@@ -7,9 +7,19 @@ import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
+import SettingContext from "./context/SettingsContext";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [settingsContext, setSettingsContext] = useState({
+    schoolName: "",
+    schoolLogo: "",
+    activeAcademicYear: "",
+  });
+  const [settings, setSettings] = useState([]);
+  const [selectedSetting, setSelectedSetting] = useState({
+    schoolName: "ABC School",
+  });
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
 
@@ -93,7 +103,18 @@ function App() {
   return (
     <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
       <ThemeProvider theme={theme}>
-        <NavDrawer />
+        <SettingContext.Provider
+          value={{
+            settingsContext,
+            setSettingsContext,
+            settings,
+            setSettings,
+            selectedSetting,
+            setSelectedSetting,
+          }}
+        >
+          <NavDrawer />
+        </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
   );

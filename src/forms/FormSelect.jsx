@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
+import ThemeModeContext from "../context/ThemeModeContext";
 
 const FormSelect = ({
   label,
@@ -19,9 +20,9 @@ const FormSelect = ({
     setFieldValue(name, value);
   };
 
-  const selectedOption = options.find(
-    (option) => option.value === formik.values[name]
-  );
+  // const selectedOption = options.find(
+  //   (option) => option.value === formik.values[name]
+  // );
   const { isDarkMode } = useContext(ThemeModeContext);
   const labelColor =
     disabled && !isDarkMode
@@ -60,7 +61,7 @@ const FormSelect = ({
         value={formik.values[name]}
         {...rest}
       >
-        {options.map((option) => (
+        {options?.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
