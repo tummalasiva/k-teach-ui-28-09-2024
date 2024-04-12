@@ -11,10 +11,15 @@ const OuterCard = styled(Card)(({ theme }) => ({
   width: "100%",
   alignItems: "center",
   justifyContent: "space-around",
-  flexDirection: {
-    [theme.breakpoints.up("md")]: "row",
-    [theme.breakpoints.down("sm")]: "column",
-    [theme.breakpoints.down("xs")]: "column",
+
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+  [theme.breakpoints.down("xs")]: {
+    flexDirection: "column",
+  },
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "row",
   },
 }));
 
