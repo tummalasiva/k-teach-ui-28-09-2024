@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { designationTableKeys } from "../../data/TableData/designation";
+import { designationTableKeys } from "../../data/tableKeys/designation";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 

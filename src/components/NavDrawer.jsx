@@ -23,7 +23,7 @@ import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import menu from "./data/menu";
+import menu from "../data/menu";
 import Dashboard from "../pages/Dashboard";
 
 import { ExpandLess, ExpandMore } from "@mui/icons-material";

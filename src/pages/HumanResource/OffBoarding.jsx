@@ -4,7 +4,7 @@ import TabList from "../../components/Tabs/Tablist";
 
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
-import { offBoardingDataTableKeys } from "../../data/TableData/offBoardingData";
+import { offBoardingDataTableKeys } from "../../data/tableKeys/offBoardingData";
 
 export default function OffBoarding() {
   const [value, setSelectValue] = useState(0);

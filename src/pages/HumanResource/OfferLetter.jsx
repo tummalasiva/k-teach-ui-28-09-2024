@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
-import { offerLetterTableKeys } from "../../data/TableData/offerLetterData";
+import { offerLetterTableKeys } from "../../data/tableKeys/offerLetterData";
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
 

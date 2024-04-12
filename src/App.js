@@ -2,11 +2,10 @@ import { useState } from "react";
 import "./App.css";
 
 import NavDrawer from "./components/NavDrawer";
-import themeData from "./components/data/themeData";
+import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
-import { Box } from "@mui/material";
 import SettingContext from "./context/SettingsContext";
 
 function App() {
