@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+// custome components
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
+import { academicYearTableKeys } from "../../data/tableKeys/academicYearData";
 
 export default function AcademicYear() {
+  const [data, setData] = useState([]);
   return (
     <>
       <PageHeader title="Academic Year" />
-      {/* <CustomTable
+      <CustomTable
         actions={["edit"]}
-        bodyDataModal="role"
-        bodyData={roles}
-        tableKeys={roleTableKeys}
-        onEditClick={handleRoleEditClick}
-        module="Roles and Permission"
-      /> */}
+        bodyDataModal="academic year"
+        bodyData={data}
+        tableKeys={academicYearTableKeys}
+      />
     </>
   );
 }

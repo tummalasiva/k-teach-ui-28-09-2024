@@ -19,6 +19,7 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     schoolName: "ABC School",
   });
+
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
 
@@ -67,6 +68,9 @@ function App() {
 
       MuiTableCell: {
         styleOverrides: {
+          head: {
+            color: "#fff",
+          },
           root: {
             padding: "8px",
             height: "40px",
@@ -99,6 +103,7 @@ function App() {
       },
     },
   });
+
   return (
     <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
       <ThemeProvider theme={theme}>
