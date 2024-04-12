@@ -513,7 +513,7 @@ export default function NavDrawer() {
 
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/manageInstitute" element={<ManageInstitute />} />
+          <Route path="/manage-institute" element={<ManageInstitute />} />
 
           <Route
             path="/administrator/academicYear"

@@ -4,7 +4,7 @@ import TabList from "../../components/Tabs/Tablist";
 
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
-import { experienceTableKeys } from "../../data/TableData/experienceleterData";
+import { experienceTableKeys } from "../../data/TableData/experienceLetterData";
 
 export default function ExperienceLetter() {
   const [value, setSelectValue] = useState(0);
@@ -16,13 +16,13 @@ export default function ExperienceLetter() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Offer letter list", "Add Offer Letter"]}
+        labels={["Experience letter list", "Add Experience Letter"]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit"]}
           tableKeys={experienceTableKeys}
-          bodyDataModal="offer letter"
+          bodyDataModal="experience  letter"
           bodyData={data}
         />
       </TabPanel>

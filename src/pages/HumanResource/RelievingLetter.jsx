@@ -16,13 +16,13 @@ export default function RelievingLetter() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Offer letter list", "Add Offer Letter"]}
+        labels={["Relieving letter list", "Add Relieving Letter"]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit"]}
           tableKeys={relievingLetterDataTableKeys}
-          bodyDataModal="offer letter"
+          bodyDataModal="relieving letter"
           bodyData={data}
         />
       </TabPanel>

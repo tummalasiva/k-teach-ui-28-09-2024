@@ -17,7 +17,7 @@ export default function Employee() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Overview", "EmployeeList", "Inactive Emploee List"]}
+        labels={["Overview", "Employee List", "Inactive Employee List"]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable tableKeys={overviewTableKeys} bodyData={data} />

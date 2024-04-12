@@ -4,7 +4,7 @@ export const overviewTableKeys = [
     key: "name",
   },
   {
-    name: "male",
+    name: "Male",
     key: "male",
   },
   {

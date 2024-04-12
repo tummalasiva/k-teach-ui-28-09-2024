@@ -1,10 +1,10 @@
 export const offerLetterTableKeys = [
   {
-    name: "Employee name",
+    name: "Employee Name",
     key: "name",
   },
   {
-    name: "Joininng Date",
+    name: "Joining Date",
     key: "date",
   },
   {

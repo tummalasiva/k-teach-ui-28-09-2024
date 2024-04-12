@@ -42,7 +42,7 @@ const SIDE_MENU_DATA = [
   },
   {
     name: "Manage Institute",
-    path: "/manageInstitute",
+    path: "/manage-institute",
     renderName: [""],
     subMenus: [],
     icon: <SettingsSuggest color="primary" fontSize="small" />,

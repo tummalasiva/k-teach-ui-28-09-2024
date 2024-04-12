@@ -1,6 +1,6 @@
 export const departmentTableKeys = [
   {
-    name: "Name",
+    name: "Department",
     key: "name",
   },
   {

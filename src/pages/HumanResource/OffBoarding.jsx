@@ -10,19 +10,20 @@ export default function OffBoarding() {
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+
   return (
     <>
       <PageHeader title="Employee" />
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Offer letter list", "Add Offer Letter"]}
+        labels={["Off-Boarding letter list", "Add Off-Boarding  Letter"]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit"]}
           tableKeys={offBoardingDataTableKeys}
-          bodyDataModal="offer letter"
+          bodyDataModal="Off-Boarding letter"
           bodyData={data}
         />
       </TabPanel>

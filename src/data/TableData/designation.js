@@ -1,6 +1,6 @@
 export const designationTableKeys = [
   {
-    name: "Name",
+    name: "Designation",
     key: "name",
   },
   {
