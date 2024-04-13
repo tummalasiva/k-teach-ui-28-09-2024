@@ -4,7 +4,7 @@ import TabList from "../../components/Tabs/Tablist";
 
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
-import { experienceTableKeys } from "../../data/TableData/experienceLetterData";
+import { experienceTableKeys } from "../../data/tableKeys/experienceLetterData";
 
 export default function ExperienceLetter() {
   const [value, setSelectValue] = useState(0);

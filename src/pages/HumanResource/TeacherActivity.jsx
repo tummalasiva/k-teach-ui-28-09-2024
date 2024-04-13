@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
-import { teacherActivityTableKeys } from "../../data/TableData/teacherActivityData";
+import { teacherActivityTableKeys } from "../../data/tableKeys/teacherActivityData";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
 import dayjs from "dayjs";

@@ -3,9 +3,9 @@ import CustomTable from "../../components/Tables/CustomTable";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
-import { overviewTableKeys } from "../../data/TableData/overviewData";
-import { employeeTableKeys } from "../../data/TableData/employeeData";
-import { inactiveTableKeys } from "../../data/TableData/inactiveEmployee";
+import { overviewTableKeys } from "../../data/tableKeys/overviewData";
+import { employeeTableKeys } from "../../data/tableKeys/employeeData";
+import { inactiveTableKeys } from "../../data/tableKeys/inactiveEmployee";
 
 export default function Employee() {
   const [value, setSelectValue] = useState(0);

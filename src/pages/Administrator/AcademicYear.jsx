@@ -1,5 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+// custome components
+import PageHeader from "../../components/PageHeader";
+import CustomTable from "../../components/Tables/CustomTable";
+import { academicYearTableKeys } from "../../data/tableKeys/academicYearData";
 
 export default function AcademicYear() {
-  return <div>AcademicYear</div>;
+  const [data, setData] = useState([]);
+  return (
+    <>
+      <PageHeader title="Academic Year" />
+      <CustomTable
+        actions={["edit"]}
+        bodyDataModal="academic year"
+        bodyData={data}
+        tableKeys={academicYearTableKeys}
+      />
+    </>
+  );
 }
