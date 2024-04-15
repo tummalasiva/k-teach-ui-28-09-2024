@@ -12,7 +12,7 @@ export default function NoTableData({ dataPresent, title }) {
         padding: "5px",
       }}
     >
-      No {title} found!
+      {title.charAt(0).toUpperCase() + title.slice(1)} not found!
     </Typography>
   );
 }
