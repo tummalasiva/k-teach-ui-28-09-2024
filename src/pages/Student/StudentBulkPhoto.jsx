@@ -1,37 +1,26 @@
 import React, { useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
-import { PrintSharp } from "@mui/icons-material";
-import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
 
 import FormSelect from "../../forms/FormSelect";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Paper,
-  Stack,
-  Tooltip,
-} from "@mui/material";
+import { Button, Grid, Paper } from "@mui/material";
 import { useFormik } from "formik";
-import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
-import { Link } from "react-router-dom";
+import { studentBulkPhotoTableKeys } from "../../data/tableKeys/studentBulkPhotoData";
 
-export default function AdmitStudent() {
+export default function StudentBulkPhoto() {
   const [data, setDate] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       class: "",
       section: "",
-      status: "",
+      student: "",
     },
     onSubmit: console.log("nnnn"),
   });
   return (
     <>
-      <PageHeader title="Students" />
+      <PageHeader title="Student Bulk Photo" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} md={6} lg={3} item>
@@ -56,19 +45,9 @@ export default function AdmitStudent() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="section"
+              name="sectiion"
               formik={entryFormik}
               label="Select Section"
-              // options={""}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="status"
-              formik={entryFormik}
-              label="Select Status"
               // options={""}
             />
           </Grid>
@@ -79,44 +58,18 @@ export default function AdmitStudent() {
             md={12}
             lg={12}
             display="flex"
-            justifyContent="flex-start"
+            justifyContent="flex-end"
           >
             <Button size="small" variant="contained">
               Find
             </Button>
           </Grid>
         </Grid>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <Stack direction="row">
-            <Tooltip title="Download">
-              <IconButton>
-                <DownloadForOfflineSharpIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Print">
-              <IconButton>
-                <PrintSharp />
-              </IconButton>
-            </Tooltip>
-            <Link to={"/student/student-bulk-photo"}>
-              <Button size="small" sx={{ p: 1, ml: 1 }} variant="contained">
-                Bulk Photo
-              </Button>
-            </Link>
-          </Stack>
-        </Box>
       </Paper>
       <CustomTable
         actions={["edit"]}
-        tableKeys={admitStudentTableKeys}
-        bodyDataModal="students"
+        tableKeys={studentBulkPhotoTableKeys}
+        bodyDataModal="student bulk photo"
         bodyData={data}
       />
     </>
