@@ -3,6 +3,8 @@ import { TextField, useTheme } from "@mui/material";
 
 export default function FormInput({
   name,
+  multiline = false,
+  rows = {},
   label = "default label",
   formik,
   required = false,
@@ -18,6 +20,8 @@ export default function FormInput({
       id={name}
       name={name}
       label={label}
+      multiline={multiline}
+      rows={4}
       disabled={disabled}
       placeholder={`Enter ${label}`}
       fullWidth
