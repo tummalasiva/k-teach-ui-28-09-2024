@@ -129,10 +129,7 @@ export default function Overview() {
                       title="Female"
                       count={overview.femaleStudents}
                     />
-                    <TableDivider
-                      style={{ borderBottomColor: "grey" }}
-                      width="100%"
-                    />
+                    <TableDivider />
                     <StudentCount
                       showTitle={true}
                       title="Total"
