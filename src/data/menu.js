@@ -283,7 +283,7 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Secion",
+        name: "Section",
         renderName: "section",
         path: "/academic/section",
         icon: (
@@ -294,7 +294,7 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Subjet",
+        name: "Subject",
         renderName: "subject",
         path: "/academic/subject",
         icon: (
