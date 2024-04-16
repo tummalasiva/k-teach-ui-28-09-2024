@@ -39,7 +39,7 @@ export default function Result() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+          <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
             <Button size="small" variant="contained">
               Find
             </Button>
