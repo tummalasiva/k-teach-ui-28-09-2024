@@ -31,14 +31,7 @@ export default function Subject() {
             />
           </Grid>
 
-          <Grid
-            item
-            xs={12}
-            md={12}
-            lg={12}
-            display="flex"
-            justifyContent="flex-end"
-          >
+          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
             <Button size="small" variant="contained">
               Find
             </Button>
