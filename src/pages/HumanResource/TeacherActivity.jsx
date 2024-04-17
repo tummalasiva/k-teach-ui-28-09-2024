@@ -45,7 +45,6 @@ export default function TeacherActivity() {
         labels={["All Activity", "Add Activity"]}
       />
       <TabPanel index={0} value={value}>
-        {" "}
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={4} item>

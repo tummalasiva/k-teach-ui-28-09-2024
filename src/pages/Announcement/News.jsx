@@ -1,5 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { newsTableKeys } from "../../data/tableKeys/newsData";
+import PageHeader from "../../components/PageHeader";
+import CustomTable from "../../components/Tables/CustomTable";
 
 export default function News() {
-  return <div>News</div>;
+  const [data, setData] = useState([]);
+  return (
+    <>
+      <PageHeader title="News" />
+      <CustomTable
+        actions={["edit", "delete"]}
+        bodyDataModal="News"
+        bodyData={data}
+        tableKeys={newsTableKeys}
+      />
+    </>
+  );
 }
