@@ -4,6 +4,7 @@ import FormSelect from "../../forms/FormSelect";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import DownloadIcon from "@mui/icons-material/Download";
+import FormInput from "../../forms/FormInput";
 
 export default function BulkAdmission() {
   const entryFormik = useFormik({
@@ -47,15 +48,14 @@ export default function BulkAdmission() {
               // options={""}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              Select file:
-            </Typography>
-            <input
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="image"
+              formik={entryFormik}
+              label="Select File"
               type="file"
-              id="myfile"
-              name="bulkAdmitFile"
-              accept=".xlsx, .xls, xlsm, .xlsb, .csv, .ods"
             />
           </Grid>
 
