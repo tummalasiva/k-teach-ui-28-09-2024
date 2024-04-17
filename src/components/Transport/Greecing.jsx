@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-
-import PageHeader from "../../components/PageHeader";
-import CustomTable from "../../components/Tables/CustomTable";
-import { vehicleLogTableKeys } from "../../data/tableKeys/vehicleLogData";
+import CustomTable from "../Tables/CustomTable";
+import { vehicleGreecingTableKeys } from "../../data/tableKeys/vehicleGreecingData";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
 
-export default function VehicleLog() {
+export default function Greecing() {
   const [data, setData] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
       vehicle: "",
-      route: "",
 
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
@@ -23,7 +20,6 @@ export default function VehicleLog() {
   });
   return (
     <>
-      <PageHeader title="Vehicle Log" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} md={6} lg={3} item>
@@ -35,42 +31,45 @@ export default function VehicleLog() {
               // options={""}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="route"
-              formik={entryFormik}
-              label="Select Route"
-              // options={""}
-            />
-          </Grid>
 
-          <Grid xs={12} sm={6} md={6} lg={3} item>
+          <Grid xs={12} md={6} lg={3} item>
             <FormDatePicker
               formik={entryFormik}
               label="From Date"
               name="fromDate"
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} lg={3} item>
+          <Grid xs={12} md={6} lg={3} item>
             <FormDatePicker
               formik={entryFormik}
               label="To Date"
               name="toDate"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            display="flex"
+            justifyContent="flex-end"
+            alignSelf="center"
+            gap={1}
+          >
             <Button size="small" variant="contained">
               Find
+            </Button>
+            <Button size="small" variant="contained">
+              Print
             </Button>
           </Grid>
         </Grid>
       </Paper>
       <CustomTable
         actions={["edit"]}
-        tableKeys={vehicleLogTableKeys}
-        bodyDataModal="vehicle log"
         bodyData={data}
+        tableKeys={vehicleGreecingTableKeys}
+        bodyDataModal="greecing"
       />
     </>
   );

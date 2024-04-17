@@ -156,7 +156,7 @@ export default function QuickAdmit() {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="Father Phone No"
+              name="fatherContactNumber"
               formik={entryFormik}
               label="Father Phone Number"
             />
@@ -173,7 +173,7 @@ export default function QuickAdmit() {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="status"
+              name="motherContactNumber"
               formik={entryFormik}
               label="Mother Phone Number"
             />

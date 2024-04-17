@@ -1,5 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+
+import PageHeader from "../../components/PageHeader";
+import CustomTable from "../../components/Tables/CustomTable";
+import { manageHostelTableKeys } from "../../data/tableKeys/manageHostelData";
 
 export default function ManageHostel() {
-  return <div>ManageHostel</div>;
+  const [data, setData] = useState([]);
+  return (
+    <>
+      <PageHeader title="Hostel" />
+
+      <CustomTable
+        actions={["edit"]}
+        tableKeys={manageHostelTableKeys}
+        bodyDataModal="hostel"
+        bodyData={data}
+      />
+    </>
+  );
 }
