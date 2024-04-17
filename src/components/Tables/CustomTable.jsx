@@ -40,7 +40,7 @@ export default function CustomTable({
   bodyData = [],
   bodyDataModal = "",
   tableKeys = [],
-  actions = ["edit", "delete", "view", "unbundle"],
+  actions = ["edit", "delete", "view", "unbundle", "switch"],
   onEditClick = () => {},
   onDeleteClick = () => {},
   onViewClick = () => {},
