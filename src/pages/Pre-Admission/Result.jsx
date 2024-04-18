@@ -5,6 +5,13 @@ import { resultTableKeys } from "../../data/tableKeys/result";
 import FormSelect from "../../forms/FormSelect";
 import { Button, Grid, Paper } from "@mui/material";
 import { useFormik } from "formik";
+import { Box, ButtonGroup, styled } from "@mui/material";
+const MuiBUtton = styled(Box)({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  marginBottom: "20px",
+});
 
 export default function Result() {
   const [data, setData] = useState([]);
@@ -46,6 +53,14 @@ export default function Result() {
           </Grid>
         </Grid>
       </Paper>
+      <MuiBUtton>
+        <ButtonGroup variant="outlined" aria-label="outlined button group">
+          <Button variant="contained">Pending:56</Button>
+          <Button>Approved: 100</Button>
+
+          <Button>Rejected:0</Button>
+        </ButtonGroup>
+      </MuiBUtton>
 
       <CustomTable
         actions={["edit"]}
