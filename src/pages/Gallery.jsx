@@ -87,7 +87,7 @@ export default function Gallery() {
                 required={true}
                 name="note"
                 formik={entryFormik}
-                label="Type note here..."
+                label="Note here"
               />
             </Grid>
 
