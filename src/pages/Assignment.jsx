@@ -161,7 +161,7 @@ export default function Assignment() {
                 required={true}
                 name="note"
                 formik={entryFormik}
-                label="Type note here..."
+                label="Note here"
               />
             </Grid>
             <Grid
