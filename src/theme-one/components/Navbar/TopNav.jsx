@@ -1,0 +1,130 @@
+import {
+  Box,
+  Button,
+  Grid,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import CallIcon from "@mui/icons-material/Call";
+import EmailIcon from "@mui/icons-material/Email";
+import { styled } from "@mui/material/styles";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Person } from "@mui/icons-material";
+import themeData from "../../../data/themeData";
+
+const MainContainer = styled(Box)({
+  backgroundColor: "#C8C8C8",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "10px 80px",
+});
+
+const SideContainer = styled(Grid)(({ theme }) => ({
+  gap: "20px",
+  [theme.breakpoints.down("sm")]: {
+    padding: "5px",
+    marginLeft: "0",
+  },
+}));
+
+const DataContainer = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  gap: "10px",
+  alignItems: "center",
+}));
+
+const SelectButton = styled(Button)(({ theme }) => ({
+  backgroundColor: themeData.darkPalette.secondary.main,
+  "&:hover": { backgroundColor: themeData.darkPalette.secondary.main },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "11px",
+  },
+}));
+
+export default function TopNav() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOptionSelect = (option) => {
+    handleClose();
+  };
+  return (
+    <>
+      <MainContainer>
+        <SideContainer container>
+          <DataContainer>
+            <CallIcon
+              sx={{ color: `${themeData.darkPalette.secondary.main}` }}
+              fontSize="small"
+            />
+            <Typography variant="body2" fontWeight="bold" color="black">
+              +91 9999999999
+            </Typography>
+          </DataContainer>
+          <DataContainer>
+            <EmailIcon
+              sx={{ color: `${themeData.darkPalette.secondary.main}` }}
+              fontSize="small"
+            />
+            <Typography variant="body2" fontWeight="bold" color="black">
+              abc@gmail.com
+            </Typography>
+          </DataContainer>
+        </SideContainer>
+
+        <Stack
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
+        >
+          <SelectButton
+            variant="contained"
+            onClick={handleClick}
+            size="small"
+            endIcon={<KeyboardArrowDownIcon />}
+          >
+            ABC School
+          </SelectButton>
+          {/* <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  {" "}
+                  {settings
+                    .filter((s) => s.active)
+                    .map((s) => {
+                      return (
+                        <MenuItem key={s._id} onClick={() => handleOptionSelect(s)}>
+                          {s.schoolName}
+                        </MenuItem>
+                      );
+                    })}
+                </Menu> */}
+
+          <Button
+            startIcon={<Person sx={{ color: "#ffff" }} />}
+            variant="contained"
+            size="small"
+          >
+            Login
+          </Button>
+        </Stack>
+      </MainContainer>
+    </>
+  );
+}
