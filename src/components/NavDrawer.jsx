@@ -135,6 +135,8 @@ import VisitorInfo from "../pages/VisitorInfo/VisitorInfo";
 import StudentCheckout from "../pages/VisitorInfo/StudentCheckout";
 import HelpDesk from "../pages/HelpDesk";
 import GuardianFeedback from "../pages/GuardianFeedback";
+import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
+import StudentReport from "../pages/Report/StudentReport";
 
 const drawerWidth = 270;
 
@@ -599,6 +601,11 @@ export default function NavDrawer() {
             path="/student/student-activity"
             element={<StudentActivity />}
           />
+          <Route
+            path="/student/student-bulk-photo"
+            element={<StudentBulkPhoto />}
+          />
+
           <Route path="/assignment" element={<Assignment />} />
 
           <Route path="/announcement/notice" element={<Notice />} />
@@ -742,6 +749,7 @@ export default function NavDrawer() {
             path="/report/employee-yearly-attendance"
             element={<EmployeeYearlyAttendance />}
           />
+          <Route path="/report/student-report" element={<StudentReport />} />
           <Route
             path="/report/student-activity-report"
             element={<StudentActivityReport />}

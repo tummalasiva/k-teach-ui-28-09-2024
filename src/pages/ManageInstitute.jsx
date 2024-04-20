@@ -9,7 +9,7 @@ export default function ManageInstitute() {
     <>
       <PageHeader title="Manage Institute" />
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "switch"]}
         bodyDataModal="manage institute"
         bodyData={data}
         tableKeys={manageInstituteTableKeys}

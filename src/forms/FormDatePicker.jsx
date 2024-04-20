@@ -4,7 +4,15 @@ import dayjs from "dayjs";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-function FormDatePicker({ name, label, formik, disabled = false }) {
+function FormDatePicker({
+  name,
+  label,
+  formik,
+  openTo = "day",
+  inputFormat = "DD-MM-YYYY",
+  views = ["year", "month", "day"],
+  disabled = false,
+}) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -23,10 +31,10 @@ function FormDatePicker({ name, label, formik, disabled = false }) {
         label={label}
         disabled={disabled}
         slotProps={{ textField: { InputLabelProps: { fontSize: "90px" } } }}
-        openTo="day"
+        openTo={openTo}
         closeOnSelect
-        views={["year", "month", "day"]}
-        inputFormat="DD-MM-YYYY"
+        views={views}
+        inputFormat={inputFormat}
         value={formik.values[name]}
         onChange={(value) => formik.setFieldValue(name, dayjs(value))}
         // renderInput={(params) => (

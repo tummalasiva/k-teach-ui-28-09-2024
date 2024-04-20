@@ -20,13 +20,25 @@ export default function Employee() {
         labels={["Overview", "Employee List", "Inactive Employee List"]}
       />
       <TabPanel index={0} value={value}>
-        <CustomTable tableKeys={overviewTableKeys} bodyData={data} />
+        <CustomTable
+          tableKeys={overviewTableKeys}
+          bodyData={data}
+          bodyDataModal="employee"
+        />
       </TabPanel>
       <TabPanel index={1} value={value}>
-        <CustomTable tableKeys={employeeTableKeys} bodyData={data} />
+        <CustomTable
+          tableKeys={employeeTableKeys}
+          bodyData={data}
+          bodyDataModal="employee"
+        />
       </TabPanel>
       <TabPanel index={2} value={value}>
-        <CustomTable actions={["edit"]} tableKeys={inactiveTableKeys} />
+        <CustomTable
+          actions={["edit"]}
+          tableKeys={inactiveTableKeys}
+          bodyDataModal="employee"
+        />
       </TabPanel>
     </>
   );

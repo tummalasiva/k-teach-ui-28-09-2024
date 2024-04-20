@@ -1,7 +1,7 @@
 export const teacherActivityTableKeys = [
   {
     name: "Date",
-    key: "name",
+    key: "date",
   },
   {
     name: "topic",

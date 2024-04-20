@@ -283,7 +283,7 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Secion",
+        name: "Section",
         renderName: "section",
         path: "/academic/section",
         icon: (
@@ -294,7 +294,7 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Subjet",
+        name: "Subject",
         renderName: "subject",
         path: "/academic/subject",
         icon: (
@@ -1257,6 +1257,7 @@ const SIDE_MENU_DATA = [
       "studentYearlyAttendane",
       "employeeAttendance",
       "employeeYearlyAttendance",
+      "studentReport",
       "studentActivityReport",
     ],
     icon: <BarChart color="primary" fontSize="small" />,
@@ -1309,6 +1310,18 @@ const SIDE_MENU_DATA = [
         name: "Employee Yearly Attendance",
         renderName: "employeeYearlyAttendance",
         path: "/report/employee-yearly-attendance",
+        icon: (
+          <SubdirectoryArrowRightOutlinedIcon
+            color="primary"
+            fontSize="small"
+          />
+        ),
+      },
+
+      {
+        name: "Student Report",
+        renderName: "studentReport",
+        path: "/report/student-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
