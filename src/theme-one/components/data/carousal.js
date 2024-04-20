@@ -15,7 +15,11 @@ function SamplePrevArrow(props) {
   const { className, style, onClick } = props;
   return (
     <div style={{ ...style, display: "block" }} onClick={onClick}>
-      <NavigateBeforeIcon size="3x" className="slick-arrow-icon-left" />
+      <NavigateBeforeIcon
+        size="3x"
+        style={{}}
+        className="slick-arrow-icon-left"
+      />
     </div>
   );
 }

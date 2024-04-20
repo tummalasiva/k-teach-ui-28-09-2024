@@ -15,7 +15,12 @@ import { calculateSlidersData } from "../data/carousal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import Gallery from "./Gallery";
+import image1 from "../../../theme-one/assets/Images/school1.avif";
+import image2 from "../../../theme-one/assets/Images/school-white.avif";
+import image3 from "../../../theme-one/assets/Images/school-green.avif";
+import image4 from "../../../theme-one/assets/Images/school1.avif";
+import Awards from "./Awards";
+import themeData from "../../../data/themeData";
 const theme = createTheme();
 
 const AppSlider = styled(Slider)`
@@ -55,8 +60,31 @@ const TextBox1 = styled(Box)(({ theme }) => ({
   },
 }));
 
+const awards = [
+  {
+    title: "Learning Management System",
+    note: " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
+    image: image1,
+  },
+  {
+    title: "Marketing and Management ",
+    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
+    image: image2,
+  },
+  {
+    title: "Marketing and Management ",
+    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
+    image: image3,
+  },
+  {
+    title: "Marketing and Management ",
+    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
+    image: image4,
+  },
+];
+
 const AwardsAndAchievment = () => {
-  const [awards, setAwards] = useState([]);
+  //   const [awards, setAwards] = useState([]);
 
   let sliderRef = useRef(null);
 
@@ -87,8 +115,11 @@ const AwardsAndAchievment = () => {
               <Box>
                 <Typography
                   variant="h3"
-                  color="#f86f03"
-                  sx={{ fontWeight: "bold", fontSize: "40px" }}
+                  sx={{
+                    color: themeData.darkPalette.primary.main,
+                    fontWeight: "bold",
+                    fontSize: "40px",
+                  }}
                 >
                   ACHIEVEMENTS
                 </Typography>
@@ -108,7 +139,7 @@ const AwardsAndAchievment = () => {
             />
             <FiberManualRecordIcon
               sx={{
-                color: "#F86F03",
+                color: themeData.darkPalette.primary.main,
                 fontSize: "10px",
                 marginTop: "14px",
                 marginLeft: "5px",
@@ -122,7 +153,7 @@ const AwardsAndAchievment = () => {
 
           <AppSlider ref={sliderRef} {...calculateSlidersData(awards.length)}>
             {awards.map((d, i) => (
-              <Gallery key={i} coursedata={d} />
+              <Awards key={i} coursedata={d} />
             ))}
           </AppSlider>
         </MainContainer>

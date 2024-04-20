@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { calculateSlidersData, imageCarousalSettings } from "../data/carousal";
+
 import {
   CardMedia,
   styled,
@@ -17,6 +18,8 @@ const MuiTitle = styled(Typography)(() => ({
   overflow: "hidden",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 1,
+  fontWeight: "bold",
+  fontSize: "18px",
 }));
 
 const MuiText = styled(Typography)(() => ({
@@ -42,6 +45,12 @@ const AppSlider = styled(Slider)`
     overflow: hidden;
   }
 `;
+
+const ImagBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
 
 function ImageSliders({ galleryImg, setModalOpen }) {
   return (

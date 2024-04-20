@@ -3,6 +3,7 @@ import image from "../../theme-one/assets/Images/image1.png";
 import { BsPlayFill } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Box, Container, Grid, Modal, Typography, styled } from "@mui/material";
+import themeData from "../../data/themeData";
 
 const ContentBox = styled(Box)(({ theme }) => ({
   backgroundColor: "white",
@@ -72,7 +73,7 @@ const FooterText = styled(Typography)(({ theme }) => ({
 
 const OuterBox = styled(Box)(({ theme }) => ({
   borderRadius: "50%",
-  backgroundColor: "#068FFF",
+  backgroundColor: themeData.darkPalette.secondary.main,
   "&:hover": { backgroundColor: "#F86F03" },
   height: 100,
   width: 100,
@@ -135,8 +136,14 @@ const Play = styled(Box)(({ theme }) => ({
     paddingBottom: "3rem",
   },
 }));
-
-const Main = styled(Grid)(({ theme }) => ({}));
+const MuiBox = styled(Box)(({ theme }) => ({
+  marginTop: "1.5rem",
+  backgroundColor: themeData.darkPalette.secondary.main,
+  "&:hover": {
+    backgroundColor: themeData.darkPalette.primary.main,
+  },
+  textAlign: "center",
+}));
 
 const styles = {
   position: "absolute",
@@ -189,16 +196,9 @@ const IntroVideo = () => {
                 </BoxText>
               </Box>
 
-              <Box
-                sx={{
-                  marginTop: "1.5rem",
-                  backgroundColor: "#068FFF",
-                  "&:hover": { backgroundColor: "#F86F03" },
-                  textAlign: "center",
-                }}
-              >
+              <MuiBox>
                 <FooterText>GET ADMISSION</FooterText>
-              </Box>
+              </MuiBox>
             </ContentBox>
           </Grid>
 
@@ -243,7 +243,7 @@ const IntroVideo = () => {
                   <Box component="div" onClick={handleOpen}>
                     <BsPlayFill
                       style={{
-                        color: "#068fff",
+                        color: themeData.darkPalette.secondary.main,
                         fontSize: "50px",
                         marginLeft: "6px",
                         marginTop: "5px",

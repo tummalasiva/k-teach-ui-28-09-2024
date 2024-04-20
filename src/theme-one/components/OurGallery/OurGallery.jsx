@@ -19,6 +19,7 @@ import image1 from "../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
+import themeData from "../../../data/themeData";
 
 const TextBox1 = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -58,6 +59,18 @@ const galleryData = [
       "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
     images: [image, image1, image2, image3, image4],
   },
+  {
+    title: "Marketing and Management ",
+    content:
+      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
+    images: [image, image1, image2, image3, image4],
+  },
+  {
+    title: "Marketing and Management ",
+    content:
+      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
+    images: [image, image1, image2, image3, image4],
+  },
 ];
 
 const OurGallery = () => {
@@ -87,15 +100,19 @@ const OurGallery = () => {
           <Typography
             variant="h3"
             color="black"
-            sx={{ fontWeight: "bold", fontSize: "40px" }}
+            fontWeight="bold"
+            fontSize="40px"
           >
             OUR
           </Typography>
           &nbsp;&nbsp;
           <Typography
             variant="h3"
-            color="#f86f03"
-            sx={{ fontWeight: "bold", fontSize: "40px" }}
+            sx={{
+              color: themeData.darkPalette.primary.main,
+              fontWeight: "bold",
+              fontSize: "40px",
+            }}
           >
             GALLERY
           </Typography>
@@ -112,7 +129,7 @@ const OurGallery = () => {
           <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
           <FiberManualRecordIcon
             sx={{
-              color: "#F86F03",
+              color: themeData.darkPalette.primary.main,
               fontSize: "10px",
               marginTop: "14px",
               marginLeft: "5px",

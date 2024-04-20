@@ -1,18 +1,10 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Box, Button, Grid, Typography, styled } from "@mui/material";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import SettingContext from "../../context/SettingsContext";
 
 const Para = styled(Typography)(({ theme }) => ({
   fontFamily: "sans-serif",
-
   color: "white",
 }));
 
@@ -106,7 +98,7 @@ const QuickLook = () => {
           item
           xs={12}
           md={6}
-          lg={4}
+          lg={3}
           sx={{
             display: "flex",
             justifyContent: "center",
