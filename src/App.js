@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./App.css";
-
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
-import HomePage from "./theme-one/page/HomePage";
+import HomePage1 from "./theme-one/page/HomePage";
+import HomePage2 from "./theme-two/page/HomePage";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -119,7 +119,8 @@ function App() {
           }}
         >
           {/* <NavDrawer /> */}
-          <HomePage />
+          {/* <HomePage1 /> */}
+          <HomePage2 />
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

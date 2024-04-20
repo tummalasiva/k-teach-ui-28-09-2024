@@ -21,9 +21,7 @@ const animationEffects = [
   "slide-left",
   "slide-right",
   "zoom-in",
-
   "bounce-in",
-
   "box",
 ];
 
