@@ -7,6 +7,7 @@ import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
+import HomePage from "./theme-one/page/HomePage";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -117,7 +118,8 @@ function App() {
             setSelectedSetting,
           }}
         >
-          <NavDrawer />
+          {/* <NavDrawer /> */}
+          <HomePage />
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
