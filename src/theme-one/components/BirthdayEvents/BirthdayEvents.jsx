@@ -4,6 +4,7 @@ import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
 import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
 import dayjs from "dayjs";
 import RegistrationForm from "./RegistrationForm";
+import themeData from "../../../data/themeData";
 
 const MovingTextContainer = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -120,7 +121,7 @@ const BirthdayEvents = () => {
                 variant="h4"
                 sx={{
                   fontWeight: "bold",
-                  color: "#0E4BF1",
+                  color: themeData.darkPalette.primary.main,
                   fontSize: { sm: "50px", xs: "30px" },
                 }}
               >

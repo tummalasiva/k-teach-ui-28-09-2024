@@ -64,7 +64,7 @@ const Times = styled(Box)(({ theme }) => ({
     justifyContent: "center",
   },
 }));
-const ReadButoon = styled(Button)(() => ({
+const ReadButton = styled(Button)(() => ({
   marginLeft: "-7px",
   fontWeight: "bold",
   fontSize: "10px",
@@ -86,31 +86,28 @@ const Time = styled(Typography)(() => ({
   fontSize: "0.7rem",
 }));
 
-const Events = ({ cards }) => {
+const Events = ({ card }) => {
   let navigate = useNavigate();
 
-  let onlyDay = cards.fromDate;
+  let onlyDay = card.fromDate;
 
   const date = moment(onlyDay);
   const specificDate = date.format("Do");
 
   const specificMonth = date.format("MMMM ,YYYY");
 
-  const time = moment(cards.fromDate);
+  const time = moment(card.fromDate);
   const specificTime = time.format("h:mm A");
 
   let handleNavigate = () => {
-    navigate(`/eventdetails/${cards._id}`, { state: cards });
+    navigate(`/eventdetails/${card._id}`, { state: card });
   };
 
   return (
     <Grid
       container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      justifyContent="center" // Centering the content horizontally
+      alignItems="center" // Centering the content vertically
     >
       <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
         <Random sx={{ marginRight: "30px" }}>
@@ -126,18 +123,17 @@ const Events = ({ cards }) => {
         sm={12}
         md={12}
         lg={5}
+        justifyContent="center" // Centering the content horizontally
+        alignItems="center" // Centering the content vertically
         sx={{
           marginY: "15px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
         }}
       >
         <CustomCard onClick={handleNavigate}>
-          <CardMedia component="img" image={cards.image} height="297" />
+          <CardMedia component="img" image={card.image} height="297" />
         </CustomCard>
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={3}>
+      <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
         <Random>
           <Typography
             variant="body1"
@@ -148,7 +144,7 @@ const Events = ({ cards }) => {
             }}
             gutterBottom
           >
-            {cards.title}
+            {card.title}
           </Typography>
         </Random>
         <Times>
@@ -156,12 +152,12 @@ const Events = ({ cards }) => {
           <Time>{specificTime}</Time>
         </Times>
 
-        <Para>{cards.shortEvent.substring(0, 150) + "....."}</Para>
+        <Para>{card.content.substring(0, 150) + "....."}</Para>
         <Random>
-          <ReadButoon onClick={handleNavigate}>
+          <ReadButton onClick={handleNavigate}>
             Read More
             <ChevronRightIcon fontWeight={600}></ChevronRightIcon>
-          </ReadButoon>
+          </ReadButton>
         </Random>
       </Grid>
     </Grid>

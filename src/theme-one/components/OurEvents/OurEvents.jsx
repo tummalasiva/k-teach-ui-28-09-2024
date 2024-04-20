@@ -107,23 +107,6 @@ const TextBox1 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const CustomCard = styled(Card)(({ theme }) => ({
-  width: "90%",
-  height: 245,
-  [theme.breakpoints.down(1200)]: {
-    width: 400,
-    height: 225,
-  },
-  [theme.breakpoints.down(900)]: {
-    width: 400,
-    height: 225,
-  },
-  [theme.breakpoints.down(400)]: {
-    maxWidth: 400,
-    height: 225,
-  },
-}));
-
 const OurEvent = () => {
   return (
     <>
@@ -225,11 +208,11 @@ const OurEvents = () => {
     <>
       <ThemeProvider theme={theme}>
         <OurEvent />
-        {events.length >= 4 && !showAll && (
+        {cards.length >= 4 && !showAll && (
           <ViewAllButton handleClick={handleViewAllClick} />
         )}
 
-        {events.slice(0, showAll ? events.length : 3).map((card, index) => (
+        {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
           <React.Fragment key={index}>
             <Events card={card} />
           </React.Fragment>
