@@ -4,19 +4,15 @@ import {
   Box,
   Typography,
   Button,
-  CardMedia,
   createTheme,
   styled,
   Card,
 } from "@mui/material";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { grey, green, blue } from "@mui/material/colors";
+
 import { ThemeProvider } from "@emotion/react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-
-import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import themeData from "../../../data/themeData";
+import Events from "./Events";
 
 const theme = createTheme();
 export const cards = [
@@ -101,62 +97,6 @@ const ViewLess = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const Random = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.down("md")]: {
-    textAlign: "center",
-  },
-}));
-const ReadButoon = styled(Button)(() => ({
-  marginLeft: "-7px",
-  fontWeight: "bold",
-  fontSize: "10px",
-  color: "black",
-}));
-
-const Times = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: "5px",
-  [theme.breakpoints.down("md")]: {
-    justifyContent: "center",
-  },
-}));
-
-const Para = styled(Typography)(({ theme }) => ({
-  fontSize: "15px",
-  lineHeight: "25px",
-  color: grey[700],
-  marginTop: "20px",
-
-  [theme.breakpoints.down(900)]: {
-    textAlign: "center",
-    margin: "5px 15px",
-  },
-  [theme.breakpoints.down(600)]: {
-    padding: "0px 50px",
-    textAlign: "center",
-  },
-  [theme.breakpoints.down(480)]: {
-    padding: "0px 20px",
-    textAlign: "center",
-  },
-}));
-
-const TimeIcon = styled(AccessTimeIcon)(() => ({
-  fontSize: "0.7rem",
-  marginTop: "2px",
-  color: "#f86f03",
-}));
-
-const Time = styled(Typography)(() => ({
-  fontSize: "0.7rem",
-}));
-
-const Date = styled(Typography)(() => ({
-  fontSize: "15px",
-  textAlign: "right",
-  marginBottom: "35px",
-}));
-
 const TextBox1 = styled(Box)(({ theme }) => ({
   marginTop: "10%",
   textShadow: "10px 8px 8px #969c96",
@@ -208,8 +148,11 @@ const OurEvent = () => {
           <Box>
             <Typography
               variant="h3"
-              color="#f86f03"
-              sx={{ fontWeight: "bold", fontSize: "40px" }}
+              sx={{
+                color: themeData.darkPalette.primary.main,
+                fontWeight: "bold",
+                fontSize: "40px",
+              }}
             >
               EVENTS
             </Typography>
@@ -224,7 +167,7 @@ const OurEvent = () => {
         <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
         <FiberManualRecordIcon
           sx={{
-            color: "#F86F03",
+            color: themeData.darkPalette.primary.main,
             fontSize: "10px",
             marginTop: "14px",
             marginLeft: "5px",
@@ -236,88 +179,6 @@ const OurEvent = () => {
         <Typography component="p">________</Typography>
       </Box>
     </>
-  );
-};
-
-const CardItem = ({ card }) => {
-  let navigate = useNavigate();
-
-  let onlyDay = card.fromDate;
-
-  const date = moment(onlyDay);
-  const specificDate = date.format("Do");
-
-  const specificMonth = date.format("MMMM ,YYYY");
-
-  const time = moment(card.fromDate);
-  const specificTime = time.format("h:mm A");
-
-  let handleNavigate = () => {
-    navigate(`/eventdetails/${card._id}`, { state: card });
-  };
-
-  return (
-    <Grid
-      container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
-        <Random sx={{ marginRight: "30px" }}>
-          <Typography mt={7} variant="h4" textAlign="right">
-            {specificDate}
-          </Typography>
-          <Date> {specificMonth}</Date>
-        </Random>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={5}
-        sx={{
-          marginY: "15px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CustomCard onClick={handleNavigate}>
-          <CardMedia component="img" image={cards.image} height="297" />
-        </CustomCard>
-      </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={3}>
-        <Random>
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: "bold",
-              mt: { lg: 5, md: 2, xs: 1 },
-              fontSize: "25px",
-            }}
-            gutterBottom
-          >
-            {cards.title}
-          </Typography>
-        </Random>
-        <Times>
-          <TimeIcon />
-          <Time>{specificTime}</Time>
-        </Times>
-
-        <Para>{card.shortEvent.substring(0, 150) + "....."}</Para>
-        <Random>
-          <ReadButoon onClick={handleNavigate}>
-            Read More
-            <ChevronRightIcon fontWeight={600}></ChevronRightIcon>
-          </ReadButoon>
-        </Random>
-      </Grid>
-    </Grid>
   );
 };
 
@@ -370,7 +231,7 @@ const OurEvents = () => {
 
         {events.slice(0, showAll ? events.length : 3).map((card, index) => (
           <React.Fragment key={index}>
-            <CardItem card={card} />
+            <Events card={card} />
           </React.Fragment>
         ))}
         {showAll && <ViewLessButton handleClick={handleViewLessClick} />}

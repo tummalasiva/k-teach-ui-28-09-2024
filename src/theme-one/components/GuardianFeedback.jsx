@@ -25,6 +25,7 @@ import { useMediaQuery } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useTheme } from "@mui/material/styles";
+import themeData from "../../data/themeData";
 
 const style = {
   position: "absolute",
@@ -422,8 +423,11 @@ const GuardianFeedback = () => {
           <Box>
             <Typography
               variant="h3"
-              color="#f86f03"
-              sx={{ fontWeight: "bold", fontSize: "40px" }}
+              sx={{
+                color: themeData.darkPalette.primary.main,
+                fontWeight: "bold",
+                fontSize: "40px",
+              }}
             >
               Feedback
             </Typography>
@@ -441,7 +445,7 @@ const GuardianFeedback = () => {
         <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
         <FiberManualRecordIcon
           sx={{
-            color: "#F86F03",
+            color: themeData.darkPalette.primary.main,
             fontSize: "10px",
             marginTop: "14px",
             marginLeft: "5px",
