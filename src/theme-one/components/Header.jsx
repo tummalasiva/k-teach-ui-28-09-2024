@@ -10,6 +10,10 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const TextBox1 = styled(Box)(({ theme }) => ({
   marginTop: "3%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
 
   textShadow: "10px 8px 8px #969c96",
   [theme.breakpoints.down("md")]: {
@@ -28,40 +32,30 @@ export default function Header({ title1 = "", title2 = "" }) {
     <>
       <ThemeProvider theme={theme}>
         <TextBox1>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: { xs: "center" },
-              //   flexDirection: { md: "row", xs: "column" },
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h3"
-                color="black"
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: { xs: "25px", sm: "30px", md: "40px", lg: "40px" },
-                }}
-              >
-                {title1}
-              </Typography>
-            </Box>
-            &nbsp;&nbsp;
-            <Box>
-              <Typography
-                variant="h3"
-                sx={{
-                  color: "#F86F03",
-                  fontWeight: "bold",
-                  fontSize: { xs: "25px", sm: "30px", md: "40px", lg: "40px" },
-                }}
-              >
-                {title2}
-              </Typography>
-            </Box>
+          <Box>
+            <Typography
+              variant="h3"
+              color="black"
+              sx={{
+                fontWeight: "bold",
+                fontSize: { xs: "25px", sm: "30px", md: "40px", lg: "40px" },
+              }}
+            >
+              {title1}
+            </Typography>
+          </Box>
+          &nbsp;&nbsp;
+          <Box>
+            <Typography
+              variant="h3"
+              sx={{
+                color: "#F86F03",
+                fontWeight: "bold",
+                fontSize: { xs: "25px", sm: "30px", md: "40px", lg: "40px" },
+              }}
+            >
+              {title2}
+            </Typography>
           </Box>
         </TextBox1>
         <Box

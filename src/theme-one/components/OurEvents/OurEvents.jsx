@@ -129,7 +129,10 @@ const OurEvents = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Header title1="Our" title2="Events" />
+        <Box pt={3}>
+          {" "}
+          <Header title1="Our" title2="Events" />
+        </Box>
         {cards.length >= 4 && !showAll && (
           <ViewAllButton handleClick={handleViewAllClick} />
         )}

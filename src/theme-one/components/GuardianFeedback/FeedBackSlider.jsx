@@ -120,7 +120,7 @@ export default function FeedBackSlider() {
                 <Dot
                   key={slide.key}
                   onClick={() => onChangeSlide(index)}
-                  style={{
+                  sx={{
                     backgroundColor:
                       index === currentSlide ? "#1565c0" : "rgba(0, 0, 0, 0.2)",
                   }}
