@@ -2,6 +2,7 @@ import { Box, Button, Grid, Typography, styled } from "@mui/material";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import SettingContext from "../../context/SettingsContext";
+import themeData from "../../data/themeData";
 
 const Para = styled(Typography)(({ theme }) => ({
   fontFamily: "sans-serif",
@@ -55,7 +56,7 @@ const QuickLook = () => {
             }}
           >
             A QUICK LOOK AT
-            <span style={{ color: "#1565c0" }}>
+            <span style={{ color: themeData.darkPalette.secondary.main }}>
               {" "}
               {selectedSetting.schoolName}
             </span>
@@ -89,9 +90,9 @@ const QuickLook = () => {
             <Link to="/contact-us">
               <Button
                 sx={{
-                  background: "#1565c0",
+                  background: themeData.darkPalette.secondary.main,
                   "&:hover": {
-                    backgroundColor: "#1565c0",
+                    backgroundColor: themeData.darkPalette.secondary.main,
                   },
                 }}
                 variant="contained"

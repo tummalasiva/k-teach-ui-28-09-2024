@@ -73,7 +73,7 @@ const FooterText = styled(Typography)(({ theme }) => ({
 
 const OuterBox = styled(Box)(({ theme }) => ({
   borderRadius: "50%",
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   "&:hover": { backgroundColor: themeData.darkPalette.primary.main },
   height: 100,
   width: 100,
@@ -138,7 +138,7 @@ const Play = styled(Box)(({ theme }) => ({
 }));
 const MuiBox = styled(Box)(({ theme }) => ({
   marginTop: "1.5rem",
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   "&:hover": {
     backgroundColor: themeData.darkPalette.primary.main,
   },
@@ -243,7 +243,7 @@ const IntroVideo = () => {
                   <Box component="div" onClick={handleOpen}>
                     <BsPlayFill
                       style={{
-                        color: "#1565c0",
+                        color: themeData.darkPalette.secondary.main,
                         fontSize: "50px",
                         marginLeft: "6px",
                         marginTop: "5px",
