@@ -8,12 +8,23 @@ import {
   styled,
   Grid,
   Modal,
+  keyframes,
 } from "@mui/material";
-import SettingContext from "../../context/SettingsContext";
-import CircularWaves from "./AnimatedButton/CircularWaves";
+import SettingContext from "../../../context/SettingsContext";
+import CircularWaves from "../AnimatedButton/CircularWaves";
 // icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
+const slideIn = keyframes`
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 const style = {
   position: "absolute",
   top: "50%",
@@ -55,7 +66,6 @@ const AnimationBox = styled(Box)(({ theme }) => ({
   marginTop: "3%",
 
   letterSpacing: "0.2rem",
-  fontFamily: "serif",
   [theme.breakpoints.down("sm")]: {
     fontSize: "30px",
   },

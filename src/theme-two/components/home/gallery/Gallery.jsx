@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { calculateSlidersData, imageCarousalSettings } from "../data/carousal";
+import {
+  calculateSlidersData,
+  imageCarousalSettings,
+} from "../../../data/Carousal";
 import {
   CardMedia,
   styled,
   Card,
   CardContent,
   Typography,
+  Box,
 } from "@mui/material";
 import Slider from "react-slick";
 
@@ -85,12 +89,12 @@ function Gallery({ galleryData = [], sliderRef, setModalOpen }) {
       >
         {galleryData?.map((galleryImg) => (
           <>
-            <Card key={galleryImg._id} sx={{ width: 345, height: 382, mb: 3 }}>
+            <Card key={galleryImg._id} sx={{ width: 345, height: 382, mb: 2 }}>
               <ImageSliders
                 galleryImg={galleryImg}
                 setModalOpen={setModalOpen}
               />
-              <CardContent sx={{ mt: 1 }}>
+              <CardContent>
                 <MuiTitle gutterBottom variant="h5" component="div">
                   {galleryImg.title}
                 </MuiTitle>
