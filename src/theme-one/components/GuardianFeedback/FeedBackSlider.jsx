@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useCallback } from "react";
 import Carousel from "react-spring-3d-carousel";
-import themeData from "../../../data/themeData";
+
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const data = [
@@ -120,7 +120,7 @@ export default function FeedBackSlider() {
               <Typography
                 variant="h3"
                 sx={{
-                  color: themeData.darkPalette.primary.main,
+                  color: "#F86F03",
                   fontWeight: "bold",
                   fontSize: "40px",
                 }}
@@ -141,7 +141,7 @@ export default function FeedBackSlider() {
           <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
           <FiberManualRecordIcon
             sx={{
-              color: themeData.darkPalette.primary.main,
+              color: "#F86F03",
               fontSize: "10px",
               marginTop: "14px",
               marginLeft: "5px",
@@ -185,9 +185,7 @@ export default function FeedBackSlider() {
                   onClick={() => onChangeSlide(index)}
                   style={{
                     backgroundColor:
-                      index === currentSlide
-                        ? themeData.darkPalette.secondary.main
-                        : "rgba(0, 0, 0, 0.2)",
+                      index === currentSlide ? "#1565c0" : "rgba(0, 0, 0, 0.2)",
                   }}
                 />
               ))}

@@ -71,7 +71,7 @@ export default function AddFeedback() {
 
           justifyContent: "center",
           columnGap: 2,
-          backgroundColor: (theme) => theme.palette.primary.dark,
+          backgroundColor: "#1565c0",
           borderTopLeftRadius: 5,
           borderBottomLeftRadius: 5,
           padding: 1,

@@ -98,7 +98,7 @@ export default function RegistrationForm() {
 
           <Button
             fullWidth
-            sx={{ marginTop: 4, padding: 1.5 }}
+            sx={{ marginTop: 4, padding: 1.5, backgroundColor: "#1565c0" }}
             variant="contained"
             type="submit"
           >

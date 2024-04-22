@@ -55,7 +55,7 @@ const QuickLook = () => {
             }}
           >
             A QUICK LOOK AT
-            <span style={{ color: "#068FFF" }}>
+            <span style={{ color: "#1565c0" }}>
               {" "}
               {selectedSetting.schoolName}
             </span>
@@ -87,7 +87,9 @@ const QuickLook = () => {
             }}
           >
             <Link to="/contact-us">
-              <Button variant="contained">Contact Us</Button>{" "}
+              <Button sx={{ background: "#1565c0" }} variant="contained">
+                Contact Us
+              </Button>{" "}
             </Link>
           </Box>
         </Grid>

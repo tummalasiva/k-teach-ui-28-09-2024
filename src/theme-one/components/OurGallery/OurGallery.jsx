@@ -21,7 +21,6 @@ import image1 from "../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
-import themeData from "../../../data/themeData";
 
 const TextBox1 = styled(Box)(({ theme }) => ({
   textShadow: "10px 8px 8px #969c96",
@@ -45,7 +44,7 @@ const Main = styled(Box)(({ theme }) => ({
 }));
 
 const StyledIconMiddle = styled(FiberManualRecordIcon)(({ theme }) => ({
-  color: themeData.darkPalette.primary.main,
+  color: "#F86F03",
   fontSize: "10px",
   marginTop: "14px",
   marginLeft: "5px",
@@ -63,7 +62,7 @@ const LeftHeader = styled(Typography)(({ theme }) => ({
 }));
 
 const RightHeader = styled(Typography)(({ theme }) => ({
-  color: themeData.darkPalette.primary.main,
+  color: "#F86F03",
   fontWeight: "bold",
   fontSize: "40px",
 }));

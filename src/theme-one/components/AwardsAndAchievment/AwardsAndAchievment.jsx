@@ -20,7 +20,6 @@ import image2 from "../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
 import Awards from "./Awards";
-import themeData from "../../../data/themeData";
 
 const AppSlider = styled(Slider)`
   width: 100%;
@@ -114,7 +113,7 @@ const AwardsAndAchievment = () => {
                 <Typography
                   variant="h3"
                   sx={{
-                    color: themeData.darkPalette.primary.main,
+                    color: "#F86F03",
                     fontWeight: "bold",
                     fontSize: "40px",
                   }}
@@ -137,7 +136,7 @@ const AwardsAndAchievment = () => {
             />
             <FiberManualRecordIcon
               sx={{
-                color: themeData.darkPalette.primary.main,
+                color: "#F86F03",
                 fontSize: "10px",
                 marginTop: "14px",
                 marginLeft: "5px",

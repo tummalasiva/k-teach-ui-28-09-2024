@@ -4,7 +4,6 @@ import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
 import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
 import dayjs from "dayjs";
 import RegistrationForm from "./RegistrationForm";
-import themeData from "../../../data/themeData";
 
 const MovingTextContainer = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -66,7 +65,7 @@ const GridContainerBox = styled(Grid)(
 
 const SubHeader1 = styled(Typography)(({}) => ({
   fontSize: "16px",
-  color: themeData.darkPalette.primary.main,
+  color: "#F86F03",
   marginTop: "10px",
   fontWeight: "bold",
 }));
@@ -136,7 +135,7 @@ const BirthdayEvents = () => {
               variant="h4"
               sx={{
                 fontWeight: "bold",
-                color: themeData.darkPalette.primary.main,
+                color: "#F86F03",
                 fontSize: { sm: "50px", xs: "30px" },
               }}
             >

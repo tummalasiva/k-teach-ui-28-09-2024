@@ -2,7 +2,7 @@ import { Box, Card, CardMedia, CardContent, styled } from "@mui/material";
 import React from "react";
 import Typography from "@mui/material/Typography";
 import avatar from "../../../theme-one/assets/Images/avatar.jpg";
-import themeData from "../../../data/themeData";
+
 import { FaQuoteLeft } from "react-icons/fa";
 
 const cardStyle = {
@@ -63,7 +63,7 @@ const Feedbacks = ({ feedback, parentName, studentName }) => {
         </Typography>
         <Typography
           sx={{
-            color: themeData.darkPalette.secondary.main,
+            color: "#1565c0",
             fontFamily: "Work Sans , Arial, sans-serif",
           }}
           mt={3}

@@ -11,7 +11,7 @@ import {
 
 import { ThemeProvider } from "@emotion/react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import themeData from "../../../data/themeData";
+
 import Events from "./Events";
 
 const theme = createTheme();
@@ -109,13 +109,13 @@ const TextBox1 = styled(Box)(({ theme }) => ({
 
 const ViewMore = styled(Button)(({ theme }) => ({
   fontSize: "10px",
-  color: themeData.darkPalette.primary.main,
+  color: "#F86F03",
   border: "1px solid",
 }));
 
 const ViewLessEvents = styled(Button)(({ theme }) => ({
   fontSize: "10px",
-  color: themeData.darkPalette.primary.main,
+  color: "#F86F03",
   border: "1px solid",
 }));
 
@@ -171,7 +171,7 @@ const OurEvents = () => {
               <Typography
                 variant="h3"
                 sx={{
-                  color: themeData.darkPalette.primary.main,
+                  color: "#F86F03",
                   fontWeight: "bold",
                   fontSize: "40px",
                 }}
@@ -193,7 +193,7 @@ const OurEvents = () => {
           <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
           <FiberManualRecordIcon
             sx={{
-              color: themeData.darkPalette.primary.main,
+              color: "#F86F03",
               fontSize: "10px",
               marginTop: "14px",
               marginLeft: "5px",
