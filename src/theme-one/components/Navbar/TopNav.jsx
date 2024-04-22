@@ -38,8 +38,8 @@ const DataContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const SelectButton = styled(Button)(({ theme }) => ({
-  backgroundColor: themeData.darkPalette.secondary.main,
-  "&:hover": { backgroundColor: themeData.darkPalette.secondary.main },
+  backgroundColor: "  #1565c0",
+  "&:hover": { backgroundColor: "  #1565c0" },
   [theme.breakpoints.down("sm")]: {
     fontSize: "11px",
   },
@@ -125,6 +125,10 @@ export default function TopNav() {
             startIcon={<Person sx={{ color: "#ffff" }} />}
             variant="contained"
             size="small"
+            sx={{
+              backgroundColor: "#F86F03",
+              "&:hover": { backgroundColor: "#F86F03" },
+            }}
           >
             Login
           </Button>

@@ -13,7 +13,6 @@ const MainBox = styled(Box)(({ theme }) => ({
     "linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url(https://shtheme.com/demosd/eduvisionwp/wp-content/themes/eduvision/images/index06/3.jpg)",
   backgroundRepeat: "no-repeat",
   width: "100%",
-
   justifyContent: "center",
   display: "flex",
   flexDirection: "column",
@@ -26,7 +25,6 @@ const MuiHeading = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
   color: "white",
   fontFamily: "sans-serif",
-  // marginLeft: "40px",
 }));
 
 const QuickLook = () => {
@@ -34,7 +32,7 @@ const QuickLook = () => {
   return (
     <MainBox
       sx={{
-        padding: { xs: "10px", sm: "10px", md: "10px", lg: "60px 25px" },
+        padding: { xs: "0px", sm: "0px", md: "10px 0px", lg: "60px 0px" },
       }}
     >
       <Grid container>
@@ -57,7 +55,7 @@ const QuickLook = () => {
             }}
           >
             A QUICK LOOK AT
-            <span style={{ color: "#068FFF" }}>
+            <span style={{ color: "#1565c0" }}>
               {" "}
               {selectedSetting.schoolName}
             </span>
@@ -67,7 +65,7 @@ const QuickLook = () => {
             sx={{
               fontSize: { xs: "14px", sm: "16px", md: "1.1rem" },
               textAlign: { xs: "center", sm: "center", md: "left" },
-              margin: { xs: "1rem", sm: "1rem", md: "1rem", lg: "2rem" },
+              padding: { xs: "1rem", sm: "1rem", md: "1rem", lg: "2rem" },
             }}
           >
             {selectedSetting.schoolName} School is a prestigious educational
@@ -89,7 +87,17 @@ const QuickLook = () => {
             }}
           >
             <Link to="/contact-us">
-              <Button variant="contained">Contact Us</Button>{" "}
+              <Button
+                sx={{
+                  background: "#1565c0",
+                  "&:hover": {
+                    backgroundColor: "#1565c0",
+                  },
+                }}
+                variant="contained"
+              >
+                Contact Us
+              </Button>{" "}
             </Link>
           </Box>
         </Grid>

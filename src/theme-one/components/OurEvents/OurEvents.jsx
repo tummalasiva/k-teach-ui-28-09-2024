@@ -1,18 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  createTheme,
-  styled,
-  Card,
-} from "@mui/material";
-
+import React, { useState } from "react";
+import { Grid, Box, Button, createTheme, styled } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import themeData from "../../../data/themeData";
 import Events from "./Events";
+import Header from "../Header";
 
 const theme = createTheme();
 export const cards = [
@@ -97,83 +87,22 @@ const ViewLess = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "10%",
-  textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+const ViewMore = styled(Button)(({ theme }) => ({
+  fontSize: "10px",
+  color: "#F86F03",
+  border: "1px solid",
 }));
 
-const OurEvent = () => {
-  return (
-    <>
-      <TextBox1>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h3"
-              color="black"
-              sx={{ fontWeight: "bold", fontSize: "40px" }}
-            >
-              OUR{" "}
-            </Typography>
-          </Box>
-          &nbsp;&nbsp;
-          <Box>
-            <Typography
-              variant="h3"
-              sx={{
-                color: themeData.darkPalette.primary.main,
-                fontWeight: "bold",
-                fontSize: "40px",
-              }}
-            >
-              EVENTS
-            </Typography>
-          </Box>
-        </Box>
-      </TextBox1>
-
-      <Box
-        sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
-      >
-        <Typography component="p">________</Typography>
-        <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
-        <FiberManualRecordIcon
-          sx={{
-            color: themeData.darkPalette.primary.main,
-            fontSize: "10px",
-            marginTop: "14px",
-            marginLeft: "5px",
-          }}
-        />
-        <FiberManualRecordIcon
-          sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
-        />
-        <Typography component="p">________</Typography>
-      </Box>
-    </>
-  );
-};
+const ViewLessEvents = styled(Button)(({ theme }) => ({
+  fontSize: "10px",
+  color: "#F86F03",
+  border: "1px solid",
+}));
 
 const ViewAllButton = ({ handleClick }) => {
   return (
     <ViewAll item xs={12} md={12}>
-      <Button
-        onClick={handleClick}
-        sx={{ fontSize: "10px", color: "#F86F03", border: "1px solid" }}
-      >
-        View All
-      </Button>
+      <ViewMore onClick={handleClick}>View All</ViewMore>
     </ViewAll>
   );
 };
@@ -181,20 +110,13 @@ const ViewAllButton = ({ handleClick }) => {
 const ViewLessButton = ({ handleClick }) => {
   return (
     <ViewLess item xs={12}>
-      <Button
-        onClick={handleClick}
-        sx={{ fontSize: "10px", color: "#F86F03", border: "1px solid" }}
-      >
-        View Less
-      </Button>
+      <ViewLessEvents onClick={handleClick}>View Less</ViewLessEvents>
     </ViewLess>
   );
 };
 
 const OurEvents = () => {
   const [showAll, setShowAll] = useState(false);
-  const [events, setEvents] = useState([]);
-  const [totalEvents, setTotalEvents] = useState(0);
 
   const handleViewAllClick = () => {
     setShowAll(true);
@@ -207,16 +129,29 @@ const OurEvents = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <OurEvent />
+        <Box pt={3}>
+          {" "}
+          <Header title1="Our" title2="Events" />
+        </Box>
         {cards.length >= 4 && !showAll && (
           <ViewAllButton handleClick={handleViewAllClick} />
         )}
 
-        {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
-          <React.Fragment key={index}>
-            <Events card={card} />
-          </React.Fragment>
-        ))}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
+            <React.Fragment key={index}>
+              <Events card={card} />
+            </React.Fragment>
+          ))}
+        </Box>
         {showAll && <ViewLessButton handleClick={handleViewLessClick} />}
       </ThemeProvider>
     </>

@@ -119,8 +119,8 @@ function App() {
           }}
         >
           {/* <NavDrawer /> */}
-          {/* <HomePage1 /> */}
-          <HomePage2 />
+          <HomePage1 />
+          {/* <HomePage2 /> */}
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

@@ -13,7 +13,7 @@ const Label = styled("label")(() => ({
   paddingLeft: "10px",
 }));
 
-const FilterBox = styled("Box")(() => ({
+const FilterBox = styled(Box)(() => ({
   display: "flex",
   justifyContent: "flex-end",
   alignItems: "center",
