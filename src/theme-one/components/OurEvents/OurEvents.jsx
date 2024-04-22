@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grid, Box, Button, createTheme, styled } from "@mui/material";
-
 import { ThemeProvider } from "@emotion/react";
-
 import Events from "./Events";
 import Header from "../Header";
 

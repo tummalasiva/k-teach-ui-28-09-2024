@@ -90,7 +90,6 @@ const Events = ({ card }) => {
   console.log(card.content);
 
   let onlyDay = card.fromDate;
-
   const date = moment(onlyDay);
   const specificDate = date.format("Do");
 
@@ -100,15 +99,8 @@ const Events = ({ card }) => {
   const specificTime = time.format("h:mm A");
 
   return (
-    <Grid
-      container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
+    <Grid container display="flex" justifyContent="center" alignItems="center">
+      <Grid item xs={12} sm={12} md={12} lg={2} justifyContent="center">
         <Random>
           <Typography mt={7} variant="h4" textAlign="center">
             {specificDate}

@@ -83,7 +83,7 @@ const LeftTitle = styled(Typography)(({ theme }) => ({
 }));
 const RightTitle = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
-  color: "#F86F03",
+  color: "#1565c0",
 }));
 
 const names = [

@@ -87,7 +87,15 @@ const QuickLook = () => {
             }}
           >
             <Link to="/contact-us">
-              <Button sx={{ background: "#1565c0" }} variant="contained">
+              <Button
+                sx={{
+                  background: "#1565c0",
+                  "&:hover": {
+                    backgroundColor: "#1565c0",
+                  },
+                }}
+                variant="contained"
+              >
                 Contact Us
               </Button>{" "}
             </Link>

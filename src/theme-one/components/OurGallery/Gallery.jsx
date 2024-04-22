@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from "@mui/material";
 import Slider from "react-slick";
 
@@ -45,12 +44,6 @@ const AppSlider = styled(Slider)`
     overflow: hidden;
   }
 `;
-
-const ImagBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 function ImageSliders({ galleryImg, setModalOpen }) {
   return (

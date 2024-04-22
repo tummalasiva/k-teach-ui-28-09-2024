@@ -6,6 +6,7 @@ import {
   TextField,
   TextareaAutosize,
   Dialog,
+  styled,
 } from "@mui/material";
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
@@ -17,6 +18,35 @@ import { useMediaQuery } from "@mui/material";
 
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useTheme } from "@mui/material/styles";
+
+const MuiBox = styled(Box)(({ theme }) => ({
+  cursor: "pointer",
+  position: "fixed",
+  right: -165,
+  width: 205,
+  zIndex: 11111,
+  display: "flex",
+  alignItems: "center",
+  top: "35%",
+
+  [theme.breakpoints.down("sm")]: {
+    top: "40%",
+  },
+  [theme.breakpoints.down("xs")]: {
+    top: "45%",
+  },
+
+  justifyContent: "center",
+  columnGap: 2,
+  backgroundColor: "#1565c0",
+  borderTopLeftRadius: 5,
+  borderBottomLeftRadius: 5,
+  padding: "8px",
+  transition: "right 0.3s ease-in-out",
+  ":hover": {
+    right: 0,
+  },
+}));
 
 const style = {
   position: "absolute",
@@ -54,33 +84,11 @@ export default function AddFeedback() {
   };
   return (
     <>
-      <Box
+      <MuiBox
         component="div"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleOpen}
-        sx={{
-          cursor: "pointer",
-          position: "fixed",
-          top: { xs: "45%", sm: "40%", md: "35%", lg: "35%" },
-          right: -165,
-          width: 205,
-          zIndex: 11111,
-          display: "flex",
-          alignItems: "center",
-
-          justifyContent: "center",
-          columnGap: 2,
-          backgroundColor: "#1565c0",
-          borderTopLeftRadius: 5,
-          borderBottomLeftRadius: 5,
-          padding: 1,
-
-          transition: "right 0.3s ease-in-out",
-          ":hover": {
-            right: 0,
-          },
-        }}
       >
         <FeedbackIcon sx={{ color: "white" }} />{" "}
         <Typography
@@ -90,7 +98,7 @@ export default function AddFeedback() {
         >
           Guardian Feedback
         </Typography>
-      </Box>
+      </MuiBox>
       {lgScreen ? (
         <Modal
           open={open}
