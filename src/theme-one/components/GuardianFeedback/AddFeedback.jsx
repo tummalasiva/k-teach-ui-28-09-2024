@@ -1,31 +1,22 @@
 import {
   Box,
   Button,
-  Card,
   FormControl,
   Grid,
-  styled,
   TextField,
   TextareaAutosize,
-  Paper,
-  CardMedia,
-  CardContent,
   Dialog,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useCallback } from "react";
-import Carousel from "react-spring-3d-carousel";
-import avatar from "../../theme-one/assets/Images/avatar.jpg";
-import { config } from "react-spring";
+
 import { useMediaQuery } from "@mui/material";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useTheme } from "@mui/material/styles";
-import themeData from "../../data/themeData";
 
 const style = {
   position: "absolute",
@@ -38,94 +29,11 @@ const style = {
   p: 5,
 };
 
-const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "5%",
-  textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));
-
-const DotsContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: 3,
-}));
-
-const Dot = styled(Paper)(({ theme, active }) => ({
-  height: "15px",
-  width: "15px",
-  borderRadius: "50%",
-  cursor: "pointer",
-}));
-
-const cardStyle = {
-  display: "flex",
-  width: "100%",
-  maxWidth: 500,
-  minWidth: 300,
-};
-
-const FeedbackItem = ({ feedback, parentName, studentName }) => {
-  return (
-    <Card elevation={0} sx={cardStyle}>
-      <Box sx={{ display: { xs: "none", md: "block" }, mt: 2 }}>
-        <CardMedia
-          component="img"
-          sx={{ width: 130 }}
-          image={avatar}
-          alt="Loading..."
-        />
-      </Box>
-      <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          {studentName}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          color="text.secondary"
-          component="div"
-          fontSize="18px"
-          lineHeight={1.6}
-          fontWeight="500"
-        >
-          {feedback}
-        </Typography>
-        <Typography
-          sx={{
-            color: "#1eaaf1",
-            fontFamily: "Work Sans , Arial, sans-serif",
-          }}
-          mt={3}
-        >
-          Guardian
-        </Typography>
-        <Typography variant="body1" mt={1} mb={1}>
-          {parentName}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-};
-
-const GuardianFeedback = () => {
+export default function AddFeedback() {
   const [open, setOpen] = React.useState(false);
-
-  const [list, setList] = useState([]);
-
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const isMobile = useMediaQuery("(max-width:600px)");
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const modalWidth = isMobile ? "100%" : style.width;
-  const slidesToShow = isMobile ? 1 : 3;
+  const [isHovered, setIsHovered] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const [formData, setFormData] = useState({
     parentName: "",
@@ -134,7 +42,9 @@ const GuardianFeedback = () => {
     feedback: "",
     approved: false,
   });
-
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const lgScreen = useMediaQuery("(min-width:600px)");
   const handleOnchange = (e) => {
     const { name, value } = e.target;
     setFormData((prv) => ({
@@ -142,24 +52,45 @@ const GuardianFeedback = () => {
       [name]: value,
     }));
   };
-
-  const onChangeSlide = useCallback((newSlide) => {
-    setCurrentSlide(newSlide);
-  }, []);
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      if (list.length) {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % list.length);
-      }
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [list]);
-
-  const lgScreen = useMediaQuery("(min-width:600px)");
   return (
     <>
+      <Box
+        component="div"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleOpen}
+        sx={{
+          cursor: "pointer",
+          position: "fixed",
+          top: { xs: "45%", sm: "40%", md: "35%", lg: "35%" },
+          right: -165,
+          width: 205,
+          zIndex: 11111,
+          display: "flex",
+          alignItems: "center",
+
+          justifyContent: "center",
+          columnGap: 2,
+          backgroundColor: (theme) => theme.palette.primary.dark,
+          borderTopLeftRadius: 5,
+          borderBottomLeftRadius: 5,
+          padding: 1,
+
+          transition: "right 0.3s ease-in-out",
+          ":hover": {
+            right: 0,
+          },
+        }}
+      >
+        <FeedbackIcon sx={{ color: "white" }} />{" "}
+        <Typography
+          sx={{
+            color: "white",
+          }}
+        >
+          Guardian Feedback
+        </Typography>
+      </Box>
       {lgScreen ? (
         <Modal
           open={open}
@@ -375,147 +306,6 @@ const GuardianFeedback = () => {
           </Box>
         </Dialog>
       )}
-
-      <TextBox1>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h3"
-              color="black"
-              sx={{ fontWeight: "bold", fontSize: "40px" }}
-            >
-              Guardian
-            </Typography>
-          </Box>
-          &nbsp;&nbsp;
-          <Box>
-            <Typography
-              variant="h3"
-              sx={{
-                color: themeData.darkPalette.primary.main,
-                fontWeight: "bold",
-                fontSize: "40px",
-              }}
-            >
-              Feedback
-            </Typography>
-          </Box>
-        </Box>
-      </TextBox1>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "50px",
-        }}
-      >
-        <Typography component="p">_____________</Typography>
-        <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
-        <FiberManualRecordIcon
-          sx={{
-            color: themeData.darkPalette.primary.main,
-            fontSize: "10px",
-            marginTop: "14px",
-            marginLeft: "5px",
-          }}
-        />
-        <FiberManualRecordIcon
-          sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
-        />
-        <Typography component="p">_____________</Typography>
-      </Box>
-      <Box
-        component="div"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={handleOpen}
-        sx={{
-          cursor: "pointer",
-          position: "fixed",
-          // top: "35%",
-          top: { xs: "45%", sm: "40%", md: "35%", lg: "35%" },
-          right: -165,
-          width: 205,
-          zIndex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          columnGap: 2,
-          backgroundColor: (theme) => theme.palette.primary.dark,
-          borderTopLeftRadius: 5,
-          borderBottomLeftRadius: 5,
-          padding: 1,
-          transition: "right 0.3s ease-in-out",
-          ":hover": {
-            right: 0,
-          },
-        }}
-      >
-        <FeedbackIcon sx={{ color: "white" }} />{" "}
-        <Typography
-          sx={{
-            color: "white",
-          }}
-        >
-          Guardian Feedback
-        </Typography>
-      </Box>
-      {!list.length ? null : (
-        <Box
-          sx={{
-            height: "50vh",
-            width: "80%",
-            margin: "auto",
-          }}
-        >
-          <Carousel
-            slides={list.map((data) => ({
-              key: data._id,
-              content:
-                data.approved === true ? (
-                  <FeedbackItem
-                    studentName={data.studentName}
-                    feedback={data.feedback}
-                    parentName={data.parentName}
-                  />
-                ) : (
-                  ""
-                ),
-            }))}
-            showNavigation={false}
-            autoPlay={true}
-            goToSlide={currentSlide}
-            animationConfig={config.default}
-            slidesToShow={slidesToShow}
-            offsetRadius={1}
-          />
-          <DotsContainer style={{ textAlign: "center" }}>
-            {list.map(
-              (slide, index) =>
-                slide.approved && (
-                  <Dot
-                    key={slide.key}
-                    onClick={() => onChangeSlide(index)}
-                    style={{
-                      backgroundColor:
-                        index === currentSlide
-                          ? "#1eaaf1"
-                          : "rgba(0, 0, 0, 0.2)",
-                    }}
-                  />
-                )
-            )}
-          </DotsContainer>
-        </Box>
-      )}
     </>
   );
-};
-
-export default GuardianFeedback;
+}

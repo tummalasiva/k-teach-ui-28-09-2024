@@ -107,73 +107,22 @@ const TextBox1 = styled(Box)(({ theme }) => ({
   },
 }));
 
-const OurEvent = () => {
-  return (
-    <>
-      <TextBox1>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h3"
-              color="black"
-              sx={{ fontWeight: "bold", fontSize: "40px" }}
-            >
-              OUR{" "}
-            </Typography>
-          </Box>
-          &nbsp;&nbsp;
-          <Box>
-            <Typography
-              variant="h3"
-              sx={{
-                color: themeData.darkPalette.primary.main,
-                fontWeight: "bold",
-                fontSize: "40px",
-              }}
-            >
-              EVENTS
-            </Typography>
-          </Box>
-        </Box>
-      </TextBox1>
+const ViewMore = styled(Button)(({ theme }) => ({
+  fontSize: "10px",
+  color: themeData.darkPalette.primary.main,
+  border: "1px solid",
+}));
 
-      <Box
-        sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
-      >
-        <Typography component="p">________</Typography>
-        <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
-        <FiberManualRecordIcon
-          sx={{
-            color: themeData.darkPalette.primary.main,
-            fontSize: "10px",
-            marginTop: "14px",
-            marginLeft: "5px",
-          }}
-        />
-        <FiberManualRecordIcon
-          sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
-        />
-        <Typography component="p">________</Typography>
-      </Box>
-    </>
-  );
-};
+const ViewLessEvents = styled(Button)(({ theme }) => ({
+  fontSize: "10px",
+  color: themeData.darkPalette.primary.main,
+  border: "1px solid",
+}));
 
 const ViewAllButton = ({ handleClick }) => {
   return (
     <ViewAll item xs={12} md={12}>
-      <Button
-        onClick={handleClick}
-        sx={{ fontSize: "10px", color: "#F86F03", border: "1px solid" }}
-      >
-        View All
-      </Button>
+      <ViewMore onClick={handleClick}>View All</ViewMore>
     </ViewAll>
   );
 };
@@ -181,20 +130,13 @@ const ViewAllButton = ({ handleClick }) => {
 const ViewLessButton = ({ handleClick }) => {
   return (
     <ViewLess item xs={12}>
-      <Button
-        onClick={handleClick}
-        sx={{ fontSize: "10px", color: "#F86F03", border: "1px solid" }}
-      >
-        View Less
-      </Button>
+      <ViewLessEvents onClick={handleClick}>View Less</ViewLessEvents>
     </ViewLess>
   );
 };
 
 const OurEvents = () => {
   const [showAll, setShowAll] = useState(false);
-  const [events, setEvents] = useState([]);
-  const [totalEvents, setTotalEvents] = useState(0);
 
   const handleViewAllClick = () => {
     setShowAll(true);
@@ -207,16 +149,76 @@ const OurEvents = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <OurEvent />
+        <TextBox1>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Box>
+              <Typography
+                variant="h3"
+                color="black"
+                sx={{ fontWeight: "bold", fontSize: "40px" }}
+              >
+                OUR{" "}
+              </Typography>
+            </Box>
+            &nbsp;&nbsp;
+            <Box>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: themeData.darkPalette.primary.main,
+                  fontWeight: "bold",
+                  fontSize: "40px",
+                }}
+              >
+                EVENTS
+              </Typography>
+            </Box>
+          </Box>
+        </TextBox1>
+
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
+        >
+          <Typography component="p">________</Typography>
+          <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
+          <FiberManualRecordIcon
+            sx={{
+              color: themeData.darkPalette.primary.main,
+              fontSize: "10px",
+              marginTop: "14px",
+              marginLeft: "5px",
+            }}
+          />
+          <FiberManualRecordIcon
+            sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
+          />
+          <Typography component="p">________</Typography>
+        </Box>
         {cards.length >= 4 && !showAll && (
           <ViewAllButton handleClick={handleViewAllClick} />
         )}
 
-        {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
-          <React.Fragment key={index}>
-            <Events card={card} />
-          </React.Fragment>
-        ))}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
+            <React.Fragment key={index}>
+              <Events card={card} />
+            </React.Fragment>
+          ))}
+        </Box>
         {showAll && <ViewLessButton handleClick={handleViewLessClick} />}
       </ThemeProvider>
     </>

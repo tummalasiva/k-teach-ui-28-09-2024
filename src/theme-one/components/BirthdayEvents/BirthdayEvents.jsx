@@ -32,7 +32,6 @@ const MovingTexts = styled(Box)(({}) => ({
   position: "absolute",
   bottom: 0,
   color: "white",
-
   animation: css`
     ${moveTextAnimation} 10s linear infinite
   `,
@@ -65,30 +64,47 @@ const GridContainerBox = styled(Grid)(
   `
 );
 
-const GridBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "5%",
+const SubHeader1 = styled(Typography)(({}) => ({
+  fontSize: "16px",
+  color: themeData.darkPalette.primary.main,
+  marginTop: "10px",
+  fontWeight: "bold",
+}));
+const SubHeader2 = styled(Typography)(({}) => ({
+  fontSize: "16px",
+  color: "#fff",
+  marginTop: "10px",
+  fontWeight: "bold",
 }));
 
-let names = [
+const names = [
   {
     name: "Raju",
     class: "10",
     section: "A",
+    rollNo: "6",
+    dob: "04/08/1999",
   },
   {
     name: "Monika",
     class: "10",
     section: "C",
+    rollNo: "3",
+    dob: "15/05/1998",
   },
   {
     name: "Alia",
     class: "8",
     section: "A",
+    rollNo: "9",
+    dob: "1/05/1994",
   },
   {
     name: "Raina",
     class: "9",
     section: "D",
+    rollNo: "8",
+    dob: "5/01/1908",
   },
 ];
 const BirthdayEvents = () => {
@@ -103,86 +119,84 @@ const BirthdayEvents = () => {
         }}
       >
         <Grid item>
-          <GridBox1>
-            <BirthdayBox>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  textShadow: "3px 3px black",
-                  fontSize: { sm: "50px", xs: "30px" },
-                }}
-              >
-                HAPPY{" "}
-              </Typography>
-              &nbsp;&nbsp;
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: "bold",
-                  color: themeData.darkPalette.primary.main,
-                  fontSize: { sm: "50px", xs: "30px" },
-                }}
-              >
-                BIRTHDAY{" "}
-              </Typography>
-              &nbsp;
-              <img
-                // src="cake-bg3.png"
-                src={RedImg}
-                style={{ height: "50px", width: "50px" }}
-                alt="loading..."
-              />
-            </BirthdayBox>
+          <BirthdayBox>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                color: "white",
+                textShadow: "3px 3px black",
+                fontSize: { sm: "50px", xs: "30px" },
+              }}
+            >
+              HAPPY{" "}
+            </Typography>
+            &nbsp;&nbsp;
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                color: themeData.darkPalette.primary.main,
+                fontSize: { sm: "50px", xs: "30px" },
+              }}
+            >
+              BIRTHDAY{" "}
+            </Typography>
+            &nbsp;
+            <img
+              // src="cake-bg3.png"
+              src={RedImg}
+              style={{ height: "50px", width: "50px" }}
+              alt="loading..."
+            />
+          </BirthdayBox>
 
-            {names.length ? (
-              <MovingTextContainer>
-                <MovingTexts>
-                  {names.map((data, i) => (
-                    <React.Fragment key={i}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                          color: "#FFD24D",
-                          mt: 4,
-                          width: "150px",
-                        }}
-                      ></Typography>
-                      <img
-                        src={Balloon}
-                        alt="loading..."
-                        style={{
-                          height: "170px",
-                          objectFit: "contain",
-                        }}
-                      />
-                      <Typography variant="h6" sx={{ fontSize: "16px", mt: 1 }}>
-                        <b style={{ color: "#FFD24D" }}>Name: </b>
+          {names.length ? (
+            <MovingTextContainer>
+              <MovingTexts>
+                {names.map((data, i) => (
+                  <React.Fragment key={i}>
+                    <img
+                      src={Balloon}
+                      alt="loading..."
+                      style={{
+                        height: "170px",
+                        marginTop: "30px",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <SubHeader1 variant="h6">
+                      Name:
+                      <SubHeader2 variant="h6" component="span">
                         {data.name}
-                      </Typography>
-                      <Typography variant="h6" sx={{ fontSize: "16px", mt: 1 }}>
-                        <b style={{ color: "#FFD24D" }}>Class: </b>
+                      </SubHeader2>
+                    </SubHeader1>
+                    <SubHeader1 variant="h6">
+                      Class:
+                      <SubHeader2 variant="h6" component="span">
                         {data.class}
-                      </Typography>
-                      <Typography variant="h6" sx={{ fontSize: "16px" }}>
-                        <b style={{ color: "#FFD24D" }}>Roll No: </b>
+                      </SubHeader2>
+                    </SubHeader1>
+                    <SubHeader1 variant="h6">
+                      Roll No:
+                      <SubHeader2 variant="h6" component="span">
                         {data.rollNo}, {data.section}
-                      </Typography>
-                      {/* <Typography variant="h6" sx={{ fontSize: "16px" }}>
-                        <b style={{ color: "#FFD24D" }}>DOB: </b>
-                        {dayjs(data.basicInfo.dob).format("DD, MMMM, YYYY")}
-                      </Typography> */}
-                    </React.Fragment>
-                  ))}
-                </MovingTexts>
-              </MovingTextContainer>
-            ) : null}
-          </GridBox1>
+                      </SubHeader2>
+                    </SubHeader1>
+                    <SubHeader1 variant="h6">
+                      DOB:
+                      <SubHeader2 variant="h6" component="span">
+                        {data.dob}
+                      </SubHeader2>
+                    </SubHeader1>
+                  </React.Fragment>
+                ))}
+              </MovingTexts>
+            </MovingTextContainer>
+          ) : null}
         </Grid>
 
-        <Grid item sx={{ paddingTop: "2rem" }}>
+        <Grid item sx={{ paddingTop: "1rem" }}>
           <RegistrationForm />
         </Grid>
       </Grid>
