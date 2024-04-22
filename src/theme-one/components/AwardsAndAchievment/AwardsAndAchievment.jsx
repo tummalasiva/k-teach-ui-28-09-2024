@@ -50,7 +50,6 @@ const MainContainer = styled(Container)(({ theme }) => ({
 }));
 
 const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "4rem",
   textShadow: "10px 8px 8px #969c96",
   [theme.breakpoints.down("md")]: {
     display: "flex",

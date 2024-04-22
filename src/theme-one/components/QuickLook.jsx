@@ -25,7 +25,6 @@ const MuiHeading = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
   color: "white",
   fontFamily: "sans-serif",
-  // marginLeft: "40px",
 }));
 
 const QuickLook = () => {
@@ -33,7 +32,7 @@ const QuickLook = () => {
   return (
     <MainBox
       sx={{
-        padding: { xs: "0px", sm: "0px", md: "10px", lg: "60px 0px" },
+        padding: { xs: "0px", sm: "0px", md: "10px 0px", lg: "60px 0px" },
       }}
     >
       <Grid container>
