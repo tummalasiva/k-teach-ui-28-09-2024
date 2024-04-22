@@ -148,12 +148,8 @@ const Slider = ({}) => {
   const [bannerImages, setBannerImages] = useState(backgroundImages);
 
   useEffect(() => {
-    setBannerImages(
-      selectedSetting?.bannerImages?.length
-        ? selectedSetting?.bannerImages
-        : backgroundImages
-    );
-  }, [selectedSetting]);
+    setBannerImages(backgroundImages);
+  }, []);
 
   const goToNextSlide = () => {
     setActiveIndex(
