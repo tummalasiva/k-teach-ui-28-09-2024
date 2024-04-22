@@ -14,6 +14,7 @@ import useResizeObserver from "use-resize-observer";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import SettingContext from "../../context/SettingsContext";
+import themeData from "../../data/themeData";
 
 const backgroundImages = [image1, image2, image3, image4];
 
@@ -81,7 +82,7 @@ const FirstMovingText = styled(MovingText)(({ theme }) => ({
   zIndex: 20,
   position: "relative",
   color: "white",
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   fontSize: "16px",
   fontWeight: "bold",
   display: "inline-block",
@@ -110,6 +111,7 @@ const SecondMovingText = styled(MovingText)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "20px",
+    paddingLeft: "60px",
   },
   [theme.breakpoints.between(279, 281)]: {
     fontSize: "16px",
@@ -130,6 +132,7 @@ const ThirdMovingText = styled(MovingText)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "20px",
+    paddingLeft: "60px",
   },
   [theme.breakpoints.between(279, 281)]: {
     fontSize: "16px",

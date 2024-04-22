@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography, styled } from "@mui/material";
+import { Box, Grid, Typography, styled } from "@mui/material";
 import React from "react";
 import dataList from "./dataList";
 import icon1 from "../../../theme-one/assets/Images/icon01.png";
@@ -7,16 +7,37 @@ import icon3 from "../../../theme-one/assets/Images/icon03.png";
 import icon4 from "../../../theme-one/assets/Images/icon04.png";
 
 import { useNavigate } from "react-router-dom";
+const Contenet = styled(Box)(({ theme }) => ({
+  display: "flex",
+  color: "black",
+  cursor: "pointer",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const MuiBox = styled(Box)(({ theme }) => ({
+  backgroundColor: "#F1F4F6",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+}));
+const ImageBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  marginBottom: "20px",
+  justifyContent: "center",
+  "&:hover": {
+    transform: "scale(1.2)",
+    transition: "all 0.3s ease",
+    behaviour: "smooth",
+  },
+}));
+
+const Header = styled(Typography)(({ theme }) => ({
+  fontWeight: 600,
+  width: "200px",
+  textAlign: "center",
+}));
 
 const Features = () => {
-  const MainBox = styled(Box)(({ theme }) => ({
-    display: "flex",
-    color: "black",
-    cursor: "pointer",
-    alignItems: "center",
-    justifyContent: "center",
-  }));
-
   let navigate = useNavigate();
   const handleClick = (data) => {
     console.log("clicked");
@@ -25,50 +46,28 @@ const Features = () => {
 
   let icons = [icon1, icon2, icon3, icon4];
   return (
-    <Box
-      sx={{
-        backgroundColor: "#F1F4F6",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <MuiBox>
       <Grid container>
         {dataList.map((d, i) => (
           <Grid key={i} item xs={12} lg={3} md={3}>
-            <MainBox py={5} component="div" onClick={() => handleClick(d.path)}>
+            <Contenet
+              py={5}
+              component="div"
+              onClick={() => handleClick(d.path)}
+            >
               <Box>
-                <Box
-                  mb={2}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    "&:hover": {
-                      transform: "scale(1.2)",
-                      transition: "all 0.3s ease",
-                      behaviour: "smooth",
-                    },
-                  }}
-                >
+                <ImageBox>
                   <img src={icons[i]} style={{ height: 85 }} alt="loading..." />
-                </Box>
-                <Typography
-                  variant="h6"
-                  fontSize={16}
-                  sx={{
-                    fontWeight: 600,
-                    width: "200px",
-                    textAlign: "center",
-                  }}
-                >
+                </ImageBox>
+                <Header variant="h6" fontSize={16}>
                   {d.title}
-                </Typography>
+                </Header>
               </Box>
-            </MainBox>
+            </Contenet>
           </Grid>
         ))}
       </Grid>
-    </Box>
+    </MuiBox>
   );
 };
 
