@@ -21,7 +21,6 @@ import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
 import Awards from "./Awards";
 import themeData from "../../../data/themeData";
-const theme = createTheme();
 
 const AppSlider = styled(Slider)`
   width: 100%;
@@ -83,7 +82,7 @@ const awards = [
 ];
 
 const AwardsAndAchievment = () => {
-  //   const [awards, setAwards] = useState([]);
+  const theme = createTheme();
 
   let sliderRef = useRef(null);
 
@@ -129,7 +128,7 @@ const AwardsAndAchievment = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              marginBottom: "50px",
+              marginBottom: "80px",
             }}
           >
             <Typography component="p">________</Typography>

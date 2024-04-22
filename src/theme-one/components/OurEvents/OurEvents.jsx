@@ -98,7 +98,7 @@ const ViewLess = styled(Grid)(({ theme }) => ({
 }));
 
 const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "10%",
+  marginTop: "7%",
   textShadow: "10px 8px 8px #969c96",
   [theme.breakpoints.down("md")]: {
     display: "flex",
@@ -183,7 +183,11 @@ const OurEvents = () => {
         </TextBox1>
 
         <Box
-          sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "50px",
+          }}
         >
           <Typography component="p">________</Typography>
           <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />

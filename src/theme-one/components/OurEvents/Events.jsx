@@ -78,7 +78,7 @@ const Random = styled(Box)(({ theme }) => ({
 }));
 const Date = styled(Typography)(() => ({
   fontSize: "15px",
-  textAlign: "right",
+  textAlign: "center",
   marginBottom: "35px",
 }));
 
@@ -109,8 +109,8 @@ const Events = ({ card }) => {
       }}
     >
       <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
-        <Random sx={{ marginRight: "30px" }}>
-          <Typography mt={7} variant="h4" textAlign="right">
+        <Random>
+          <Typography mt={7} variant="h4" textAlign="center">
             {specificDate}
           </Typography>
           <Date> {specificMonth}</Date>
@@ -121,7 +121,7 @@ const Events = ({ card }) => {
         xs={12}
         sm={12}
         md={12}
-        lg={4}
+        lg={5}
         sx={{
           marginY: "15px",
           display: "flex",
