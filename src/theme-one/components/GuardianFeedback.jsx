@@ -255,24 +255,11 @@ const GuardianFeedback = () => {
                   size="small"
                   variant="contained"
                   onClick={() => setOpen(false)}
-                  color="warning"
-                  // sx={{
-                  //   color: "#ffff",
-                  //   background: "#f86f03",
-                  //   ":hover": { background: "#f86f03" },
-                  // }}
+                  color="error"
                 >
                   Cancel
                 </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  type="submit"
-                  sx={{
-                    background: "#0E4BF1",
-                    ":hover": { background: "#0E4BF5" },
-                  }}
-                >
+                <Button size="small" variant="contained" type="submit">
                   Submit
                 </Button>
               </Box>
@@ -374,26 +361,13 @@ const GuardianFeedback = () => {
               >
                 <Button
                   size="small"
-                  variant="outlined"
+                  variant="contained"
                   onClick={() => setOpen(false)}
-                  sx={{
-                    color: "#ffff",
-                    background: "#f86f03",
-                    ":hover": { background: "#f86f03" },
-                  }}
+                  color="error"
                 >
                   Cancel
                 </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  type="submit"
-                  sx={{
-                    color: "#ffff",
-                    background: "#0E4BF1",
-                    ":hover": { background: "#0E4BF1" },
-                  }}
-                >
+                <Button size="small" variant="contained" type="submit">
                   Submit
                 </Button>
               </Box>
@@ -468,7 +442,7 @@ const GuardianFeedback = () => {
           top: { xs: "45%", sm: "40%", md: "35%", lg: "35%" },
           right: -165,
           width: 205,
-          zIndex: 11111,
+          zIndex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

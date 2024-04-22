@@ -24,6 +24,7 @@ const FooterText = styled(Typography)(({ theme }) => ({
 const StyledLink = styled(RouterLink)({
   textDecoration: "none",
   color: "white",
+  fontFamily: "sans-serif",
   cursor: "pointer",
   transition: "1s",
   "&:hover": {

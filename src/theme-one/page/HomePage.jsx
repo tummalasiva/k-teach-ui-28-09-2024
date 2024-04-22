@@ -11,10 +11,12 @@ import AwardsAndAchievment from "../components/AwardsAndAchievment/AwardsAndAchi
 import QuickLook from "../components/QuickLook";
 import OurGallery from "../components/OurGallery/OurGallery";
 import Footer from "../components/Footer";
+import ScrollTop from "../components/ScrollTop";
 
 export default function HomePage() {
   return (
     <>
+      <ScrollTop />
       <TopNav />
       <MainNav />
       <Slider />
