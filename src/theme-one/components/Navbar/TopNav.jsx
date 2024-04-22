@@ -15,20 +15,20 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Person } from "@mui/icons-material";
 import themeData from "../../../data/themeData";
 
-const MainContainer = styled(Box)({
+const MainContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: "#C8C8C8",
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
   alignItems: "center",
   padding: "10px 80px",
-});
+  [theme.breakpoints.down("sm")]: {
+    padding: "10px ",
+  },
+}));
 
 const SideContainer = styled(Grid)(({ theme }) => ({
+  padding: "10px",
   gap: "20px",
-  [theme.breakpoints.down("sm")]: {
-    padding: "5px",
-    marginLeft: "0",
-  },
 }));
 
 const DataContainer = styled(Grid)(({ theme }) => ({
@@ -47,6 +47,12 @@ const SelectButton = styled(Button)(({ theme }) => ({
 
 export default function TopNav() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedSchool, setSelectedSchool] = useState(null);
+  const [schools, setSchools] = useState([
+    "Kayaka School",
+    "Anjuman",
+    "Siddhart Pu college",
+  ]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,7 +61,8 @@ export default function TopNav() {
     setAnchorEl(null);
   };
 
-  const handleOptionSelect = (option) => {
+  const handleSchoolSelect = (schoolName) => {
+    setSelectedSchool(schoolName);
     handleClose();
   };
   return (
@@ -97,24 +104,22 @@ export default function TopNav() {
             size="small"
             endIcon={<KeyboardArrowDownIcon />}
           >
-            ABC School
+            {selectedSchool || "Sample School Name"}
           </SelectButton>
-          {/* <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  {" "}
-                  {settings
-                    .filter((s) => s.active)
-                    .map((s) => {
-                      return (
-                        <MenuItem key={s._id} onClick={() => handleOptionSelect(s)}>
-                          {s.schoolName}
-                        </MenuItem>
-                      );
-                    })}
-                </Menu> */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {schools.map((schoolName) => (
+              <MenuItem
+                key={schoolName}
+                onClick={() => handleSchoolSelect(schoolName)}
+              >
+                {schoolName}
+              </MenuItem>
+            ))}
+          </Menu>
 
           <Button
             startIcon={<Person sx={{ color: "#ffff" }} />}
