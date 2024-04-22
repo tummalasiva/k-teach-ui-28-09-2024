@@ -61,7 +61,6 @@ const TypographyMain = styled(Typography)(({ theme }) => ({
     margin: 0,
     padding: "0",
   },
-
   [theme.breakpoints.down(600)]: {
     fontSize: "20px",
   },
