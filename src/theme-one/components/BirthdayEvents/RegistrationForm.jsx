@@ -22,6 +22,14 @@ const Header = styled(Typography)(() => ({
   fontWeight: 600,
   color: "#333",
 }));
+const MuiButton = styled(Button)(() => ({
+  marginTop: "25px",
+  padding: "10px",
+  backgroundColor: "#1565c0",
+  "&:hover": {
+    backgroundColor: "#1565c0",
+  },
+}));
 const StyledTextField = styled(TextField)({
   // boxShadow: "0 5px 10px rgba(0, 0, 0, 0.2)",
   transition: "box-shadow 0.3s",
@@ -96,14 +104,9 @@ export default function RegistrationForm() {
             label="I accept all terms & condition"
           />
 
-          <Button
-            fullWidth
-            sx={{ marginTop: 4, padding: 1.5, backgroundColor: "#1565c0" }}
-            variant="contained"
-            type="submit"
-          >
+          <MuiButton fullWidth variant="contained" type="submit">
             Register Now
-          </Button>
+          </MuiButton>
 
           <Typography mt={2} textAlign="center">
             Already have an account? <a href="/login">Login now</a>

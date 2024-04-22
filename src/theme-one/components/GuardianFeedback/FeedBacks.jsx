@@ -15,8 +15,8 @@ const cardStyle = {
 const FaqStyle = styled(FaQuoteLeft)(({ theme }) => ({
   fontSize: "100px",
   position: "absolute",
-  top: "9%",
-  left: "50%",
+  top: "6%",
+  left: "40%",
   color: "#5d50c6",
   opacity: 0.1,
   [theme.breakpoints.down("md")]: {
@@ -40,6 +40,7 @@ const Feedbacks = ({ feedback, parentName, studentName }) => {
   return (
     <Card elevation={0} sx={cardStyle}>
       <Box sx={{ display: { xs: "none", md: "block" }, mt: 2 }}>
+        <FaqStyle />
         <CardMedia
           component="img"
           sx={{ width: 130 }}

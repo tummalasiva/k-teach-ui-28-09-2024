@@ -1,18 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  createTheme,
-  styled,
-  Card,
-} from "@mui/material";
+import { Grid, Box, Button, createTheme, styled } from "@mui/material";
 
 import { ThemeProvider } from "@emotion/react";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 import Events from "./Events";
+import Header from "../Header";
 
 const theme = createTheme();
 export const cards = [
@@ -97,16 +89,6 @@ const ViewLess = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "7%",
-  textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));
-
 const ViewMore = styled(Button)(({ theme }) => ({
   fontSize: "10px",
   color: "#F86F03",
@@ -149,61 +131,7 @@ const OurEvents = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <TextBox1>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h3"
-                color="black"
-                sx={{ fontWeight: "bold", fontSize: "40px" }}
-              >
-                OUR{" "}
-              </Typography>
-            </Box>
-            &nbsp;&nbsp;
-            <Box>
-              <Typography
-                variant="h3"
-                sx={{
-                  color: "#F86F03",
-                  fontWeight: "bold",
-                  fontSize: "40px",
-                }}
-              >
-                EVENTS
-              </Typography>
-            </Box>
-          </Box>
-        </TextBox1>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "50px",
-          }}
-        >
-          <Typography component="p">________</Typography>
-          <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
-          <FiberManualRecordIcon
-            sx={{
-              color: "#F86F03",
-              fontSize: "10px",
-              marginTop: "14px",
-              marginLeft: "5px",
-            }}
-          />
-          <FiberManualRecordIcon
-            sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
-          />
-          <Typography component="p">________</Typography>
-        </Box>
+        <Header title1="Our" title2="Events" />
         {cards.length >= 4 && !showAll && (
           <ViewAllButton handleClick={handleViewAllClick} />
         )}

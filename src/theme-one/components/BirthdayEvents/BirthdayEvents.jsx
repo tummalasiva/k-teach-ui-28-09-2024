@@ -76,6 +76,16 @@ const SubHeader2 = styled(Typography)(({}) => ({
   fontWeight: "bold",
 }));
 
+const LeftTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  color: "white",
+  textShadow: "3px 3px black",
+}));
+const RightTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  color: "#F86F03",
+}));
+
 const names = [
   {
     name: "Raju",
@@ -119,28 +129,19 @@ const BirthdayEvents = () => {
       >
         <Grid item>
           <BirthdayBox>
-            <Typography
+            <LeftTitle
               variant="h4"
-              sx={{
-                fontWeight: "bold",
-                color: "white",
-                textShadow: "3px 3px black",
-                fontSize: { sm: "50px", xs: "30px" },
-              }}
+              sx={{ fontSize: { sm: "50px", xs: "30px" } }}
             >
               HAPPY{" "}
-            </Typography>
+            </LeftTitle>
             &nbsp;&nbsp;
-            <Typography
+            <RightTitle
               variant="h4"
-              sx={{
-                fontWeight: "bold",
-                color: "#F86F03",
-                fontSize: { sm: "50px", xs: "30px" },
-              }}
+              sx={{ fontSize: { sm: "50px", xs: "30px" } }}
             >
               BIRTHDAY{" "}
-            </Typography>
+            </RightTitle>
             &nbsp;
             <img
               // src="cake-bg3.png"

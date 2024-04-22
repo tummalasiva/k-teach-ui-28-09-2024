@@ -3,7 +3,6 @@ import Slider from "react-slick";
 import {
   Container,
   Box,
-  Typography,
   styled,
   Modal,
   Backdrop,
@@ -13,7 +12,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { settings } from "../data/carousal";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+
 import { Close } from "@mui/icons-material";
 import Gallery from "./Gallery";
 import image from "../../../theme-one/assets/Images/image1.png";
@@ -21,50 +20,11 @@ import image1 from "../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
-
-const TextBox1 = styled(Box)(({ theme }) => ({
-  textShadow: "10px 8px 8px #969c96",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "20px",
-  flexDirection: "row",
-
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "row",
-  },
-  [theme.breakpoints.down("xs")]: {
-    flexDirection: "column",
-  },
-}));
+import Header from "../Header";
 
 const Main = styled(Box)(({ theme }) => ({
   marginTop: "4rem",
   marginBottom: "5rem",
-}));
-
-const StyledIconMiddle = styled(FiberManualRecordIcon)(({ theme }) => ({
-  color: "#F86F03",
-  fontSize: "10px",
-  marginTop: "14px",
-  marginLeft: "5px",
-}));
-
-const StyledIconSide = styled(FiberManualRecordIcon)(({ theme }) => ({
-  fontSize: "8px",
-  marginTop: "15px",
-}));
-
-const LeftHeader = styled(Typography)(({ theme }) => ({
-  color: "#000",
-  fontWeight: "bold",
-  fontSize: "40px",
-}));
-
-const RightHeader = styled(Typography)(({ theme }) => ({
-  color: "#F86F03",
-  fontWeight: "bold",
-  fontSize: "40px",
 }));
 
 const ImagBox = styled(Box)(({ theme }) => ({
@@ -131,18 +91,7 @@ const OurGallery = () => {
     <>
       <ThemeProvider theme={theme}>
         <Main>
-          <TextBox1>
-            <LeftHeader variant="h3">Our</LeftHeader>
-            &nbsp;&nbsp;
-            <RightHeader variant="h3">Gallery</RightHeader>
-          </TextBox1>
-          <Box display="flex" justifyContent="center" marginBottom="50px">
-            <Typography component="p">________</Typography>
-            <StyledIconSide />
-            <StyledIconMiddle />
-            <StyledIconSide sx={{ ml: "6px" }} />
-            <Typography component="p">________</Typography>
-          </Box>
+          <Header title1="Our" title2="Gallery" />
 
           <Container sx={{ padding: "10px" }}>
             <Gallery

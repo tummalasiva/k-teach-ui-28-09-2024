@@ -5,15 +5,13 @@ import {
   Box,
   Paper,
   ThemeProvider,
-  Typography,
   styled,
   useMediaQuery,
   createTheme,
 } from "@mui/material";
 import { useCallback } from "react";
 import Carousel from "react-spring-3d-carousel";
-
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import Header from "../Header";
 
 const data = [
   {
@@ -53,16 +51,6 @@ const data = [
   },
 ];
 
-const TextBox1 = styled(Box)(({ theme }) => ({
-  marginTop: "5%",
-  textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));
-
 const DotsContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -80,7 +68,8 @@ const Dot = styled(Paper)(({ theme, active }) => ({
 export default function FeedBackSlider() {
   const theme = createTheme();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const isMobile = useMediaQuery("(max-width:600px)");
+
+  const isMobile = useMediaQuery("(max-width:700px)");
   const slidesToShow = isMobile ? 1 : 3;
 
   const onChangeSlide = useCallback((newSlide) => {
@@ -98,60 +87,8 @@ export default function FeedBackSlider() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <TextBox1>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h3"
-                color="black"
-                sx={{ fontWeight: "bold", fontSize: "40px" }}
-              >
-                Guardian
-              </Typography>
-            </Box>
-            &nbsp;&nbsp;
-            <Box>
-              <Typography
-                variant="h3"
-                sx={{
-                  color: "#F86F03",
-                  fontWeight: "bold",
-                  fontSize: "40px",
-                }}
-              >
-                Feedback
-              </Typography>
-            </Box>
-          </Box>
-        </TextBox1>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "30px",
-          }}
-        >
-          <Typography component="p">_____________</Typography>
-          <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
-          <FiberManualRecordIcon
-            sx={{
-              color: "#F86F03",
-              fontSize: "10px",
-              marginTop: "14px",
-              marginLeft: "5px",
-            }}
-          />
-          <FiberManualRecordIcon
-            sx={{ fontSize: "8px", marginTop: "15px", marginLeft: "6px" }}
-          />
-          <Typography component="p">_____________</Typography>
-        </Box>
+        <Header title1="Guardian" title2="Feedback" />
+
         {!data.length ? null : (
           <Box
             sx={{

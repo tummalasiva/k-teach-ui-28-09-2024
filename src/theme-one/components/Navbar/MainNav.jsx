@@ -22,7 +22,6 @@ import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import menuItems from "./menuItems";
 import logo from "../../../theme-one/assets/Images/bannback.png";
-import themeData from "../../../data/themeData";
 
 const SideMenuContainer = styled(Box)({
   display: { xs: "flex", md: "none", justifyContent: "flex-end" },
@@ -42,7 +41,7 @@ const ManinMenuItems = styled(Button)({
 
   fontSize: "16px",
   "&:hover": {
-    color: themeData.darkPalette.primary.main,
+    color: "#F86F03",
   },
 });
 
@@ -54,7 +53,7 @@ const MainMenuChildrenContainer = styled(Box)({
   backgroundColor: "#fff",
   zIndex: 1,
   boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
-  borderTop: `3px solid ${themeData.darkPalette.primary.main}`,
+  borderTop: `3px solid ${"#F86F03"}`,
 });
 const MainMenuDropDownItems = styled(Button)({
   fontSize: "16px",
@@ -155,12 +154,10 @@ const MainNav = () => {
                         <Typography
                           sx={{
                             "&:hover": {
-                              color: themeData.darkPalette.primary.main,
+                              color: "#F86F03",
                             },
                             color:
-                              pathname === item.path
-                                ? themeData.darkPalette.primary.main
-                                : "inherit",
+                              pathname === item.path ? "#F86F03" : "inherit",
                           }}
                         >
                           {item.title}
@@ -176,7 +173,7 @@ const MainNav = () => {
                                 textDecoration: "none",
                                 color:
                                   pathname === subItem.path
-                                    ? themeData.darkPalette.primary.main
+                                    ? "#F86F03"
                                     : "inherit",
                               }}
                               onClick={handleCloseNavMenu}
@@ -184,7 +181,7 @@ const MainNav = () => {
                               <MenuItem
                                 sx={{
                                   "&:hover": {
-                                    color: themeData.darkPalette.primary.main,
+                                    color: "#F86F03",
                                   },
                                 }}
                                 onClick={handleCloseNavMenu}
@@ -208,13 +205,10 @@ const MainNav = () => {
                       <MenuItem
                         sx={{
                           "&:hover": {
-                            color: themeData.darkPalette.primary.main,
+                            color: "#F86F03",
                             backgroundColor: "transparent",
                           },
-                          color:
-                            pathname === item.path
-                              ? themeData.darkPalette.primary.main
-                              : "inherit",
+                          color: pathname === item.path ? "#F86F03" : "inherit",
                         }}
                         onClick={handleCloseNavMenu}
                       >
@@ -247,10 +241,7 @@ const MainNav = () => {
                   >
                     <MainMenuDropDownItems
                       sx={{
-                        color:
-                          pathname === item.path
-                            ? themeData.darkPalette.primary.main
-                            : "inherit",
+                        color: pathname === item.path ? "#F86F03" : "inherit",
                       }}
                       onClick={() => handleChange(item.path)}
                     >
@@ -272,10 +263,10 @@ const MainNav = () => {
                                 sx={{
                                   color:
                                     pathname === subItem.path
-                                      ? themeData.darkPalette.primary.main
+                                      ? "#F86F03"
                                       : "inherit",
                                   "&:hover": {
-                                    color: themeData.darkPalette.primary.main,
+                                    color: "#F86F03",
                                   },
                                 }}
                                 primary={subItem.title}
@@ -295,10 +286,7 @@ const MainNav = () => {
                     to={item.path}
                     onClick={() => handleChange(item.path)}
                     sx={{
-                      color:
-                        pathname === item.path
-                          ? themeData.darkPalette.primary.main
-                          : "inherit",
+                      color: pathname === item.path ? "#F86F03" : "inherit",
                     }}
                   >
                     {item.title}
