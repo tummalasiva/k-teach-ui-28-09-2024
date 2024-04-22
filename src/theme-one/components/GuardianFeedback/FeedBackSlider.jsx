@@ -12,6 +12,7 @@ import {
 import { useCallback } from "react";
 import Carousel from "react-spring-3d-carousel";
 import Header from "../Header";
+import themeData from "../../../data/themeData";
 
 const data = [
   {
@@ -122,7 +123,9 @@ export default function FeedBackSlider() {
                   onClick={() => onChangeSlide(index)}
                   sx={{
                     backgroundColor:
-                      index === currentSlide ? "#1565c0" : "rgba(0, 0, 0, 0.2)",
+                      index === currentSlide
+                        ? themeData.darkPalette.secondary.main
+                        : "rgba(0, 0, 0, 0.2)",
                   }}
                 />
               ))}

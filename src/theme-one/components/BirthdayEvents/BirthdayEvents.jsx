@@ -4,6 +4,7 @@ import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
 import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
 import dayjs from "dayjs";
 import RegistrationForm from "./RegistrationForm";
+import themeData from "../../../data/themeData";
 
 const MovingTextContainer = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -65,7 +66,7 @@ const GridContainerBox = styled(Grid)(
 
 const SubHeader1 = styled(Typography)(({}) => ({
   fontSize: "16px",
-  color: "#F86F03",
+  color: themeData.darkPalette.primary.main,
   marginTop: "10px",
   fontWeight: "bold",
 }));
@@ -83,7 +84,7 @@ const LeftTitle = styled(Typography)(({ theme }) => ({
 }));
 const RightTitle = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
-  color: "#1565c0",
+  color: themeData.darkPalette.primary.main,
 }));
 
 const names = [

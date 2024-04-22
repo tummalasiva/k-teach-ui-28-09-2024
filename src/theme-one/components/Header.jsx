@@ -7,6 +7,7 @@ import {
   createTheme,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import themeData from "../../data/themeData";
 
 const TextBox1 = styled(Box)(({ theme }) => ({
   marginTop: "3%",
@@ -49,7 +50,7 @@ export default function Header({ title1 = "", title2 = "" }) {
             <Typography
               variant="h3"
               sx={{
-                color: "#F86F03",
+                color: themeData.darkPalette.primary.main,
                 fontWeight: "bold",
                 fontSize: { xs: "25px", sm: "30px", md: "40px", lg: "40px" },
               }}
@@ -69,7 +70,7 @@ export default function Header({ title1 = "", title2 = "" }) {
           <FiberManualRecordIcon sx={{ fontSize: "8px", marginTop: "15px" }} />
           <FiberManualRecordIcon
             sx={{
-              color: "#F86F03",
+              color: themeData.darkPalette.primary.main,
               fontSize: "10px",
               marginTop: "14px",
               marginLeft: "5px",

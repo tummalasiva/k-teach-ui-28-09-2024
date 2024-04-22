@@ -82,7 +82,7 @@ const FirstMovingText = styled(MovingText)(({ theme }) => ({
   zIndex: 20,
   position: "relative",
   color: "white",
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   fontSize: "16px",
   fontWeight: "bold",
   display: "inline-block",

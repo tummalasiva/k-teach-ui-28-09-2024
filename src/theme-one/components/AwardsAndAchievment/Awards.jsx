@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import themeData from "../../../data/themeData";
 
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   fontSize: "20px",
-  color: "#F86F03",
+  color: themeData.darkPalette.primary.main,
   textAlign: "center",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 1,
@@ -60,7 +61,7 @@ const Awards = ({ coursedata }) => {
         <CardActions>
           <Button
             onClick={handleNavigate}
-            sx={{ color: "#1565c0" }}
+            sx={{ color: themeData.darkPalette.secondary.main }}
             size="small"
           >
             View Details

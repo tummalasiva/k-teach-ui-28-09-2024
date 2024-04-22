@@ -8,6 +8,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import React, { useState } from "react";
+import themeData from "../../../data/themeData";
 
 const Wrapper = styled(Box)(() => ({
   position: "relative",
@@ -25,9 +26,9 @@ const Header = styled(Typography)(() => ({
 const MuiButton = styled(Button)(() => ({
   marginTop: "25px",
   padding: "10px",
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   "&:hover": {
-    backgroundColor: "#1565c0",
+    backgroundColor: themeData.darkPalette.secondary.main,
   },
 }));
 const StyledTextField = styled(TextField)({

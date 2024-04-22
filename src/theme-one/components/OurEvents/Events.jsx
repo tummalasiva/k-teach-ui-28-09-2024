@@ -15,6 +15,7 @@ import { grey, green, blue } from "@mui/material/colors";
 
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import themeData from "../../../data/themeData";
 const Para = styled(Typography)(({ theme }) => ({
   fontSize: "15px",
   lineHeight: "25px",
@@ -55,7 +56,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
 const TimeIcon = styled(AccessTimeIcon)(() => ({
   fontSize: "0.7rem",
   marginTop: "2px",
-  color: "#f86f03",
+  color: themeData.darkPalette.primary.main,
 }));
 const Times = styled(Box)(({ theme }) => ({
   display: "flex",

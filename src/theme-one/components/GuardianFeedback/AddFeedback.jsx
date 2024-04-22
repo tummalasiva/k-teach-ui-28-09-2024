@@ -18,6 +18,7 @@ import { useMediaQuery } from "@mui/material";
 
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useTheme } from "@mui/material/styles";
+import themeData from "../../../data/themeData";
 
 const MuiBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -38,7 +39,7 @@ const MuiBox = styled(Box)(({ theme }) => ({
 
   justifyContent: "center",
   columnGap: 2,
-  backgroundColor: "#1565c0",
+  backgroundColor: themeData.darkPalette.secondary.main,
   borderTopLeftRadius: 5,
   borderBottomLeftRadius: 5,
   padding: "8px",

@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import avatar from "../../../theme-one/assets/Images/avatar.jpg";
 
 import { FaQuoteLeft } from "react-icons/fa";
+import themeData from "../../../data/themeData";
 
 const cardStyle = {
   display: "flex",
@@ -64,7 +65,7 @@ const Feedbacks = ({ feedback, parentName, studentName }) => {
         </Typography>
         <Typography
           sx={{
-            color: "#1565c0",
+            color: themeData.darkPalette.secondary.main,
             fontFamily: "Work Sans , Arial, sans-serif",
           }}
           mt={3}
