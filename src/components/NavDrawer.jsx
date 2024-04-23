@@ -137,6 +137,8 @@ import HelpDesk from "../pages/HelpDesk";
 import GuardianFeedback from "../pages/GuardianFeedback";
 import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
 import StudentReport from "../pages/Report/StudentReport";
+import HomeComponents from "../theme-two/components/home/HomeComponents";
+import HomePage from "../theme-two/page/HomePage";
 
 const drawerWidth = 270;
 
@@ -765,6 +767,10 @@ export default function NavDrawer() {
           <Route path="/guardian-feedback" element={<GuardianFeedback />} />
         </Routes>
       </Box>
+      {/* <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about/overview" element={<Overview />} />
+      </Routes> */}
     </Box>
   );
 }

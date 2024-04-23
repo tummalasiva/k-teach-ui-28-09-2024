@@ -8,6 +8,10 @@ import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
+import Overview from "./theme-two/components/About-us/Overview";
+import { Route, Routes } from "react-router-dom";
+import PublicRoute from "./theme-one/components/PublicRoute";
+import Founder from "./theme-two/components/About-us/Founder";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -119,8 +123,17 @@ function App() {
           }}
         >
           {/* <NavDrawer /> */}
-          <HomePage1 />
+
+          {/* <HomePage1 /> */}
           {/* <HomePage2 /> */}
+          <Routes>
+            {/* <Route path="/" element={<PublicRoute component={<HomePage1 />} />} /> */}
+            <Route path="/" element={<HomePage2 />} />
+            {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+            {/* <Route path="*" element={<PageNotFound />} /> */}
+            <Route path="/about/overview" element={<Overview />} />
+            <Route path="/about/founder" element={<Founder />} />
+          </Routes>
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
