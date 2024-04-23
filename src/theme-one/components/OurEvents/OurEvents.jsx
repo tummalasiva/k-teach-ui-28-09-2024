@@ -3,6 +3,7 @@ import { Grid, Box, Button, createTheme, styled } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import Events from "./Events";
 import Header from "../Header";
+import themeData from "../../../data/themeData";
 
 const theme = createTheme();
 export const cards = [
@@ -89,13 +90,13 @@ const ViewLess = styled(Grid)(({ theme }) => ({
 
 const ViewMore = styled(Button)(({ theme }) => ({
   fontSize: "10px",
-  color: "#F86F03",
+  color: themeData.darkPalette.primary.main,
   border: "1px solid",
 }));
 
 const ViewLessEvents = styled(Button)(({ theme }) => ({
   fontSize: "10px",
-  color: "#F86F03",
+  color: themeData.darkPalette.primary.main,
   border: "1px solid",
 }));
 

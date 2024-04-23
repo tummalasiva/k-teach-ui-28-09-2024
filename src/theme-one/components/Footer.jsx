@@ -8,6 +8,7 @@ import { styled, Grid, Box, Typography, Container } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import SettingContext from "../../context/SettingsContext";
 import { Facebook, Twitter } from "@mui/icons-material";
+import themeData from "../../data/themeData";
 
 const FooterNav = styled(Typography)(({ theme }) => ({
   color: "white",
@@ -27,7 +28,7 @@ const StyledLink = styled(RouterLink)({
   cursor: "pointer",
   transition: "1s",
   "&:hover": {
-    color: "#F86F03",
+    color: themeData.darkPalette.primary.main,
   },
 });
 
@@ -35,7 +36,7 @@ const FooterSectionTitle = styled(Typography)(() => ({
   fontSize: "1.2rem",
   fontWeight: "bold",
   textAlign: "center",
-  color: "#F86F03",
+  color: themeData.darkPalette.primary.main,
   fontFamily: "sans-serif",
   marginBottom: "10px",
 }));

@@ -39,7 +39,7 @@ const TypographyMain = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   marginTop: "25px",
   fontSize: "40px",
-  color: "#f86f03",
+  color: themeData.darkPalette.primary.main,
   fontWeight: "bold",
   textShadow: "10px 8px 8px #969c96",
   [theme.breakpoints.down("md")]: {
