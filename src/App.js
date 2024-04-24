@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
@@ -8,8 +9,7 @@ import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
-import { Route, Routes } from "react-router-dom";
-import Overview from "./theme-one/components/Navbar/navbar/about/Overview";
+import Overview1 from "./theme-one/components/Navbar/navbar/about/Overview";
 import MainNav from "./theme-one/components/Navbar/MainNav";
 import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
 import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
@@ -20,8 +20,7 @@ import Transport from "./theme-one/components/Navbar/navbar/facilities/Transport
 import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
 import Result from "./theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
-import Overview from "./theme-two/components/About-us/Overview";
-import { Route, Routes } from "react-router-dom";
+import Overview2 from "./theme-two/components/About-us/Overview";
 import PublicRoute from "./theme-one/components/PublicRoute";
 import Founder from "./theme-two/components/About-us/Founder";
 import VisionAndMission from "./theme-two/components/About-us/VisionAndMission";
@@ -137,9 +136,10 @@ function App() {
         >
           {/* <NavDrawer /> */}
           {/* <HomePage1 /> */}
-
-          <Routes>
-            <Route path="/about/overview" element={<Overview />} />
+          {/* ========= Theme 1 route ========== */}
+          {/* <Routes>
+            <Route path="/" element={<HomePage1 />} />
+            <Route path="/about/overview" element={<Overview1 />} />
             <Route path="/about/founder" element={<AboutFounder />} />
             <Route
               path="/about/visionandmission"
@@ -155,22 +155,20 @@ function App() {
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
-          </Routes>
+          </Routes> */}
+          {/* ======================= // ======================== */}
 
-          {/* <HomePage1 /> */}
-          {/* <HomePage2 /> */}
-          {/* <Routes>
-         
+          {/* ========= Theme 2 route ========== */}
+          <Routes>
             <Route path="/" element={<HomePage2 />} />
- 
-            <Route path="/about/overview" element={<Overview />} />
+            <Route path="/about/overview" element={<Overview2 />} />
             <Route path="/about/founder" element={<Founder />} />
             <Route
               path="/about/vision-mission"
               element={<VisionAndMission />}
             />
           </Routes>
-          </Routes> */}
+          {/* ============== // ================= */}
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
