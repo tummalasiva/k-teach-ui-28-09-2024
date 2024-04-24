@@ -182,12 +182,10 @@ function App() {
               element={<DanceAndSinging2 />}
             />
             <Route path="/facilities/labs" element={<Labs />} />
-            <Route
-              path="/facilities/pre-admission"
-              element={<AdmissionForm />}
-            />
+            <Route path="/pre-admission" element={<AdmissionForm />} />
             <Route path="/results" element={<Results show={false} />} />
             <Route path="/contact-us" element={<Contact />} />
+            <Route path="/contact-us" element={<Ga />} />
           </Routes>
           {/* ============== // ================= */}
         </SettingContext.Provider>
