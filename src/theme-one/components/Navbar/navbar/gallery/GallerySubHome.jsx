@@ -97,7 +97,7 @@ const GallerySubHome = ({ data, setModalOpen }) => {
             ))}
           </Slider>
 
-          <CardContent sx={{ mt: 1, height: "110px" }}>
+          <CardContent sx={{ mt: 1, height: "80px" }}>
             <MuiTitle gutterBottom variant="h5" component="div">
               {data.title}
             </MuiTitle>

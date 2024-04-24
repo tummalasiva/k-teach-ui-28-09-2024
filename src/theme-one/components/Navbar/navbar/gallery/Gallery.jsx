@@ -69,6 +69,7 @@ const ModalBox = styled(Box)(({ theme }) => ({
 
 const GridBox = styled(Box)(({ theme }) => ({
   display: "grid",
+  paddingBottom: "30px",
   gridTemplateColumns: "300px 300px 300px 300px",
   justifyContent: "space-evenly",
   gap: "15px",
@@ -90,6 +91,7 @@ const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
   fontFamily: "sans-serif",
   fontWeight: "bold",
+  paddingTop: "20px",
 }));
 
 const TextBox = styled(Box)(({ theme }) => ({
@@ -108,7 +110,12 @@ const Text = styled(Typography)(({ theme }) => ({
   paddingLeft: "0.5rem",
 }));
 
-export default function Gallery() {
+const MuiMainBox = styled(Box)(({}) => ({
+  background: "#fff",
+  borderRadius: "8px",
+}));
+
+export default function Gallery({ show }) {
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
     imageData: [],
@@ -130,27 +137,28 @@ export default function Gallery() {
       <TopNav />
       <MainNav />
       <SubHeader
+        show={show}
         title="Gallery"
         leftSideHeader="Home"
         rightSideHeader="Gallery"
       />
+      <MuiMainBox>
+        <Heading>DISCOVER NEW</Heading>
+        <TypographyMain>Our Gallery</TypographyMain>
+        <TextBox>
+          <Text>ALL</Text>
+        </TextBox>
 
-      <Heading>DISCOVER NEW</Heading>
-      <TypographyMain>Our Gallery</TypographyMain>
-
-      <TextBox>
-        <Text>ALL</Text>
-      </TextBox>
-
-      <GridBox>
-        {awards.map((item, i) => {
-          return (
-            <React.Fragment key={i}>
-              <GallerySubHome data={item} setModalOpen={setModalOpen} />
-            </React.Fragment>
-          );
-        })}
-      </GridBox>
+        <GridBox>
+          {awards.map((item, i) => {
+            return (
+              <React.Fragment key={i}>
+                <GallerySubHome data={item} setModalOpen={setModalOpen} />
+              </React.Fragment>
+            );
+          })}
+        </GridBox>
+      </MuiMainBox>
 
       {/* ======== View Gallery img ======= */}
       <Modal
