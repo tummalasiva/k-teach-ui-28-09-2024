@@ -8,6 +8,18 @@ import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
+import { Route, Routes } from "react-router-dom";
+import Overview from "./theme-one/components/Navbar/navbar/about/Overview";
+import MainNav from "./theme-one/components/Navbar/MainNav";
+import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
+import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
+import Library from "./theme-one/components/Navbar/navbar/facilities/Library";
+import Food from "./theme-one/components/Navbar/navbar/facilities/Food";
+import DanceAndSinging from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
+import Transport from "./theme-one/components/Navbar/navbar/facilities/Transport";
+import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
+import Result from "./theme-one/components/Navbar/navbar/Result";
+import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -119,8 +131,26 @@ function App() {
           }}
         >
           {/* <NavDrawer /> */}
-          <HomePage1 />
-          {/* <HomePage2 /> */}
+          {/* <HomePage1 /> */}
+
+          <Routes>
+            <Route path="/about/overview" element={<Overview />} />
+            <Route path="/about/founder" element={<AboutFounder />} />
+            <Route
+              path="/about/visionandmission"
+              element={<VissionMission />}
+            />
+            <Route path="/facilities/library" element={<Library />} />
+            <Route path="/facilities/canteen" element={<Food />} />
+            <Route
+              path="/facilities/dance-and-singing"
+              element={<DanceAndSinging />}
+            />
+            <Route path="/facilities/transport" element={<Transport />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/results" element={<Result />} />
+            <Route path="/pre-admission" element={<PreAdmission />} />
+          </Routes>
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
