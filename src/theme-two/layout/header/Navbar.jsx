@@ -70,82 +70,33 @@ export default function Navbar() {
 
   const { selectedSetting } = useContext(SettingContext);
   const [showMenuItem, setShowMenuItem] = useState(false);
-  const [home, setHome] = useState(null);
-  const open = Boolean(home);
+
   const [about, setAbout] = useState(null);
   const open1 = Boolean(about);
 
   const [facilities, setFacilities] = useState(null);
   const open2 = Boolean(facilities);
 
-  const [achievment, setAchievment] = useState(null);
-  const open4 = Boolean(achievment);
-
   const [state, setState] = React.useState({
     right: false,
   });
-  const [result, setResult] = useState(null);
-  const open5 = Boolean(result);
-
-  const [contact, setContact] = useState(null);
-  const open6 = Boolean(contact);
-
-  const [admission, setAdmission] = useState(null);
-  const open7 = Boolean(admission);
 
   const handleMenuItem = () => {
     setShowMenuItem(true);
   };
 
-  const handleClick = (e) => {
-    setHome(e.currentTarget);
-    navigate("/");
-  };
-
   const handleClick1 = (e) => {
-    setHome(e.currentTarget);
-    navigate("/");
+    setAbout(e.currentTarget);
   };
-
   const handleClose1 = () => {
-    // if (path){navigate(path)}
     setAbout(null);
   };
 
+  const handleClick2 = (e) => {
+    setFacilities(e.currentTarget);
+  };
   const handleClose2 = () => {
     setFacilities(null);
-  };
-
-  const handleClick4 = (e) => {
-    setAchievment(e.currentTarget);
-  };
-  const handleClose4 = () => {
-    setAchievment(null);
-  };
-
-  const handleClick5 = (e) => {
-    setResult(e.currentTarget);
-    navigate("/results");
-  };
-  const handleClose5 = () => {
-    setResult(null);
-  };
-
-  const handleClick6 = (e) => {
-    setContact(e.currentTarget);
-    navigate("/contact-us");
-  };
-  const handleClose6 = () => {
-    setContact(null);
-  };
-
-  const handleClick7 = (e) => {
-    setAdmission(e.currentTarget);
-    navigate("/pre-admission");
-  };
-  const handleClose7 = () => {
-    // if (path){navigate(path)}
-    setAdmission(null);
   };
 
   const toggleDrawer = (open) => (event) => {
@@ -161,6 +112,109 @@ export default function Navbar() {
   let handlePath = (data) => {
     navigate(data);
   };
+
+  const navbarData = [
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Home ",
+      path: "/",
+    },
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      "aria-expanded": open1 ? "true" : undefined,
+      onClick: handleClick1,
+      variant: "contained",
+      title: "About +",
+
+      items: [
+        {
+          title: "About us",
+          pathName: "/about/overview",
+        },
+        {
+          title: "About Founder",
+          pathName: "/about/founder",
+        },
+        {
+          title: " Vision & Mission",
+          pathName: "/about/vision-and-mission",
+        },
+      ],
+    },
+
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Pre-Admission ",
+      path: "/pre-admission",
+    },
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Gallery ",
+      path: "/discover-gallery",
+    },
+
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      "aria-expanded": "true",
+      "aria-expanded": open2 ? "true" : undefined,
+      onClick: handleClick2,
+      variant: "contained",
+      title: "Facilities + ",
+      items: [
+        {
+          title: "Food",
+          pathName: "/facilities/canteen",
+        },
+        {
+          title: "Library",
+          pathName: "/library",
+        },
+        {
+          title: "Transport",
+          pathName: "/transport",
+        },
+        {
+          title: "Dance And Singing",
+          pathName: "/facilities/dance-and-singing",
+        },
+        {
+          title: "Lab Facilities",
+          pathName: "/facilities/labs",
+        },
+      ],
+    },
+
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Results ",
+      path: "/results",
+    },
+
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Contact us ",
+      path: "/contact-us",
+    },
+  ];
 
   const list = (anchor) => (
     <Box
@@ -179,7 +233,7 @@ export default function Navbar() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography onClick={handleClick}>{data.title}</Typography>
+                  <Typography>{data.title}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   {data.items &&
@@ -221,7 +275,9 @@ export default function Navbar() {
           />
         </Link>
 
-        <NavContainer>
+        <NavContainer
+          sx={{ display: { xs: "none", sm: "none", md: "block", lg: "block" } }}
+        >
           <MuiUl variant="ul">
             {navbarData &&
               navbarData.map((data, i) => {
@@ -271,13 +327,13 @@ export default function Navbar() {
                 </MenuItem>
               </Link>
               <Link
-                to="/about/visionandmission"
+                to="/about/vision-and-mission"
                 style={{ textDecoration: "none" }}
               >
                 <MenuItem
                   style={{
                     color:
-                      pathname == "/about/visionandmission"
+                      pathname == "/about/vision-and-mission"
                         ? "orangered"
                         : "black",
                   }}
@@ -287,6 +343,7 @@ export default function Navbar() {
               </Link>
             </Menu>
 
+            {/* Facilities Submenu */}
             <Menu
               id="facilities"
               anchorEl={facilities}
@@ -298,14 +355,11 @@ export default function Navbar() {
                 textAlign: "center",
               }}
             >
-              <NavLink
-                to="/facilities/canteen"
-                style={{ textDecoration: "none" }}
-              >
+              <NavLink to="/facilities/food" style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
-                      pathname == "/facilities/canteen" ? "orangered" : "black",
+                      pathname == "/facilities/food" ? "orangered" : "black",
                   }}
                 >
                   Food
@@ -362,8 +416,9 @@ export default function Navbar() {
                 </MenuItem>
               </Link>
             </Menu>
+            {/* ================ */}
 
-            <Menu
+            {/* <Menu
               id="achievment"
               anchorEl={achievment}
               open={open4}
@@ -404,11 +459,13 @@ export default function Navbar() {
                   background: "transparent",
                 }}
               ></Menu>
-            )}
+            )} */}
           </MuiUl>
         </NavContainer>
 
-        <SideContainer>
+        <SideContainer
+          sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
+        >
           <IconButton
             size="large"
             edge="start"

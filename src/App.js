@@ -31,7 +31,8 @@ import Labs from "./theme-two/components/facilities/Labs";
 import AdmissionForm from "./theme-two/components/pre-admission/AdmissionForm";
 import Results from "./theme-two/components/result/Results";
 import Contact from "./theme-two/components/contact/Contact";
-import Gallery from "./theme-one/components/OurGallery/Gallery";
+import GalleryComponents from "./theme-two/components/gallery/GalleryComponents";
+import Gallery from "./theme-one/components/Navbar/navbar/gallery/Gallery";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -145,7 +146,7 @@ function App() {
           {/* <NavDrawer /> */}
           {/* <HomePage1 /> */}
           {/* ========= Theme 1 route ========== */}
-          <Routes>
+          {/* <Routes>
             <Route path="/" element={<HomePage1 />} />
             <Route path="/about/overview" element={<Overview1 />} />
             <Route path="/about/founder" element={<AboutFounder />} />
@@ -164,11 +165,11 @@ function App() {
             <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
             <Route path="/home-gallery" element={<Gallery />} />
-          </Routes>
+          </Routes> */}
           {/* ======================= // ======================== */}
 
           {/* ========= Theme 2 route ========== */}
-          {/* <Routes>
+          <Routes>
             <Route path="/" element={<HomePage2 />} />
             <Route path="/about/overview" element={<Overview2 />} />
             <Route path="/about/founder" element={<Founder />} />
@@ -187,7 +188,8 @@ function App() {
             <Route path="/pre-admission" element={<AdmissionForm />} />
             <Route path="/results" element={<Results show={false} />} />
             <Route path="/contact-us" element={<Contact />} />
-          </Routes> */}
+            <Route path="/discover-gallery" element={<GalleryComponents />} />
+          </Routes>
           {/* ============== // ================= */}
         </SettingContext.Provider>
       </ThemeProvider>
