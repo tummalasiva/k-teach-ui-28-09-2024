@@ -8,7 +8,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
-import Overview from "./theme-one/components/Navbar/navbar/about/Overview";
+import Overview1 from "./theme-one/components/Navbar/navbar/about/Overview";
 import MainNav from "./theme-one/components/Navbar/MainNav";
 import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
 import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
@@ -19,7 +19,19 @@ import Transport1 from "./theme-one/components/Navbar/navbar/facilities/Transpor
 import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
 import Result from "./theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
-import Gallery from "./theme-one/components/Navbar/navbar/gallery/Gallery";
+import PublicRoute from "./theme-one/components/PublicRoute";
+import Founder from "./theme-two/components/about-us/Founder";
+import VisionAndMission from "./theme-two/components/about-us/VisionAndMission";
+import Overview2 from "./theme-two/components/about-us/Overview";
+import Food2 from "./theme-two/components/facilities/Food";
+import Library2 from "./theme-two/components/facilities/Library";
+import Transport2 from "./theme-two/components/facilities/Transport";
+import DanceAndSinging2 from "./theme-two/components/facilities/DanceAndSinging";
+import Labs from "./theme-two/components/facilities/Labs";
+import AdmissionForm from "./theme-two/components/pre-admission/AdmissionForm";
+import Results from "./theme-two/components/result/Results";
+import Contact from "./theme-two/components/contact/Contact";
+import Gallery from "./theme-one/components/OurGallery/Gallery";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -132,10 +144,10 @@ function App() {
         >
           {/* <NavDrawer /> */}
           {/* <HomePage1 /> */}
-          <MainNav />
+          {/* ========= Theme 1 route ========== */}
           <Routes>
-            {/* <Route path="/" element={<HomePage1 />} /> */}
-            <Route path="/about/overview" element={<Overview />} />
+            <Route path="/" element={<HomePage1 />} />
+            <Route path="/about/overview" element={<Overview1 />} />
             <Route path="/about/founder" element={<AboutFounder />} />
             <Route
               path="/about/visionandmission"
@@ -149,21 +161,34 @@ function App() {
             />
             <Route path="/facilities/transport" element={<Transport1 />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/results" element={<Result show={true} />} />
+            <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
             <Route path="/home-gallery" element={<Gallery />} />
           </Routes>
-
-          {/* <HomePage1 /> */}
-          {/* <HomePage2 /> */}
-          {/* <Routes>
-         
-            <Route path="/" element={<HomePage2 />} />
- 
-            <Route path="/about/overview" element={<Overview />} />
-            <Route path="/about/founder" element={<Founder />} />
-          </Routes> */}
           {/* ======================= // ======================== */}
+
+          {/* ========= Theme 2 route ========== */}
+          {/* <Routes>
+            <Route path="/" element={<HomePage2 />} />
+            <Route path="/about/overview" element={<Overview2 />} />
+            <Route path="/about/founder" element={<Founder />} />
+            <Route
+              path="/about/vision-and-mission"
+              element={<VisionAndMission />}
+            />
+            <Route path="/facilities/food" element={<Food2 />} />
+            <Route path="/facilities/library" element={<Library2 />} />
+            <Route path="/facilities/transport" element={<Transport2 />} />
+            <Route
+              path="/facilities/dance-and-singing"
+              element={<DanceAndSinging2 />}
+            />
+            <Route path="/facilities/labs" element={<Labs />} />
+            <Route path="/pre-admission" element={<AdmissionForm />} />
+            <Route path="/results" element={<Results show={false} />} />
+            <Route path="/contact-us" element={<Contact />} />
+          </Routes> */}
+          {/* ============== // ================= */}
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>
