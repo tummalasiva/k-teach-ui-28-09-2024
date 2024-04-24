@@ -21,7 +21,7 @@ const Wrapper = styled(Paper)(({ theme }) => ({
   marginBottom: "20px",
 }));
 
-export default function PageHeader({ title = "" }) {
+export default function PageHeader({ title = "", showTextField = true }) {
   const { settings, setSettings, selectedSetting, setSelectedSetting } =
     useContext(SettingContext);
 
@@ -35,31 +35,32 @@ export default function PageHeader({ title = "" }) {
       <Typography component="h1" sx={{ fontWeight: "bold" }}>
         {title}
       </Typography>
-
-      <Stack direction="row" spacing={2}>
-        <FormControl fullWidth size="small" sx={{ minWidth: "200px" }}>
-          <InputLabel id="demo-simple-select-label">Select School</InputLabel>
-          <Select
-            labelId="demo-simpless-select-filled-label"
-            id="demo-simple-select-filled-l"
-            value={selectedSetting._id}
-            name="setting"
-            onChange={handleSettingChange}
-            IconComponent={(props) => (
-              <KeyboardArrowDownIcon {...props} fontSize="medium" />
-            )}
-            label="Select school"
-          >
-            {settings
-              .filter((s) => s.active)
-              .map((set) => (
-                <MenuItem key={set._id} value={set._id}>
-                  {set.schoolName}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-      </Stack>
+      {showTextField && (
+        <Stack direction="row" spacing={2}>
+          <FormControl fullWidth size="small" sx={{ minWidth: "200px" }}>
+            <InputLabel id="demo-simple-select-label">Select School</InputLabel>
+            <Select
+              labelId="demo-simpless-select-filled-label"
+              id="demo-simple-select-filled-l"
+              value={selectedSetting._id}
+              name="setting"
+              onChange={handleSettingChange}
+              IconComponent={(props) => (
+                <KeyboardArrowDownIcon {...props} fontSize="medium" />
+              )}
+              label="Select school"
+            >
+              {settings
+                .filter((s) => s.active)
+                .map((set) => (
+                  <MenuItem key={set._id} value={set._id}>
+                    {set.schoolName}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+        </Stack>
+      )}
     </Wrapper>
   );
 }

@@ -44,6 +44,7 @@ export default function CustomTable({
   onEditClick = () => {},
   onDeleteClick = () => {},
   onViewClick = () => {},
+  onCardClick = () => {},
   onUnBundleClick = () => {},
   onToggleSwitch = () => {},
   toggleStatus = false,
@@ -150,7 +151,7 @@ export default function CustomTable({
                           <Button
                             size="small"
                             variant="contained"
-                            onClick={() => onViewClick(data)}
+                            onClick={() => onCardClick(data)}
                           >
                             Card
                           </Button>

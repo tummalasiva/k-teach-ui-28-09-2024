@@ -20,10 +20,7 @@ import Transport from "./theme-one/components/Navbar/navbar/facilities/Transport
 import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
 import Result from "./theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
-import Overview from "./theme-two/components/About-us/Overview";
-import { Route, Routes } from "react-router-dom";
-import PublicRoute from "./theme-one/components/PublicRoute";
-import Founder from "./theme-two/components/About-us/Founder";
+import Gallery from "./theme-one/components/Navbar/navbar/gallery/Gallery";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -136,8 +133,9 @@ function App() {
         >
           {/* <NavDrawer /> */}
           {/* <HomePage1 /> */}
-
+          <MainNav />
           <Routes>
+            {/* <Route path="/" element={<HomePage1 />} /> */}
             <Route path="/about/overview" element={<Overview />} />
             <Route path="/about/founder" element={<AboutFounder />} />
             <Route
@@ -154,6 +152,7 @@ function App() {
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
+            <Route path="/home-gallery" element={<Gallery />} />
           </Routes>
 
           {/* <HomePage1 /> */}

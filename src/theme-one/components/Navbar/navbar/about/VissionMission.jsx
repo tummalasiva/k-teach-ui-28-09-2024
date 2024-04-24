@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import SubHeader from "../../../SubHeader";
+import themeData from "../../../../../data/themeData";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -10,6 +11,12 @@ const ContentContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     padding: "5px 15px",
   },
+}));
+
+const Header = styled(Typography)(({ theme }) => ({
+  fontSize: "22px",
+  fontWeight: "bold",
+  color: themeData.darkPalette.primary.main,
 }));
 
 const Missionvalues = [
@@ -35,24 +42,24 @@ export default function VissionMission() {
         <Grid container>
           <Grid item md={8} sm={12}>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
+              <Header variant="h6" gutterBottom>
                 Our Vission:
-              </Typography>
+              </Header>
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   <b>Kayaka Foundation,</b>&nbsp;Gulbarga proposes a
                   life-oriented education that equips students to be agents of
                   transformation and growth at various levels of life through a
                   humanising and liberative process.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   Enabled and empowered, they actively address issues and
                   worries that are part of today's reality, particularly those
                   of students and people who are unable to exercise their right
                   to human freedom, and they fight for the integrity of the
                   natural world.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   The focus is on a knowledge-based civilisation that the
                   founder, Sri. Shivaraj Patil, foresaw and encouraged.
                 </Typography>
@@ -60,20 +67,20 @@ export default function VissionMission() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
+              <Header variant="h6" gutterBottom>
                 Our Mission:
-              </Typography>
-              <ul>
+              </Header>
+              <Typography component="ul">
                 {Missionvalues.map((data, i) => {
                   return (
                     <React.Fragment key={i}>
-                      <Typography component="li" gutterBottom>
+                      <Typography component="li" gutterBottom fontSize={16}>
                         {data}
                       </Typography>
                     </React.Fragment>
                   );
                 })}
-              </ul>
+              </Typography>
             </Box>
           </Grid>
           <Grid item lg={4} md={4} sm={12} padding="10px"></Grid>
