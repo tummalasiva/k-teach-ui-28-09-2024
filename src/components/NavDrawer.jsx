@@ -17,7 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Avatar, Collapse, Stack, Switch } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -219,7 +219,7 @@ export default function NavDrawer() {
   const [open, setOpen] = React.useState(true);
   // const { setUser, user } = React.useContext(UserContext);
   const [sideMenuData, setSideMenuData] = React.useState([]);
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { isDarkMode, setIsDarkMode } = React.useContext(ThemeModeContext);
   const [selecteSubMenu, setSelectedSubMenu] = React.useState("");
@@ -228,58 +228,6 @@ export default function NavDrawer() {
   React.useEffect(() => {
     setSideMenuData(SIDE_MENU_DATA);
   });
-
-  // React.useEffect(() => {
-  //   const roleDetails = window.localStorage.getItem("role");
-  //   if (!roleDetails) {
-  //     setSideMenuData(SIDE_MENU_DATA);
-  //   } else {
-  //     let role = JSON.parse(roleDetails);
-  //     let permissions = role.permissions;
-  //     let newSideMenuData = [];
-  //     for (let menuData of SIDE_MENU_DATA) {
-  //       if (menuData.name === "Dashboard") {
-  //         newSideMenuData.push(menuData);
-  //       }
-  //       if (menuData.subMenus.length) {
-  //         let newMenu = { ...menuData, subMenus: [] };
-
-  //         for (let ren of menuData.renderName) {
-  //           if (
-  //             permissions
-  //               ?.filter((p) => p.module.toLowerCase() === ren)[0]
-  //               ?.permissions?.includes("view")
-  //           ) {
-  //             newMenu.subMenus = [
-  //               ...new Set([
-  //                 ...newMenu.subMenus,
-  //                 ...menuData.subMenus.filter((s) => s.renderName === ren),
-  //               ]),
-  //             ];
-  //           }
-  //         }
-
-  //         if (newMenu.subMenus.length) {
-  //           newSideMenuData.push(newMenu);
-  //         }
-  //       } else {
-  //         if (
-  //           permissions
-  //             ?.filter(
-  //               (p) => p.module.toLowerCase() === menuData.renderName[0]
-  //             )[0]
-  //             ?.permissions?.includes("view")
-  //         ) {
-  //           newSideMenuData.push(menuData);
-  //         }
-  //       }
-  //     }
-
-  //     setSideMenuData(newSideMenuData);
-  //   }
-  // }, [user]);
-
-  // const []
 
   // on load if any selected sub-menu was there then open
   React.useEffect(() => {
@@ -326,11 +274,11 @@ export default function NavDrawer() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("inventory_current_user");
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("role");
+    // window.localStorage.removeItem("inventory_current_user");
+    // window.localStorage.removeItem("access_token");
+    // window.localStorage.removeItem("role");
     // setUser(null);
-    // navigate("/");
+    navigate("/");
   };
 
   return (
@@ -514,256 +462,245 @@ export default function NavDrawer() {
         <DrawerHeader />
 
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/manage-institute" element={<ManageInstitute />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="manage-institute" element={<ManageInstitute />} />
+
+          <Route path="administrator/academicYear" element={<AcademicYear />} />
 
           <Route
-            path="/administrator/academicYear"
-            element={<AcademicYear />}
-          />
-
-          <Route
-            path="/administrator/role-permission"
+            path="administrator/role-permission"
             element={<RolePermission />}
           />
 
-          <Route path="/administrator/user-role" element={<UserRole />} />
+          <Route path="administrator/user-role" element={<UserRole />} />
           <Route
-            path="/administrator/reset-password"
+            path="administrator/reset-password"
             element={<ResetPassword />}
           />
 
           <Route
-            path="/human-resource/manage-designation"
+            path="human-resource/manage-designation"
             element={<ManageDesignation />}
           />
           <Route
-            path="/human-resource/manage-department"
+            path="human-resource/manage-department"
             element={<ManageDepartment />}
           />
 
-          <Route path="/human-resource/employee" element={<Employee />} />
-          <Route
-            path="/human-resource/offer-letter"
-            element={<OfferLetter />}
-          />
+          <Route path="human-resource/employee" element={<Employee />} />
+          <Route path="human-resource/offer-letter" element={<OfferLetter />} />
 
           <Route
-            path="/human-resource/relieving-letter"
+            path="human-resource/relieving-letter"
             element={<RelievingLetter />}
           />
 
+          <Route path="human-resource/off-boarding" element={<OffBoarding />} />
           <Route
-            path="/human-resource/off-boarding"
-            element={<OffBoarding />}
-          />
-          <Route
-            path="/human-resource/experience-letter"
+            path="human-resource/experience-letter"
             element={<ExperienceLetter />}
           />
 
           <Route
-            path="/human-resource/teacher-activity"
+            path="human-resource/teacher-activity"
             element={<TeacherActivity />}
           />
 
-          <Route path="/pre-admission/enquiries" element={<Enquiries />} />
-          <Route path="/pre-admission/exams" element={<Exams />} />
+          <Route path="pre-admission/enquiries" element={<Enquiries />} />
+          <Route path="pre-admission/exams" element={<Exams />} />
           <Route
-            path="/pre-admission/exam-schedules"
+            path="pre-admission/exam-schedules"
             element={<ExamSchedules />}
           />
-          <Route path="/pre-admission/result" element={<Result />} />
+          <Route path="pre-admission/result" element={<Result />} />
 
-          <Route path="/academic/class" element={<Class />} />
-          <Route path="/academic/section" element={<Section />} />
-          <Route path="/academic/subject" element={<Subject />} />
+          <Route path="academic/class" element={<Class />} />
+          <Route path="academic/section" element={<Section />} />
+          <Route path="academic/subject" element={<Subject />} />
 
           <Route
-            path="/attendence/student-attendance"
+            path="attendence/student-attendance"
             element={<StudentAttendance />}
           />
           <Route
-            path="/attendence/employee-attendance"
+            path="attendence/employee-attendance"
             element={<EmployeeAttendance />}
           />
 
-          <Route path="/class-routine" element={<ClassRoutine />} />
-          <Route path="/student/overview" element={<Overview />} />
+          <Route path="class-routine" element={<ClassRoutine />} />
+          <Route path="student/overview" element={<Overview />} />
 
-          <Route path="/student/admit-student" element={<AdmitStudent />} />
-          <Route path="/student/reshuffle" element={<Reshuffle />} />
-          <Route path="/student/promotion" element={<Promotion />} />
-          <Route path="/student/bulk-admission" element={<BulkAdmission />} />
-          <Route path="/student/credential" element={<Credential />} />
-          <Route path="/student/quick-admit" element={<QuickAdmit />} />
+          <Route path="student/admit-student" element={<AdmitStudent />} />
+          <Route path="student/reshuffle" element={<Reshuffle />} />
+          <Route path="student/promotion" element={<Promotion />} />
+          <Route path="student/bulk-admission" element={<BulkAdmission />} />
+          <Route path="student/credential" element={<Credential />} />
+          <Route path="student/quick-admit" element={<QuickAdmit />} />
           <Route
-            path="/student/student-activity"
+            path="student/student-activity"
             element={<StudentActivity />}
           />
           <Route
-            path="/student/student-bulk-photo"
+            path="student/student-bulk-photo"
             element={<StudentBulkPhoto />}
           />
 
-          <Route path="/assignment" element={<Assignment />} />
+          <Route path="assignment" element={<Assignment />} />
 
-          <Route path="/announcement/notice" element={<Notice />} />
-          <Route path="/announcement/news" element={<News />} />
-          <Route path="/announcement/holiday" element={<Holiday />} />
+          <Route path="announcement/notice" element={<Notice />} />
+          <Route path="announcement/news" element={<News />} />
+          <Route path="announcement/holiday" element={<Holiday />} />
           <Route
-            path="/announcement/awardsAndAchievements"
+            path="announcement/awardsAndAchievements"
             element={<AwardsAndAchievements />}
           />
-          <Route path="/announcement/splashNews" element={<SplashNews />} />
+          <Route path="announcement/splashNews" element={<SplashNews />} />
 
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/event" element={<Event />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="event" element={<Event />} />
 
-          <Route path="/exam/exam-grade" element={<ExamGrade />} />
-          <Route path="/exam/exam-term" element={<ExamTerm />} />
-          <Route path="/exam/exam-schedule" element={<ExamSchedule />} />
-          <Route path="/exam/exam-hall-ticket" element={<ExamHallTicket />} />
+          <Route path="exam/exam-grade" element={<ExamGrade />} />
+          <Route path="exam/exam-term" element={<ExamTerm />} />
+          <Route path="exam/exam-schedule" element={<ExamSchedule />} />
+          <Route path="exam/exam-hall-ticket" element={<ExamHallTicket />} />
           <Route
-            path="/exam-Mark/exam-Attendance"
+            path="exam-Mark/exam-Attendance"
             element={<ExamAttendance />}
           />
-          <Route path="/exam-Mark/manage-mark" element={<ManageMark />} />
-          <Route path="/exam-Mark/exam-result" element={<ExamResult />} />
-          <Route path="/exam-Mark/marks-card" element={<Markscard />} />
+          <Route path="exam-Mark/manage-mark" element={<ManageMark />} />
+          <Route path="exam-Mark/exam-result" element={<ExamResult />} />
+          <Route path="exam-Mark/marks-card" element={<Markscard />} />
           <Route
-            path="/exam-Mark/consolidated-marks-sheet"
+            path="exam-Mark/consolidated-marks-sheet"
             element={<ConsolidatedMarkSheet />}
           />
           <Route
-            path="/exam-Mark/subject-wise-report"
+            path="exam-Mark/subject-wise-report"
             element={<SubjectWiseReport />}
           />
           <Route
-            path="/exam-Mark/division-wise-report"
+            path="exam-Mark/division-wise-report"
             element={<DivisionWiseReport />}
           />
 
-          <Route path="/lms/storage" element={<Storage />} />
-          <Route path="/lms/courses" element={<Courses />} />
-          <Route path="/lms/course-content" element={<CourseContent />} />
-          <Route path="/lms/live" element={<Live />} />
+          <Route path="lms/storage" element={<Storage />} />
+          <Route path="lms/courses" element={<Courses />} />
+          <Route path="lms/course-content" element={<CourseContent />} />
+          <Route path="lms/live" element={<Live />} />
 
-          <Route path="/library/books" element={<Books />} />
-          <Route path="/library/periodical" element={<Periodical />} />
+          <Route path="library/books" element={<Books />} />
+          <Route path="library/periodical" element={<Periodical />} />
           <Route
-            path="/library/student-library-member"
+            path="library/student-library-member"
             element={<StudentLibraryMember />}
           />
           <Route
-            path="/library/student-issue-return"
+            path="library/student-issue-return"
             element={<StudentIssueReturn />}
           />
           <Route
-            path="/library/employee-library-member"
+            path="library/employee-library-member"
             element={<EmployeeLibraryMember />}
           />
           <Route
-            path="/library/employee-issue-return"
+            path="library/employee-issue-return"
             element={<EmployeeIssueReturn />}
           />
 
-          <Route path="/leave-management/leave-type" element={<LeaveType />} />
+          <Route path="leave-management/leave-type" element={<LeaveType />} />
           <Route
-            path="/leave-management/student-leave"
+            path="leave-management/student-leave"
             element={<StudentsLeave />}
           />
           <Route
-            path="/leave-management/employee-leave"
+            path="leave-management/employee-leave"
             element={<EmployeeLeave />}
           />
           <Route
-            path="/leave-management/leave-report"
+            path="leave-management/leave-report"
             element={<LeaveReport />}
           />
 
-          <Route path="/inventory/item" element={<Item />} />
-          <Route path="/inventory/vendor" element={<Vendor />} />
-          <Route path="/inventory/transaction" element={<InOutTransaction />} />
-          <Route path="/inventory/stockList" element={<StockList />} />
-          <Route path="/inventory/issue" element={<Issue />} />
-          <Route path="/inventory/sell" element={<Sell />} />
+          <Route path="inventory/item" element={<Item />} />
+          <Route path="inventory/vendor" element={<Vendor />} />
+          <Route path="inventory/transaction" element={<InOutTransaction />} />
+          <Route path="inventory/stockList" element={<StockList />} />
+          <Route path="inventory/issue" element={<Issue />} />
+          <Route path="inventory/sell" element={<Sell />} />
           <Route
-            path="/certificate/study-certificate"
+            path="certificate/study-certificate"
             element={<StudyCertificate />}
           />
           <Route
-            path="/certificate/transfer-certificate"
+            path="certificate/transfer-certificate"
             element={<TransferCertificate />}
           />
-          <Route path="/fees/receipt-book" element={<ReceiptBook />} />
-          <Route path="/fees/feeMap-category" element={<FeeMapCategory />} />
-          <Route path="/fees/collect-fees" element={<CollectFees />} />
-          <Route path="/fees/balance-fee" element={<BalanceFeeReport />} />
-          <Route path="/fees/fee-overview" element={<FeeOverview />} />
-          <Route path="/fees/re-conciliation" element={<Reconciliation />} />
+          <Route path="fees/receipt-book" element={<ReceiptBook />} />
+          <Route path="fees/feeMap-category" element={<FeeMapCategory />} />
+          <Route path="fees/collect-fees" element={<CollectFees />} />
+          <Route path="fees/balance-fee" element={<BalanceFeeReport />} />
+          <Route path="fees/fee-overview" element={<FeeOverview />} />
+          <Route path="fees/re-conciliation" element={<Reconciliation />} />
 
-          <Route path="/hostel/manage-hostel" element={<ManageHostel />} />
-          <Route path="/hostel/manage-room-type" element={<ManageRoomType />} />
-          <Route
-            path="/hostel/manage-room-bed"
-            element={<ManageRoomAndBed />}
-          />
-          <Route path="/hostel/hostel-member" element={<HostelMember />} />
+          <Route path="hostel/manage-hostel" element={<ManageHostel />} />
+          <Route path="hostel/manage-room-type" element={<ManageRoomType />} />
+          <Route path="hostel/manage-room-bed" element={<ManageRoomAndBed />} />
+          <Route path="hostel/hostel-member" element={<HostelMember />} />
 
-          <Route path="/transport/vehicle" element={<Vehicle />} />
+          <Route path="transport/vehicle" element={<Vehicle />} />
           <Route
-            path="/transport/manage-route"
+            path="transport/manage-route"
             element={<ManageRouteAndTrips />}
           />
-          <Route path="/transport/routes" element={<VehicleRoutes />} />
+          <Route path="transport/routes" element={<VehicleRoutes />} />
           <Route
-            path="/transport/trasport-member"
+            path="transport/trasport-member"
             element={<TransportMember />}
           />
 
-          <Route path="/transport/vehicle-log" element={<VehicleLog />} />
+          <Route path="transport/vehicle-log" element={<VehicleLog />} />
           <Route
-            path="/transport/vehicle-maintenance"
+            path="transport/vehicle-maintenance"
             element={<VehicleMaintenance />}
           />
 
-          <Route path="/payroll/salary-grade" element={<SalaryGrade />} />
-          <Route path="/payroll/make-payment" element={<MakePayment />} />
+          <Route path="payroll/salary-grade" element={<SalaryGrade />} />
+          <Route path="payroll/make-payment" element={<MakePayment />} />
 
-          <Route path="/report/library-report" element={<LibraryReport />} />
+          <Route path="report/library-report" element={<LibraryReport />} />
           <Route
-            path="/report/student-attendance"
+            path="report/student-attendance"
             element={<StudentAttendanceReport />}
           />
           <Route
-            path="/report/student-yearly-attendane"
+            path="report/student-yearly-attendane"
             element={<StudentYearlyAttendance />}
           />
           <Route
-            path="/report/employee-attendance"
+            path="report/employee-attendance"
             element={<EmployeeAttendanceReport />}
           />
           <Route
-            path="/report/employee-yearly-attendance"
+            path="report/employee-yearly-attendance"
             element={<EmployeeYearlyAttendance />}
           />
-          <Route path="/report/student-report" element={<StudentReport />} />
+          <Route path="report/student-report" element={<StudentReport />} />
           <Route
-            path="/report/student-activity-report"
+            path="report/student-activity-report"
             element={<StudentActivityReport />}
           />
 
-          <Route path="/visitorInfo/visitor-info" element={<VisitorInfo />} />
+          <Route path="visitorInfo/visitor-info" element={<VisitorInfo />} />
           <Route
-            path="/visitorInfo/student-checkout"
+            path="visitorInfo/student-checkout"
             element={<StudentCheckout />}
           />
 
-          <Route path="/help-desk" element={<HelpDesk />} />
-          <Route path="/guardian-feedback" element={<GuardianFeedback />} />
+          <Route path="help-desk" element={<HelpDesk />} />
+          <Route path="guardian-feedback" element={<GuardianFeedback />} />
         </Routes>
+        <Outlet />
       </Box>
     </Box>
   );

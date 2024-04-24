@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
-
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
+import WebsiteTheme1 from "./components/WebsiteTheme1";
+import WebsiteTheme2 from "./components/WebsiteTheme2";
+import { Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+const LayoutOne = () => (
+  <div>
+    <Outlet />
+  </div>
+);
+
+const LayoutTwo = () => (
+  <div>
+    <Outlet />
+  </div>
+);
 
 function App() {
+  const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [settingsContext, setSettingsContext] = useState({
     schoolName: "",
@@ -117,7 +132,15 @@ function App() {
             setSelectedSetting,
           }}
         >
-          <NavDrawer />
+          <Routes>
+            <Route
+              path="/*"
+              element={
+                selectedTheme % 2 === 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
+              }
+            />
+            <Route path="/sch/*" element={<NavDrawer />} />
+          </Routes>
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

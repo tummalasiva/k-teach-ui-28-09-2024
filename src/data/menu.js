@@ -35,14 +35,14 @@ import Diversity2Icon from "@mui/icons-material/Diversity2";
 const SIDE_MENU_DATA = [
   {
     name: "Dashboard",
-    path: "/dashboard",
+    path: "/sch/dashboard",
     renderName: [],
     subMenus: [],
     icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
   },
   {
     name: "Manage Institute",
-    path: "/manage-institute",
+    path: "/sch/manage-institute",
     renderName: [""],
     subMenus: [],
     icon: <SettingsSuggest color="primary" fontSize="small" />,
@@ -63,7 +63,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Academic Year",
         renderName: "academicYear",
-        path: "/administrator/academicYear",
+        path: "/sch/administrator/academicYear",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -74,7 +74,7 @@ const SIDE_MENU_DATA = [
       {
         name: "User Role(ACL)",
         renderName: "userRole",
-        path: "/administrator/user-role",
+        path: "/sch/administrator/user-role",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -85,7 +85,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Role Permission(ACL)",
         renderName: "rolePermission",
-        path: "/administrator/role-permission",
+        path: "/sch/administrator/role-permission",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -96,7 +96,7 @@ const SIDE_MENU_DATA = [
       {
         name: "User Password Reset",
         renderName: "userPasswordReset",
-        path: "/administrator/reset-password",
+        path: "/sch/administrator/reset-password",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -125,7 +125,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Designation",
         renderName: "manageDesignation",
-        path: "/human-resource/manage-designation",
+        path: "/sch/human-resource/manage-designation",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -136,7 +136,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Department",
         renderName: "manageDepartment",
-        path: "/human-resource/manage-department",
+        path: "/sch/human-resource/manage-department",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -147,7 +147,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee",
         renderName: "employee",
-        path: "/human-resource/employee",
+        path: "/sch/human-resource/employee",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -158,7 +158,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Offer-Letter",
         renderName: "offerLetter",
-        path: "/human-resource/offer-letter",
+        path: "/sch/human-resource/offer-letter",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -169,7 +169,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Relieving Letter",
         renderName: "relievingLetter",
-        path: "/human-resource/relieving-letter",
+        path: "/sch/human-resource/relieving-letter",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -180,7 +180,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Off Boarding",
         renderName: "offBoarding",
-        path: "/human-resource/off-boarding",
+        path: "/sch/human-resource/off-boarding",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -191,7 +191,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Experience Letter",
         renderName: "experienceLetter",
-        path: "/human-resource/experience-letter",
+        path: "/sch/human-resource/experience-letter",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -202,7 +202,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Teacher Activity",
         renderName: "teacherActivity",
-        path: "/human-resource/teacher-activity",
+        path: "/sch/human-resource/teacher-activity",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -221,7 +221,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Enquiries",
         renderName: "enquiries",
-        path: "/pre-admission/enquiries",
+        path: "/sch/pre-admission/enquiries",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -232,7 +232,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exams",
         renderName: "exams",
-        path: "/pre-admission/exams",
+        path: "/sch/pre-admission/exams",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -243,7 +243,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Schedules",
         renderName: "examSchedules",
-        path: "/pre-admission/exam-schedules",
+        path: "/sch/pre-admission/exam-schedules",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -254,7 +254,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Result",
         renderName: "result",
-        path: "/pre-admission/result",
+        path: "/sch/pre-admission/result",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -274,7 +274,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Class",
         renderName: "class",
-        path: "/academic/class",
+        path: "/sch/academic/class",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -285,7 +285,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Section",
         renderName: "section",
-        path: "/academic/section",
+        path: "/sch/academic/section",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -296,7 +296,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Subject",
         renderName: "subject",
-        path: "/academic/subject",
+        path: "/sch/academic/subject",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -316,7 +316,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Attendance",
         renderName: "studentAttendance",
-        path: "/attendence/student-attendance",
+        path: "/sch/attendence/student-attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -327,7 +327,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Attendance",
         renderName: "employeeAttendance",
-        path: "/attendence/employee-attendance",
+        path: "/sch/attendence/employee-attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -339,7 +339,7 @@ const SIDE_MENU_DATA = [
   },
   {
     name: "Class Routine",
-    path: "/class-routine",
+    path: "/sch/class-routine",
     renderName: ["class-routine"],
     subMenus: [],
     icon: <AccessTime color="primary" fontSize="small" />,
@@ -363,7 +363,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Overview",
         renderName: "overview",
-        path: "/student/overview",
+        path: "/sch/student/overview",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -374,7 +374,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Admit Student",
         renderName: "admitStudent",
-        path: "/student/admit-student",
+        path: "/sch/student/admit-student",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -385,7 +385,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Reshuffle",
         renderName: "reshuffle",
-        path: "/student/reshuffle",
+        path: "/sch/student/reshuffle",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -396,7 +396,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Promotion",
         renderName: "promotion",
-        path: "/student/promotion",
+        path: "/sch/student/promotion",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -408,7 +408,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Bulk Admission",
         renderName: "bulkAdmission",
-        path: "/student/bulk-admission",
+        path: "/sch/student/bulk-admission",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -419,7 +419,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Credential",
         renderName: "credential",
-        path: "/student/credential",
+        path: "/sch/student/credential",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -430,7 +430,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Quick Admit",
         renderName: "quickAdmit",
-        path: "/student/quick-admit",
+        path: "/sch/student/quick-admit",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -441,7 +441,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Activity",
         renderName: "studentActivity",
-        path: "/student/student-activity",
+        path: "/sch/student/student-activity",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -454,7 +454,7 @@ const SIDE_MENU_DATA = [
 
   {
     name: "Assignment",
-    path: "/assignment",
+    path: "/sch/assignment",
     renderName: ["assgnment"],
     subMenus: [],
     icon: <AssignmentRoundedIcon color="primary" fontSize="small" />,
@@ -475,7 +475,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Notice",
         renderName: "notice",
-        path: "/announcement/notice",
+        path: "/sch/announcement/notice",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -486,7 +486,7 @@ const SIDE_MENU_DATA = [
       {
         name: "News",
         renderName: "news",
-        path: "/announcement/news",
+        path: "/sch/announcement/news",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -497,7 +497,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Holiday",
         renderName: "holiday",
-        path: "/announcement/holiday",
+        path: "/sch/announcement/holiday",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -508,7 +508,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Awards And Achievements",
         renderName: "awardsAndAchievements",
-        path: "/announcement/awardsAndAchievements",
+        path: "/sch/announcement/awardsAndAchievements",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -520,7 +520,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Splash News",
         renderName: "splashNews",
-        path: "/announcement/splashNews",
+        path: "/sch/announcement/splashNews",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -532,21 +532,21 @@ const SIDE_MENU_DATA = [
   },
   {
     name: "Gallery",
-    path: "/gallery",
+    path: "/sch/gallery",
     renderName: ["gallery"],
     subMenus: [],
     icon: <PhotoRoundedIcon color="primary" fontSize="small" />,
   },
   {
     name: "Notifications",
-    path: "/notifications",
+    path: "/sch/notifications",
     renderName: ["notifications"],
     subMenus: [],
     icon: <NotificationsActiveRoundedIcon color="primary" fontSize="small" />,
   },
   {
     name: "Event",
-    path: "/event",
+    path: "/sch/event",
     renderName: ["event"],
     subMenus: [],
     icon: <Groups color="primary" fontSize="small" />,
@@ -561,7 +561,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Grade",
         renderName: "examGrade",
-        path: "/exam/exam-grade",
+        path: "/sch/exam/exam-grade",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -572,7 +572,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Term",
         renderName: "examTerm",
-        path: "/exam/exam-term",
+        path: "/sch/exam/exam-term",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -583,7 +583,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Schedule",
         renderName: "examSchedule",
-        path: "/exam/exam-schedule",
+        path: "/sch/exam/exam-schedule",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -594,7 +594,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Hall Ticket",
         renderName: "examHallTicket",
-        path: "/exam/exam-hall-ticket",
+        path: "/sch/exam/exam-hall-ticket",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -622,7 +622,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Attendance",
         renderName: "examAttendance",
-        path: "/exam-Mark/exam-Attendance",
+        path: "/sch/exam-Mark/exam-Attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -633,7 +633,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Mark",
         renderName: "manageMark",
-        path: "/exam-Mark/manage-mark",
+        path: "/sch/exam-Mark/manage-mark",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -644,7 +644,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Exam Result",
         renderName: "examResult",
-        path: "/exam-Mark/exam-result",
+        path: "/sch/exam-Mark/exam-result",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -655,7 +655,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Marks Card",
         renderName: "marksCard",
-        path: "/exam-Mark/marks-card",
+        path: "/sch/exam-Mark/marks-card",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -667,7 +667,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Consolidated Marks Sheet",
         renderName: "consolidatedMarksSheet",
-        path: "/exam-Mark/consolidated-marks-sheet",
+        path: "/sch/exam-Mark/consolidated-marks-sheet",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -678,7 +678,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Subject Wise Report",
         renderName: "subjectWiseReport",
-        path: "/exam-Mark/subject-wise-report",
+        path: "/sch/exam-Mark/subject-wise-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -689,7 +689,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Division Wise Report",
         renderName: "divisionWiseReport",
-        path: "/exam-Mark/division-wise-report",
+        path: "/sch/exam-Mark/division-wise-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -709,7 +709,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Storage",
         renderName: "storage",
-        path: "/lms/storage",
+        path: "/sch/lms/storage",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -720,7 +720,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Courses",
         renderName: "courses",
-        path: "/lms/courses",
+        path: "/sch/lms/courses",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -731,7 +731,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Course Content",
         renderName: "courseContent",
-        path: "/lms/course-content",
+        path: "/sch/lms/course-content",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -742,7 +742,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Live",
         renderName: "live",
-        path: "/lms/live",
+        path: "/sch/lms/live",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -769,7 +769,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Books",
         renderName: "books",
-        path: "/library/books",
+        path: "/sch/library/books",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -780,7 +780,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Periodical",
         renderName: "periodical",
-        path: "/library/periodical",
+        path: "/sch/library/periodical",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -791,7 +791,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Library Member",
         renderName: "studentLibraryMember",
-        path: "/library/student-library-member",
+        path: "/sch/library/student-library-member",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -802,7 +802,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Issue & Return",
         renderName: "studentIssueReturn",
-        path: "/library/student-issue-return",
+        path: "/sch/library/student-issue-return",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -814,7 +814,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Library Member",
         renderName: "employeeLibraryMember",
-        path: "/library/employee-library-member",
+        path: "/sch/library/employee-library-member",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -825,7 +825,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Issue & Return",
         renderName: "employeeIssueReturn",
-        path: "/library/employee-issue-return",
+        path: "/sch/library/employee-issue-return",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -845,7 +845,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Leave Type",
         renderName: "leaveType",
-        path: "/leave-management/leave-type",
+        path: "/sch/leave-management/leave-type",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -856,7 +856,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Leave",
         renderName: "employeeLeave",
-        path: "/leave-management/employee-leave",
+        path: "/sch/leave-management/employee-leave",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -867,7 +867,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Students Leave",
         renderName: "studentLeave",
-        path: "/leave-management/student-leave",
+        path: "/sch/leave-management/student-leave",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -878,7 +878,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Leave Report",
         renderName: "leaveReport",
-        path: "/leave-management/leave-report",
+        path: "/sch/leave-management/leave-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -898,7 +898,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Item",
         renderName: "item",
-        path: "/inventory/item",
+        path: "/sch/inventory/item",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -909,7 +909,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Vendor",
         renderName: "vendor",
-        path: "/inventory/vendor",
+        path: "/sch/inventory/vendor",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -920,7 +920,7 @@ const SIDE_MENU_DATA = [
       {
         name: "In/Out Transaction",
         renderName: "transaction",
-        path: "/inventory/transaction",
+        path: "/sch/inventory/transaction",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -931,7 +931,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Stock List",
         renderName: "stockList",
-        path: "/inventory/stockList",
+        path: "/sch/inventory/stockList",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -942,7 +942,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Issue",
         renderName: "issue",
-        path: "/inventory/issue",
+        path: "/sch/inventory/issue",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -953,7 +953,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Sell",
         renderName: "sell",
-        path: "/inventory/sell",
+        path: "/sch/inventory/sell",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -973,7 +973,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Study Certificate",
         renderName: "studyCertificate",
-        path: "/certificate/study-certificate",
+        path: "/sch/certificate/study-certificate",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -984,7 +984,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Transfer Certificate",
         renderName: "transferCertificate",
-        path: "/certificate/transfer-certificate",
+        path: "/sch/certificate/transfer-certificate",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1011,7 +1011,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Receipt Book",
         renderName: "receiptBook",
-        path: "/fees/receipt-book",
+        path: "/sch/fees/receipt-book",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1022,7 +1022,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Fee Map Category",
         renderName: "feeMapCategory",
-        path: "/fees/feeMap-category",
+        path: "/sch/fees/feeMap-category",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1033,7 +1033,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Collect Fees",
         renderName: "collectFees",
-        path: "/fees/collect-fees",
+        path: "/sch/fees/collect-fees",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1044,7 +1044,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Balance Fee",
         renderName: "balanceFee",
-        path: "/fees/balance-fee",
+        path: "/sch/fees/balance-fee",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1055,7 +1055,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Fee Overview",
         renderName: "feeOverview",
-        path: "/fees/fee-overview",
+        path: "/sch/fees/fee-overview",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1066,7 +1066,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Reconciliation",
         renderName: "reconciliation",
-        path: "/fees/re-conciliation",
+        path: "/sch/fees/re-conciliation",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1091,7 +1091,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Hostel",
         renderName: "manageHostel",
-        path: "/hostel/manage-hostel",
+        path: "/sch/hostel/manage-hostel",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1102,7 +1102,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Room Type",
         renderName: "manageRoomType",
-        path: "/hostel/manage-room-type",
+        path: "/sch/hostel/manage-room-type",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1113,7 +1113,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Room Bed",
         renderName: "manageRoomBed",
-        path: "/hostel/manage-room-bed",
+        path: "/sch/hostel/manage-room-bed",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1124,7 +1124,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Hostel Member",
         renderName: "hostelMember",
-        path: "/hostel/hostel-member",
+        path: "/sch/hostel/hostel-member",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1151,7 +1151,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Vehicle",
         renderName: "vehicle",
-        path: "/transport/vehicle",
+        path: "/sch/transport/vehicle",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1162,7 +1162,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Manage Route & Trips",
         renderName: "manageRoute",
-        path: "/transport/manage-route",
+        path: "/sch/transport/manage-route",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1173,7 +1173,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Routes",
         renderName: "routes",
-        path: "/transport/routes",
+        path: "/sch/transport/routes",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1184,7 +1184,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Trasport Member",
         renderName: "trasportMember",
-        path: "/transport/trasport-member",
+        path: "/sch/transport/trasport-member",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1195,7 +1195,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Vehicle Log",
         renderName: "vehicleLog",
-        path: "/transport/vehicle-log",
+        path: "/sch/transport/vehicle-log",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1206,7 +1206,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Vehicle Maintenance",
         renderName: "vehicleMaintenance",
-        path: "/transport/vehicle-maintenance",
+        path: "/sch/transport/vehicle-maintenance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1226,7 +1226,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Salary Grade",
         renderName: "salaryGrade",
-        path: "/payroll/salary-grade",
+        path: "/sch/payroll/salary-grade",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1237,7 +1237,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Make Payment",
         renderName: "makePayment",
-        path: "/payroll/make-payment",
+        path: "/sch/payroll/make-payment",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1265,7 +1265,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Library Report",
         renderName: "libraryReport",
-        path: "/report/library-report",
+        path: "/sch/report/library-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1276,7 +1276,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Attendance",
         renderName: "studentAttendance",
-        path: "/report/student-attendance",
+        path: "/sch/report/student-attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1287,7 +1287,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Yearly Attendane",
         renderName: "studentYearlyAttendaneroutes",
-        path: "/report/student-yearly-attendane",
+        path: "/sch/report/student-yearly-attendane",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1298,7 +1298,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Attendance",
         renderName: "employeeAttendance",
-        path: "/report/employee-attendance",
+        path: "/sch/report/employee-attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1309,7 +1309,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Employee Yearly Attendance",
         renderName: "employeeYearlyAttendance",
-        path: "/report/employee-yearly-attendance",
+        path: "/sch/report/employee-yearly-attendance",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1321,7 +1321,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Report",
         renderName: "studentReport",
-        path: "/report/student-report",
+        path: "/sch/report/student-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1332,7 +1332,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Activity Report",
         renderName: "studentActivityReport",
-        path: "/report/student-activity-report",
+        path: "/sch/report/student-activity-report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1351,7 +1351,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Visitor Info",
         renderName: "visitorInfo",
-        path: "/visitorInfo/visitor-info",
+        path: "/sch/visitorInfo/visitor-info",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1362,7 +1362,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Student Checkout",
         renderName: "studentCheckout",
-        path: "/visitorInfo/student-checkout",
+        path: "/sch/visitorInfo/student-checkout",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -1374,14 +1374,14 @@ const SIDE_MENU_DATA = [
   },
   {
     name: "Help Desk",
-    path: "/help-desk",
+    path: "/sch/help-desk",
     renderName: ["Help desk"],
     subMenus: [],
     icon: <Groups color="primary" fontSize="small" />,
   },
   {
     name: "Guardian Feedback",
-    path: "/guardian-feedback",
+    path: "/sch/guardian-feedback",
     renderName: ["guardianFeedback"],
     subMenus: [],
     icon: <FeedbackIcon color="primary" fontSize="small" />,
