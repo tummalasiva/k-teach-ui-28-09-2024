@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
-const NavbarItem = ({ onClick, title, open, path, isSelected }) => {
+const NavbarItem = ({ onClick, title, open, isSelected, pathname }) => {
   return (
     <>
       <Box
@@ -12,13 +13,14 @@ const NavbarItem = ({ onClick, title, open, path, isSelected }) => {
           borderBottom: isSelected ? "2px solid white" : "none",
         }}
       >
-        <Typography
-          component="div"
-          onClick={path}
-          sx={{ fontWeight: "bold", color: "white" }}
-        >
-          {title}
-        </Typography>
+        <Link to={pathname} style={{ textDecoration: "none" }}>
+          <Typography
+            component="div"
+            sx={{ fontWeight: "bold", color: "white" }}
+          >
+            {title}
+          </Typography>
+        </Link>
       </Box>
     </>
   );

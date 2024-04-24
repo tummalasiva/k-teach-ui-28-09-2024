@@ -232,6 +232,7 @@ export default function Navbar() {
                         title={data.title}
                         onClick={data.onClick}
                         open={data.open}
+                        pathname={data.path}
                         isSelected={pathname === data.path}
                       />
                     </li>
@@ -404,15 +405,6 @@ export default function Navbar() {
                 }}
               ></Menu>
             )}
-            {/* <Box component='div'
-                open={open6}
-                onClose={handleClose6}
-              style={{
-                marginTop: "4%",
-                Width: "15%",
-                textAlign: "center",
-              }}
-              ></Box> */}
           </MuiUl>
         </NavContainer>
 

@@ -28,7 +28,9 @@ import Library2 from "./theme-two/components/facilities/Library";
 import Transport2 from "./theme-two/components/facilities/Transport";
 import DanceAndSinging2 from "./theme-two/components/facilities/DanceAndSinging";
 import Labs from "./theme-two/components/facilities/Labs";
-import AdmissionForm from "./theme-two/components/facilities/AdmissionForm";
+import AdmissionForm from "./theme-two/components/pre-admission/AdmissionForm";
+import Results from "./theme-two/components/result/Results";
+import Contact from "./theme-two/components/contact/Contact";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -184,6 +186,8 @@ function App() {
               path="/facilities/pre-admission"
               element={<AdmissionForm />}
             />
+            <Route path="/results" element={<Results show={false} />} />
+            <Route path="/contact-us" element={<Contact />} />
           </Routes>
           {/* ============== // ================= */}
         </SettingContext.Provider>

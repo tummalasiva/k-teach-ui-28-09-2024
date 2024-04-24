@@ -16,7 +16,7 @@ import SubHeader from "../../SubHeader";
 import CustomTable from "../../../../components/Tables/CustomTable";
 import { examResultHomePageTableKeys } from "../../../../data/tableKeys/examResultsHomePageData";
 
-export default function Result() {
+export default function Result({ show }) {
   const [data, setData] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
@@ -30,7 +30,7 @@ export default function Result() {
   return (
     <>
       <SubHeader
-        show={false}
+        show={show}
         title="Results"
         leftSideHeader="Home"
         rightSideHeader="Results"
