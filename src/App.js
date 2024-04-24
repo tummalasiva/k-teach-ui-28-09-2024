@@ -12,6 +12,7 @@ import Overview from "./theme-two/components/About-us/Overview";
 import { Route, Routes } from "react-router-dom";
 import PublicRoute from "./theme-one/components/PublicRoute";
 import Founder from "./theme-two/components/About-us/Founder";
+import VisionAndMission from "./theme-two/components/About-us/VisionAndMission";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -133,6 +134,10 @@ function App() {
             {/* <Route path="*" element={<PageNotFound />} /> */}
             <Route path="/about/overview" element={<Overview />} />
             <Route path="/about/founder" element={<Founder />} />
+            <Route
+              path="/about/vision-mission"
+              element={<VisionAndMission />}
+            />
           </Routes>
         </SettingContext.Provider>
       </ThemeProvider>

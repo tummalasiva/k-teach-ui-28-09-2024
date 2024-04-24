@@ -3,6 +3,7 @@ import { Box, Typography, styled, Container } from "@mui/material";
 import Footer from "../../layout/Footer";
 import TopNav from "../../../theme-one/components/Navbar/TopNav";
 import Navbar from "../../layout/header/Navbar";
+import themeData from "../../../data/themeData";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage:
@@ -31,7 +32,7 @@ export default function Overview() {
       <OuterBox>
         <Typography
           variant="h4"
-          color="#F86F03"
+          color={themeData.darkPalette.primary.main}
           textAlign="center"
           fontWeight="700"
           fontSize={32}
