@@ -1,9 +1,11 @@
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import image from "../../../../../theme-one/assets/Images/food.gif";
-
 import SubHeader from "../../../SubHeader";
 import themeData from "../../../../../data/themeData";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+import Footer from "../../../Footer";
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
   [theme.breakpoints.down("md")]: {
@@ -24,6 +26,8 @@ const Header = styled(Typography)(({ theme }) => ({
 export default function Food() {
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="Food"
         leftSideHeader="Home"
@@ -132,6 +136,7 @@ export default function Food() {
           </Typography>
         </Box>
       </ContentContainer>
+      <Footer />
     </>
   );
 }

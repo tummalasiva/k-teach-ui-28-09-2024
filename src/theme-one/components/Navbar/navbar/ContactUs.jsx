@@ -12,6 +12,9 @@ import { BsPhoneFill } from "react-icons/bs";
 import { MdMail } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
 import themeData from "../../../../data/themeData";
+import TopNav from "../TopNav";
+import MainNav from "../MainNav";
+import Footer from "../../Footer";
 
 const Header = styled(Typography)(({}) => ({
   fontWeight: "bold",
@@ -91,6 +94,8 @@ let data = [
 export default function ContactUs() {
   return (
     <>
+      <TopNav />
+      <MainNav />
       <MuiMainBox sx={{ mx: 4 }}>
         <Container sx={{ mt: 4 }}>
           <Header pt={2}>FIND OUR ADDRESS</Header>
@@ -125,6 +130,7 @@ export default function ContactUs() {
           </MuiBox>
         </Container>
       </MuiMainBox>
+      <Footer />
     </>
   );
 }

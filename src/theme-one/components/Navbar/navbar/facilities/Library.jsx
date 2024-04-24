@@ -3,6 +3,9 @@ import SubHeader from "../../../SubHeader";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import image from "../../../../../theme-one/assets/Images/library.gif";
 import themeData from "../../../../../data/themeData";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+import Footer from "../../../Footer";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -24,6 +27,8 @@ const Header = styled(Typography)(({ theme }) => ({
 export default function Library() {
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="Library"
         leftSideHeader="Home"
@@ -182,6 +187,7 @@ export default function Library() {
           </Typography>
         </Box>
       </ContentContainer>
+      <Footer />
     </>
   );
 }

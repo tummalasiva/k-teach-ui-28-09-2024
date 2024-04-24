@@ -6,6 +6,9 @@ import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import themeData from "../../../../data/themeData";
+import TopNav from "../TopNav";
+import MainNav from "../MainNav";
+import Footer from "../../Footer";
 const Gender_Options = [
   {
     label: "Male",
@@ -74,7 +77,8 @@ export default function PreAdmission() {
   });
   return (
     <>
-      {" "}
+      <TopNav />
+      <MainNav />
       <Container>
         <Grid container mt={2}>
           <Paper
@@ -484,6 +488,7 @@ export default function PreAdmission() {
           justifyContent="flex-end"
           alignItems="center"
           gap={1}
+          mb={1}
         >
           <Button size="small" color="error" variant="contained">
             Cancel
@@ -493,6 +498,7 @@ export default function PreAdmission() {
           </Button>
         </Box>
       </Container>
+      <Footer />
     </>
   );
 }

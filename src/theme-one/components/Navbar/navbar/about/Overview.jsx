@@ -2,6 +2,9 @@ import { Box, Container, Typography, styled } from "@mui/material";
 import React from "react";
 import SubHeader from "../../../SubHeader";
 import themeData from "../../../../../data/themeData";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+import Footer from "../../../Footer";
 
 const Title = styled(Typography)(() => ({
   fontWeight: 700,
@@ -12,7 +15,7 @@ const Title = styled(Typography)(() => ({
 }));
 
 const FooterText = styled(Typography)(() => ({
-  marginTop: "3rem",
+  margin: "40px 0px",
   fontWeight: "bold",
   color: themeData.darkPalette.primary.main,
   textAlign: "center",
@@ -27,7 +30,8 @@ const Content = styled(Typography)(() => ({
 export default function Overview() {
   return (
     <>
-      {" "}
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="Overview"
         leftSideHeader="Home"
@@ -75,6 +79,7 @@ export default function Overview() {
           </FooterText>
         </Box>
       </Container>
+      <Footer />
     </>
   );
 }

@@ -2,6 +2,9 @@ import React from "react";
 import { Container, Grid, Typography, styled } from "@mui/material";
 import SubHeader from "../../../SubHeader";
 import themeData from "../../../../../data/themeData";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+import Footer from "../../../Footer";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -33,6 +36,8 @@ const Missionvalues = [
 export default function VissionMission() {
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="Vission And Mission"
         leftSideHeader="Home"
@@ -81,6 +86,7 @@ export default function VissionMission() {
           </Grid>
         </Grid>
       </ContentContainer>
+      <Footer />
     </>
   );
 }

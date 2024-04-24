@@ -3,6 +3,10 @@ import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import image from "../../../../../theme-one/assets/Images/founder.png";
 import SubHeader from "../../../SubHeader";
 import themeData from "../../../../../data/themeData";
+import Footer from "../../../Footer";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+
 const ImageContainer = styled(Grid)(({ theme }) => ({
   borderShadow: "10px 20px #0000",
   padding: "15px",
@@ -38,7 +42,7 @@ const Title = styled(Typography)(({ theme }) => ({
 }));
 
 const AboutContainer = styled(Box)(({ theme }) => ({
-  padding: "20px",
+  padding: "30px",
   [theme.breakpoints.down("md")]: {
     padding: "15px",
   },
@@ -50,6 +54,8 @@ const AboutContainer = styled(Box)(({ theme }) => ({
 export default function AboutFounder() {
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="About Founder"
         leftSideHeader="Home"
@@ -137,6 +143,7 @@ export default function AboutFounder() {
           </Grid>
         </Grid>
       </AboutContainer>
+      <Footer />
     </>
   );
 }

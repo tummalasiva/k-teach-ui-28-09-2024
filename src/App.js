@@ -22,7 +22,7 @@ import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
 import PublicRoute from "./theme-one/components/PublicRoute";
 import Founder from "./theme-two/components/about-us/Founder";
 import VisionAndMission from "./theme-two/components/about-us/VisionAndMission";
-import Overview2 from "./theme-two/components/about-us/Overview";
+
 import Food2 from "./theme-two/components/facilities/Food";
 import Library2 from "./theme-two/components/facilities/Library";
 import Transport2 from "./theme-two/components/facilities/Transport";
@@ -31,7 +31,9 @@ import Labs from "./theme-two/components/facilities/Labs";
 import AdmissionForm from "./theme-two/components/pre-admission/AdmissionForm";
 import Results from "./theme-two/components/result/Results";
 import Contact from "./theme-two/components/contact/Contact";
-import Gallery from "./theme-one/components/OurGallery/Gallery";
+import Overview2 from "./theme-two/components/about-us/Overview";
+import Gallery from "./theme-one/components/Navbar/navbar/gallery/Gallery";
+import EventDetails from "./theme-one/components/OurEvents/EventDetails";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -145,6 +147,7 @@ function App() {
           {/* <NavDrawer /> */}
           {/* <HomePage1 /> */}
           {/* ========= Theme 1 route ========== */}
+
           <Routes>
             <Route path="/" element={<HomePage1 />} />
             <Route path="/about/overview" element={<Overview1 />} />
@@ -164,6 +167,7 @@ function App() {
             <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
             <Route path="/home-gallery" element={<Gallery />} />
+            <Route path="/eventdetails/:id" element={<EventDetails />} />
           </Routes>
           {/* ======================= // ======================== */}
 

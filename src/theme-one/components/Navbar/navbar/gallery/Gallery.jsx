@@ -8,11 +8,13 @@ import { Backdrop, Box, CardMedia, Modal, Typography } from "@mui/material";
 // icons
 import CloseIcon from "@mui/icons-material/Close";
 import themeData from "../../../../../data/themeData";
-
 import image1 from "../../../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../../../theme-one/assets/Images/school1.avif";
+import TopNav from "../../TopNav";
+import MainNav from "../../MainNav";
+import Footer from "../../../Footer";
 
 const awards = [
   {
@@ -125,6 +127,8 @@ export default function Gallery() {
 
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         title="Gallery"
         leftSideHeader="Home"
@@ -197,6 +201,7 @@ export default function Gallery() {
           </Carousel>
         </ModalBox>
       </Modal>
+      <Footer />
     </>
   );
 }

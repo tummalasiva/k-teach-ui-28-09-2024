@@ -98,6 +98,11 @@ const Events = ({ card }) => {
 
   const time = moment(card.fromDate);
   const specificTime = time.format("h:mm A");
+  let navigate = useNavigate();
+
+  let handleNavigate = () => {
+    navigate(`/eventdetails/${card.id}`, { state: { events: card } });
+  };
 
   return (
     <Grid container display="flex" justifyContent="center" alignItems="center">
@@ -122,7 +127,7 @@ const Events = ({ card }) => {
           alignItems: "center",
         }}
       >
-        <CustomCard>
+        <CustomCard onClick={handleNavigate}>
           <CardMedia component="img" image={card.image} height="297" />
         </CustomCard>
       </Grid>
@@ -147,7 +152,7 @@ const Events = ({ card }) => {
 
         <Para>{card?.content?.substring(0, 150) + "....."}</Para>
         <Random>
-          <ReadButton>
+          <ReadButton onClick={handleNavigate}>
             Read More
             <ChevronRightIcon fontWeight={600}></ChevronRightIcon>
           </ReadButton>

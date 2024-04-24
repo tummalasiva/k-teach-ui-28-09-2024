@@ -11,10 +11,12 @@ import { DownloadForOffline, Print } from "@mui/icons-material";
 import { useFormik } from "formik";
 import FormSelect from "../../../../forms/FormSelect";
 import PageHeader from "../../../../components/PageHeader";
-
 import SubHeader from "../../SubHeader";
 import CustomTable from "../../../../components/Tables/CustomTable";
 import { examResultHomePageTableKeys } from "../../../../data/tableKeys/examResultsHomePageData";
+import Footer from "../../Footer";
+import TopNav from "../TopNav";
+import MainNav from "../MainNav";
 
 export default function Result({ show }) {
   const [data, setData] = useState([]);
@@ -29,6 +31,8 @@ export default function Result({ show }) {
   });
   return (
     <>
+      <TopNav />
+      <MainNav />
       <SubHeader
         show={show}
         title="Results"
@@ -108,6 +112,7 @@ export default function Result({ show }) {
           bodyData={data}
         />
       </Box>
+      <Footer />
     </>
   );
 }
