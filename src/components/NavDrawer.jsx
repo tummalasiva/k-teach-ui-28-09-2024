@@ -229,58 +229,6 @@ export default function NavDrawer() {
     setSideMenuData(SIDE_MENU_DATA);
   });
 
-  // React.useEffect(() => {
-  //   const roleDetails = window.localStorage.getItem("role");
-  //   if (!roleDetails) {
-  //     setSideMenuData(SIDE_MENU_DATA);
-  //   } else {
-  //     let role = JSON.parse(roleDetails);
-  //     let permissions = role.permissions;
-  //     let newSideMenuData = [];
-  //     for (let menuData of SIDE_MENU_DATA) {
-  //       if (menuData.name === "Dashboard") {
-  //         newSideMenuData.push(menuData);
-  //       }
-  //       if (menuData.subMenus.length) {
-  //         let newMenu = { ...menuData, subMenus: [] };
-
-  //         for (let ren of menuData.renderName) {
-  //           if (
-  //             permissions
-  //               ?.filter((p) => p.module.toLowerCase() === ren)[0]
-  //               ?.permissions?.includes("view")
-  //           ) {
-  //             newMenu.subMenus = [
-  //               ...new Set([
-  //                 ...newMenu.subMenus,
-  //                 ...menuData.subMenus.filter((s) => s.renderName === ren),
-  //               ]),
-  //             ];
-  //           }
-  //         }
-
-  //         if (newMenu.subMenus.length) {
-  //           newSideMenuData.push(newMenu);
-  //         }
-  //       } else {
-  //         if (
-  //           permissions
-  //             ?.filter(
-  //               (p) => p.module.toLowerCase() === menuData.renderName[0]
-  //             )[0]
-  //             ?.permissions?.includes("view")
-  //         ) {
-  //           newSideMenuData.push(menuData);
-  //         }
-  //       }
-  //     }
-
-  //     setSideMenuData(newSideMenuData);
-  //   }
-  // }, [user]);
-
-  // const []
-
   // on load if any selected sub-menu was there then open
   React.useEffect(() => {
     const openPreviousMenu = () => {

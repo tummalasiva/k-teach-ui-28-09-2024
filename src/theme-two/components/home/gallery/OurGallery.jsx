@@ -29,7 +29,7 @@ const TextBox = styled(Box)(({ theme }) => ({
 
 const Heading = styled(Typography)(({ theme }) => ({
   marginTop: "4rem",
-  color: "#FF6D34",
+  color: themeData.darkPalette.secondary.main,
   fontSize: "1rem",
   fontFamily: "sans-serif",
   fontWeight: "bold",
