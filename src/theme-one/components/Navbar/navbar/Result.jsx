@@ -29,13 +29,13 @@ export default function Result() {
   });
   return (
     <>
-      {" "}
       <SubHeader
+        show={false}
         title="Results"
         leftSideHeader="Home"
         rightSideHeader="Results"
       />
-      <Box sx={{ margin: "15px" }}>
+      <Box sx={{ margin: "15px", px: 4 }}>
         <PageHeader title="Exam Result" />
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>
