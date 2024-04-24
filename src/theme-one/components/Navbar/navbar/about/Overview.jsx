@@ -21,7 +21,7 @@ const FooterText = styled(Typography)(() => ({
 
 const Content = styled(Typography)(() => ({
   marginTop: "2rem",
-  fontSize: "15px",
+  fontSize: "16px",
 }));
 
 export default function Overview() {
