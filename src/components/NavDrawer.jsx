@@ -137,8 +137,6 @@ import HelpDesk from "../pages/HelpDesk";
 import GuardianFeedback from "../pages/GuardianFeedback";
 import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
 import StudentReport from "../pages/Report/StudentReport";
-import HomeComponents from "../theme-two/components/home/HomeComponents";
-import HomePage from "../theme-two/page/HomePage";
 
 const drawerWidth = 270;
 
@@ -230,58 +228,6 @@ export default function NavDrawer() {
   React.useEffect(() => {
     setSideMenuData(SIDE_MENU_DATA);
   });
-
-  // React.useEffect(() => {
-  //   const roleDetails = window.localStorage.getItem("role");
-  //   if (!roleDetails) {
-  //     setSideMenuData(SIDE_MENU_DATA);
-  //   } else {
-  //     let role = JSON.parse(roleDetails);
-  //     let permissions = role.permissions;
-  //     let newSideMenuData = [];
-  //     for (let menuData of SIDE_MENU_DATA) {
-  //       if (menuData.name === "Dashboard") {
-  //         newSideMenuData.push(menuData);
-  //       }
-  //       if (menuData.subMenus.length) {
-  //         let newMenu = { ...menuData, subMenus: [] };
-
-  //         for (let ren of menuData.renderName) {
-  //           if (
-  //             permissions
-  //               ?.filter((p) => p.module.toLowerCase() === ren)[0]
-  //               ?.permissions?.includes("view")
-  //           ) {
-  //             newMenu.subMenus = [
-  //               ...new Set([
-  //                 ...newMenu.subMenus,
-  //                 ...menuData.subMenus.filter((s) => s.renderName === ren),
-  //               ]),
-  //             ];
-  //           }
-  //         }
-
-  //         if (newMenu.subMenus.length) {
-  //           newSideMenuData.push(newMenu);
-  //         }
-  //       } else {
-  //         if (
-  //           permissions
-  //             ?.filter(
-  //               (p) => p.module.toLowerCase() === menuData.renderName[0]
-  //             )[0]
-  //             ?.permissions?.includes("view")
-  //         ) {
-  //           newSideMenuData.push(menuData);
-  //         }
-  //       }
-  //     }
-
-  //     setSideMenuData(newSideMenuData);
-  //   }
-  // }, [user]);
-
-  // const []
 
   // on load if any selected sub-menu was there then open
   React.useEffect(() => {
@@ -767,10 +713,6 @@ export default function NavDrawer() {
           <Route path="/guardian-feedback" element={<GuardianFeedback />} />
         </Routes>
       </Box>
-      {/* <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about/overview" element={<Overview />} />
-      </Routes> */}
     </Box>
   );
 }

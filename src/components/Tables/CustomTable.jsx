@@ -40,7 +40,7 @@ export default function CustomTable({
   bodyData = [],
   bodyDataModal = "",
   tableKeys = [],
-  actions = ["edit", "delete", "view", "unbundle", "switch"],
+  actions = ["edit", "delete", "view", "view", "card", "switch"],
   onEditClick = () => {},
   onDeleteClick = () => {},
   onViewClick = () => {},
@@ -145,14 +145,14 @@ export default function CustomTable({
                           </IconButton>
                         </Tooltip>
                       )}
-                      {actions.includes("unbundle") && (
+                      {actions.includes("card") && (
                         <Tooltip title="Unbundle">
                           <Button
                             size="small"
                             variant="contained"
-                            onClick={() => onUnBundleClick(data)}
+                            onClick={() => onViewClick(data)}
                           >
-                            UnBundle
+                            Card
                           </Button>
                         </Tooltip>
                       )}
