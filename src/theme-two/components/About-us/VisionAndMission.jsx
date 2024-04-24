@@ -56,7 +56,7 @@ export default function VisionAndMission() {
               variant="h4"
               sx={{
                 color: themeData.darkPalette.primary.main,
-                fontSize: "32px",
+                fontSize: "35px",
                 fontWeight: "700",
                 textAlign: "center",
               }}
@@ -91,7 +91,7 @@ export default function VisionAndMission() {
               variant="h4"
               sx={{
                 color: themeData.darkPalette.primary.main,
-                fontSize: "32px",
+                fontSize: "35px",
                 fontWeight: "700",
                 textAlign: "center",
               }}

@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
@@ -13,17 +12,23 @@ import Overview1 from "./theme-one/components/Navbar/navbar/about/Overview";
 import MainNav from "./theme-one/components/Navbar/MainNav";
 import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
 import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
-import Library from "./theme-one/components/Navbar/navbar/facilities/Library";
-import Food from "./theme-one/components/Navbar/navbar/facilities/Food";
-import DanceAndSinging from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
-import Transport from "./theme-one/components/Navbar/navbar/facilities/Transport";
+import Library1 from "./theme-one/components/Navbar/navbar/facilities/Library";
+import Food1 from "./theme-one/components/Navbar/navbar/facilities/Food";
+import DanceAndSinging1 from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
+import Transport1 from "./theme-one/components/Navbar/navbar/facilities/Transport";
 import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
 import Result from "./theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
-import Overview2 from "./theme-two/components/About-us/Overview";
 import PublicRoute from "./theme-one/components/PublicRoute";
-import Founder from "./theme-two/components/About-us/Founder";
-import VisionAndMission from "./theme-two/components/About-us/VisionAndMission";
+import Founder from "./theme-two/components/about-us/Founder";
+import VisionAndMission from "./theme-two/components/about-us/VisionAndMission";
+import Overview2 from "./theme-two/components/about-us/Overview";
+import Food2 from "./theme-two/components/facilities/Food";
+import Library2 from "./theme-two/components/facilities/Library";
+import Transport2 from "./theme-two/components/facilities/Transport";
+import DanceAndSinging2 from "./theme-two/components/facilities/DanceAndSinging";
+import Labs from "./theme-two/components/facilities/Labs";
+import AdmissionForm from "./theme-two/components/facilities/AdmissionForm";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -145,13 +150,13 @@ function App() {
               path="/about/visionandmission"
               element={<VissionMission />}
             />
-            <Route path="/facilities/library" element={<Library />} />
-            <Route path="/facilities/canteen" element={<Food />} />
+            <Route path="/facilities/library" element={<Library1 />} />
+            <Route path="/facilities/canteen" element={<Food1 />} />
             <Route
               path="/facilities/dance-and-singing"
-              element={<DanceAndSinging />}
+              element={<DanceAndSinging1 />}
             />
-            <Route path="/facilities/transport" element={<Transport />} />
+            <Route path="/facilities/transport" element={<Transport1 />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/results" element={<Result />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
@@ -164,8 +169,20 @@ function App() {
             <Route path="/about/overview" element={<Overview2 />} />
             <Route path="/about/founder" element={<Founder />} />
             <Route
-              path="/about/vision-mission"
+              path="/about/vision-and-mission"
               element={<VisionAndMission />}
+            />
+            <Route path="/facilities/food" element={<Food2 />} />
+            <Route path="/facilities/library" element={<Library2 />} />
+            <Route path="/facilities/transport" element={<Transport2 />} />
+            <Route
+              path="/facilities/dance-and-singing"
+              element={<DanceAndSinging2 />}
+            />
+            <Route path="/facilities/labs" element={<Labs />} />
+            <Route
+              path="/facilities/pre-admission"
+              element={<AdmissionForm />}
             />
           </Routes>
           {/* ============== // ================= */}

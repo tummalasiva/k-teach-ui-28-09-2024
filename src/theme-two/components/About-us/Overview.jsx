@@ -35,7 +35,7 @@ export default function Overview() {
           color={themeData.darkPalette.primary.main}
           textAlign="center"
           fontWeight="700"
-          fontSize={32}
+          fontSize={35}
         >
           OVERVIEW
         </Typography>
