@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useEffect } from "react";
 import SettingContext from "./context/SettingsContext";
 import HomePage1 from "./theme-one/page/HomePage";
 import HomePage2 from "./theme-two/page/HomePage";
-import { Route, Routes } from "react-router-dom";
 import Overview from "./theme-one/components/Navbar/navbar/about/Overview";
 import MainNav from "./theme-one/components/Navbar/MainNav";
 import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
 import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
-import Library from "./theme-one/components/Navbar/navbar/facilities/Library";
-import Food from "./theme-one/components/Navbar/navbar/facilities/Food";
-import DanceAndSinging from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
-import Transport from "./theme-one/components/Navbar/navbar/facilities/Transport";
+import Library1 from "./theme-one/components/Navbar/navbar/facilities/Library";
+import Food1 from "./theme-one/components/Navbar/navbar/facilities/Food";
+import DanceAndSinging1 from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
+import Transport1 from "./theme-one/components/Navbar/navbar/facilities/Transport";
 import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
 import Result from "./theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
@@ -142,15 +141,15 @@ function App() {
               path="/about/visionandmission"
               element={<VissionMission />}
             />
-            <Route path="/facilities/library" element={<Library />} />
-            <Route path="/facilities/canteen" element={<Food />} />
+            <Route path="/facilities/library" element={<Library1 />} />
+            <Route path="/facilities/canteen" element={<Food1 />} />
             <Route
               path="/facilities/dance-and-singing"
-              element={<DanceAndSinging />}
+              element={<DanceAndSinging1 />}
             />
-            <Route path="/facilities/transport" element={<Transport />} />
+            <Route path="/facilities/transport" element={<Transport1 />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/results" element={<Result />} />
+            <Route path="/results" element={<Result show={true} />} />
             <Route path="/pre-admission" element={<PreAdmission />} />
             <Route path="/home-gallery" element={<Gallery />} />
           </Routes>
@@ -164,6 +163,7 @@ function App() {
             <Route path="/about/overview" element={<Overview />} />
             <Route path="/about/founder" element={<Founder />} />
           </Routes> */}
+          {/* ======================= // ======================== */}
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

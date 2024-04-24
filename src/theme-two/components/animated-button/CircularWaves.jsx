@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
-import css from "../AnimatedButton/style.css";
+import css from "./style.css";
 
 export default function CircularWaves() {
   const [isHovered, setIsHovered] = useState(false);

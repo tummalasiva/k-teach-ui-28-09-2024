@@ -11,7 +11,7 @@ import {
   keyframes,
 } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
-import CircularWaves from "../AnimatedButton/CircularWaves";
+import CircularWaves from "../animated-button/CircularWaves";
 // icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 

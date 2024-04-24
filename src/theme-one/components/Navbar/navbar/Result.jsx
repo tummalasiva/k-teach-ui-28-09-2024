@@ -16,7 +16,7 @@ import SubHeader from "../../SubHeader";
 import CustomTable from "../../../../components/Tables/CustomTable";
 import { examResultHomePageTableKeys } from "../../../../data/tableKeys/examResultsHomePageData";
 
-export default function Result() {
+export default function Result({ show }) {
   const [data, setData] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
@@ -29,13 +29,14 @@ export default function Result() {
   });
   return (
     <>
-      {" "}
       <SubHeader
+        show={show}
         title="Results"
         leftSideHeader="Home"
         rightSideHeader="Results"
       />
-      <Box sx={{ margin: "15px" }}>
+
+      <Box sx={{ margin: "15px", px: 4 }}>
         <PageHeader title="Exam Result" showTextField={false} />
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>

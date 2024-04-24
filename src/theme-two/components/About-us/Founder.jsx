@@ -28,7 +28,7 @@ export default function Founder() {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            px: { xs: 1, sm: 2, md: 12 },
+            px: { xs: 1, sm: 2, md: 22 },
           }}
         >
           <img

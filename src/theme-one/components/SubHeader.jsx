@@ -29,18 +29,21 @@ export default function SubHeader({
   title = "",
   leftSideHeader = "",
   rightSideHeader = "",
+  show = true,
 }) {
   return (
     <>
-      <OverViewTitleContainer variant="h4" align="center">
-        <OverViewTitle>{title.toUpperCase()}</OverViewTitle>
-        <Typography sx={{ color: "white" }}>
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-            {leftSideHeader.toUpperCase()}
-          </Link>
-          &nbsp; / {rightSideHeader.toUpperCase()}
-        </Typography>
-      </OverViewTitleContainer>
+      {show && (
+        <OverViewTitleContainer variant="h4" align="center">
+          <OverViewTitle>{title.toUpperCase()}</OverViewTitle>
+          <Typography sx={{ color: "white" }}>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              {leftSideHeader.toUpperCase()}
+            </Link>
+            &nbsp; / {rightSideHeader.toUpperCase()}
+          </Typography>
+        </OverViewTitleContainer>
+      )}
     </>
   );
 }
