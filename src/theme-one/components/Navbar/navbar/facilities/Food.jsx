@@ -3,6 +3,7 @@ import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import image from "../../../../../theme-one/assets/Images/food.gif";
 
 import SubHeader from "../../../SubHeader";
+import themeData from "../../../../../data/themeData";
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
   [theme.breakpoints.down("md")]: {
@@ -11,6 +12,13 @@ const ContentContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     padding: "5px 15px",
   },
+}));
+
+const Header = styled(Typography)(({ theme }) => ({
+  color: themeData.darkPalette.primary.main,
+  fontWeight: "bold",
+
+  fontSize: "20px",
 }));
 
 export default function Food() {
@@ -23,7 +31,7 @@ export default function Food() {
       />
       <ContentContainer>
         <Box sx={{ padding: "10px 0" }}>
-          <Typography sx={{ fontWeight: 500 }}>
+          <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>
             At Kayaka, we understand the importance of providing students with
             nutritious meals to support their overall well-being and academic
             success. We are committed to ensuring that no child goes hungry and
@@ -34,15 +42,13 @@ export default function Food() {
         <Grid container>
           <Grid lg={8} md={8} sm={12}>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
-                Nutritious Meal Options:
-              </Typography>
+              <Header>Nutritious Meal Options:</Header>
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   Description of the healthy and balanced meals provided to
                   students through the free food facility.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   Emphasis on the use of fresh ingredients, whole grains,
                   fruits, and vegetables to promote good nutrition and support
                   physical and cognitive development.
@@ -51,15 +57,14 @@ export default function Food() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
-                Meal Distribution:
-              </Typography>
+              <Header> Meal Distribution:</Header>
+
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   Details on how and where meals are distributed within the
                   school premises.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   Information on the schedule and timings for breakfast, lunch,
                   and any additional meal programs, including summer meal
                   programs if applicable.
@@ -68,15 +73,14 @@ export default function Food() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
-                Allergies and Dietary Restrictions:
-              </Typography>
+              <Header>Allergies and Dietary Restrictions:</Header>
+
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   Instructions for parents to communicate any specific allergies
                   or dietary restrictions their child may have.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   Information on how the school accommodates and addresses these
                   requirements to ensure the safety and well-being of all
                   students.
@@ -85,15 +89,14 @@ export default function Food() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" gutterBottom sx={{ color: "#F86F03" }}>
-                Food Safety and Quality:
-              </Typography>
+              <Header> Food Safety and Quality:</Header>
+
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   Assurance of adherence to strict food safety and hygiene
                   standards in meal preparation and distribution.
                 </Typography>
-                <Typography component="li">
+                <Typography component="li" gutterBottom fontSize={16}>
                   Overview of any certifications or partnerships with local
                   health authorities to ensure the highest quality of food
                   service.
@@ -102,11 +105,10 @@ export default function Food() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" sx={{ color: "#F86F03" }}>
-                Additional Support:
-              </Typography>
+              <Header>Additional Support:</Header>
+
               <Typography component="ul">
-                <Typography component="li" gutterBottom>
+                <Typography component="li" gutterBottom fontSize={16}>
                   Information on any supplementary programs or resources
                   available to students and families, such as nutrition
                   education workshops, community referrals, or partnerships with
@@ -120,7 +122,7 @@ export default function Food() {
           </Grid>
         </Grid>
         <Box sx={{ padding: "10px 0" }}>
-          <Typography sx={{ fontWeight: 500 }}>
+          <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>
             We believe that access to healthy meals is fundamental to a
             student's ability to learn and thrive. If you have any questions
             regarding our free food facility or need assistance with the

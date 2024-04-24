@@ -23,6 +23,12 @@ const FounderName = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const Content = styled(Typography)(({ theme }) => ({
+  fontFamily: "arial",
+  textAlign: "start",
+  fontSize: "16px",
+}));
+
 const Title = styled(Typography)(({ theme }) => ({
   textShadow: `1px 1px 1px ${themeData.darkPalette.primary.main}`,
   color: "#1b61ff",
@@ -92,22 +98,15 @@ export default function AboutFounder() {
             </ImageContainer>
           </Grid>
           <Grid item xs={12} md={6} lg={8}>
-            <Typography
-              style={{
-                fontFamily: "arial",
-                textAlign: "start",
-              }}
-              className="font-sans"
-            >
-              <b>
-                <b style={{ color: "#30A2FF" }}>"</b>Sri. Shivaraj T. Patil,{" "}
-              </b>
-              the founder of the <b>Kayaka Foundation Education Trust</b>, is a
-              man of many manifestations, hails from Devdurg of Raichur
-              district, completed his B.E. from PDA College of Engineering,
-              Gulbarga. He joined Infosys, Bangalore, served for a period of 6
-              months, then went to US for Consultancy job and completed MBA from
-              Michigan University of America.
+            <Content>
+              <b style={{ color: themeData.darkPalette.primary.main }}>"</b>
+              <b>Sri.Shivaraj T. Patil,</b> the founder of the
+              <b> Kayaka Foundation Education Trust</b>, is a man of many
+              manifestations, hails from Devdurg of Raichur district, completed
+              his B.E. from PDA College of Engineering, Gulbarga. He joined
+              Infosys, Bangalore, served for a period of 6 months, then went to
+              US for Consultancy job and completed MBA from Michigan University
+              of America.
               <br />
               <br />
               The sum total synthesis of whatever Patil observed, experienced,
@@ -133,8 +132,8 @@ export default function AboutFounder() {
               scientists. He has the greater dream to collaborate - THINK AND
               INK SCIENCE FOUNDATION of Germany, which always aims at achieving
               to get the Nobel prizes.
-              <b style={{ color: "#30A2FF" }}>"</b>
-            </Typography>
+              <b style={{ color: themeData.darkPalette.primary.main }}>"</b>
+            </Content>
           </Grid>
         </Grid>
       </AboutContainer>

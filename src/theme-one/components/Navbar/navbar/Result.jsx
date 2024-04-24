@@ -35,8 +35,9 @@ export default function Result({ show }) {
         leftSideHeader="Home"
         rightSideHeader="Results"
       />
+
       <Box sx={{ margin: "15px", px: 4 }}>
-        <PageHeader title="Exam Result" />
+        <PageHeader title="Exam Result" showTextField={false} />
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={3} item>
@@ -76,7 +77,7 @@ export default function Result({ show }) {
               />
             </Grid>
 
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+            <Grid xs={12} md={12} lg={12} textAlign="end" item>
               <Button size="small" variant="contained">
                 Find
               </Button>
