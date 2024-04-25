@@ -4,7 +4,7 @@ import TopNav from "../theme-one/components/Navbar/TopNav";
 import Navbar from "../theme-two/layout/header/Navbar";
 import Footer from "../theme-two/layout/Footer";
 
-// ===== code splitting ==================
+// ===== code splitting ===================================
 const HomePage = React.lazy(() => import("../theme-two/page/HomePage"));
 const Overview = React.lazy(() =>
   import("../theme-two/components/about-us/Overview")
