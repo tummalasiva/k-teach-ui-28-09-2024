@@ -2,22 +2,57 @@ import React from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import TopNav from "../theme-one/components/Navbar/TopNav";
 import MainNav from "../theme-one/components/Navbar/MainNav";
-import HomePage from "../theme-one/page/HomePage";
-import Overview from "../theme-one/components/Navbar/navbar/about/Overview";
-import AboutFounder from "../theme-one/components/Navbar/navbar/about/AboutFounder";
-import VissionMission from "../theme-one/components/Navbar/navbar/about/VissionMission";
-import Library from "../theme-one/components/Navbar/navbar/facilities/Library";
-import Food from "../theme-one/components/Navbar/navbar/facilities/Food";
-import DanceAndSinging from "../theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
-import Transport from "../theme-one/components/Navbar/navbar/facilities/Transport";
-import ContactUs from "../theme-one/components/Navbar/navbar/ContactUs";
-import Result from "../theme-one/components/Navbar/navbar/Result";
-import PreAdmission from "../theme-one/components/Navbar/navbar/PreAdmission";
 import Footer from "../theme-one/components/Footer";
-import Gallery from "../theme-one/components/Navbar/navbar/gallery/Gallery";
-import EventDetails from "../theme-one/components/OurEvents/EventDetails";
-import UniqueFeature from "../theme-one/components/Features/features/UniqueFeature";
-import KnowledgeOfParent from "../theme-one/components/Features/features/KnowledgeOfParent";
+
+// ===== code splitting ===================================
+const Home = React.lazy(() => import("../theme-one/page/HomePage"));
+const Overview = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/about/Overview")
+);
+const AboutFounder = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/about/AboutFounder")
+);
+const VissionMission = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/about/VissionMission")
+);
+const Library = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/facilities/Library")
+);
+
+const Food = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/facilities/Food")
+);
+const DanceAndSinging = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/facilities/DanceAndSinging")
+);
+const Transport = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/facilities/Transport")
+);
+
+const ContactUs = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/ContactUs")
+);
+const Result = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/Result")
+);
+const PreAdmission = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/PreAdmission")
+);
+
+const Gallery = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/gallery/Gallery")
+);
+const EventDetails = React.lazy(() =>
+  import("../theme-one/components/OurEvents/EventDetails")
+);
+const UniqueFeature = React.lazy(() =>
+  import("../theme-one/components/Features/features/UniqueFeature")
+);
+
+const KnowledgeOfParent = React.lazy(() =>
+  import("../theme-one/components/Features/features/KnowledgeOfParent")
+);
+// =================================================
 
 const WebsiteTheme1 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
@@ -27,7 +62,7 @@ const WebsiteTheme1 = () => {
       <TopNav />
       <MainNav />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/about/overview" element={<Overview />} />
         <Route path="/about/founder" element={<AboutFounder />} />
         <Route path="/about/visionandmission" element={<VissionMission />} />
@@ -49,7 +84,6 @@ const WebsiteTheme1 = () => {
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
       </Routes>
-
       <Footer />
       <Outlet />
     </>

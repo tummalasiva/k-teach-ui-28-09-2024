@@ -10,6 +10,57 @@ import { GrGooglePlus } from "react-icons/gr";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import themeData from "../../data/themeData";
+
+const MuiFacebookIcon = styled(FacebookIcon)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  "&:hover": {
+    color: "#1877F2", // Facebook Blue
+  },
+}));
+
+const MuiYouTubeIcon = styled(BsYoutube)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  "&:hover": {
+    color: "#FF0000", // YouTube Red
+  },
+}));
+
+const MuiBiLogoLinkedin = styled(BiLogoLinkedin)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  "&:hover": {
+    color: "#0077B5",
+  },
+}));
+
+const MuiGrGooglePlus = styled(GrGooglePlus)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  "&:hover": {
+    color: "#C6352F",
+  },
+}));
+
+const MuiTwitterIcon = styled(TwitterIcon)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  "&:hover": {
+    color: "#1DA1F2",
+  },
+}));
+
+const MuiInstagramIcon = styled(InstagramIcon)(({ theme }) => ({
+  color: "#fff",
+  transition: "1s",
+  fontSize: 25,
+  "&:hover": {
+    backgroundImage:
+      "linear-gradient(to right, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80)",
+  },
+}));
 
 const FooterContainer = styled(Grid)(({ theme }) => ({
   // marginTop: "6rem",
@@ -23,6 +74,18 @@ const ContentHeading = styled(Typography)(({ theme }) => ({
   padding: "20px 0",
   fontSize: 25,
   fontWeight: 600,
+}));
+
+const MuiText = styled(Typography)(({ theme }) => ({
+  color: "#fff",
+  fontSize: 16,
+  fontFamily: "sans-serif",
+  "&:hover": {
+    borderBottom: `1px solid ${themeData.darkPalette.primary.main} `,
+    transition: "0.8s",
+    color: themeData.darkPalette.primary.main,
+    transitionTimingFunction: "ease-in-out",
+  },
 }));
 
 const CopyRightContainer = styled(Box)(({ theme }) => ({
@@ -43,7 +106,7 @@ export default function Footer() {
         container
         spacing={2}
         sx={{
-          padding: { xs: 0, sm: 0, md: "60px" },
+          padding: { xs: 2, sm: 3, md: "60px" },
         }}
       >
         <Grid
@@ -57,136 +120,119 @@ export default function Footer() {
           }}
         >
           <ContentHeading variant="h5">Contact us</ContentHeading>
-          <Box>
-            <Stack style={{ display: "flex" }}>
-              <Typography sx={{ color: "#CDCDCD", fontSize: 16 }}>
-                <b style={{ color: "#ff8f0b" }}>Address:&nbsp;</b>
-                1,3rd Floor, LVR ONE, 17th Cross Rd, near Orion Mall, A Block,
-                Milk Colony, 2nd Stage, Rajajinagar, <br /> Bengaluru, Karnataka
-                560010
-              </Typography>
-            </Stack>
-            <Typography>
-              <span style={{ color: "#ff8f0b", fontWeight: "500" }}>
-                Email:
-              </span>
-              &nbsp;
-              <span variant="body2" className={style.address}>
-                {selectedSetting ? selectedSetting.email : "abc@gmail.com"}
-              </span>
+          <Stack style={{ display: "flex" }}>
+            <Typography sx={{ color: "#CDCDCD", fontSize: 16 }}>
+              <b style={{ color: themeData.darkPalette.primary.main }}>
+                Address:&nbsp;
+              </b>
+              1,3rd Floor, LVR ONE, 17th Cross Rd, near <br /> Orion Mall, A
+              Block, Milk Colony, 2nd Stage, Rajajinagar, Bengaluru, Karnataka
+              560010
             </Typography>
-            <Typography>
-              <span style={{ color: "#ff8f0b", fontWeight: "500" }}>
-                Phone:
-              </span>
-              &nbsp;
-              <span>
-                +91 {selectedSetting ? selectedSetting.phone : "9878798777"}
-              </span>
-            </Typography>
-            <Box sx={{ display: "flex", gap: 3, padding: "5px 0" }}>
-              {/* <a href="www.facebook.com" className={style.facebook}>
-                <span>
-                  <FacebookIcon />
-                </span>
-              </a> */}
+          </Stack>
+          <Typography variant="body2" color="#fff" fontSize={16}>
+            <b style={{ color: themeData.darkPalette.primary.main }}>Email:</b>
+            &nbsp;
+            {selectedSetting.email ? selectedSetting.email : "abc@gmail.com"}
+          </Typography>
+          <Typography variant="body2" color="#fff" fontSize={16}>
+            <b style={{ color: themeData.darkPalette.primary.main }}>Phone:</b>
+            &nbsp; +91
+            {selectedSetting.phone ? selectedSetting.phone : "9878798777"}
+          </Typography>
 
-              {selectedSetting.facebookUrl ? (
-                <span>
-                  <Link
-                    className={style.facebook}
-                    to={selectedSetting.facebookUrl}
-                    target="_blank"
-                  >
-                    <FacebookIcon />
-                  </Link>
-                </span>
-              ) : null}
+          <Box sx={{ display: "flex", gap: 3, padding: "5px 0" }}>
+            {selectedSetting.facebookUrl ? (
+              <Link
+                className={style.facebook}
+                to={selectedSetting.facebookUrl}
+                target="_blank"
+              >
+                <MuiFacebookIcon />
+              </Link>
+            ) : null}
 
-              {selectedSetting?.gplusUrl ? (
-                <span>
-                  <Link to={selectedSetting.gplusUrl} target="_blank">
-                    <GrGooglePlus className={style.logo} size={25} />
-                  </Link>
-                </span>
-              ) : null}
+            {selectedSetting?.gplusUrl ? (
+              <Link to={selectedSetting.gplusUrl} target="_blank">
+                <MuiGrGooglePlus size={25} />
+              </Link>
+            ) : null}
 
-              {selectedSetting?.youtubeUrl ? (
-                <span>
-                  <Link to={selectedSetting.youtubeUrl} target="_blank">
-                    <BsYoutube className={style.youtube} size={20} />
-                  </Link>
-                </span>
-              ) : null}
+            {selectedSetting?.linkedinUrl ? (
+              <Link to={selectedSetting.linkedinUrl} target="_blank">
+                <MuiBiLogoLinkedin size={25} />
+              </Link>
+            ) : null}
 
-              {selectedSetting?.linkedinUrl ? (
-                <span>
-                  <Link to={selectedSetting.linkedinUrl} target="_blank">
-                    {" "}
-                    <BiLogoLinkedin className={style.likedin} size={25} />
-                  </Link>
-                </span>
-              ) : null}
+            {selectedSetting?.youtubeUrl ? (
+              <Link to={selectedSetting.youtubeUrl} target="_blank">
+                <MuiYouTubeIcon size={25} />
+              </Link>
+            ) : null}
 
-              {/* <a href="www.twitter.com" className={style.twitter}>
-                <TwitterIcon />
-              </a> */}
+            {selectedSetting.twitterUrl ? (
+              <Link to={selectedSetting.twitterUrl} target="_blank">
+                <MuiTwitterIcon />
+              </Link>
+            ) : null}
 
-              {selectedSetting.twitterUrl ? (
-                <span>
-                  <Link
-                    className={style.twitter}
-                    to={selectedSetting.twitterUrl}
-                    target="_blank"
-                  >
-                    <TwitterIcon />
-                  </Link>
-                </span>
-              ) : null}
-
-              {selectedSetting.instagramUrl ? (
-                <span>
-                  <Link
-                    className={style.instagram}
-                    to={selectedSetting.instagramUrl}
-                    target="_blank"
-                  >
-                    <InstagramIcon />
-                  </Link>
-                </span>
-              ) : null}
-            </Box>
+            {selectedSetting.instagramUrl ? (
+              <Link to={selectedSetting.instagramUrl} target="_blank">
+                <MuiInstagramIcon />
+              </Link>
+            ) : null}
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <ContentHeading variant="h5">Quick Links</ContentHeading>
-          <Box>
-            <Typography>
-              <Link to="/about/overview" className={style.link}>
-                <span>OverView</span>
-              </Link>
-            </Typography>
-            <Typography>
-              <Link to="/about/founder" className={style.link}>
-                <span>About Founder</span>
-              </Link>
-            </Typography>
-            <Typography>
-              <Link to="/results" className={style.link}>
-                <span>Results</span>
-              </Link>
-            </Typography>
-            <Typography>
-              <Link to="/home-gallery" className={style.link}>
-                <span>Gallery</span>
-              </Link>
-            </Typography>
-            <Typography>
-              <Link to="/about/visionandmission" className={style.link}>
-                <span> Vision and Mission</span>
-              </Link>
-            </Typography>
-          </Box>
+          <Link
+            to="/about/overview"
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <MuiText variant="span">Overview</MuiText>
+          </Link>
+          <Typography>
+            <Link
+              to="/about/founder"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <MuiText variant="span">About Founder</MuiText>
+            </Link>
+          </Typography>
+          <Typography>
+            <Link
+              to="/results"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <MuiText variant="span">Results</MuiText>
+            </Link>
+          </Typography>
+          <Typography>
+            <Link
+              to="/discover-gallery"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <MuiText variant="span">Gallery</MuiText>
+            </Link>
+          </Typography>
+          <Typography>
+            <Link
+              to="/about/vision-and-mission"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <MuiText variant="span"> Vision and Mission</MuiText>
+            </Link>
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={5}>
           <ContentHeading variant="h5" textAlign="center">
@@ -215,7 +261,7 @@ export default function Footer() {
         }}
       >
         <Typography>{selectedSetting.websiteFooter}</Typography>
-        <Typography>Powered by eCampusStreet</Typography>
+        <Typography sx={{ color: "#fff" }}>Powered by eCampusStreet</Typography>
       </CopyRightContainer>
     </>
   );
