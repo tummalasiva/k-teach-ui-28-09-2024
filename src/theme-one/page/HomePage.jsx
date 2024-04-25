@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "../components/Slider";
-import Features from "../components/Features/Features";
+import Features from "../components/Features/FeatureMain";
 import BirthdayEvents from "../components/BirthdayEvents/BirthdayEvents";
 import OurEvents from "../components/OurEvents/OurEvents";
 import IntroVideo from "../components/IntroVideo";
