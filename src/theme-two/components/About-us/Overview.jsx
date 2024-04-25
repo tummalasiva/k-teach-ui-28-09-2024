@@ -1,8 +1,5 @@
 import React from "react";
 import { Box, Typography, styled, Container } from "@mui/material";
-import Footer from "../../layout/Footer";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 import themeData from "../../../data/themeData";
 
 const OuterBox = styled(Box)(({ theme }) => ({
@@ -27,8 +24,6 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 export default function Overview() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <Typography
           variant="h4"
@@ -88,8 +83,6 @@ export default function Overview() {
             </Typography>
           </Box>
         </ContentContainer>
-
-        <Footer />
       </OuterBox>
     </>
   );

@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography, styled } from "@mui/material";
 import founderimg from "../../assets/images/founder.png";
-import Footer from "../../layout/Footer";
-import Navbar from "../../layout/header/Navbar";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
 import themeData from "../../../data/themeData";
 
 const OuterBox = styled(Box)(({ theme }) => ({
@@ -18,8 +15,6 @@ const OuterBox = styled(Box)(({ theme }) => ({
 export default function Founder() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox component="div">
         <Box
           sx={{
@@ -118,7 +113,6 @@ export default function Founder() {
             </Typography>
           </Box>
         </Box>
-        <Footer />
       </OuterBox>
     </>
   );

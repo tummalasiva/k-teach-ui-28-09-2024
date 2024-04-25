@@ -1,10 +1,6 @@
 import React from "react";
 import { Box, Container, Grid, styled, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import themeData from "../../../data/themeData";
-import Footer from "../../layout/Footer";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 import transportImg from "../../assets/images/transport1.png";
 
 const MuiTypography = styled(Typography)(({ theme }) => ({
@@ -43,8 +39,6 @@ const MuiHeadContent = styled(Typography)(({ theme }) => ({
 export default function Transport() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <MuiHeadContent variant="h4">TRANSPORT</MuiHeadContent>
         <ContentContainer>
@@ -263,7 +257,6 @@ export default function Transport() {
             </Typography>
           </Box>
         </ContentContainer>
-        <Footer />
       </OuterBox>
     </>
   );

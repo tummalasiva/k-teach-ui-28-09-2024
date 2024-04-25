@@ -1,8 +1,5 @@
 import React from "react";
 import { Box, styled } from "@mui/material";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
-import Footer from "../../layout/Footer";
 import ContactUs from "../../../theme-one/components/Navbar/navbar/ContactUs";
 
 const OuterBox = styled(Box)(({ theme }) => ({
@@ -17,11 +14,8 @@ const OuterBox = styled(Box)(({ theme }) => ({
 export default function Contact() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <ContactUs />
-        <Footer />
       </OuterBox>
     </>
   );

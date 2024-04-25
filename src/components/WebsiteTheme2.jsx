@@ -10,11 +10,16 @@ import Transport from "../theme-two/components/facilities/Transport";
 import DanceAndSinging from "../theme-two/components/facilities/DanceAndSinging";
 import Labs from "../theme-two/components/facilities/Labs";
 import AdmissionForm from "../theme-two/components/pre-admission/AdmissionForm";
+import TopNav from "../theme-one/components/Navbar/TopNav";
+import Navbar from "../theme-two/layout/header/Navbar";
+import Footer from "../theme-two/layout/Footer";
 
 const WebsiteTheme2 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
   return (
     <>
+      <TopNav />
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about/overview" element={<Overview />} />
@@ -33,6 +38,7 @@ const WebsiteTheme2 = () => {
         <Route path="/facilities/labs" element={<Labs />} />
         <Route path="/pre-admission" element={<AdmissionForm />} />
       </Routes>
+      <Footer />
       <Outlet />
     </>
   );
