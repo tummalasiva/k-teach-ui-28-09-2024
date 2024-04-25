@@ -131,8 +131,6 @@ export default function Gallery({ show }) {
 
   return (
     <>
-      <TopNav />
-      <MainNav />
       <SubHeader
         show={show}
         title="Gallery"
