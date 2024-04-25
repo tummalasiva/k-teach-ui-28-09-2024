@@ -9,6 +9,7 @@ const OuterBox = styled(Box)(({ theme }) => ({
   backgroundPosition: "center",
   backgroundSize: "cover",
   paddingTop: "150px",
+  paddingBottom: "50px",
 }));
 
 export default function Contact() {

@@ -12,7 +12,7 @@ const OuterBox = styled(Box)(({ theme }) => ({
 }));
 
 const ContentContainer = styled(Container)(({ theme }) => ({
-  padding: "30px",
+  padding: "60px 30px",
   [theme.breakpoints.down("md")]: {
     padding: "20px",
   },

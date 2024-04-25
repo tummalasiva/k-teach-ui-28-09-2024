@@ -39,9 +39,9 @@ const Titl2 = styled(Typography)(({}) => ({
 const MuiBox = styled(Box)(({}) => ({
   border: "1px solid #ffff",
   borderShadow: "10px 20px #fff",
-  marginBottom: "3rem",
+  // marginBottom: "6rem",
   textAlign: "center",
-  paddingBottom: "20px",
+  paddingBottom: "80px",
 }));
 
 const MuiMainBox = styled(Box)(({}) => ({

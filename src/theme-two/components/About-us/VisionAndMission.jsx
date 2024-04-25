@@ -32,7 +32,7 @@ const MuiLi = styled(Typography)(({ theme }) => ({
 }));
 
 const ContentContainer = styled(Container)(({ theme }) => ({
-  padding: "30px",
+  padding: "40px 30px",
   [theme.breakpoints.down("md")]: {
     padding: "20px",
   },

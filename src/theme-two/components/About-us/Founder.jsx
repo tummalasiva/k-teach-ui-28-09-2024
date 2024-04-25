@@ -8,7 +8,7 @@ const OuterBox = styled(Box)(({ theme }) => ({
     "linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url(https://images.unsplash.com/photo-1533901567451-7a6e68d6cd8f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-  backgroundPositionY: "-150px",
+  backgroundPosition: "cover",
   paddingTop: "150px",
 }));
 
@@ -24,6 +24,7 @@ export default function Founder() {
             alignItems: "center",
             textAlign: "center",
             px: { xs: 1, sm: 2, md: 22 },
+            paddingBottom: "60px",
           }}
         >
           <img
