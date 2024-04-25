@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Box, Grid, Stack, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
-import style from "../layout/style.css";
 import SettingContext from "../../context/SettingsContext";
 // icons
 import { BiLogoLinkedin } from "react-icons/bi";
@@ -120,7 +119,7 @@ export default function Footer() {
           }}
         >
           <ContentHeading variant="h5">Contact us</ContentHeading>
-          <Stack style={{ display: "flex" }}>
+          <Stack sx={{ display: "flex" }}>
             <Typography sx={{ color: "#CDCDCD", fontSize: 16 }}>
               <b style={{ color: themeData.darkPalette.primary.main }}>
                 Address:&nbsp;
@@ -143,11 +142,7 @@ export default function Footer() {
 
           <Box sx={{ display: "flex", gap: 3, padding: "5px 0" }}>
             {selectedSetting.facebookUrl ? (
-              <Link
-                className={style.facebook}
-                to={selectedSetting.facebookUrl}
-                target="_blank"
-              >
+              <Link to={selectedSetting.facebookUrl} target="_blank">
                 <MuiFacebookIcon />
               </Link>
             ) : null}

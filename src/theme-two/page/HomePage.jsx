@@ -4,6 +4,7 @@ import LearningInfo from "../components/home/LearningInfo";
 import HomeAbout from "../components/home/HomeAbout";
 import OurGallery from "../components/home/gallery/OurGallery";
 import NewsAndNotice from "../components/home/news-notice/NewsAndNotice";
+import CountUpTimer from "../components/home/CountUpTimer";
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HomeAbout />
       <OurGallery />
       <NewsAndNotice />
+      <CountUpTimer />
     </>
   );
 }
