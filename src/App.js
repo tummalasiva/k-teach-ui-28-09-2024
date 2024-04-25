@@ -125,7 +125,7 @@ function App() {
               path="/*"
               element={
                 <React.Suspense fallback={<div>Loading...</div>}>
-                  {selectedTheme % 2 != 0 ? <Web1 /> : <Web2 />}
+                  {selectedTheme % 2 === 0 ? <Web1 /> : <Web2 />}
                 </React.Suspense>
               }
             />

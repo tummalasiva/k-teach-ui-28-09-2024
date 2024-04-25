@@ -37,7 +37,7 @@ const Header = styled(Typography)(({ theme }) => ({
   textAlign: "center",
 }));
 
-const Features = () => {
+const FeatureMain = () => {
   let navigate = useNavigate();
   const handleClick = (data) => {
     console.log("clicked");
@@ -71,4 +71,4 @@ const Features = () => {
   );
 };
 
-export default Features;
+export default FeatureMain;
