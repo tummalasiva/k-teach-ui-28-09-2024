@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography, styled } from "@mui/material";
 import founderimg from "../../assets/images/founder.png";
-import Footer from "../../layout/Footer";
-import Navbar from "../../layout/header/Navbar";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
 import themeData from "../../../data/themeData";
 
 const OuterBox = styled(Box)(({ theme }) => ({
@@ -11,15 +8,13 @@ const OuterBox = styled(Box)(({ theme }) => ({
     "linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url(https://images.unsplash.com/photo-1533901567451-7a6e68d6cd8f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-  backgroundPositionY: "-150px",
+  backgroundPosition: "cover",
   paddingTop: "150px",
 }));
 
 export default function Founder() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox component="div">
         <Box
           sx={{
@@ -29,6 +24,7 @@ export default function Founder() {
             alignItems: "center",
             textAlign: "center",
             px: { xs: 1, sm: 2, md: 22 },
+            paddingBottom: "60px",
           }}
         >
           <img
@@ -118,7 +114,6 @@ export default function Founder() {
             </Typography>
           </Box>
         </Box>
-        <Footer />
       </OuterBox>
     </>
   );

@@ -7,9 +7,6 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
-import Footer from "../../layout/Footer";
 import themeData from "../../../data/themeData";
 
 const OuterBox = styled(Box)(({ theme }) => ({
@@ -35,7 +32,7 @@ const MuiLi = styled(Typography)(({ theme }) => ({
 }));
 
 const ContentContainer = styled(Container)(({ theme }) => ({
-  padding: "30px",
+  padding: "40px 30px",
   [theme.breakpoints.down("md")]: {
     padding: "20px",
   },
@@ -47,8 +44,6 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 export default function VisionAndMission() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <MuiGrid container>
           <Grid item xs={12} md={10}>
@@ -136,7 +131,6 @@ export default function VisionAndMission() {
             </ContentContainer>
           </Grid>
         </MuiGrid>
-        <Footer />
       </OuterBox>
     </>
   );

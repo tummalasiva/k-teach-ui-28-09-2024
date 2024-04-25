@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
-import Footer from "../../layout/Footer";
 import themeData from "../../../data/themeData";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -55,8 +52,6 @@ const MuiTypography = styled(Typography)(({ theme }) => ({
 export default function Labs() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <MuiHeadContent variant="h4">LAB FACILITIES</MuiHeadContent>
         <ContentContainer>
@@ -223,7 +218,6 @@ export default function Labs() {
             further, please feel free to contact us.
           </MuiContent>
         </ContentContainer>
-        <Footer />
       </OuterBox>
     </>
   );

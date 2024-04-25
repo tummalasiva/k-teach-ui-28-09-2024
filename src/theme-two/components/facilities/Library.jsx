@@ -1,11 +1,6 @@
 import React from "react";
 import { Typography, Box, styled, Container, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
-import libraryImg from "../../assets/images/library.avif";
-import Footer from "../../layout/Footer";
 import themeData from "../../../data/themeData";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -31,8 +26,6 @@ export default function Library() {
 
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <Typography
           variant="h4"
@@ -290,7 +283,6 @@ export default function Library() {
             reading and exploring!
           </Typography>
         </ContentContainer>
-        <Footer />
       </OuterBox>
     </>
   );

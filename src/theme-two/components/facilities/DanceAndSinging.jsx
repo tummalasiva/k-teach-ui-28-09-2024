@@ -2,9 +2,6 @@ import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import themeData from "../../../data/themeData";
-import Footer from "../../layout/Footer";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 
 const ContentContainer = styled(Container)(({ theme }) => ({
   padding: "30px",
@@ -42,8 +39,6 @@ const MuiTypography = styled(Typography)(({ theme }) => ({
 export default function DanceAndSinging() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <MuiHeadContent variant="h4">DANCE AND SINGING</MuiHeadContent>
         <ContentContainer>
@@ -366,7 +361,6 @@ export default function DanceAndSinging() {
             Dance and Singing Facility, please feel free to contact us.
           </Typography>
         </ContentContainer>
-        <Footer />
       </OuterBox>
     </>
   );
