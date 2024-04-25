@@ -67,11 +67,12 @@ const UniqueFeature = () => {
           {data.map((d, i) => (
             <Container>
               <Typography
-                style={{ fontSize: 16, fontWeight: 600 }}
+                sx={{ fontSize: 16, fontWeight: 600 }}
                 variant="h5"
                 color="initial"
+                component="li"
               >
-                <Typography component="li">{d.title}</Typography>
+                {d.title}
               </Typography>
               {d.description.map((v, i) => (
                 <Container>
@@ -80,8 +81,9 @@ const UniqueFeature = () => {
                       variant="h6"
                       style={{ fontSize: 16 }}
                       color="initial"
+                      component="li"
                     >
-                      <Typography component="li">{v}</Typography>
+                      {v}
                     </Typography>
                   </Typography>
                 </Container>
