@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
@@ -21,6 +21,8 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     schoolName: "ABC School",
   });
+
+  const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
