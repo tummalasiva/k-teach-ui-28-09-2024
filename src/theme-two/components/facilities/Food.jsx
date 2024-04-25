@@ -2,10 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import foodImage from "../../assets/images/childfood.avif";
-import Footer from "../../layout/Footer";
 import themeData from "../../../data/themeData";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage:
@@ -31,8 +28,6 @@ export default function Food() {
 
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <Typography
           variant="h4"
@@ -196,7 +191,6 @@ export default function Food() {
             </Typography>
           </Box>
         </ContentContainer>
-        <Footer />
       </OuterBox>
     </>
   );

@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, styled } from "@mui/material";
 import React from "react";
-import dataList from "./dataList";
+import featureList from "../data/featureList";
 import icon1 from "../../../theme-one/assets/Images/icon01.png";
 import icon2 from "../../../theme-one/assets/Images/icon02.png";
 import icon3 from "../../../theme-one/assets/Images/icon03.png";
@@ -48,7 +48,7 @@ const Features = () => {
   return (
     <MuiBox>
       <Grid container>
-        {dataList.map((d, i) => (
+        {featureList.map((d, i) => (
           <Grid key={i} item xs={12} lg={3} md={3}>
             <Contenet
               py={5}

@@ -20,7 +20,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import menuItems from "./menuItems";
+import menuItems from "../data/menuItems";
 import logo from "../../../theme-one/assets/Images/bannback.png";
 import themeData from "../../../data/themeData";
 

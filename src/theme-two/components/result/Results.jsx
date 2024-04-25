@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, styled } from "@mui/material";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 import Result from "../../../theme-one/components/Navbar/navbar/Result";
-import Footer from "../../layout/Footer";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage:
@@ -17,11 +14,8 @@ const OuterBox = styled(Box)(({ theme }) => ({
 export default function Results({ show = false }) {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <Result show={false} />
-        <Footer />
       </OuterBox>
     </>
   );

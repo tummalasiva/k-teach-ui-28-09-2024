@@ -4,10 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import moment from "moment";
-import TopNav from "../Navbar/TopNav";
-import MainNav from "../Navbar/MainNav";
-import Footer from "../Footer";
+
 const Title = styled(Box)(() => ({
   color: "#1976D2",
   fontSize: "2rem",
@@ -52,8 +49,6 @@ export default function EventDetails() {
 
   return (
     <>
-      <TopNav />
-      <MainNav />
       <SubHeader
         title="Events"
         leftSideHeader="Home"
@@ -104,7 +99,6 @@ export default function EventDetails() {
           </Grid>
         </Grid>
       </Box>
-      <Footer />
     </>
   );
 }

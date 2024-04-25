@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, styled } from "@mui/material";
-import TopNav from "../../../theme-one/components/Navbar/TopNav";
-import Navbar from "../../layout/header/Navbar";
 import PreAdmission from "../../../theme-one/components/Navbar/navbar/PreAdmission";
-import Footer from "../../layout/Footer";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage:
@@ -17,11 +14,8 @@ const OuterBox = styled(Box)(({ theme }) => ({
 export default function AdmissionForm() {
   return (
     <>
-      <TopNav />
-      <Navbar />
       <OuterBox>
         <PreAdmission />
-        <Footer />
       </OuterBox>
     </>
   );

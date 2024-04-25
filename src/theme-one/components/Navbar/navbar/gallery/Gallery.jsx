@@ -12,9 +12,6 @@ import image1 from "../../../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../../../theme-one/assets/Images/school1.avif";
-import TopNav from "../../TopNav";
-import MainNav from "../../MainNav";
-import Footer from "../../../Footer";
 
 const awards = [
   {
@@ -134,8 +131,6 @@ export default function Gallery({ show }) {
 
   return (
     <>
-      <TopNav />
-      <MainNav />
       <SubHeader
         show={show}
         title="Gallery"
@@ -209,7 +204,6 @@ export default function Gallery({ show }) {
           </Carousel>
         </ModalBox>
       </Modal>
-      <Footer />
     </>
   );
 }
