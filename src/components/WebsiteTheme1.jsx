@@ -4,6 +4,7 @@ import TopNav from "../theme-one/components/Navbar/TopNav";
 import MainNav from "../theme-one/components/Navbar/MainNav";
 import Footer from "../theme-one/components/Footer";
 
+// ===== code splitting ===================================
 const Home = React.lazy(() => import("../theme-one/page/HomePage"));
 const Overview = React.lazy(() =>
   import("../theme-one/components/Navbar/navbar/about/Overview")
@@ -51,6 +52,7 @@ const UniqueFeature = React.lazy(() =>
 const KnowledgeOfParent = React.lazy(() =>
   import("../theme-one/components/Features/features/KnowledgeOfParent")
 );
+// =================================================
 
 const WebsiteTheme1 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
@@ -82,7 +84,6 @@ const WebsiteTheme1 = () => {
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
       </Routes>
-
       <Footer />
       <Outlet />
     </>
