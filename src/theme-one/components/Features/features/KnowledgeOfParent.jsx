@@ -69,32 +69,32 @@ const KnowledgeOfParent = () => {
           development and provide them with enriching experiences. Here are some
           of the remarkable features you'll find at our school:
         </Typography>
-        <ol>
+        <Typography component="ol">
           {list.map((d, i, a) => (
             <Container>
               <Typography
-                style={{ fontSize: 16, fontWeight: 600 }}
+                sx={{ fontSize: 16, fontWeight: 600 }}
                 variant="h5"
                 color="initial"
+                component="li"
               >
-                <li>{d.title}</li>
+                {d.title}
               </Typography>
               {d.description.map((v, i) => (
                 <Container>
-                  <ul type="disc">
-                    <Typography
-                      variant="h6"
-                      style={{ fontSize: 16 }}
-                      color="initial"
-                    >
-                      <li>{v}</li>
-                    </Typography>
-                  </ul>
+                  <Typography
+                    variant="h6"
+                    component="li"
+                    sx={{ fontSize: 16 }}
+                    color="initial"
+                  >
+                    {v}
+                  </Typography>
                 </Container>
               ))}
             </Container>
           ))}
-        </ol>
+        </Typography>
         <Typography style={{ fontSize: 18 }} varient="h4">
           These unique features represent the diverse opportunities available to
           our students at Kayaka. We invite you to explore our website further
