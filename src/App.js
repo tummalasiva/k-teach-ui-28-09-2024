@@ -1,41 +1,17 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
-import HomePage1 from "./theme-one/page/HomePage";
-import HomePage2 from "./theme-two/page/HomePage";
-import Overview1 from "./theme-one/components/Navbar/navbar/about/Overview";
-import MainNav from "./theme-one/components/Navbar/MainNav";
-import AboutFounder from "./theme-one/components/Navbar/navbar/about/AboutFounder";
-import VissionMission from "./theme-one/components/Navbar/navbar/about/VissionMission";
-import Library1 from "./theme-one/components/Navbar/navbar/facilities/Library";
-import Food1 from "./theme-one/components/Navbar/navbar/facilities/Food";
-import DanceAndSinging1 from "./theme-one/components/Navbar/navbar/facilities/DanceAndSinging";
-import Transport1 from "./theme-one/components/Navbar/navbar/facilities/Transport";
-import ContactUs from "./theme-one/components/Navbar/navbar/ContactUs";
-import Result from "./theme-one/components/Navbar/navbar/Result";
-import PreAdmission from "./theme-one/components/Navbar/navbar/PreAdmission";
-import PublicRoute from "./theme-one/components/PublicRoute";
-import Founder from "./theme-two/components/about-us/Founder";
-import VisionAndMission from "./theme-two/components/about-us/VisionAndMission";
-
-import Food2 from "./theme-two/components/facilities/Food";
-import Library2 from "./theme-two/components/facilities/Library";
-import Transport2 from "./theme-two/components/facilities/Transport";
-import DanceAndSinging2 from "./theme-two/components/facilities/DanceAndSinging";
-import Labs from "./theme-two/components/facilities/Labs";
-import AdmissionForm from "./theme-two/components/pre-admission/AdmissionForm";
-import Results from "./theme-two/components/result/Results";
-import Contact from "./theme-two/components/contact/Contact";
-import Overview2 from "./theme-two/components/about-us/Overview";
-import Gallery from "./theme-one/components/Navbar/navbar/gallery/Gallery";
-import EventDetails from "./theme-one/components/OurEvents/EventDetails";
+import WebsiteTheme1 from "./components/WebsiteTheme1";
+import WebsiteTheme2 from "./components/WebsiteTheme2";
+import { Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function App() {
+  const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [settingsContext, setSettingsContext] = useState({
     schoolName: "",
@@ -144,55 +120,15 @@ function App() {
             setSelectedSetting,
           }}
         >
-          {/* <NavDrawer /> */}
-          {/* <HomePage1 /> */}
-          {/* ========= Theme 1 route ========== */}
-
           <Routes>
-            <Route path="/" element={<HomePage1 />} />
-            <Route path="/about/overview" element={<Overview1 />} />
-            <Route path="/about/founder" element={<AboutFounder />} />
             <Route
-              path="/about/visionandmission"
-              element={<VissionMission />}
+              path="/*"
+              element={
+                selectedTheme % 2 === 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
+              }
             />
-            <Route path="/facilities/library" element={<Library1 />} />
-            <Route path="/facilities/canteen" element={<Food1 />} />
-            <Route
-              path="/facilities/dance-and-singing"
-              element={<DanceAndSinging1 />}
-            />
-            <Route path="/facilities/transport" element={<Transport1 />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/results" element={<Result />} />
-            <Route path="/pre-admission" element={<PreAdmission />} />
-            <Route path="/home-gallery" element={<Gallery />} />
-            <Route path="/eventdetails/:id" element={<EventDetails />} />
+            <Route path="/sch/*" element={<NavDrawer />} />
           </Routes>
-          {/* ======================= // ======================== */}
-
-          {/* ========= Theme 2 route ========== */}
-          {/* <Routes>
-            <Route path="/" element={<HomePage2 />} />
-            <Route path="/about/overview" element={<Overview2 />} />
-            <Route path="/about/founder" element={<Founder />} />
-            <Route
-              path="/about/vision-and-mission"
-              element={<VisionAndMission />}
-            />
-            <Route path="/facilities/food" element={<Food2 />} />
-            <Route path="/facilities/library" element={<Library2 />} />
-            <Route path="/facilities/transport" element={<Transport2 />} />
-            <Route
-              path="/facilities/dance-and-singing"
-              element={<DanceAndSinging2 />}
-            />
-            <Route path="/facilities/labs" element={<Labs />} />
-            <Route path="/pre-admission" element={<AdmissionForm />} />
-            <Route path="/results" element={<Results show={false} />} />
-            <Route path="/contact-us" element={<Contact />} />
-          </Routes> */}
-          {/* ============== // ================= */}
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

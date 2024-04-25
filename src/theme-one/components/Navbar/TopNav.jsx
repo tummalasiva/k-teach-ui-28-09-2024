@@ -14,6 +14,7 @@ import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Person } from "@mui/icons-material";
 import themeData from "../../../data/themeData";
+import { useNavigate } from "react-router-dom";
 
 const MainContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: "#C8C8C8",
@@ -46,6 +47,7 @@ const SelectButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function TopNav() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [schools, setSchools] = useState([
@@ -128,6 +130,7 @@ export default function TopNav() {
             sx={{
               backgroundColor: themeData.darkPalette.primary.main,
             }}
+            onClick={() => navigate("/sch/dashboard")}
           >
             Login
           </Button>
