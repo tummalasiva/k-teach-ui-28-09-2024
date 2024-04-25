@@ -12,7 +12,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
 const FooterContainer = styled(Grid)(({ theme }) => ({
-  marginTop: "6rem",
+  // marginTop: "6rem",
   height: "auto",
   backgroundColor: "#12141b",
   color: "#CDCDCD",
