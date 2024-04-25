@@ -23,6 +23,8 @@ function App() {
   });
 
   const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
+  const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
+  const DashBoard = React.lazy(() => import("./components/NavDrawer"));
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
@@ -125,10 +127,19 @@ function App() {
             <Route
               path="/*"
               element={
-                selectedTheme % 2 === 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  {selectedTheme % 2 === 0 ? <Web1 /> : <Web2 />}
+                </React.Suspense>
               }
             />
-            <Route path="/sch/*" element={<NavDrawer />} />
+            <Route
+              path="/sch/*"
+              element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <DashBoard />
+                </React.Suspense>
+              }
+            />
           </Routes>
         </SettingContext.Provider>
       </ThemeProvider>
