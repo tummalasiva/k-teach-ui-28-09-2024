@@ -19,6 +19,8 @@ import EventDetails from "../theme-one/components/OurEvents/EventDetails";
 import UniqueFeature from "../theme-one/components/Features/features/UniqueFeature";
 import KnowledgeOfParent from "../theme-one/components/Features/features/KnowledgeOfParent";
 
+const Home = React.lazy(() => import("../theme-one/page/HomePage"));
+
 const WebsiteTheme1 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
 
@@ -27,7 +29,7 @@ const WebsiteTheme1 = () => {
       <TopNav />
       <MainNav />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/about/overview" element={<Overview />} />
         <Route path="/about/founder" element={<AboutFounder />} />
         <Route path="/about/visionandmission" element={<VissionMission />} />

@@ -66,14 +66,10 @@ export default function Footer() {
                 560010
               </Typography>
             </Stack>
-            <Typography>
-              <span style={{ color: "#ff8f0b", fontWeight: "500" }}>
-                Email:
-              </span>
+            <Typography variant="body2" color="#fff" fontSize={16}>
+              <b style={{ color: "#ff8f0b" }}>Email:</b>
               &nbsp;
-              <span variant="body2" className={style.address}>
-                {selectedSetting ? selectedSetting.email : "abc@gmail.com"}
-              </span>
+              {selectedSetting.email ? selectedSetting.email : "abc@gmail.com"}
             </Typography>
             <Typography>
               <span style={{ color: "#ff8f0b", fontWeight: "500" }}>

@@ -6,6 +6,10 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 
+const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
+const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
+const DashBoard = React.lazy(() => import("./components/NavDrawer"));
+
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -18,10 +22,6 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     schoolName: "ABC School",
   });
-
-  const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
-  const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
-  const DashBoard = React.lazy(() => import("./components/NavDrawer"));
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
