@@ -14,6 +14,8 @@ import ContactUs from "../theme-one/components/Navbar/navbar/ContactUs";
 import Result from "../theme-one/components/Navbar/navbar/Result";
 import PreAdmission from "../theme-one/components/Navbar/navbar/PreAdmission";
 import Footer from "../theme-one/components/Footer";
+import Gallery from "../theme-one/components/Navbar/navbar/gallery/Gallery";
+import EventDetails from "../theme-one/components/OurEvents/EventDetails";
 
 const WebsiteTheme1 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
@@ -34,9 +36,11 @@ const WebsiteTheme1 = () => {
           element={<DanceAndSinging />}
         />
         <Route path="/facilities/transport" element={<Transport />} />
+        <Route path="/home-gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/results" element={<Result />} />
         <Route path="/pre-admission" element={<PreAdmission />} />
+        <Route path="/eventDetails/:id" element={<EventDetails />} />
       </Routes>
 
       <Footer />
