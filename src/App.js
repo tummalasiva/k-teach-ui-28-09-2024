@@ -124,7 +124,9 @@ function App() {
           <Routes>
             <Route
               path="/*"
-              element={selectedTheme % 2 === 0 ? <Web1 /> : <WebsiteTheme2 />}
+              element={
+                selectedTheme % 2 === 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
+              }
             />
             <Route path="/sch/*" element={<NavDrawer />} />
           </Routes>
