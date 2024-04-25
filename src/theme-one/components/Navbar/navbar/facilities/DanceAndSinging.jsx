@@ -169,7 +169,16 @@ export default function DanceAndSinging() {
               </Typography>
             </Box>
           </Grid>
-          <Grid item lg={4} md={4} sm={12} padding="10px">
+          <Grid
+            item
+            lg={4}
+            md={4}
+            sm={12}
+            padding="10px"
+            sx={{
+              textAlign: { xs: "center", sm: "center" },
+            }}
+          >
             <img src={image} alt="" style={{ width: "100%" }} />
           </Grid>
         </Grid>

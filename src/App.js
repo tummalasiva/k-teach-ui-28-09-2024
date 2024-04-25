@@ -5,6 +5,7 @@ import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
+import Loader from "./components/Loader";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -124,7 +125,7 @@ function App() {
             <Route
               path="/*"
               element={
-                <React.Suspense fallback={<div>Loading...</div>}>
+                <React.Suspense fallback={<Loader />}>
                   {selectedTheme % 2 === 0 ? <Web1 /> : <Web2 />}
                 </React.Suspense>
               }
@@ -132,7 +133,7 @@ function App() {
             <Route
               path="/sch/*"
               element={
-                <React.Suspense fallback={<div>Loading...</div>}>
+                <React.Suspense fallback={<Loader />}>
                   <DashBoard />
                 </React.Suspense>
               }
