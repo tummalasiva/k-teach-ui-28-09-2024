@@ -16,6 +16,8 @@ import PreAdmission from "../theme-one/components/Navbar/navbar/PreAdmission";
 import Footer from "../theme-one/components/Footer";
 import Gallery from "../theme-one/components/Navbar/navbar/gallery/Gallery";
 import EventDetails from "../theme-one/components/OurEvents/EventDetails";
+import UniqueFeature from "../theme-one/components/Features/features/UniqueFeature";
+import KnowledgeOfParent from "../theme-one/components/Features/features/KnowledgeOfParent";
 
 const WebsiteTheme1 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
@@ -34,6 +36,11 @@ const WebsiteTheme1 = () => {
         <Route
           path="/facilities/dance-and-singing"
           element={<DanceAndSinging />}
+        />
+        <Route path="/features/unique-features" element={<UniqueFeature />} />
+        <Route
+          path="/features/to-the-knowledge-of-parents"
+          element={<KnowledgeOfParent />}
         />
         <Route path="/facilities/transport" element={<Transport />} />
         <Route path="/home-gallery" element={<Gallery />} />
