@@ -25,8 +25,6 @@ const Header = styled(Typography)(({ theme }) => ({
 export default function Transport() {
   return (
     <>
-      <TopNav />
-      <MainNav />
       <SubHeader
         title="Transport"
         leftSideHeader="Home"
@@ -175,7 +173,6 @@ export default function Transport() {
           </Typography>
         </Box>
       </ContentContainer>
-      <Footer />
     </>
   );
 }
