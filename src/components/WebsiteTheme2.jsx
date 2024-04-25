@@ -1,21 +1,49 @@
 import React from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
-import HomePage from "../theme-two/page/HomePage";
-import Overview from "../theme-two/components/about-us/Overview";
-import Founder from "../theme-two/components/about-us/Founder";
-import VisionAndMission from "../theme-two/components/about-us/VisionAndMission";
-import Food from "../theme-two/components/facilities/Food";
-import Library from "../theme-two/components/facilities/Library";
-import Transport from "../theme-two/components/facilities/Transport";
-import DanceAndSinging from "../theme-two/components/facilities/DanceAndSinging";
-import Labs from "../theme-two/components/facilities/Labs";
-import AdmissionForm from "../theme-two/components/pre-admission/AdmissionForm";
 import TopNav from "../theme-one/components/Navbar/TopNav";
 import Navbar from "../theme-two/layout/header/Navbar";
 import Footer from "../theme-two/layout/Footer";
-import Gallery from "../theme-two/components/gallery/GalleryComponents";
-import Results from "../theme-two/components/result/Results";
-import ContactUs from "../theme-two/components/contact/Contact";
+
+// ===== code splitting ==================
+const HomePage = React.lazy(() => import("../theme-two/page/HomePage"));
+const Overview = React.lazy(() =>
+  import("../theme-two/components/about-us/Overview")
+);
+const Founder = React.lazy(() =>
+  import("../theme-two/components/about-us/Founder")
+);
+const VisionAndMission = React.lazy(() =>
+  import("../theme-two/components/about-us/VisionAndMission")
+);
+const Food = React.lazy(() =>
+  import("../theme-two/components/facilities/Food")
+);
+const Library = React.lazy(() =>
+  import("../theme-two/components/facilities/Library")
+);
+const Transport = React.lazy(() =>
+  import("../theme-two/components/facilities/Transport")
+);
+const DanceAndSinging = React.lazy(() =>
+  import("../theme-two/components/facilities/DanceAndSinging")
+);
+const Labs = React.lazy(() =>
+  import("../theme-two/components/facilities/Labs")
+);
+const AdmissionForm = React.lazy(() =>
+  import("../theme-two/components/pre-admission/AdmissionForm")
+);
+const Gallery = React.lazy(() =>
+  import("../theme-two/components/gallery/GalleryComponents")
+);
+const Results = React.lazy(() =>
+  import("../theme-two/components/result/Results")
+);
+const ContactUs = React.lazy(() =>
+  import("../theme-two/components/contact/Contact")
+);
+
+// =================================================
 
 const WebsiteTheme2 = () => {
   if (window.location.pathname.startsWith("/sch")) return null;
