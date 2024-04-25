@@ -8,7 +8,6 @@ import SettingContext from "./context/SettingsContext";
 import WebsiteTheme1 from "./components/WebsiteTheme1";
 import WebsiteTheme2 from "./components/WebsiteTheme2";
 import { Route, Routes } from "react-router-dom";
-import { Outlet } from "react-router-dom";
 
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(2);
