@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
@@ -21,6 +21,8 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     schoolName: "ABC School",
   });
+
+  const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
@@ -122,9 +124,7 @@ function App() {
           <Routes>
             <Route
               path="/*"
-              element={
-                selectedTheme % 2 === 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
-              }
+              element={selectedTheme % 2 === 0 ? <Web1 /> : <WebsiteTheme2 />}
             />
             <Route path="/sch/*" element={<NavDrawer />} />
           </Routes>
