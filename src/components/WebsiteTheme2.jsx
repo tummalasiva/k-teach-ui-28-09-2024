@@ -51,27 +51,29 @@ const WebsiteTheme2 = () => {
     <>
       <TopNav />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about/overview" element={<Overview />} />
-        <Route path="/about/founder" element={<Founder />} />
-        <Route
-          path="/about/vision-and-mission"
-          element={<VisionAndMission />}
-        />
-        <Route path="/facilities/food" element={<Food />} />
-        <Route path="/facilities/library" element={<Library />} />
-        <Route path="/facilities/transport" element={<Transport />} />
-        <Route
-          path="/facilities/dance-and-singing"
-          element={<DanceAndSinging />}
-        />
-        <Route path="/facilities/labs" element={<Labs />} />
-        <Route path="/pre-admission" element={<AdmissionForm />} />
-        <Route path="/discover-gallery" element={<Gallery />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-      </Routes>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about/overview" element={<Overview />} />
+          <Route path="/about/founder" element={<Founder />} />
+          <Route
+            path="/about/vision-and-mission"
+            element={<VisionAndMission />}
+          />
+          <Route path="/facilities/food" element={<Food />} />
+          <Route path="/facilities/library" element={<Library />} />
+          <Route path="/facilities/transport" element={<Transport />} />
+          <Route
+            path="/facilities/dance-and-singing"
+            element={<DanceAndSinging />}
+          />
+          <Route path="/facilities/labs" element={<Labs />} />
+          <Route path="/pre-admission" element={<AdmissionForm />} />
+          <Route path="/discover-gallery" element={<Gallery />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+        </Routes>
+      </React.Suspense>
       <Footer />
       <Outlet />
     </>

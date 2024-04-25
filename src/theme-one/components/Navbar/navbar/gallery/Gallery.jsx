@@ -193,12 +193,13 @@ export default function Gallery({ show }) {
                 component="img"
                 image={image}
                 alt="loading..."
-                height="560"
+                height="460"
                 sx={{
                   borderRadius: "5px",
                   objectFit: "contain",
                   px: "15px",
                 }}
+                loading={true}
               />
             ))}
           </Carousel>

@@ -84,7 +84,6 @@ const WebsiteTheme1 = () => {
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
       </Routes>
-
       <Footer />
       <Outlet />
     </>
