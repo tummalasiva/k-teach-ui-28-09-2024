@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import NavDrawer from "./components/NavDrawer";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
-import WebsiteTheme1 from "./components/WebsiteTheme1";
-import WebsiteTheme2 from "./components/WebsiteTheme2";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -23,6 +20,8 @@ function App() {
   });
 
   const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
+  const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
+  const DashBoard = React.lazy(() => import("./components/NavDrawer"));
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
@@ -125,10 +124,19 @@ function App() {
             <Route
               path="/*"
               element={
-                selectedTheme % 2 != 0 ? <WebsiteTheme1 /> : <WebsiteTheme2 />
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  {selectedTheme % 2 != 0 ? <Web1 /> : <Web2 />}
+                </React.Suspense>
               }
             />
-            <Route path="/sch/*" element={<NavDrawer />} />
+            <Route
+              path="/sch/*"
+              element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <DashBoard />
+                </React.Suspense>
+              }
+            />
           </Routes>
         </SettingContext.Provider>
       </ThemeProvider>

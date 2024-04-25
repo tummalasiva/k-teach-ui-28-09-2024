@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Grid, Typography, styled } from "@mui/material";
+import { Box, Grid, Stack, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import style from "../layout/style.css";
 import SettingContext from "../../context/SettingsContext";
@@ -19,9 +19,10 @@ const FooterContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const ContentHeading = styled(Typography)(({ theme }) => ({
-  //   color: "white",
+  color: "white",
   padding: "20px 0",
-  fontWeight: "700",
+  fontSize: 25,
+  fontWeight: 600,
 }));
 
 const CopyRightContainer = styled(Box)(({ theme }) => ({
@@ -57,16 +58,14 @@ export default function Footer() {
         >
           <ContentHeading variant="h5">Contact us</ContentHeading>
           <Box>
-            <div style={{ display: "flex" }}>
-              <Typography sx={{ color: "#ff8f0b", fontWeight: "500" }}>
-                Address:&nbsp;
-                <span style={{ color: "#CDCDCD" }}>
-                  1,3rd Floor, LVR ONE, 17th Cross Rd, near Orion Mall, <br />
-                  A Block, Milk Colony, 2nd Stage, Rajajinagar, <br />{" "}
-                  Bengaluru, Karnataka 560010
-                </span>
+            <Stack style={{ display: "flex" }}>
+              <Typography sx={{ color: "#CDCDCD", fontSize: 16 }}>
+                <b style={{ color: "#ff8f0b" }}>Address:&nbsp;</b>
+                1,3rd Floor, LVR ONE, 17th Cross Rd, near Orion Mall, A Block,
+                Milk Colony, 2nd Stage, Rajajinagar, <br /> Bengaluru, Karnataka
+                560010
               </Typography>
-            </div>
+            </Stack>
             <Typography>
               <span style={{ color: "#ff8f0b", fontWeight: "500" }}>
                 Email:
