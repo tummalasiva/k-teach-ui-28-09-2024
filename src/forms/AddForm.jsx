@@ -6,7 +6,6 @@ import themeData from "../data/themeData";
 export default function AddForm({ title, onAddClick = () => {} }) {
   return (
     <>
-      {" "}
       <Box
         sx={{
           position: "fixed",
@@ -16,10 +15,10 @@ export default function AddForm({ title, onAddClick = () => {} }) {
           bottom: "20px",
         }}
       >
-        {" "}
         <Tooltip title={title}>
           <Fab
             variant="contained"
+            onClick={onAddClick}
             sx={{
               color: "#ffff",
 

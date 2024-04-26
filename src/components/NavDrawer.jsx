@@ -301,7 +301,7 @@ export default function NavDrawer() {
           <Typography variant="h6" noWrap component="div" color="white">
             School ERP
           </Typography>
-          {/* <Box
+          <Box
             sx={{
               display: "flex",
               width: "100%",
@@ -320,7 +320,7 @@ export default function NavDrawer() {
               </IconButton>
               <Avatar />
             </Stack>
-          </Box> */}
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -342,23 +342,26 @@ export default function NavDrawer() {
         <List>
           {sideMenuData.map((m, index) =>
             !m.subMenus.length ? (
-              <ListItem key={m.path} disablePadding>
-                <Link
-                  to={m.path}
-                  style={{ textDecoration: "none", display: "flex", flex: 1 }}
-                >
-                  <ListItemButton
-                    onClick={() => setSelectedMenu(index)}
-                    selected={
-                      selectedMenu === index ||
-                      window.location.pathname === m.path
-                    }
+              <div key={m.path}>
+                <ListItem disablePadding>
+                  <Link
+                    to={m.path}
+                    style={{ textDecoration: "none", display: "flex", flex: 1 }}
                   >
-                    <ListItemIcon>{m.icon}</ListItemIcon>
-                    <ListItemText primary={m.name} />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
+                    <ListItemButton
+                      onClick={() => setSelectedMenu(index)}
+                      selected={
+                        selectedMenu === index ||
+                        window.location.pathname === m.path
+                      }
+                    >
+                      <ListItemIcon>{m.icon}</ListItemIcon>
+                      <ListItemText primary={m.name} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                {/* <Divider /> */}
+              </div>
             ) : (
               <div key={m.path + m.name}>
                 <ListItem key={m.path} sx={{ padding: 0 }}>
@@ -407,6 +410,7 @@ export default function NavDrawer() {
                     ))}
                   </List>
                 </Collapse>
+                {/* <Divider /> */}
               </div>
             )
           )}
