@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
+import WebsiteThemeContext from "./context/WebsiteThemeContext";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -23,6 +24,15 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     schoolName: "ABC School",
   });
+
+  useEffect(() => {
+    let theme = window.localStorage.getItem("selectedTheme");
+    if (!theme) {
+      window.localStorage.setItem("selectedTheme", 1);
+    } else {
+      setSelectedTheme(parseInt(theme));
+    }
+  }, []);
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");
@@ -121,24 +131,28 @@ function App() {
             setSelectedSetting,
           }}
         >
-          <Routes>
-            <Route
-              path="/*"
-              element={
-                <React.Suspense fallback={<Loader />}>
-                  {selectedTheme % 2 === 0 ? <Web1 /> : <Web2 />}
-                </React.Suspense>
-              }
-            />
-            <Route
-              path="/sch/*"
-              element={
-                <React.Suspense fallback={<Loader />}>
-                  <DashBoard />
-                </React.Suspense>
-              }
-            />
-          </Routes>
+          <WebsiteThemeContext.Provider
+            value={{ selectedTheme, setSelectedTheme }}
+          >
+            <Routes>
+              <Route
+                path="/*"
+                element={
+                  <React.Suspense fallback={<Loader />}>
+                    {selectedTheme % 2 !== 0 ? <Web1 /> : <Web2 />}
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/sch/*"
+                element={
+                  <React.Suspense fallback={<Loader />}>
+                    <DashBoard />
+                  </React.Suspense>
+                }
+              />
+            </Routes>
+          </WebsiteThemeContext.Provider>
         </SettingContext.Provider>
       </ThemeProvider>
     </ThemeModeContext.Provider>

@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Person } from "@mui/icons-material";
 import themeData from "../../../data/themeData";
 import { useNavigate } from "react-router-dom";
+import ThemeSelector from "../../../components/ThemeSelector";
 
 const MainContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: "#C8C8C8",
@@ -100,6 +101,7 @@ export default function TopNav() {
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
         >
+          <ThemeSelector />
           <SelectButton
             variant="contained"
             onClick={handleClick}

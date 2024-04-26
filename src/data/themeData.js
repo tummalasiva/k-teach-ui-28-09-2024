@@ -1,3 +1,6 @@
+import Theme1 from "../assets/images/theme1.png";
+import Theme2 from "../assets/images/theme2.png";
+
 const darkPalette = {
   primary: {
     main: "#196838", // Blue for light mode
@@ -22,8 +25,20 @@ const shapeProperties = {
   borderRadius: 5,
 };
 
+const websiteThemes = [
+  {
+    image: Theme1,
+    theme: 1,
+  },
+  {
+    image: Theme2,
+    theme: 2,
+  },
+];
+
 export default {
   lightPalette,
   darkPalette,
   shapeProperties,
+  websiteThemes,
 };
