@@ -32,7 +32,7 @@ const MuiButton = styled(Button)(() => ({
   },
 }));
 const StyledTextField = styled(TextField)({
-  // boxShadow: "0 5px 10px rgba(0, 0, 0, 0.2)",
+  marginBottom: "25px",
   transition: "box-shadow 0.3s",
   "&:hover": {
     boxShadow: "0 5px 10px rgba(0, 0, 0, 0.2)",
@@ -70,7 +70,6 @@ export default function RegistrationForm() {
             onChange={handleChange}
             placeholder="Enter your name"
             required
-            sx={{ marginBottom: 3 }}
           />
 
           <StyledTextField
@@ -81,7 +80,6 @@ export default function RegistrationForm() {
             onChange={handleChange}
             placeholder="Enter your email"
             required
-            sx={{ marginBottom: 3 }}
           />
 
           <StyledTextField
@@ -92,7 +90,6 @@ export default function RegistrationForm() {
             onChange={handleChange}
             placeholder="Message"
             required
-            sx={{ marginBottom: 1 }}
           />
 
           <FormControlLabel

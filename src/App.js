@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
+import Login from "./components/Authentication/Login";
 import ForgotPassword from "./components/Authentication/ForgotPassword";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
@@ -139,6 +140,7 @@ function App() {
                 </React.Suspense>
               }
             />
+            <Route path="/login" element={<Login />} />
             <Route
               path="/sch/*"
               element={
