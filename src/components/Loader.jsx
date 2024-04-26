@@ -8,12 +8,14 @@ const MuiBox = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   marginTop: "20px",
+  width: "100%",
+  height: "100vh",
 }));
 
 export default function Loader() {
   return (
     <MuiBox>
-      <CircularProgress />
+      <CircularProgress size={30} />
     </MuiBox>
   );
 }
