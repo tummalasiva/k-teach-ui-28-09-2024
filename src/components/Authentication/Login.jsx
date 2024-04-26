@@ -54,7 +54,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    userName: "",
     password: "",
   });
 
@@ -62,7 +62,7 @@ const Login = () => {
     try {
       e.preventDefault();
       const data = {
-        username: formData.name,
+        username: formData.userName,
         password: formData.password,
         rememberMe,
       };
@@ -97,6 +97,7 @@ const Login = () => {
                       size="small"
                       required={true}
                       name="userName"
+                      value={formData.userName}
                       placeholder="User Name"
                       fullWidth
                       InputProps={{
@@ -122,6 +123,7 @@ const Login = () => {
                       size="small"
                       placeholder="Password"
                       fullWidth
+                      value={formData.password}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
