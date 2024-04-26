@@ -6,6 +6,7 @@ import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
+import AddForm from "../../forms/AddForm";
 
 export default function ManageDepartment() {
   const [data, setData] = useState([]);
@@ -33,6 +34,10 @@ export default function ManageDepartment() {
         bodyDataModal="department"
         bodyData={data}
       />
+      {/* ====== Add form fab button =======*/}
+      <AddForm title="Add Department" />
+      {/* ================================== */}
+
       {/* ==== add department ======== */}
       <FormModal
         open={open}

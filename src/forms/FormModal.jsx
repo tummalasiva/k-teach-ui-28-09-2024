@@ -37,7 +37,7 @@ export default function FormModal({
             ...styles,
           },
           component: "form",
-          onSubmit: entryFormik.handleSubmit,
+          //   onSubmit: entryFormik.handleSubmit,
         }}
       >
         <DialogTitle>{formTitle}</DialogTitle>
