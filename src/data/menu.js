@@ -71,19 +71,19 @@ const SIDE_MENU_DATA = [
           />
         ),
       },
+      // {
+      //   name: "User Role(ACL)",
+      //   renderName: "userRole",
+      //   path: "/sch/administrator/user-role",
+      //   icon: (
+      //     <SubdirectoryArrowRightOutlinedIcon
+      //       color="primary"
+      //       fontSize="small"
+      //     />
+      //   ),
+      // },
       {
-        name: "User Role(ACL)",
-        renderName: "userRole",
-        path: "/sch/administrator/user-role",
-        icon: (
-          <SubdirectoryArrowRightOutlinedIcon
-            color="primary"
-            fontSize="small"
-          />
-        ),
-      },
-      {
-        name: "Role Permission(ACL)",
+        name: "Roles & Permissions",
         renderName: "rolePermission",
         path: "/sch/administrator/role-permission",
         icon: (

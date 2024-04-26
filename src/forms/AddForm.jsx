@@ -3,7 +3,7 @@ import React from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import themeData from "../data/themeData";
-export default function AddForm({ title = "", onAddClick = () => {} }) {
+export default function AddForm({ title, onAddClick = () => {} }) {
   return (
     <>
       {" "}
@@ -17,7 +17,7 @@ export default function AddForm({ title = "", onAddClick = () => {} }) {
         }}
       >
         {" "}
-        <Tooltip title="Add">
+        <Tooltip title={title}>
           <Fab
             variant="contained"
             sx={{
