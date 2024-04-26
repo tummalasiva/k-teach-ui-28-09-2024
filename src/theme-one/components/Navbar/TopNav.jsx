@@ -130,7 +130,7 @@ export default function TopNav() {
             sx={{
               backgroundColor: themeData.darkPalette.primary.main,
             }}
-            onClick={() => navigate("/sch/dashboard")}
+            onClick={() => navigate("/login")}
           >
             Login
           </Button>

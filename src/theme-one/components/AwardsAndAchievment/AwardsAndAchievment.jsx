@@ -78,7 +78,7 @@ const AwardsAndAchievment = () => {
 
           <AppSlider ref={sliderRef} {...calculateSlidersData(awards.length)}>
             {awards.map((d, i) => (
-              <Awards key={i} coursedata={d} />
+              <Awards key={i} awardsDetails={d} />
             ))}
           </AppSlider>
         </MainContainer>

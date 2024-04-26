@@ -29,10 +29,13 @@ const Note = styled(Typography)(({ theme }) => ({
   WebkitLineClamp: 2,
 }));
 
-const Awards = ({ coursedata }) => {
+const Awards = ({ awardsDetails }) => {
   const navigate = useNavigate();
+
   const handleNavigate = () => {
-    navigate(`/courseDetails/${coursedata._id}`);
+    navigate(`/awardsDetails/${awardsDetails.id}`, {
+      state: { awards: awardsDetails },
+    });
   };
 
   return (
@@ -43,18 +46,19 @@ const Awards = ({ coursedata }) => {
           marginBottom: "50px",
           boxShadow: (theme) => theme.shadows[2],
         }}
+        onClick={handleNavigate}
       >
         <CardActionArea>
           <CardMedia
             component="img"
             height="260"
-            image={coursedata.image}
+            image={awardsDetails.image}
             alt="green iguana"
           />
           <CardContent sx={{ height: 100 }}>
-            <Title variant="body2">{coursedata.title}</Title>
+            <Title variant="body2">{awardsDetails.title}</Title>
             <Note varient="body2" fontSize={16} color="text.secondary">
-              {coursedata.note}
+              {awardsDetails.note}
             </Note>
           </CardContent>
         </CardActionArea>
