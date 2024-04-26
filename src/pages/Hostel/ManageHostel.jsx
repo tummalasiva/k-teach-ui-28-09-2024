@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { manageHostelTableKeys } from "../../data/tableKeys/manageHostelData";
+import AddForm from "../../forms/AddForm";
 
 export default function ManageHostel() {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ export default function ManageHostel() {
         bodyDataModal="hostel"
         bodyData={data}
       />
+      <AddForm />
     </>
   );
 }
