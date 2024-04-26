@@ -40,7 +40,7 @@ export default function FormModal({
           //   onSubmit: entryFormik.handleSubmit,
         }}
       >
-        <DialogTitle>{formTitle}</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600 }}>{formTitle}</DialogTitle>
         <Divider />
         <DialogContent
           sx={{

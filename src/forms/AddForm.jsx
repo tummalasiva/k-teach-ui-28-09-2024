@@ -15,9 +15,10 @@ export default function AddForm({ title = "", onAddClick = () => {} }) {
           bottom: "20px",
         }}
       >
-        <Tooltip title="Add">
+        <Tooltip title={title}>
           <Fab
             variant="contained"
+            onClick={onAddClick}
             sx={{
               color: "#ffff",
 

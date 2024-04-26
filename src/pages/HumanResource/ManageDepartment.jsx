@@ -16,6 +16,10 @@ export default function ManageDepartment() {
     setOpen(false);
   };
 
+  const AddDepartmentHandel = () => {
+    setOpen(true);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       department: "",
@@ -35,7 +39,7 @@ export default function ManageDepartment() {
         bodyData={data}
       />
       {/* ====== Add form fab button =======*/}
-      <AddForm title="Add Department" />
+      <AddForm title="Add Department" onAddClick={AddDepartmentHandel} />
       {/* ================================== */}
 
       {/* ==== add department ======== */}
@@ -58,7 +62,7 @@ export default function ManageDepartment() {
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
-              type="text"
+              type="number"
               formik={entryFormik}
               name="order"
               label="Order Sequence"
