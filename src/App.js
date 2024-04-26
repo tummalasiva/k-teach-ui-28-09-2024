@@ -7,6 +7,7 @@ import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
 import Login from "./components/Authentication/Login";
+import ForgotPassword from "./components/Authentication/ForgotPassword";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -127,7 +128,15 @@ function App() {
               path="/*"
               element={
                 <React.Suspense fallback={<Loader />}>
-                  {selectedTheme % 2 === 0 ? <Web1 /> : <Web2 />}
+                  {selectedTheme % 2 !== 0 ? <Web1 /> : <Web2 />}
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <React.Suspense>
+                  <ForgotPassword />
                 </React.Suspense>
               }
             />
