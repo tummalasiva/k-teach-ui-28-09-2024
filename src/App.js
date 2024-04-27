@@ -9,6 +9,7 @@ import Loader from "./components/Loader";
 import Login from "./components/Authentication/Login";
 import ForgotPassword from "./components/Authentication/ForgotPassword";
 import WebsiteThemeContext from "./context/WebsiteThemeContext";
+import AddForm from "./forms/AddForm";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -145,6 +146,7 @@ function App() {
                   </React.Suspense>
                 }
               />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route
                 path="/sch/*"
                 element={

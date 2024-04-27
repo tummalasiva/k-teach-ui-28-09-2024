@@ -21,7 +21,6 @@ export default function AddForm({ title = "", onAddClick = () => {} }) {
             onClick={onAddClick}
             sx={{
               color: "#ffff",
-
               background: themeData.darkPalette.primary.main,
               ":hover": { background: themeData.darkPalette.primary.main },
             }}

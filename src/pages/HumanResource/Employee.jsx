@@ -6,11 +6,17 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import { overviewTableKeys } from "../../data/tableKeys/overviewData";
 import { employeeTableKeys } from "../../data/tableKeys/employeeData";
 import { inactiveTableKeys } from "../../data/tableKeys/inactiveEmployee";
+import AddForm from "../../forms/AddForm";
+import { useNavigate } from "react-router-dom";
 
 export default function Employee() {
+  const navigation = useNavigate();
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+  const AddEmployeeHandle = (e) => {
+    navigation("/sch/human-resource/add-employee");
+  };
   return (
     <>
       <PageHeader title="Employee" />
@@ -40,6 +46,9 @@ export default function Employee() {
           bodyDataModal="employee"
         />
       </TabPanel>
+
+      {/* == Fab button component =========== */}
+      <AddForm title="Add Employee" onAddClick={AddEmployeeHandle} />
     </>
   );
 }
