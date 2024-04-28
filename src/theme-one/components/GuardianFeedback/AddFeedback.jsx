@@ -24,7 +24,7 @@ const MuiBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   position: "fixed",
   right: -165,
-  width: 205,
+  width: 185,
   zIndex: 11111,
   display: "flex",
   alignItems: "center",
@@ -36,13 +36,13 @@ const MuiBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("xs")]: {
     top: "45%",
   },
-
   justifyContent: "center",
   columnGap: 2,
   backgroundColor: themeData.darkPalette.secondary.main,
   borderTopLeftRadius: 5,
   borderBottomLeftRadius: 5,
   padding: "8px",
+
   transition: "right 0.3s ease-in-out",
   ":hover": {
     right: 0,
@@ -53,7 +53,7 @@ const style = {
   position: "absolute",
   top: "45%",
   right: "10px",
-  width: 450,
+  width: 400,
   bgcolor: "background.paper",
   borderRadius: "10px",
   boxShadow: 24,
@@ -86,19 +86,22 @@ export default function AddFeedback() {
   return (
     <>
       <MuiBox
+        sx={{ justifyContent: !isHovered ? "flex-start" : "center" }}
         component="div"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleOpen}
       >
         <FeedbackIcon sx={{ color: "white" }} />{" "}
-        <Typography
-          sx={{
-            color: "white",
-          }}
-        >
-          Guardian Feedback
-        </Typography>
+        {isHovered ? (
+          <Typography
+            sx={{
+              color: "white",
+            }}
+          >
+            Guardian Feedback
+          </Typography>
+        ) : null}
       </MuiBox>
       {lgScreen ? (
         <Modal

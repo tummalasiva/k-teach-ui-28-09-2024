@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import {
   Grid,
   Box,
   Typography,
   Button,
   CardMedia,
-  createTheme,
   styled,
-  Card,
+  CardContent,
+  CardActions,
+  Container,
 } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -17,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import themeData from "../../../data/themeData";
 const Para = styled(Typography)(({ theme }) => ({
-  fontSize: "15px",
+  fontSize: "16px",
   lineHeight: "25px",
   color: grey[700],
   marginTop: "20px",
@@ -36,23 +37,6 @@ const Para = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const CustomCard = styled(Card)(({ theme }) => ({
-  width: "90%",
-  height: 245,
-  [theme.breakpoints.down(1200)]: {
-    width: 400,
-    height: 225,
-  },
-  [theme.breakpoints.down(900)]: {
-    width: 400,
-    height: 225,
-  },
-  [theme.breakpoints.down(400)]: {
-    maxWidth: 370,
-    height: 225,
-  },
-}));
-
 const TimeIcon = styled(AccessTimeIcon)(() => ({
   fontSize: "0.7rem",
   marginTop: "2px",
@@ -66,10 +50,12 @@ const Times = styled(Box)(({ theme }) => ({
   },
 }));
 const ReadButton = styled(Button)(() => ({
-  marginLeft: "-7px",
   fontWeight: "bold",
-  fontSize: "10px",
+  fontSize: "12px",
   color: "black",
+  "&:hover": {
+    color: themeData.darkPalette.primary.main,
+  },
 }));
 
 const Random = styled(Box)(({ theme }) => ({
@@ -80,11 +66,31 @@ const Random = styled(Box)(({ theme }) => ({
 const Date = styled(Typography)(() => ({
   fontSize: "15px",
   textAlign: "center",
+  color: "#fff",
+  marginTop: "10px",
   marginBottom: "35px",
 }));
 
 const Time = styled(Typography)(() => ({
   fontSize: "0.7rem",
+}));
+
+const Arc = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  right: 0,
+
+  clipPath: "circle(85.8% at 100% 0);",
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  backgroundColor: themeData.darkPalette.primary.main,
+  zIndex: "2",
+  padding: "20px 14px 35px 65px",
+}));
+
+const CardImageWrapper = styled(Box)(({ theme }) => ({
+  position: "relative",
 }));
 
 const Events = ({ card }) => {
@@ -93,9 +99,7 @@ const Events = ({ card }) => {
   let onlyDay = card.fromDate;
   const date = moment(onlyDay);
   const specificDate = date.format("Do");
-
   const specificMonth = date.format("MMMM ,YYYY");
-
   const time = moment(card.fromDate);
   const specificTime = time.format("h:mm A");
   let navigate = useNavigate();
@@ -105,60 +109,66 @@ const Events = ({ card }) => {
   };
 
   return (
-    <Grid container display="flex" justifyContent="center" alignItems="center">
-      <Grid item xs={12} sm={12} md={12} lg={2} justifyContent="center">
-        <Random>
-          <Typography mt={7} variant="h4" textAlign="center">
-            {specificDate}
-          </Typography>
-          <Date> {specificMonth}</Date>
-        </Random>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={5}
-        sx={{
-          marginY: "15px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CustomCard onClick={handleNavigate}>
-          <CardMedia component="img" image={card.image} height="297" />
-        </CustomCard>
-      </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={3} justifyContent="center">
-        <Random>
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: "bold",
-              mt: { lg: 5, md: 2, xs: 1 },
-              fontSize: "25px",
-            }}
-            gutterBottom
-          >
-            {card.title}
-          </Typography>
-        </Random>
-        <Times>
-          <TimeIcon />
-          <Time>{specificTime}</Time>
-        </Times>
+    <Container maxWidth="xl">
+      <Grid container spacing={2} sx={{ padding: "20px" }}>
+        <Grid item xs={12} md={6}>
+          <CardImageWrapper>
+            <Arc>
+              <Typography
+                variant="h4"
+                sx={{ color: "#ffffff", paddingLeft: "50%", lineHeight: "1" }}
+                textAlign="center"
+              >
+                {specificDate}
+              </Typography>
+              <Date> {specificMonth}</Date>
+            </Arc>
 
-        <Para>{card?.content?.substring(0, 150) + "....."}</Para>
-        <Random>
-          <ReadButton onClick={handleNavigate}>
-            Read More
-            <ChevronRightIcon fontWeight={600}></ChevronRightIcon>
-          </ReadButton>
-        </Random>
+            <CardMedia
+              sx={{
+                transform: "scale(1)",
+                transition: "transform 0.3s ease-in-out",
+              }}
+              onClick={handleNavigate}
+              component="img"
+              image={card.image}
+              alt="Live from space album cover"
+              height="350"
+            />
+          </CardImageWrapper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <CardContent>
+            <Random>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "25px",
+                }}
+                gutterBottom
+              >
+                {card.title}
+              </Typography>
+            </Random>
+            <Times>
+              <TimeIcon />
+              <Time>{specificTime}</Time>
+            </Times>
+
+            <Para>{card?.content?.substring(0, 150) + "....."}</Para>
+          </CardContent>
+          <CardActions>
+            <Random>
+              <ReadButton onClick={handleNavigate}>
+                Read More
+                <ChevronRightIcon fontWeight={600}></ChevronRightIcon>
+              </ReadButton>
+            </Random>
+          </CardActions>
+        </Grid>
       </Grid>
-    </Grid>
+    </Container>
   );
 };
 
