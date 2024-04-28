@@ -38,7 +38,7 @@ export default function ManageDepartment() {
         bodyDataModal="department"
         bodyData={data}
       />
-      {/* ====== Add form fab button =======*/}
+      {/* ====== Fab button component =======*/}
       <AddForm title="Add Department" onAddClick={AddDepartmentHandel} />
       {/* ================================== */}
 

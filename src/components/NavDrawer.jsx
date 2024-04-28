@@ -137,6 +137,8 @@ import HelpDesk from "../pages/HelpDesk";
 import GuardianFeedback from "../pages/GuardianFeedback";
 import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
 import StudentReport from "../pages/Report/StudentReport";
+import AddForm from "../forms/AddForm";
+import AddEmployee from "../pages/HumanResource/AddEmployee";
 
 const drawerWidth = 270;
 
@@ -468,20 +470,16 @@ export default function NavDrawer() {
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="manage-institute" element={<ManageInstitute />} />
-
           <Route path="administrator/academicYear" element={<AcademicYear />} />
-
           <Route
             path="administrator/role-permission"
             element={<RolePermission />}
           />
-
           <Route path="administrator/user-role" element={<UserRole />} />
           <Route
             path="administrator/reset-password"
             element={<ResetPassword />}
           />
-
           <Route
             path="human-resource/manage-designation"
             element={<ManageDesignation />}
@@ -490,10 +488,8 @@ export default function NavDrawer() {
             path="human-resource/manage-department"
             element={<ManageDepartment />}
           />
-
           <Route path="human-resource/employee" element={<Employee />} />
           <Route path="human-resource/offer-letter" element={<OfferLetter />} />
-
           <Route
             path="human-resource/relieving-letter"
             element={<RelievingLetter />}
@@ -703,6 +699,7 @@ export default function NavDrawer() {
 
           <Route path="help-desk" element={<HelpDesk />} />
           <Route path="guardian-feedback" element={<GuardianFeedback />} />
+          <Route path="human-resource/add-employee" element={<AddEmployee />} />
         </Routes>
         <Outlet />
       </Box>
