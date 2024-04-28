@@ -17,6 +17,8 @@ import desktopImg from "../../assets/images/loginimage.png";
 import themeData from "../../data/themeData";
 import { Link } from "react-router-dom";
 import SchoolSelector from "../SchoolSelector";
+import FormInput from "../../forms/FormInput";
+import { useFormik } from "formik";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${desktopImg})`,
@@ -58,18 +60,15 @@ const Login = () => {
     password: "",
   });
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      const data = {
-        username: formData.userName,
-        password: formData.password,
-        rememberMe,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      userName: "",
+      password: "",
+      rememberMe,
+    },
+
+    onSubmit: console.log("dfghj"),
+  });
 
   return (
     <>
@@ -86,118 +85,95 @@ const Login = () => {
                 objectFit: "contain",
               }}
             />
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2} mt={3}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <SchoolSelector />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <BoarderBox>
-                    <TextField
-                      size="small"
-                      required={true}
-                      name="userName"
-                      value={formData.userName}
-                      placeholder="User Name"
-                      fullWidth
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="start">
-                              <Person
-                                sx={{
-                                  color: themeData.darkPalette.primary.main,
-                                }}
-                              />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </BoarderBox>
-                </Grid>
 
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <BoarderBox>
-                    <TextField
-                      size="small"
-                      placeholder="Password"
-                      fullWidth
-                      value={formData.password}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="start">
-                              <Key
-                                sx={{
-                                  color: themeData.darkPalette.secondary.main,
-                                }}
-                              />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                        endAdornment: (
-                          <InputAdornment position="end" sx={{ pr: 1 }}>
-                            <IconButton edge="end">
-                              {showPassword ? (
-                                <VisibilityOff sx={{ color: "grey" }} />
-                              ) : (
-                                <Visibility sx={{ color: "grey" }} />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      type={showPassword ? "text" : "password"}
-                    />
-                  </BoarderBox>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  gap={3}
-                >
-                  <FormControlLabel
-                    control={<Checkbox size="small" />}
-                    type="checkbox"
-                    onChange={(e) => {
-                      setRememberMe(e.target.checked);
-                    }}
-                    sx={{ fontSize: "12px" }}
-                    label="Remember Me"
-                  />
-
-                  <Link to="/forgot-password">
-                    <Typography
-                      sx={{ color: themeData.darkPalette.secondary.main }}
-                    >
-                      Forgot Password?
-                    </Typography>
-                  </Link>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  display="flex"
-                  justifyContent="center"
-                >
-                  <Button type="submit" variant="contained">
-                    Log In
-                  </Button>
-                </Grid>
+            <Grid container spacing={2} mt={3}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <SchoolSelector />
               </Grid>
-            </form>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                {" "}
+                <FormInput
+                  formik={formik}
+                  name="userName"
+                  label="Enter your UserName"
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton edge="start">
+                          <Person
+                            sx={{
+                              color: themeData.darkPalette.primary.main,
+                            }}
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <FormInput
+                  formik={formik}
+                  name="password"
+                  label="Enter your password"
+                  size="small"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton edge="start">
+                          <Key
+                            sx={{
+                              color: themeData.darkPalette.secondary.main,
+                            }}
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end" sx={{ pr: 1 }}>
+                        <IconButton edge="end">
+                          {showPassword ? (
+                            <VisibilityOff sx={{ color: "grey" }} />
+                          ) : (
+                            <Visibility sx={{ color: "grey" }} />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign="left">
+                <FormControlLabel
+                  control={<Checkbox size="small" />}
+                  type="checkbox"
+                  onChange={(e) => {
+                    setRememberMe(e.target.checked);
+                  }}
+                  sx={{ fontSize: "12px" }}
+                  label="Remember Me"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Button type="submit" variant="contained">
+                  Log In
+                </Button>
+              </Grid>
+              <Grid xs={12} sm={12} md={12} lg={12} textAlign="center" mt={1}>
+                <Link to="/forgot-password">
+                  <Typography
+                    sx={{ color: themeData.darkPalette.secondary.main }}
+                  >
+                    Forgot Password?
+                  </Typography>
+                </Link>
+              </Grid>
+            </Grid>
           </FormCard>
         </InnerBox>
       </OuterBox>
