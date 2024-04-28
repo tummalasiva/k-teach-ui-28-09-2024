@@ -94,8 +94,8 @@ const Login = () => {
                 {" "}
                 <FormInput
                   formik={formik}
-                  name="userName"
-                  label="userName"
+                  name="username"
+                  label="User Name"
                   size="small"
                   InputProps={{
                     startAdornment: (
