@@ -95,7 +95,7 @@ const Login = () => {
                 <FormInput
                   formik={formik}
                   name="userName"
-                  label="Enter your UserName"
+                  label="userName"
                   size="small"
                   InputProps={{
                     startAdornment: (
@@ -117,7 +117,7 @@ const Login = () => {
                 <FormInput
                   formik={formik}
                   name="password"
-                  label="Enter your password"
+                  label="password"
                   size="small"
                   type={showPassword ? "text" : "password"}
                   InputProps={{
