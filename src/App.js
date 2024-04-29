@@ -137,7 +137,7 @@ function App() {
             value={{ selectedTheme, setSelectedTheme }}
           >
             <Routes>
-              {/* <Route
+              <Route
                 path="/*"
                 element={
                   <React.Suspense fallback={<Loader />}>
@@ -153,7 +153,7 @@ function App() {
                     <DashBoard />
                   </React.Suspense>
                 }
-              /> */}
+              />
               <Route path="/login" element={<Login />} />
             </Routes>
           </WebsiteThemeContext.Provider>
