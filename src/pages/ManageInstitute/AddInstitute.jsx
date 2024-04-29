@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography, styled } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import React from "react";
@@ -10,6 +10,25 @@ import currencyCodes from "currency-codes";
 
 import avatar from "../../assets/images/avatar.jpg";
 import AddOrUpdateFiles from "../../forms/AddOrUpdateFiles";
+import PageHeader from "../../components/PageHeader";
+
+const MuiBox = styled(Box)({
+  background: "#ececec",
+  width: "100px",
+  height: "100px",
+  borderRadius: "50%",
+  overflow: "hidden",
+  backgroundPosition: "center",
+});
+
+const BasicData = styled(Paper)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: "15px",
+  padding: "15px 0px",
+});
 
 const rollNumber_Options = [
   {
@@ -89,26 +108,9 @@ export default function AddInstitute() {
   });
   return (
     <>
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          py: "15px",
-          mb: "15px",
-        }}
-      >
-        <Box
-          sx={{
-            background: "#ececec",
-            width: "100px",
-            height: "100px",
-            borderRadius: "50%",
-            overflow: "hidden",
-            backgroundPosition: "center",
-          }}
-        >
+      <PageHeader title="Add Institute" showTextField={false} />
+      <BasicData>
+        <MuiBox>
           <img
             src={avatar}
             style={{
@@ -118,7 +120,7 @@ export default function AddInstitute() {
             }}
             alt="Preview"
           />
-        </Box>
+        </MuiBox>
         <Grid container spacing={2} display="flex" justifyContent="center">
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
@@ -130,7 +132,7 @@ export default function AddInstitute() {
             />
           </Grid>
         </Grid>
-      </Paper>
+      </BasicData>
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
