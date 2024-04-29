@@ -314,6 +314,13 @@ export default function AddInstitute() {
           </Grid>
           <Grid xs={12} md={6} lg={3} item mt={2}>
             <TimezoneSelect
+              styles={{
+                control: (baseStyle, state) => ({
+                  ...baseStyle,
+                  height: "42px",
+                }),
+              }}
+              placeholder="Select default timezone"
               name="timeZone"
               value={entryFormik.values.timeZone}
               onChange={(value) => entryFormik.setFieldValue("timeZone", value)}
