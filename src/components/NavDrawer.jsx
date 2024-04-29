@@ -32,8 +32,6 @@ import LOGO from "../assets/images/deleteicon.png";
 import { useNavigate } from "react-router-dom";
 
 import ThemeModeContext from "../context/ThemeModeContext";
-import ManageInstitute from "../pages/ManageInstitute";
-
 import AcademicYear from "../pages/Administrator/AcademicYear";
 import ManageDesignation from "../pages/HumanResource/ManageDesignation";
 import ManageDepartment from "../pages/HumanResource/ManageDepartment";
@@ -139,6 +137,8 @@ import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
 import StudentReport from "../pages/Report/StudentReport";
 import AddForm from "../forms/AddForm";
 import AddEmployee from "../pages/HumanResource/AddEmployee";
+import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
+import AddInstitute from "../pages/ManageInstitute/AddInstitute";
 
 const drawerWidth = 270;
 
@@ -700,6 +700,10 @@ export default function NavDrawer() {
           <Route path="help-desk" element={<HelpDesk />} />
           <Route path="guardian-feedback" element={<GuardianFeedback />} />
           <Route path="human-resource/add-employee" element={<AddEmployee />} />
+          <Route
+            path="manage-institute/add-institute"
+            element={<AddInstitute />}
+          />
         </Routes>
         <Outlet />
       </Box>
