@@ -11,6 +11,7 @@ import currencyCodes from "currency-codes";
 import avatar from "../../assets/images/avatar.jpg";
 import AddOrUpdateFiles from "../../forms/AddOrUpdateFiles";
 import PageHeader from "../../components/PageHeader";
+import { useNavigate } from "react-router-dom";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -69,6 +70,7 @@ const admission_Options = [
   },
 ];
 export default function AddInstitute() {
+  const navigate = useNavigate();
   const currencies = currencyCodes.data.map((currency) => ({
     label: `${currency.currency} - ${currency.code}`,
     value: currency.code,
@@ -168,7 +170,7 @@ export default function AddInstitute() {
               required={true}
               name="phoneNumber"
               formik={entryFormik}
-              label="Phone"
+              label="Phone number"
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -458,6 +460,29 @@ export default function AddInstitute() {
           </Grid>
         </Grid>
       </Paper>
+
+      <Grid
+        item
+        xs={12}
+        md={12}
+        lg={12}
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="center"
+        gap={1}
+      >
+        <Button
+          size="small"
+          color="error"
+          variant="contained"
+          onClick={() => navigate(-1)}
+        >
+          Cancel
+        </Button>
+        <Button size="small" variant="contained">
+          Submit
+        </Button>
+      </Grid>
     </>
   );
 }
