@@ -65,7 +65,7 @@ const Random = styled(Box)(({ theme }) => ({
 }));
 const Date = styled(Typography)(() => ({
   fontSize: "15px",
-  textAlign: "center",
+  textAlign: "start",
   color: "#fff",
   marginTop: "10px",
   marginBottom: "35px",
@@ -77,16 +77,16 @@ const Time = styled(Typography)(() => ({
 
 const Arc = styled(Box)(({ theme }) => ({
   position: "absolute",
-  right: 0,
-
-  clipPath: "circle(85.8% at 100% 0);",
+  left: 0,
+  textAlign: "left",
+  clipPath: "circle(85.8% at 0% 0);",
   display: "flex",
   justifyContent: "center",
   flexDirection: "column",
-  alignItems: "flex-end",
+  alignItems: "flex-start",
   backgroundColor: themeData.darkPalette.primary.main,
   zIndex: "2",
-  padding: "20px 14px 35px 65px",
+  padding: "20px 65px 35px 14px",
 }));
 
 const CardImageWrapper = styled(Box)(({ theme }) => ({
@@ -116,8 +116,7 @@ const Events = ({ card }) => {
             <Arc>
               <Typography
                 variant="h4"
-                sx={{ color: "#ffffff", paddingLeft: "50%", lineHeight: "1" }}
-                textAlign="center"
+                sx={{ color: "#ffffff", textAlign: "start", lineHeight: "1" }}
               >
                 {specificDate}
               </Typography>

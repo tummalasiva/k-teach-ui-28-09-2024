@@ -26,19 +26,6 @@ const Content = styled(Typography)(() => ({
   lineHeight: "30px",
 }));
 
-const Arc = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  right: 0,
-
-  clipPath: "circle(85.8% at 100% 0);",
-  display: "flex",
-  justifyContent: "center",
-  flexDirection: "column",
-  alignItems: "flex-end",
-  backgroundColor: "#00BDA6",
-  zIndex: "2",
-  padding: "20px 14px 35px 65px",
-}));
 const CardImage = styled(CardMedia)(({ theme }) => ({
   width: "100%",
   height: "100%",
