@@ -19,6 +19,10 @@ import { Link } from "react-router-dom";
 import SchoolSelector from "../SchoolSelector";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
+import { Home } from "@mui/icons-material";
+
+import avatar from "../../assets/images/avatar.jpg";
+import FormSelect from "../../forms/FormSelect";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${desktopImg})`,
@@ -52,18 +56,27 @@ const BoarderBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const userType_Options = [
+  {
+    label: "Employee",
+    value: "Emplyee",
+  },
+  {
+    label: "Student",
+    value: "Student",
+  },
+];
+
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    userName: "",
-    password: "",
-  });
 
   const formik = useFormik({
     initialValues: {
       userName: "",
       password: "",
+      user: "",
+      school: "",
       rememberMe,
     },
 
@@ -76,19 +89,33 @@ const Login = () => {
         <InnerBox>
           <FormCard sx={{ maxWidth: 400, minWidth: 350 }}>
             <img
-              src={""}
+              src={avatar}
               height={"200px"}
               width={"200px"}
               style={{
                 alignSelf: "center",
                 resize: "contain",
                 objectFit: "contain",
+                borderRadius: "50%",
               }}
             />
 
-            <Grid container spacing={2} mt={3}>
+            <Grid container spacing={1}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                <SchoolSelector />
+                <FormSelect
+                  formik={formik}
+                  name="user"
+                  label="Select User"
+                  options={userType_Options}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <FormSelect
+                  formik={formik}
+                  name="school"
+                  label="Select School"
+                  showStartAdornment={true}
+                />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 {" "}
@@ -160,7 +187,7 @@ const Login = () => {
               </Grid>
 
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Button type="submit" variant="contained">
+                <Button type="submit" fullWidth variant="contained">
                   Log In
                 </Button>
               </Grid>

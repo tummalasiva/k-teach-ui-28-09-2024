@@ -223,7 +223,7 @@ export default function AddOrUpdateFiles({
             variant="contained"
             onClick={handleUpdateItem}
           >
-            Update
+            Add
           </LoadingButton>
         </DialogActions>
       </Dialog>
