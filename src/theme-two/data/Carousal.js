@@ -148,22 +148,18 @@ export const calculateSlidersData = (length) => {
 
 export const calculateSlidersSetting = (length) => {
   return {
-    infinite: true,
     slidesToShow: length >= 4 ? 3 : length,
-    speed: 900,
-    autoplaySpeed: 3000,
+    dots: false,
+    infinite: true,
+    speed: 500,
     slidesToScroll: 1,
-    initialSlide: 0,
-    autoplay: true,
-    pauseOnHover: true,
-    arrows: false,
 
     responsive: [
       {
         breakpoint: 1536,
         settings: {
           slidesToShow: length >= 4 ? 3 : length,
-          slidesToScroll: 2,
+          slidesToScroll: 1,
         },
       },
       {
