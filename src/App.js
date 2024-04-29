@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
 import WebsiteThemeContext from "./context/WebsiteThemeContext";
 import AddForm from "./forms/AddForm";
+import ForgotPassword from "./components/Authentication/ForgotPassword";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));

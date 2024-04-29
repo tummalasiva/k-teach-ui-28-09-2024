@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import TopNav from "../theme-one/components/Navbar/TopNav";
 import Navbar from "../theme-two/layout/header/Navbar";
 import Footer from "../theme-two/layout/Footer";
@@ -46,6 +46,10 @@ const ContactUs = React.lazy(() =>
 // =================================================
 
 const WebsiteTheme2 = () => {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
   if (window.location.pathname.startsWith("/sch")) return null;
   return (
     <>
