@@ -7,7 +7,8 @@ import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
 import WebsiteThemeContext from "./context/WebsiteThemeContext";
-import AddForm from "./forms/AddForm";
+import ForgotPassword from "../src/components/Authentication/ForgotPassword";
+import Login from "./components/Authentication/Login";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -136,7 +137,7 @@ function App() {
             value={{ selectedTheme, setSelectedTheme }}
           >
             <Routes>
-              <Route
+              {/* <Route
                 path="/*"
                 element={
                   <React.Suspense fallback={<Loader />}>
@@ -152,7 +153,8 @@ function App() {
                     <DashBoard />
                   </React.Suspense>
                 }
-              />
+              /> */}
+              <Route path="/login" element={<Login />} />
             </Routes>
           </WebsiteThemeContext.Provider>
         </SettingContext.Provider>
