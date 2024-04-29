@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import TopNav from "../theme-one/components/Navbar/TopNav";
 import MainNav from "../theme-one/components/Navbar/MainNav";
 import Footer from "../theme-one/components/Footer";
@@ -54,9 +54,15 @@ const UniqueFeature = React.lazy(() =>
 const KnowledgeOfParent = React.lazy(() =>
   import("../theme-one/components/Features/features/KnowledgeOfParent")
 );
-// =================================================
+// ============================================
 
 const WebsiteTheme1 = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
   if (window.location.pathname.startsWith("/sch")) return null;
 
   return (
