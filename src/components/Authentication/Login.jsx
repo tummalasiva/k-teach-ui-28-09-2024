@@ -19,7 +19,7 @@ import themeData from "../../data/themeData";
 import { Link } from "react-router-dom";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
-
+import { useTheme } from "@mui/material";
 import avatar from "../../assets/images/avatar.jpg";
 import FormSelect from "../../forms/FormSelect";
 
@@ -58,13 +58,14 @@ const BoarderBox = styled(Box)(({ theme }) => ({
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
 
   const formik = useFormik({
     initialValues: {
       userName: "",
       password: "",
       user: "",
-      school: "",
+
       rememberMe,
     },
 
@@ -93,12 +94,11 @@ const Login = () => {
             />
 
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12} lg={12} mt={2}>
+              <Grid item xs={12} sm={12} md={12} lg={12} my={2}>
                 <ButtonGroup
                   fullWidth
                   variant="contained"
                   aria-label="Basic button group"
-                  sx={{ borderRadius: "20px", overflow: "hidden" }}
                 >
                   <Button
                     variant={
@@ -119,7 +119,7 @@ const Login = () => {
                 </ButtonGroup>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12} mt={1}>
+              {/* <Grid item xs={12} sm={12} md={12} lg={12} mt={1}>
                 <FormSelect
                   formik={formik}
                   name="school"
@@ -128,13 +128,13 @@ const Login = () => {
                   borderRadius="20px"
                   showStartAdornment={true}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 {" "}
                 <FormInput
                   formik={formik}
                   name="username"
-                  label="User Name"
+                  label="user name"
                   size="small"
                   InputProps={{
                     startAdornment: (
@@ -194,11 +194,11 @@ const Login = () => {
                     setRememberMe(e.target.checked);
                   }}
                   sx={{ fontSize: "12px" }}
-                  label="Remember Me"
+                  label="Remember me"
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} my={1}>
                 <Button type="submit" fullWidth variant="contained">
                   Log In
                 </Button>
