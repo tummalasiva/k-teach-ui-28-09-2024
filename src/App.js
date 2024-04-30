@@ -60,20 +60,24 @@ function App() {
     components: {
       MuiTextField: {
         styleOverrides: {
-          root: {},
+          root: {
+            borderRadius: 5,
+          },
         },
       },
       MuiButton: {
         styleOverrides: {
-          disableElevation: true,
           root: {
             boxShadow: "none",
+            borderRadius: 5,
           },
         },
       },
       MuiListItemButton: {
         styleOverrides: {
           root: {
+            borderRadius: 5,
+
             "&.Mui-selected": {
               backgroundColor: isDarkMode ? "#4f4f4f" : "#e8eaed",
             },
@@ -107,6 +111,8 @@ function App() {
       MuiSelect: {
         styleOverrides: {
           root: {
+            borderRadius: 5,
+
             height: "40px",
           },
         },

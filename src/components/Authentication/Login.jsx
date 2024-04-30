@@ -9,7 +9,13 @@ import {
   ButtonGroup,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import { Person, Key, VisibilityOff, Visibility } from "@mui/icons-material";
+import {
+  Person,
+  Key,
+  VisibilityOff,
+  Visibility,
+  ArrowBack,
+} from "@mui/icons-material";
 import { InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
 import mobileImg from "../../assets/images/loginpage.png";
@@ -117,8 +123,30 @@ const Login = () => {
               background: "rgba(255,255,255,0.3)",
               borderRadius: theme.shape.borderRadius,
               padding: "30px",
+              position: "relative",
             }}
           >
+            <Box
+              sx={{
+                position: "absolute",
+                height: 70,
+                width: 70,
+                top: 0,
+                left: -70,
+                zIndex: 10000,
+                background: "rgba(255,255,255,0.3)",
+                borderTopLeftRadius: 35,
+                borderBottomLeftRadius: 35,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <IconButton onClick={() => navigate("/")}>
+                <ArrowBack fontSize="medium" />
+              </IconButton>
+            </Box>
+
             <img
               src={avatar}
               height={"150px"}
@@ -166,6 +194,11 @@ const Login = () => {
                   label="Username"
                   size="small"
                   InputProps={{
+                    style: {
+                      borderWidth: 1,
+                      height: "42px",
+                      borderRadius: 5,
+                    },
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton edge="start">
@@ -186,10 +219,15 @@ const Login = () => {
                   required
                   formik={formik}
                   name="password"
-                  label="password"
+                  label="Password"
                   size="small"
                   type={showPassword ? "text" : "password"}
                   InputProps={{
+                    style: {
+                      borderWidth: 1,
+                      height: "42px",
+                      borderRadius: 5,
+                    },
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton disabled edge="start">

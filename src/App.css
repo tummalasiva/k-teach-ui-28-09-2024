@@ -23,18 +23,65 @@
   letter-spacing: 0.2rem;
   font-family: "Roboto Slab", serif;
 }
-.rotate {
-  animation: rotation 100s infinite linear;
-  font-size: 16px;
-  font-weight: 400;
+
+.circle {
+  width: 75px;
+  height: 75px;
+  border-radius: 12px;
+  color: #fdfefe;
+  font-weight: 600;
+  /* margin: auto; */
+  margin-top: 1rem;
+  margin-left: 1rem;
+  /* border: 5px solid; */
+  /* border-color: #db580d; */
+  /* background-color: #bc007d; */
+  /* border-color: #616a6b; */
+  /* background-color: #fff; */
+  /* -webkit-box-shadow: 0 35px 20px #777;
+  -moz-box-shadow: 0 35px 20px #777; */
+  /* box-shadow: 0 10px 20px #777; */
+  transition: all 1s;
 }
 
-@keyframes rotation {
-  from {
-    transform: rotate(0deg);
-  }
+.ripple {
+  box-sizing: border-box;
+  position: relative;
+}
 
-  to {
-    transform: rotate(359deg);
+.ripple:before {
+  animation: ripple 2s ease-in infinite;
+  border: solid 2px #bb007d;
+  border-radius: 10%;
+  bottom: 0;
+  box-sizing: border-box;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.ripple:after {
+  animation: ripple 2s 1s ease-in infinite;
+  border: solid 2px #bb007d;
+  border-radius: 10%;
+  bottom: 0;
+  box-sizing: border-box;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
   }
 }

@@ -37,8 +37,9 @@ export default function ThemeSelector() {
 
   const handleUpdateTheme = () => {
     setTheme(selectedTheme);
-    window.localStorage.setItem("selectedTheme", selectedTheme);
     setOpen(false);
+
+    window.localStorage.setItem("selectedTheme", selectedTheme);
   };
 
   return (
