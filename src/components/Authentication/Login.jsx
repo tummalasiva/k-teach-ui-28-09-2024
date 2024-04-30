@@ -7,6 +7,7 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
+  ButtonGroup,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { Person, Key, VisibilityOff, Visibility } from "@mui/icons-material";
@@ -16,10 +17,8 @@ import mobileImg from "../../assets/images/loginpage.png";
 import desktopImg from "../../assets/images/loginimage.png";
 import themeData from "../../data/themeData";
 import { Link } from "react-router-dom";
-import SchoolSelector from "../SchoolSelector";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
-import { Home } from "@mui/icons-material";
 
 import avatar from "../../assets/images/avatar.jpg";
 import FormSelect from "../../forms/FormSelect";
@@ -56,17 +55,6 @@ const BoarderBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const userType_Options = [
-  {
-    label: "Employee",
-    value: "Emplyee",
-  },
-  {
-    label: "Student",
-    value: "Student",
-  },
-];
-
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -82,7 +70,11 @@ const Login = () => {
 
     onSubmit: console.log("dfghj"),
   });
+  const [selectedButton, setSelectedButton] = useState("Employee");
 
+  const handleButtonClick = (button) => {
+    setSelectedButton(button);
+  };
   return (
     <>
       <OuterBox>
@@ -101,19 +93,39 @@ const Login = () => {
             />
 
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <FormSelect
-                  formik={formik}
-                  name="user"
-                  label="Select User"
-                  options={userType_Options}
-                />
+              <Grid item xs={12} sm={12} md={12} lg={12} mt={2}>
+                <ButtonGroup
+                  fullWidth
+                  variant="contained"
+                  aria-label="Basic button group"
+                  sx={{ borderRadius: "20px", overflow: "hidden" }}
+                >
+                  <Button
+                    variant={
+                      selectedButton === "Employee" ? "contained" : "outlined"
+                    }
+                    onClick={() => handleButtonClick("Employee")}
+                  >
+                    Employee
+                  </Button>
+                  <Button
+                    variant={
+                      selectedButton === "Student" ? "contained" : "outlined"
+                    }
+                    onClick={() => handleButtonClick("Student")}
+                  >
+                    Student
+                  </Button>
+                </ButtonGroup>
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+
+              <Grid item xs={12} sm={12} md={12} lg={12} mt={1}>
                 <FormSelect
                   formik={formik}
                   name="school"
                   label="Select School"
+                  backgroundColor={themeData.darkPalette.primary.main}
+                  borderRadius="20px"
                   showStartAdornment={true}
                 />
               </Grid>
@@ -140,7 +152,7 @@ const Login = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} mt={0.5}>
                 <FormInput
                   formik={formik}
                   name="password"

@@ -99,6 +99,7 @@ const FormSelect = ({
   borderRadius,
   required,
   showStartAdornment,
+
   ...rest
 }) => {
   const { setFieldValue, touched, errors } = formik;
@@ -140,6 +141,7 @@ const FormSelect = ({
         onChange={handleChange}
         label={label}
         labelId={name}
+        sx={{ borderRadius: borderRadius }}
         error={touched[name] && errors[name]}
         multiple={multiple}
         value={formik.values[name]}
