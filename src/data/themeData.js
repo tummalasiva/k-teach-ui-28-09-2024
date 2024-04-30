@@ -22,7 +22,7 @@ const lightPalette = {
 };
 
 const shapeProperties = {
-  borderRadius: 5,
+  borderRadius: 2,
 };
 
 const websiteThemes = [

@@ -1,6 +1,6 @@
 export const PUBLIC_URLS = {
   account: {
-    login: "",
+    login: "/account/login",
   },
   school: {
     getSchools: "/school/listPublic",

@@ -99,7 +99,7 @@ export default function TopNav() {
           spacing={2}
         >
           <ThemeSelector />
-          {settings.length > 1 && (
+          {settings.length >= 1 && (
             <>
               <SelectButton
                 variant="contained"

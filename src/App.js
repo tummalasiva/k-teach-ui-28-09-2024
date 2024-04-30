@@ -12,6 +12,7 @@ import WebsiteThemeContext from "./context/WebsiteThemeContext";
 import Login from "./components/Authentication/Login";
 import ForgotPassword from "./components/Authentication/ForgotPassword";
 import { useQuery } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 import { get } from "./services/apiMethods";
 import { PUBLIC_URLS } from "./services/urlConstants";
@@ -191,6 +192,7 @@ function App() {
           </WebsiteThemeContext.Provider>
         </SettingContext.Provider>
       </ThemeProvider>
+      <ToastContainer />
     </ThemeModeContext.Provider>
   );
 }

@@ -50,13 +50,11 @@ export default function PageHeader({ title = "", showTextField = true }) {
               )}
               label="Select school"
             >
-              {settings
-                .filter((s) => s.active)
-                .map((set) => (
-                  <MenuItem key={set._id} value={set._id}>
-                    {set.schoolName}
-                  </MenuItem>
-                ))}
+              {settings.map((set) => (
+                <MenuItem key={set._id} value={set._id}>
+                  {set.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Stack>
