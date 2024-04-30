@@ -5,6 +5,8 @@ import HomeAbout from "../components/home/HomeAbout";
 import OurGallery from "../components/home/gallery/OurGallery";
 import NewsAndNotice from "../components/home/news-notice/NewsAndNotice";
 import CountUpTimer from "../components/home/CountUpTimer";
+import OurEvents from "../components/events/OurEvents";
+import AwardAndAchivement from "../components/events/AwardAndAchivement";
 
 export default function HomePage() {
   return (
@@ -14,7 +16,9 @@ export default function HomePage() {
       <HomeAbout />
       <OurGallery />
       <NewsAndNotice />
+      <OurEvents />
       <CountUpTimer />
+      <AwardAndAchivement />
     </>
   );
 }

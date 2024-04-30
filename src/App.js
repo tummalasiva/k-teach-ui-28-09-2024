@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import themeData from "./data/themeData";
 import ThemeModeContext from "./context/ThemeModeContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -7,8 +9,8 @@ import SettingContext from "./context/SettingsContext";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
 import WebsiteThemeContext from "./context/WebsiteThemeContext";
-import ForgotPassword from "../src/components/Authentication/ForgotPassword";
 import Login from "./components/Authentication/Login";
+import ForgotPassword from "./components/Authentication/ForgotPassword";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
