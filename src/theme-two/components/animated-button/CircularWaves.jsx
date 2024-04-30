@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
-import css from "./style.css";
+import Style from "../animated-button/style.css";
 
 export default function CircularWaves() {
   const [isHovered, setIsHovered] = useState(false);
@@ -16,13 +16,13 @@ export default function CircularWaves() {
   return (
     <>
       <Box
-        className={css.circular1}
+        className={Style.circular1}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <Box className={css.circular2}></Box>
-        <Box className={css.circular3}></Box>
-        <Box className={css.circular4}></Box>
+        <Box className={Style.circular2}></Box>
+        <Box className={Style.circular3}></Box>
+        <Box className={Style.circular4}></Box>
       </Box>
     </>
   );

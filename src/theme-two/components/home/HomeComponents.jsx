@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import MovingText from "react-moving-text";
 import {
   Box,
@@ -9,22 +9,38 @@ import {
   Grid,
   Modal,
   keyframes,
+  css,
 } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
 import CircularWaves from "../animated-button/CircularWaves";
 // icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import themeData from "../../../data/themeData";
 
-const slideIn = keyframes`
+const rippleAnimation = keyframes`
   0% {
-    transform: translateX(-50%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
+    transform: scale(0);
     opacity: 1;
   }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 `;
+
+const Rotate = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(359deg);
+}
+`;
+
+const RotateImg = css`
+  animation: ${Rotate} 100s infinite linear;
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,6 +52,87 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const PencileBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "flex-end",
+  marginTop: "20px",
+}));
+
+const AnimatedImage = styled("img")(({ theme }) => ({
+  objectFit: "contain",
+  ...RotateImg,
+}));
+
+const VideoPlayButton = styled(Box)(({ theme }) => ({
+  color: "white",
+  borderRadius: "50%",
+  background: themeData.lightPalette.secondary.main,
+  height: "60px",
+  width: "60px",
+  display: "flex",
+  // zIndex: 30,
+  alignItems: "center",
+  justifyContent: "center",
+  "&:hover": {
+    background: themeData.lightPalette.primary.main,
+  },
+}));
+
+const RippleVideoButton = styled(Box)(({ theme }) => ({
+  position: "relative",
+  color: "white",
+  // borderRadius: "50%",
+  // background: themeData.lightPalette.secondary.main,
+  // height: "60px",
+  // width: "60px",
+  // display: "flex",
+  zIndex: 10,
+  // alignItems: "center",
+  // justifyContent: "center",
+  // "&:hover": {
+  //   background: themeData.lightPalette.primary.main,
+  // },
+
+  "&:after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    border: "2px solid #009edc",
+    borderRadius: "50%",
+    boxSizing: "border-box",
+    animation: `${rippleAnimation} 2s 1s ease-in infinite`,
+  },
+
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    border: "2px solid #009edc",
+    borderRadius: "50%",
+    boxSizing: "border-box",
+    animation: `${rippleAnimation} 2s ease-in infinite`,
+  },
+}));
+
+const MuiMainBox = styled(Box)(({ theme }) => ({
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
+  border: "solid grey 0.1px",
+  objectFit: "contain",
+  width: "100%",
+  height: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
 const GridContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -59,12 +156,15 @@ const IconBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const AnimationBox = styled(Box)(({ theme }) => ({
-  fontSize: "50px",
-  color: "#fff",
+const Text = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  marginTop: "3%",
+  fontSize: 50,
+  color: "#fff",
+  marginTop: 5,
+}));
 
+const AnimationBox = styled(Box)(({ theme }) => ({
+  marginTop: "50px",
   letterSpacing: "0.2rem",
   [theme.breakpoints.down("sm")]: {
     fontSize: "30px",
@@ -82,289 +182,295 @@ const AnimationBox = styled(Box)(({ theme }) => ({
 
 export default function HomeComponents() {
   const { selectedSetting } = useContext(SettingContext);
+  let [play, setPlay] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  let handleVideo = () => {
+    setPlay(!play);
+  };
 
   return (
     <>
-      <Box
+      <MuiMainBox
         sx={{
           backgroundImage:
             selectedSetting.bannerImages &&
             selectedSetting.bannerImages.length > 0
-              ? `url(${selectedSetting.bannerImages[0]})`
-              : "url(/boy.png)",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          border: "solid grey 0.1px",
-          objectFit: "contain",
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+              ? `linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url(${selectedSetting.bannerImages[0]})`
+              : "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url(/boy.png)",
         }}
       >
-        <Box
-          sx={{
-            width: "100%",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: { xs: "0 0", sm: "0 20px", md: "0 30px" },
-          }}
-        >
-          <Container maxWidth="xl">
+        <Container maxWidth="xl">
+          <Box
+            sx={{
+              textAlign: { xs: "start", md: "left" },
+              width: "fit-content",
+              // maxWidth: { xs: "100%", sm: "100%", md: "100%", lg: "80%" },
+            }}
+          >
+            <Box sx={{ borderLeft: "solid #ff4500", mt: 13 }}>
+              <MovingText
+                type="slideInFromLeft"
+                duration="3000ms"
+                delay="0.5s"
+                direction="normal"
+                timing="ease"
+                iteration="1"
+                fillMode="none"
+                className="title"
+              >
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    fontSize: 16,
+                  }}
+                >
+                  FUEL YOUR FUTURE
+                </Typography>
+              </MovingText>
+            </Box>
+            <AnimationBox>
+              <MovingText
+                type="slideInFromRight"
+                duration="3000ms"
+                delay="0.5s"
+                direction="normal"
+                timing="ease"
+                iteration="1"
+                fillMode="none"
+              >
+                <Text variant="h5">More Than 50+ Faculties</Text>
+              </MovingText>
+              <MovingText
+                type="slideInFromLeft"
+                duration="3000ms"
+                delay="0.5s"
+                direction="normal"
+                timing="ease"
+                iteration="1"
+                fillMode="none"
+              >
+                <Text variant="h5">To Knowledge With Us.</Text>
+              </MovingText>
+            </AnimationBox>
+
+            <Box
+              component="div"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                mt: 6,
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  "&:hover": {
+                    bgcolor: "transparent",
+                    color: "#fff",
+                    border: `1px solid ${themeData.lightPalette.secondary.main}`,
+                  },
+                }}
+              >
+                GET ADMISSION
+              </Button>
+              {/* <Box
+                // sx={{ zIndex: 10, position: "relative" }}
+                // onClick={handleOpen}
+              > */}
+              {/* <Box sx={{ zIndex: 10, position: "relative" }}>
+                  <CircularWaves />
+                </Box> */}
+
+              <RippleVideoButton>
+                <VideoPlayButton>
+                  <PlayArrowIcon />
+                </VideoPlayButton>
+              </RippleVideoButton>
+              {/* </Box> */}
+
+              <Modal
+                // open={open}
+                // onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <iframe
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      top: 0,
+                      left: 0,
+                      height: "100%",
+                    }}
+                    width=""
+                    src="https://www.youtube.com/embed/ZCKYz6cgiRs"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      zIndex: 10,
+                      position: "absolute",
+                      left: "103%",
+                      top: "0%",
+                      bgcolor: "#ff4500",
+                      "&:hover": { bgcolor: "#1779f7" },
+                    }}
+                    // onClick={handleClose}
+                  >
+                    cancel
+                    {/* <Cancel /> */}
+                  </Button>
+                </Box>
+              </Modal>
+            </Box>
+          </Box>
+          <PencileBox>
+            <AnimatedImage
+              src="pencile.png"
+              width={100}
+              height={100}
+              style={{ position: "absolute", top: "220px " }}
+            />
+          </PencileBox>
+          <IconBox>
+            <AnimatedImage
+              src="globe.png"
+              width={100}
+              height={100}
+              style={{
+                position: "absolute",
+                right: "30px",
+                top: "380px ",
+              }}
+            />
+            <AnimatedImage
+              src="magnifying.png"
+              width={100}
+              height={100}
+              style={{
+                position: "absolute",
+                right: "70px",
+                top: "560px ",
+              }}
+            />
             <Box
               sx={{
-                textAlign: { xs: "start", md: "left" },
-                maxWidth: { xs: "100%", sm: "100%", md: "100%", lg: "80%" },
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  paddingTop: (theme) => theme.spacing(14),
-                }}
-              >
-                <Box sx={{ borderLeft: "solid #ff4500" }}>
-                  <MovingText
-                    type="slideInFromLeft"
-                    duration="3000ms"
-                    delay="0.5s"
-                    direction="normal"
-                    timing="ease"
-                    iteration="1"
-                    fillMode="none"
-                    className="title"
-                  >
-                    <Typography sx={{ color: "#fff" }}>
-                      FUEL YOUR FUTURE
-                    </Typography>
-                  </MovingText>
-                </Box>
-              </Box>
-              <AnimationBox>
-                <MovingText
-                  type="slideInFromRight"
-                  duration="3000ms"
-                  delay="0.5s"
-                  direction="normal"
-                  timing="ease"
-                  iteration="1"
-                  fillMode="none"
-                >
-                  <Typography variant="h5">More Than 50+ Faculties </Typography>
-                </MovingText>
-                <MovingText
-                  type="slideInFromLeft"
-                  duration="3000ms"
-                  delay="0.5s"
-                  direction="normal"
-                  timing="ease"
-                  iteration="1"
-                  fillMode="none"
-                >
-                  <Typography variant="h5">To Knowledge With Us.</Typography>
-                </MovingText>
-              </AnimationBox>
-            </Box>
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: { sm: "20px" },
-                }}
-              >
-                <img
-                  src="pencill.png"
-                  width="100"
-                  height="90"
-                  className="rotate"
-                  style={{ position: "absolute", top: "220px " }}
-                />
-              </Box>
-              {/* <IconBox>
-              <img
+              <AnimatedImage
                 src="science.png"
-                width="100"
-                height="90"
+                width={100}
+                height={100}
                 style={{
                   position: "absolute",
-                  right: "100px",
-                  top: "300px ",
+                  marginLeft: "2px",
+                  top: "200px ",
                 }}
-                className={css.rotate}
               />
-              <img
-                src="magnifying.png"
-                width="100"
-                height="90"
+              <AnimatedImage
+                src="light-bulb.png"
+                width={100}
+                height={100}
                 style={{
                   position: "absolute",
-                  right: "50px",
-                  top: "550px ",
+                  marginLeft: "2px",
+                  bottom: "-10px",
                 }}
-                className={css.rotate}
               />
-            </IconBox> */}
-              <IconBox>
-                <img
-                  src="globe-pencil.png"
-                  width="100"
-                  height="90"
-                  style={{
-                    position: "absolute",
-                    right: "30px",
-                    top: "380px ",
-                  }}
-                  className="rotate"
-                />
-                <img
-                  src="magnifying.png"
-                  width="100"
-                  height="90"
-                  style={{
-                    position: "absolute",
-                    right: "70px",
-                    top: "550px ",
-                  }}
-                  className="rotate"
-                />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  <img
-                    src="science.png"
-                    width="100"
-                    height="90"
-                    style={{
-                      position: "absolute",
-                      marginLeft: "2px",
-                      top: "180px ",
-                    }}
-                    className="rotate"
-                  />
-                  <img
-                    src="light-bulb.png"
-                    width="100"
-                    height="90"
-                    style={{
-                      position: "absolute",
-                      marginLeft: "2px",
-                      top: "600px ",
-                    }}
-                    className="rotate"
-                  />
-                </Box>
-              </IconBox>
             </Box>
+          </IconBox>
 
-            <GridContainer
-              container
-              spacing={2}
-              sx={{
-                paddingTop: { xs: "50px", sm: "50px", md: "30px", lg: "80px" },
-              }}
-            >
-              <Grid item xs={6} sm={4} md={3} lg={3}>
-                <Button
-                  variant="contained"
-                  //   onClick={handleNavigate}
-                  sx={{
-                    bgcolor: "#1779f7",
-                    border: "solid #1779f7",
-                    "&:hover": {
-                      bgcolor: "transparent",
-                      border: "solid #ff4500",
-                    },
-                  }}
+          {/* <GridContainer
+            container
+            spacing={2}
+            sx={{
+              paddingTop: { xs: "50px", sm: "50px", md: "30px", lg: "80px" },
+            }}
+          >
+            <Grid item xs={4} sm={4} md={3}>
+              <Box component="div" onClick={handleVideo}>
+                <Box
+                  sx={{ zIndex: 10, position: "relative" }}
+                  onClick={handleOpen}
                 >
-                  <Typography>GET ADMISSION</Typography>
-                </Button>
-              </Grid>
-
-              <Grid item xs={4} sm={4} md={3}>
-                <Box component="div">
-                  <Box
-                    sx={{ zIndex: 10, position: "relative" }}
-                    // onClick={handleOpen}
-                  >
-                    <Box sx={{ zIndex: 10, position: "relative" }}>
-                      <CircularWaves />
-                    </Box>
-
-                    <Box
-                      sx={{
-                        zIndex: 30,
-                        position: "relative",
-                        color: "white",
-                        borderRadius: "50%",
-                        bgcolor: "orangered",
-                        height: "50px",
-                        width: "50px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        "&:hover": { bgcolor: "#1779f7" },
-                      }}
-                    >
-                      <PlayArrowIcon />
-                    </Box>
+                  <Box sx={{ zIndex: 10, position: "relative" }}>
+                    <CircularWaves />
                   </Box>
 
-                  <Modal
-                    // open={open}
-                    // onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
+                  <Box
+                    sx={{
+                      zIndex: 30,
+                      position: "relative",
+                      color: "white",
+                      borderRadius: "50%",
+                      bgcolor: "orangered",
+                      height: "50px",
+                      width: "50px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      "&:hover": { bgcolor: "#1779f7" },
+                    }}
                   >
-                    <Box sx={style}>
-                      <iframe
-                        style={{
-                          position: "absolute",
-                          width: "100%",
-                          top: 0,
-                          left: 0,
-                          height: "100%",
-                        }}
-                        width=""
-                        src="https://www.youtube.com/embed/ZCKYz6cgiRs"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                      ></iframe>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          zIndex: 10,
-                          position: "absolute",
-                          left: "103%",
-                          top: "0%",
-                          bgcolor: "#ff4500",
-                          "&:hover": { bgcolor: "#1779f7" },
-                        }}
-                        // onClick={handleClose}
-                      >
-                        cancel
-                        {/* <Cancel /> */}
-                      </Button>
-                    </Box>
-                  </Modal>
+                    <PlayArrowIcon />
+                  </Box>
                 </Box>
-              </Grid>
-            </GridContainer>
-          </Container>
-        </Box>
-      </Box>
+
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <iframe
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        top: 0,
+                        left: 0,
+                        height: "100%",
+                      }}
+                      width=""
+                      src="https://www.youtube.com/embed/ZCKYz6cgiRs"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        zIndex: 10,
+                        position: "absolute",
+                        left: "103%",
+                        top: "0%",
+                        bgcolor: "#ff4500",
+                        "&:hover": { bgcolor: "#1779f7" },
+                      }}
+                      onClick={handleClose}
+                    >
+                      <Cancel />
+                    </Button>
+                  </Box>
+                </Modal>
+              </Box>
+            </Grid>
+          </GridContainer> */}
+        </Container>
+      </MuiMainBox>
     </>
   );
 }

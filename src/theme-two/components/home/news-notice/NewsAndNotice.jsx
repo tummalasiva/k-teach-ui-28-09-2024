@@ -87,7 +87,7 @@ export default function NewsAndNotice() {
       <Box mx={7}>
         <MuiCard>
           <TypographyMain sx={{ mt: 3 }} variant="h3">
-            News & Notice
+            NEWS & NOTICE
           </TypographyMain>
 
           <MuiBox>

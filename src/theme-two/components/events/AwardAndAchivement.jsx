@@ -98,7 +98,7 @@ export default function AwardAndAchivement() {
     <>
       <Container sx={{ marginTop: "8rem" }} maxWidth="xl">
         <TypographyMain variant="h5" my={6}>
-          OUR Awards And Achivements
+          OUR AWARDS AND ACHIVEMENTS
         </TypographyMain>
         <Box
           sx={{
