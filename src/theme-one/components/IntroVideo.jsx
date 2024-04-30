@@ -1,9 +1,9 @@
 import React from "react";
 import image from "../../theme-one/assets/Images/image1.png";
-import { BsPlayFill } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { Box, Container, Grid, Modal, Typography, styled } from "@mui/material";
 import themeData from "../../data/themeData";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 const ContentBox = styled(Box)(({ theme }) => ({
   backgroundColor: "white",
@@ -136,6 +136,7 @@ const Play = styled(Box)(({ theme }) => ({
     paddingBottom: "3rem",
   },
 }));
+
 const MuiBox = styled(Box)(({ theme }) => ({
   marginTop: "1.5rem",
   backgroundColor: themeData.darkPalette.secondary.main,
@@ -241,9 +242,12 @@ const IntroVideo = () => {
               <OuterBox>
                 <InnerBox>
                   <Box component="div" onClick={handleOpen}>
-                    <BsPlayFill
-                      style={{
+                    <PlayArrowIcon
+                      sx={{
                         color: themeData.darkPalette.secondary.main,
+                        "&:hover": {
+                          color: themeData.darkPalette.primary.main,
+                        },
                         fontSize: "50px",
                         marginLeft: "6px",
                         marginTop: "5px",

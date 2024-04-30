@@ -14,17 +14,20 @@ import { useNavigate } from "react-router-dom";
 import themeData from "../../../data/themeData";
 
 const Title = styled(Typography)(({ theme }) => ({
-  fontWeight: 700,
-  fontSize: "20px",
-  color: themeData.darkPalette.primary.main,
-  textAlign: "center",
+  display: "-webkit-box",
+  overflow: "hidden",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 1,
+  fontWeight: "bold",
+  fontSize: "18px",
+  fontFamily: "sans-serif",
+  color: themeData.darkPalette.primary.main,
 }));
 
 const Note = styled(Typography)(({ theme }) => ({
   display: "-webkit-box",
   overflow: "hidden",
+  fontFamily: "sans-serif",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 2,
 }));
@@ -55,9 +58,11 @@ const Awards = ({ awardsDetails }) => {
             image={awardsDetails.image}
             alt="green iguana"
           />
-          <CardContent sx={{ height: 100 }}>
-            <Title variant="body2">{awardsDetails.title}</Title>
-            <Note varient="body2" fontSize={16} color="text.secondary">
+          <CardContent sx={{ mt: 1 }}>
+            <Title gutterBottom variant="h5">
+              {awardsDetails.title}
+            </Title>
+            <Note varient="body2" color="text.secondary">
               {awardsDetails.note}
             </Note>
           </CardContent>

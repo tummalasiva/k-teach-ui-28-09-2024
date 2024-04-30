@@ -110,8 +110,16 @@ const Events = ({ card }) => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={2} sx={{ padding: "20px" }}>
-        <Grid item xs={12} md={6}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          paddingBottom: "20px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Grid item xs={12} md={5}>
           <CardImageWrapper>
             <Arc>
               <Typography
@@ -136,7 +144,7 @@ const Events = ({ card }) => {
             />
           </CardImageWrapper>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <CardContent>
             <Random>
               <Typography
