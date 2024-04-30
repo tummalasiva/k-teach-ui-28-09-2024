@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick";
 import {
   Container,
@@ -8,11 +8,8 @@ import {
   Backdrop,
   CardMedia,
   IconButton,
-  ThemeProvider,
-  createTheme,
 } from "@mui/material";
 import { settings } from "../data/carousal";
-
 import { Close } from "@mui/icons-material";
 import Gallery from "./Gallery";
 import image from "../../../theme-one/assets/Images/image1.png";
@@ -72,7 +69,6 @@ const galleryData = [
 ];
 
 const OurGallery = () => {
-  const theme = createTheme();
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
     img: [],
@@ -84,7 +80,6 @@ const OurGallery = () => {
   );
 
   const reorderedImages = [
-    modalOpen.singleImg,
     ...modalOpen.img.slice(0, selectedIndex),
     ...modalOpen.img.slice(selectedIndex + 1),
   ];
@@ -93,67 +88,63 @@ const OurGallery = () => {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Main>
-          <Header title1="Our" title2="Gallery" />
+      <Main>
+        <Header title1="Our" title2="Gallery" />
 
-          <Container sx={{ padding: "10px" }}>
-            <Gallery
-              ref={sliderRef}
-              galleryData={galleryData}
-              setModalOpen={setModalOpen}
-            />
-          </Container>
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={modalOpen.open}
-            onClose={() =>
-              setModalOpen({ open: false, img: [], singleImg: {} })
-            }
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <ImagBox>
-              <IconButton
-                aria-label="close"
-                onClick={() =>
-                  setModalOpen({ open: false, img: [], singleImg: {} })
-                }
-                sx={{
-                  position: "absolute",
-                  right: 8,
-                  top: 8,
-                  zIndex: 9,
-                }}
-              >
-                <Close />
-              </IconButton>
-              <Slider {...settings}>
-                {reorderedImages.map((image, index) => (
-                  <CardMedia
-                    key={index + image}
-                    component="img"
-                    image={image}
-                    alt="loading..."
-                    sx={{
-                      borderRadius: "5px",
-                      objectFit: "contain",
-                      p: "15px",
-                      height: "600px",
-                    }}
-                  />
-                ))}
-              </Slider>
-            </ImagBox>
-          </Modal>
-        </Main>
-      </ThemeProvider>
+        <Container sx={{ padding: "10px" }}>
+          <Gallery
+            ref={sliderRef}
+            galleryData={galleryData}
+            setModalOpen={setModalOpen}
+          />
+        </Container>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={modalOpen.open}
+          onClose={() => setModalOpen({ open: false, img: [], singleImg: {} })}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <ImagBox>
+            <IconButton
+              aria-label="close"
+              onClick={() =>
+                setModalOpen({ open: false, img: [], singleImg: {} })
+              }
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                zIndex: 9,
+              }}
+            >
+              <Close />
+            </IconButton>
+            <Slider {...settings}>
+              {reorderedImages.map((image, index) => (
+                <CardMedia
+                  key={index}
+                  component="img"
+                  image={image}
+                  alt="loading..."
+                  sx={{
+                    borderRadius: "5px",
+                    objectFit: "contain",
+                    p: "15px",
+                    height: "600px",
+                  }}
+                />
+              ))}
+            </Slider>
+          </ImagBox>
+        </Modal>
+      </Main>
     </>
   );
 };

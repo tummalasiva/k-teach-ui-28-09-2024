@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Container, ThemeProvider, createTheme, styled } from "@mui/material";
+import React, { useRef } from "react";
+import { Container, styled } from "@mui/material";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -34,7 +34,6 @@ const AppSlider = styled(Slider)`
 
 const MainContainer = styled(Container)(({ theme }) => ({
   marginTop: "4rem",
-
   [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
     padding: "7%",
@@ -66,23 +65,19 @@ const awards = [
 ];
 
 const AwardsAndAchievment = () => {
-  const theme = createTheme();
-
   let sliderRef = useRef(null);
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MainContainer>
-          <Header title1="Awards &" title2="Achievements" />
+      <MainContainer>
+        <Header title1="Awards &" title2="Achievements" />
 
-          <AppSlider ref={sliderRef} {...calculateSlidersData(awards.length)}>
-            {awards.map((d, i) => (
-              <Awards key={i} awardsDetails={d} />
-            ))}
-          </AppSlider>
-        </MainContainer>
-      </ThemeProvider>
+        <AppSlider ref={sliderRef} {...calculateSlidersData(awards.length)}>
+          {awards.map((d, i) => (
+            <Awards key={i} awardsDetails={d} />
+          ))}
+        </AppSlider>
+      </MainContainer>
     </>
   );
 };

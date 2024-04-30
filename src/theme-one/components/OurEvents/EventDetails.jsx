@@ -4,9 +4,10 @@ import { useLocation, useParams } from "react-router-dom";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import themeData from "../../../data/themeData";
 
 const Title = styled(Box)(() => ({
-  color: "#1976D2",
+  color: themeData.darkPalette.primary.main,
   fontSize: "2rem",
   fontWeight: 700,
 }));

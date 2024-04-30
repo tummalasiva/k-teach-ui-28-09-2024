@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import Slider from "react-slick";
+import themeData from "../../../data/themeData";
 
 const MuiTitle = styled(Typography)(() => ({
   display: "-webkit-box",
@@ -18,11 +19,15 @@ const MuiTitle = styled(Typography)(() => ({
   WebkitLineClamp: 1,
   fontWeight: "bold",
   fontSize: "18px",
+  fontFamily: "sans-serif",
+  color: themeData.darkPalette.primary.main,
 }));
 
 const MuiText = styled(Typography)(() => ({
   display: "-webkit-box",
   overflow: "hidden",
+  fontFamily: "sans-serif",
+
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 2,
 }));
@@ -94,7 +99,7 @@ function Gallery({ galleryData = [], sliderRef, setModalOpen }) {
                 setModalOpen={setModalOpen}
               />
               <CardContent sx={{ mt: 1 }}>
-                <MuiTitle gutterBottom variant="h5" component="div">
+                <MuiTitle gutterBottom variant="h5">
                   {galleryImg.title}
                 </MuiTitle>
                 <MuiText variant="body2" color="text.secondary">
