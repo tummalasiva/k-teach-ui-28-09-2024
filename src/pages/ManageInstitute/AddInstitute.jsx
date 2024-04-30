@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Paper, Typography, styled } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
@@ -71,6 +71,7 @@ const admission_Options = [
 ];
 export default function AddInstitute() {
   const navigate = useNavigate();
+  const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const currencies = currencyCodes.data.map((currency) => ({
     label: `${currency.currency} - ${currency.code}`,
     value: currency.code,
@@ -108,13 +109,22 @@ export default function AddInstitute() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewCreateUrl(imageUrl);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Add Institute" showTextField={false} />
       <BasicData>
         <MuiBox>
           <img
-            src={avatar}
+            src={previewCreateUrl || avatar}
             style={{
               width: "100px",
               height: "100px",
@@ -131,6 +141,7 @@ export default function AddInstitute() {
               formik={entryFormik}
               label="Logo"
               type="file"
+              onChange={handleImageChange}
             />
           </Grid>
         </Grid>
