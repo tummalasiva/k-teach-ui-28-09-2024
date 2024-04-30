@@ -135,6 +135,7 @@ const Events = ({ card }) => {
               sx={{
                 transform: "scale(1)",
                 transition: "transform 0.3s ease-in-out",
+                cursor: "pointer",
               }}
               onClick={handleNavigate}
               component="img"
