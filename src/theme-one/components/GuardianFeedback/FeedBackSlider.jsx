@@ -100,7 +100,7 @@ export default function FeedBackSlider() {
           >
             <Carousel
               slides={data.map((data, i) => ({
-                key: i,
+                key: i + data.studentName + data.feedback,
                 content: (
                   <Feedbacks
                     studentName={data.studentName}
@@ -119,7 +119,7 @@ export default function FeedBackSlider() {
             <DotsContainer style={{ textAlign: "center" }}>
               {data.map((slide, index) => (
                 <Dot
-                  key={slide.key}
+                  key={slide.feedback + slide.parentName + index}
                   onClick={() => onChangeSlide(index)}
                   sx={{
                     backgroundColor:

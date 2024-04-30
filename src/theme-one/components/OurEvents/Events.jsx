@@ -94,8 +94,6 @@ const CardImageWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const Events = ({ card }) => {
-  console.log(card.content);
-
   let onlyDay = card.fromDate;
   const date = moment(onlyDay);
   const specificDate = date.format("Do");

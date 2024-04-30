@@ -23,8 +23,6 @@ const ScrollTop = () => {
     setIsVisible(scrollTop > 400); // Show button when scrolled down 200 pixels
   };
 
-  console.log(isVisible, "====");
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

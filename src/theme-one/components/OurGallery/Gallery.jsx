@@ -83,9 +83,12 @@ function Gallery({ galleryData = [], sliderRef, setModalOpen }) {
         dots
         {...calculateSlidersData(galleryData?.length)}
       >
-        {galleryData?.map((galleryImg) => (
+        {galleryData?.map((galleryImg, index) => (
           <>
-            <Card key={galleryImg.id} sx={{ width: 345, height: 382, mb: 3 }}>
+            <Card
+              key={galleryImg.id + index}
+              sx={{ width: 345, height: 382, mb: 3 }}
+            >
               <ImageSliders
                 galleryImg={galleryImg}
                 setModalOpen={setModalOpen}

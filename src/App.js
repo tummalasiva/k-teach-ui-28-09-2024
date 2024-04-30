@@ -11,6 +11,10 @@ import Loader from "./components/Loader";
 import WebsiteThemeContext from "./context/WebsiteThemeContext";
 import Login from "./components/Authentication/Login";
 import ForgotPassword from "./components/Authentication/ForgotPassword";
+import { useQuery } from "@tanstack/react-query";
+
+import { get } from "./services/apiMethods";
+import { PUBLIC_URLS } from "./services/urlConstants";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -19,14 +23,10 @@ const DashBoard = React.lazy(() => import("./components/NavDrawer"));
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [settingsContext, setSettingsContext] = useState({
-    schoolName: "",
-    schoolLogo: "",
-    activeAcademicYear: "",
-  });
+
   const [settings, setSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({
-    schoolName: "ABC School",
+    name: "ABC School",
   });
 
   useEffect(() => {
@@ -60,6 +60,14 @@ function App() {
       MuiTextField: {
         styleOverrides: {
           root: {},
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          disableElevation: true,
+          root: {
+            boxShadow: "none",
+          },
         },
       },
       MuiListItemButton: {
@@ -122,13 +130,35 @@ function App() {
     },
   });
 
+  // get schools list
+  const getAllSchools = async () => {
+    const { data } = await get(PUBLIC_URLS.school.getSchools);
+    return data.result;
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["publicSchoolList"],
+    queryFn: getAllSchools,
+  });
+
+  console.log(data, "data");
+
+  useEffect(() => {
+    if (data) {
+      setSettings(data);
+      if (data.length) {
+        setSelectedSetting(data[0]);
+      }
+    }
+  }, [data]);
+
+  if (isLoading) return <Loader />;
+
   return (
     <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
       <ThemeProvider theme={theme}>
         <SettingContext.Provider
           value={{
-            settingsContext,
-            setSettingsContext,
             settings,
             setSettings,
             selectedSetting,

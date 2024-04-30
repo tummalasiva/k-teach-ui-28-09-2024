@@ -70,6 +70,7 @@ export default function ThemeSelector() {
           <Grid spacing={2} container>
             {themeData.websiteThemes.map((t) => (
               <Grid
+                key={t.theme + t.image}
                 item
                 sx={{
                   display: "flex",

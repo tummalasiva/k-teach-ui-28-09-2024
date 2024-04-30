@@ -137,7 +137,7 @@ const OurGallery = () => {
               <Slider {...settings}>
                 {reorderedImages.map((image, index) => (
                   <CardMedia
-                    key={index}
+                    key={index + image}
                     component="img"
                     image={image}
                     alt="loading..."

@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CallIcon from "@mui/icons-material/Call";
 import EmailIcon from "@mui/icons-material/Email";
 import { styled } from "@mui/material/styles";
@@ -16,6 +16,7 @@ import { Person } from "@mui/icons-material";
 import themeData from "../../../data/themeData";
 import { useNavigate } from "react-router-dom";
 import ThemeSelector from "../../../components/ThemeSelector";
+import SettingContext from "../../../context/SettingsContext";
 
 const MainContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: "#C8C8C8",
@@ -49,13 +50,9 @@ const SelectButton = styled(Button)(({ theme }) => ({
 
 export default function TopNav() {
   const navigate = useNavigate();
+  const { settings, setSelectedSetting, selectedSetting } =
+    useContext(SettingContext);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedSchool, setSelectedSchool] = useState(null);
-  const [schools, setSchools] = useState([
-    "Kayaka School",
-    "Anjuman",
-    "Siddhart Pu college",
-  ]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -64,8 +61,8 @@ export default function TopNav() {
     setAnchorEl(null);
   };
 
-  const handleSchoolSelect = (schoolName) => {
-    setSelectedSchool(schoolName);
+  const handleSchoolSelect = (school) => {
+    setSelectedSetting(school);
     handleClose();
   };
   return (
@@ -102,40 +99,46 @@ export default function TopNav() {
           spacing={2}
         >
           <ThemeSelector />
-          <SelectButton
-            variant="contained"
-            onClick={handleClick}
-            size="small"
-            endIcon={<KeyboardArrowDownIcon />}
-          >
-            {selectedSchool || "Sample School Name"}
-          </SelectButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {schools.map((schoolName) => (
-              <MenuItem
-                key={schoolName}
-                onClick={() => handleSchoolSelect(schoolName)}
+          {settings.length > 1 && (
+            <>
+              <SelectButton
+                variant="contained"
+                onClick={handleClick}
+                size="small"
+                endIcon={<KeyboardArrowDownIcon />}
               >
-                {schoolName}
-              </MenuItem>
-            ))}
-          </Menu>
+                {selectedSetting.name || "NA"}
+              </SelectButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {settings.map((school, index) => (
+                  <MenuItem
+                    key={school.name + index}
+                    onClick={() => handleSchoolSelect(school)}
+                  >
+                    {school.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
 
-          <Button
-            startIcon={<Person sx={{ color: "#ffff" }} />}
-            variant="contained"
-            size="small"
-            sx={{
-              backgroundColor: themeData.darkPalette.primary.main,
-            }}
-            onClick={() => navigate("/sch/dashboard")}
-          >
-            Login
-          </Button>
+          {settings.length ? (
+            <Button
+              startIcon={<Person sx={{ color: "#ffff" }} />}
+              variant="contained"
+              size="small"
+              sx={{
+                backgroundColor: themeData.darkPalette.primary.main,
+              }}
+              onClick={() => navigate("login")}
+            >
+              Login
+            </Button>
+          ) : null}
         </Stack>
       </MainContainer>
     </>
