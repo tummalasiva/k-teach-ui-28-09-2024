@@ -19,11 +19,13 @@ const FooterNav = styled(Typography)(({ theme }) => ({
 const FooterText = styled(Typography)(({ theme }) => ({
   color: "white",
   padding: "10px 0px",
+  fontFamily: "sans-serif",
 }));
 
 const StyledLink = styled(RouterLink)({
   textDecoration: "none",
   color: "white",
+  fontSize: "1rem",
   fontFamily: "sans-serif",
   cursor: "pointer",
   transition: "1s",

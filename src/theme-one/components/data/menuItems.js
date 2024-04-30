@@ -16,11 +16,11 @@ const menuItems = [
     logo: <RiInformationFill />,
     dropdown: [
       {
-        title: "OverView",
+        title: "Overview",
         path: "/about/overview",
       },
       {
-        title: "About founder",
+        title: "About Founder",
         path: "/about/founder",
       },
       {
@@ -53,7 +53,7 @@ const menuItems = [
         path: "/facilities/transport",
       },
       {
-        title: "Dance and singing",
+        title: "Dance & Singing",
         path: "/facilities/dance-and-singing",
       },
       {
