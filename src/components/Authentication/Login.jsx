@@ -71,7 +71,7 @@ const Login = () => {
 
     onSubmit: console.log("dfghj"),
   });
-  const [selectedButton, setSelectedButton] = useState("Employee");
+  const [selectedButton, setSelectedButton] = useState("employee");
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
@@ -102,17 +102,17 @@ const Login = () => {
                 >
                   <Button
                     variant={
-                      selectedButton === "Employee" ? "contained" : "outlined"
+                      selectedButton === "employee" ? "contained" : "outlined"
                     }
-                    onClick={() => handleButtonClick("Employee")}
+                    onClick={() => handleButtonClick("employee")}
                   >
                     Employee
                   </Button>
                   <Button
                     variant={
-                      selectedButton === "Student" ? "contained" : "outlined"
+                      selectedButton === "student" ? "contained" : "outlined"
                     }
-                    onClick={() => handleButtonClick("Student")}
+                    onClick={() => handleButtonClick("student")}
                   >
                     Student
                   </Button>
