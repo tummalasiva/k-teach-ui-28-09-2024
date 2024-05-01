@@ -108,32 +108,32 @@ export default function TopNav() {
           spacing={2}
         >
           <ThemeSelector />
-          {/* {settings.length >= 1 && ( */}
-          <>
-            <SelectButton
-              variant="contained"
-              onClick={handleClick}
-              size="small"
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              {selectedSetting.name || "NA"}
-            </SelectButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              {settings.map((school, index) => (
-                <MenuItem
-                  key={school.name + index}
-                  onClick={() => handleSchoolSelect(school)}
-                >
-                  {school.name}
-                </MenuItem>
-              ))}
-            </Menu>
-          </>
-          {/* )} */}
+          {settings.length >= 1 && (
+            <>
+              <SelectButton
+                variant="contained"
+                onClick={handleClick}
+                size="small"
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                {selectedSetting.name || "NA"}
+              </SelectButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {settings.map((school, index) => (
+                  <MenuItem
+                    key={school.name + index}
+                    onClick={() => handleSchoolSelect(school)}
+                  >
+                    {school.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
 
           {/* {settings.length ? (
           <Button
