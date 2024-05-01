@@ -6,12 +6,13 @@ import {
   styled,
   Checkbox,
   FormControlLabel,
+  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import themeData from "../../../data/themeData";
 
 const Wrapper = styled(Box)(() => ({
-  position: "relative",
+  // position: "relative",
   maxWidth: "480px",
 
   width: "100%",
@@ -31,16 +32,17 @@ const MuiButton = styled(Button)(() => ({
     backgroundColor: themeData.darkPalette.secondary.main,
   },
 }));
-const StyledTextField = styled(TextField)({
+const StyledTextField = styled(TextField)(() => ({
   marginBottom: "25px",
   transition: "box-shadow 0.3s",
   "&:hover": {
     boxShadow: "0 5px 10px rgba(0, 0, 0, 0.2)",
   },
-});
+}));
 
 export default function RegistrationForm() {
   const [rememberMe, setRememberMe] = useState(false);
+  const theme = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -55,7 +57,11 @@ export default function RegistrationForm() {
   return (
     <Wrapper>
       <Box
-        sx={{ backgroundColor: "#fff", borderRadius: "6px", padding: "34px" }}
+        sx={{
+          backgroundColor: "#fff",
+          borderRadius: theme.shape.borderRadius,
+          padding: "34px",
+        }}
       >
         <Header textAlign="start" mb={4}>
           Registration Form

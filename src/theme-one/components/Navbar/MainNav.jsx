@@ -23,15 +23,31 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import menuItems from "../data/menuItems";
 import logo from "../../../theme-one/assets/Images/bannback.png";
 import themeData from "../../../data/themeData";
+import { Person } from "@mui/icons-material";
 
-const SideMenuContainer = styled(Box)({
-  display: { xs: "flex", md: "none", justifyContent: "flex-end" },
-});
+const SideContainer = styled(Box)(({ theme }) => ({
+  display: "none",
+
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+  },
+
+  [theme.breakpoints.down("xs")]: {
+    display: "block",
+  },
+  [theme.breakpoints.between(900, 964)]: {
+    display: "block",
+  },
+}));
 
 const MainMenuContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
-  marginRight: "3.5rem",
+  alignItems: "center",
+  // marginRight: "3.5rem",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
@@ -53,6 +69,7 @@ const MainMenuChildrenContainer = styled(Box)({
   width: "170px",
   backgroundColor: "#fff",
   zIndex: 1,
+
   boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
   borderTop: `3px solid ${themeData.darkPalette.primary.main}`,
 });
@@ -70,7 +87,6 @@ const MainMenuDropdownContainer = styled(Box)({
 const MainNav = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [subMenuOpen, setSubMenuOpen] = useState("");
-
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -96,29 +112,139 @@ const MainNav = () => {
 
   return (
     <React.Fragment>
-      <AppBar position="sticky" sx={{ backgroundColor: "#fff", color: "#333" }}>
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: "#fff",
+          color: "#333",
+          height: "100px",
+          px: { xs: 3, sm: 3, md: 3, lg: 12 },
+        }}
+      >
         <Toolbar
           disableGutters
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            px: { xs: 0, sm: 0, md: 0, lg: 5 },
+            alignItems: "center",
           }}
         >
           <Link to="/">
             <img
               alt=""
               style={{
-                marginLeft: "3.2rem",
                 objectFit: "contain",
-                padding: "2px",
                 maxWidth: "200px",
-                maxHeight: "150px",
+                marginTop: "4px",
+                padding: "2px 0px",
+                height: "100px",
               }}
               src={logo}
             />
           </Link>
-          <SideMenuContainer>
+
+          <MainMenuContainer>
+            {menuItems.map((item) => {
+              if (item.dropdown) {
+                return (
+                  <MainMenuDropdownContainer
+                    key={item.title}
+                    onMouseEnter={() => handleOpenSubMenu(item.title)}
+                    onMouseLeave={handleCloseSubMenu}
+                  >
+                    <MainMenuDropDownItems
+                      sx={{
+                        color:
+                          pathname === item.path
+                            ? themeData.darkPalette.primary.main
+                            : "black",
+                        fontWeight: pathname === item.path ? "bold" : "normal",
+                      }}
+                      onClick={() => handleChange(item.path)}
+                    >
+                      {item.title}
+                      <KeyboardArrowDownIcon />
+                    </MainMenuDropDownItems>
+                    {subMenuOpen === item.title && (
+                      <MainMenuChildrenContainer>
+                        <List component="nav">
+                          {item.dropdown.map((subItem) => (
+                            <ListItem
+                              key={subItem.title}
+                              button
+                              component={Link}
+                              to={subItem.path}
+                              onClick={handleCloseSubMenu}
+                            >
+                              <ListItemText
+                                sx={{
+                                  fontWeight:
+                                    pathname === subItem.path
+                                      ? "bold"
+                                      : "normal",
+                                  color:
+                                    pathname === subItem.path
+                                      ? themeData.darkPalette.primary.main
+                                      : "black",
+                                  "&:hover": {
+                                    color: themeData.darkPalette.primary.main,
+                                  },
+                                }}
+                                primary={subItem.title}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </MainMenuChildrenContainer>
+                    )}
+                  </MainMenuDropdownContainer>
+                );
+              } else {
+                return (
+                  <ManinMenuItems
+                    key={item.title}
+                    component={Link}
+                    to={item.path}
+                    onClick={() => handleChange(item.path)}
+                    sx={{
+                      fontWeight: pathname === item.path ? "bold" : "normal",
+                      color:
+                        pathname === item.path
+                          ? themeData.darkPalette.primary.main
+                          : "inherit",
+                    }}
+                  >
+                    {item.title}
+                  </ManinMenuItems>
+                );
+              }
+            })}
+
+            <Box
+              sx={{
+                paddingLeft: { lg: 5 },
+                display: { xs: "none", md: "block" },
+              }}
+            >
+              <Button
+                startIcon={<Person sx={{ color: "#ffff" }} />}
+                variant="contained"
+                size="small"
+                sx={{
+                  backgroundColor: themeData.darkPalette.primary.main,
+                }}
+                onClick={() => navigate("login")}
+              >
+                Login
+              </Button>
+            </Box>
+          </MainMenuContainer>
+
+          <Box
+            sx={{
+              display: { xs: "block", sm: "block", md: "none", lg: "none" },
+            }}
+          >
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -234,79 +360,7 @@ const MainNav = () => {
             >
               <MenuIcon />
             </IconButton>
-          </SideMenuContainer>
-
-          <MainMenuContainer>
-            {menuItems.map((item) => {
-              if (item.dropdown) {
-                return (
-                  <MainMenuDropdownContainer
-                    key={item.title}
-                    onMouseEnter={() => handleOpenSubMenu(item.title)}
-                    onMouseLeave={handleCloseSubMenu}
-                  >
-                    <MainMenuDropDownItems
-                      sx={{
-                        color:
-                          pathname === item.path
-                            ? themeData.darkPalette.primary.main
-                            : "inherit",
-                      }}
-                      onClick={() => handleChange(item.path)}
-                    >
-                      {item.title}
-                      <KeyboardArrowDownIcon />
-                    </MainMenuDropDownItems>
-                    {subMenuOpen === item.title && (
-                      <MainMenuChildrenContainer>
-                        <List component="nav">
-                          {item.dropdown.map((subItem) => (
-                            <ListItem
-                              key={subItem.title}
-                              button
-                              component={Link}
-                              to={subItem.path}
-                              onClick={handleCloseSubMenu}
-                            >
-                              <ListItemText
-                                sx={{
-                                  color:
-                                    pathname === subItem.path
-                                      ? themeData.darkPalette.primary.main
-                                      : "inherit",
-                                  "&:hover": {
-                                    color: themeData.darkPalette.primary.main,
-                                  },
-                                }}
-                                primary={subItem.title}
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </MainMenuChildrenContainer>
-                    )}
-                  </MainMenuDropdownContainer>
-                );
-              } else {
-                return (
-                  <ManinMenuItems
-                    key={item.title}
-                    component={Link}
-                    to={item.path}
-                    onClick={() => handleChange(item.path)}
-                    sx={{
-                      color:
-                        pathname === item.path
-                          ? themeData.darkPalette.primary.main
-                          : "inherit",
-                    }}
-                  >
-                    {item.title}
-                  </ManinMenuItems>
-                );
-              }
-            })}
-          </MainMenuContainer>
+          </Box>
         </Toolbar>
       </AppBar>
     </React.Fragment>

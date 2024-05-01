@@ -32,7 +32,7 @@ export default function FormInput({
       sx={{
         mt: 2,
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: theme.shape.borderRadius,
       }}
       variant="outlined"
       InputLabelProps={{
@@ -43,7 +43,7 @@ export default function FormInput({
         style: {
           borderWidth: 1,
           height: "42px",
-          borderRadius: 5,
+          borderRadius: theme.shape.borderRadius,
         },
       }}
       {...rest}

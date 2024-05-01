@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Person } from "@mui/icons-material";
 import themeData from "../../../data/themeData";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ThemeSelector from "../../../components/ThemeSelector";
 import SettingContext from "../../../context/SettingsContext";
 
@@ -83,9 +83,18 @@ export default function TopNav() {
               sx={{ color: `${themeData.darkPalette.secondary.main}` }}
               fontSize="small"
             />
-            <Typography variant="body2" fontWeight="bold" color="black">
+
+            <Link
+              to="mailto:abc@gmail.com"
+              style={{
+                color: "black",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+            >
+              {" "}
               abc@gmail.com
-            </Typography>
+            </Link>
           </DataContainer>
         </SideContainer>
 
@@ -99,46 +108,46 @@ export default function TopNav() {
           spacing={2}
         >
           <ThemeSelector />
-          {settings.length >= 1 && (
-            <>
-              <SelectButton
-                variant="contained"
-                onClick={handleClick}
-                size="small"
-                endIcon={<KeyboardArrowDownIcon />}
-              >
-                {selectedSetting.name || "NA"}
-              </SelectButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                {settings.map((school, index) => (
-                  <MenuItem
-                    key={school.name + index}
-                    onClick={() => handleSchoolSelect(school)}
-                  >
-                    {school.name}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </>
-          )}
-
-          {settings.length ? (
-            <Button
-              startIcon={<Person sx={{ color: "#ffff" }} />}
+          {/* {settings.length >= 1 && ( */}
+          <>
+            <SelectButton
               variant="contained"
+              onClick={handleClick}
               size="small"
-              sx={{
-                backgroundColor: themeData.darkPalette.primary.main,
-              }}
-              onClick={() => navigate("login")}
+              endIcon={<KeyboardArrowDownIcon />}
             >
-              Login
-            </Button>
-          ) : null}
+              {selectedSetting.name || "NA"}
+            </SelectButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {settings.map((school, index) => (
+                <MenuItem
+                  key={school.name + index}
+                  onClick={() => handleSchoolSelect(school)}
+                >
+                  {school.name}
+                </MenuItem>
+              ))}
+            </Menu>
+          </>
+          {/* )} */}
+
+          {/* {settings.length ? (
+          <Button
+            startIcon={<Person sx={{ color: "#ffff" }} />}
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: themeData.darkPalette.primary.main,
+            }}
+            onClick={() => navigate("login")}
+          >
+            Login
+          </Button>
+         ) : null}  */}
         </Stack>
       </MainContainer>
     </>
