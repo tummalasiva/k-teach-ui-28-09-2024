@@ -13,9 +13,8 @@ import themeData from "../../../data/themeData";
 
 const Wrapper = styled(Box)(() => ({
   // position: "relative",
-  maxWidth: "480px",
-
-  width: "100%",
+  // maxWidth: "480px",
+  // width: "100%",
 }));
 
 const Header = styled(Typography)(() => ({

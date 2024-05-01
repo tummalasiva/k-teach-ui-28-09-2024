@@ -49,10 +49,11 @@ const IntroVideo = () => {
         sx={{
           display: "flex",
           justifyContent: "space-evenly",
-          paddingTop: { sm: "40px", xs: "20px" },
+
+          flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
         }}
       >
-        <Grid item xs={12} md={6} lg={8}>
+        <Grid item xs={12} sm={12} md={6} lg={8}>
           <iframe
             style={{
               height: "53vh",
@@ -66,7 +67,7 @@ const IntroVideo = () => {
           ></iframe>
         </Grid>
 
-        <Grid item>
+        <Grid item xs={12} sm={12} md={6} lg={4}>
           <RegistrationForm />
         </Grid>
       </Grid>

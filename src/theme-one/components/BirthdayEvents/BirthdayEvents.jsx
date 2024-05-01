@@ -198,7 +198,7 @@ const BirthdayEvents = () => {
         </Grid>
 
         <Grid item sx={{ paddingTop: "1rem" }}>
-          <RegistrationForm />
+          {/* <RegistrationForm /> */}
         </Grid>
       </Grid>
     </GridContainerBox>
