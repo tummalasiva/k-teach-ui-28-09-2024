@@ -105,7 +105,7 @@ export default function Footer() {
         container
         spacing={2}
         sx={{
-          padding: { xs: 2, sm: 3, md: "60px" },
+          px: { xs: 2, sm: 3, md: "100px" },
         }}
       >
         <Grid

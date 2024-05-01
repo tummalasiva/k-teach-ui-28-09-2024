@@ -24,6 +24,72 @@ function SamplePrevArrow(props) {
   );
 }
 
+export const cardSettings = {
+  infinite: true,
+  speed: 500,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  autoplay: true,
+  arrows: false,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />,
+  responsive: [
+    {
+      breakpoint: 1536,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+
+    {
+      breakpoint: 1280,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+
+    {
+      breakpoint: 1100,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+
+    {
+      breakpoint: 900,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+
+    {
+      breakpoint: 650,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+
+    {
+      breakpoint: 350,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+      },
+    },
+  ],
+};
+
 export const settings = {
   infinite: true,
   speed: 500,
