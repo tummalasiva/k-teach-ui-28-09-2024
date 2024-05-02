@@ -106,67 +106,69 @@ export default function CustomTable({
           </TableHead>
           <TableBody>
             {bodyData.length && isDataReady
-              ? bodyData.map((data, index) => (
-                  <TableRow key={data._id}>
-                    <TableCell align="center">{index + 1}</TableCell>
-                    {tableKeys.map((k, i) => (
-                      <TableCell key={i} align="center">
-                        {typeof data[k.key] === "boolean"
-                          ? data[k.key] === true
-                            ? "Yes"
-                            : "No"
-                          : Object.keys(data[k.path] || {}).length > 0
-                          ? data[k.path][k.key]
-                          : data[k.key] || "NA"}
-                      </TableCell>
-                    ))}
-                    <TableCell align="center">
-                      {actions.includes("edit") && (
-                        <Tooltip title="Edit">
-                          <IconButton onClick={() => onEditClick(data)}>
-                            <EditIcon color="primary" fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {actions.includes("delete") && (
-                        <Tooltip title="Delete">
-                          <IconButton onClick={() => handleDeleteClick(data)}>
-                            <DeleteIcon fontSize="small" color="error" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
+              ? bodyData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((data, index) => (
+                    <TableRow key={data._id}>
+                      <TableCell align="center">{index + 1}</TableCell>
+                      {tableKeys.map((k, i) => (
+                        <TableCell key={i} align="center">
+                          {typeof data[k.key] === "boolean"
+                            ? data[k.key] === true
+                              ? "Yes"
+                              : "No"
+                            : Object.keys(data[k.path] || {}).length > 0
+                            ? data[k.path][k.key]
+                            : data[k.key] || "NA"}
+                        </TableCell>
+                      ))}
+                      <TableCell align="center">
+                        {actions.includes("edit") && (
+                          <Tooltip title="Edit">
+                            <IconButton onClick={() => onEditClick(data)}>
+                              <EditIcon color="primary" fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {actions.includes("delete") && (
+                          <Tooltip title="Delete">
+                            <IconButton onClick={() => handleDeleteClick(data)}>
+                              <DeleteIcon fontSize="small" color="error" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
 
-                      {actions.includes("view") && (
-                        <Tooltip title="View">
-                          <IconButton onClick={() => onViewClick(data)}>
-                            <RemoveRedEyeRoundedIcon
-                              fontSize="small"
-                              color="primary"
-                            />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {actions.includes("card") && (
-                        <Tooltip title="Unbundle">
-                          <Button
-                            size="small"
-                            variant="contained"
-                            onClick={() => onCardClick(data)}
-                          >
-                            Card
-                          </Button>
-                        </Tooltip>
-                      )}
-                      {actions.includes("switch") && (
-                        <Tooltip title={toggleStatus}>
-                          <IconButton onClick={() => onToggleSwitch(data)}>
-                            <Switch checked={data[toggleStatus] === true} />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
+                        {actions.includes("view") && (
+                          <Tooltip title="View">
+                            <IconButton onClick={() => onViewClick(data)}>
+                              <RemoveRedEyeRoundedIcon
+                                fontSize="small"
+                                color="primary"
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {actions.includes("card") && (
+                          <Tooltip title="Unbundle">
+                            <Button
+                              size="small"
+                              variant="contained"
+                              onClick={() => onCardClick(data)}
+                            >
+                              Card
+                            </Button>
+                          </Tooltip>
+                        )}
+                        {actions.includes("switch") && (
+                          <Tooltip title={toggleStatus}>
+                            <IconButton onClick={() => onToggleSwitch(data)}>
+                              <Switch checked={data[toggleStatus] === true} />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
               : null}
           </TableBody>
         </Table>
