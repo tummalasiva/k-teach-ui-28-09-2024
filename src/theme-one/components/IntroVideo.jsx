@@ -53,12 +53,12 @@ const IntroVideo = () => {
           flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
         }}
       >
-        <Grid item xs={12} sm={12} md={6} lg={8}>
+        <Grid item xs={12} sm={12} md={6} lg={7}>
           <iframe
             style={{
               height: "53vh",
               width: "100%",
-              borderRadius: "2px",
+              borderRadius: "5px",
             }}
             src="https://www.youtube.com/embed/ZCKYz6cgiRs"
             title="YouTube video player"
