@@ -51,10 +51,10 @@ client.interceptors.response.use(
     const { response } = error;
     const originalRequest = error.config;
     if (response && response.status === 401) {
-      originalRequest._retry = true;
-      const accessToken = await refreshAccessToken();
-      originalRequest.headers["x-auth-token"] = `bearer ${accessToken}`;
-      return Axios(originalRequest);
+      // originalRequest._retry = true;
+      // const accessToken = await refreshAccessToken();
+      // originalRequest.headers["x-auth-token"] = `bearer ${accessToken}`;
+      // return Axios(originalRequest);
     }
     if (response && response.data && response.data.message) {
       toast.error(response.data.message);
