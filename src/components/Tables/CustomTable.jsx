@@ -160,10 +160,7 @@ export default function CustomTable({
                       {actions.includes("switch") && (
                         <Tooltip title={toggleStatus}>
                           <IconButton onClick={() => onToggleSwitch(data)}>
-                            <Switch
-                              checked={toggleStatus === true}
-                              onChange={() => onToggleSwitch(data)}
-                            />
+                            <Switch checked={data[toggleStatus] === true} />
                           </IconButton>
                         </Tooltip>
                       )}

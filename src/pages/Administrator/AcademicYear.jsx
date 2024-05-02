@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
-// custome components
+// custom components
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import PageHeader from "../../components/PageHeader";
@@ -34,6 +34,7 @@ export default function AcademicYear() {
 
   const handleClose = () => {
     setOpen(false);
+    setDataToEdit(null);
   };
 
   // create || update actions
@@ -42,7 +43,6 @@ export default function AcademicYear() {
       const payload = {
         ...values,
       };
-
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -54,8 +54,6 @@ export default function AcademicYear() {
         const { data } = await post(PRIVATE_URLS.academicYear.create, payload);
         getData();
       }
-
-      // getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -78,21 +76,40 @@ export default function AcademicYear() {
     getData();
   }, []);
 
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleToggleActiveStatus = async (academicYear) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.academicYear.toggleActiveStatus + "/" + academicYear._id
+      );
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Academic Year" />
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "switch"]}
         bodyDataModal="academic year"
         bodyData={data}
         tableKeys={academicYearTableKeys}
+        onEditClick={handleEditClick}
+        toggleStatus="active"
+        onToggleSwitch={handleToggleActiveStatus}
       />
 
       {/* ====== Fab button component =======*/}
       <AddForm title="Add Academic Year" onAddClick={AddDepartmentHandel} />
       {/* ================================== */}
 
-      {/* ==== add department ======== */}
+      {/* ==== add/edit academicYear ======== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -124,7 +141,6 @@ export default function AcademicYear() {
               formik={entryFormik}
               name="note"
               label="Drop a note"
-              required={true}
             />
           </Grid>
         </Grid>
