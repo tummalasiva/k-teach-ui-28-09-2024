@@ -9,9 +9,9 @@ const MainBox = styled(Box)(({ theme }) => ({
   justifyContent: "space-around",
   alignItems: "center",
   height: "300px",
-  width: "250px",
+  width: "278px",
   borderRadius: "10px",
-  padding: "6px 0",
+  padding: "6px 10px",
 }));
 
 const CircleBox = styled(Box)(({ theme }) => ({
