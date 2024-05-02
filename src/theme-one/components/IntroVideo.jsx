@@ -49,15 +49,17 @@ const IntroVideo = () => {
         sx={{
           display: "flex",
           justifyContent: "space-evenly",
-          paddingTop: { sm: "40px", xs: "20px" },
+
+          flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
         }}
       >
-        <Grid item xs={12} md={6} lg={8}>
+        <Grid item xs={12} sm={12} md={6} lg={7}>
           <iframe
             style={{
               height: "53vh",
               width: "100%",
-              borderRadius: "2px",
+              borderRadius: "5px",
+              overflow: "hidden",
             }}
             src="https://www.youtube.com/embed/ZCKYz6cgiRs"
             title="YouTube video player"
@@ -66,7 +68,7 @@ const IntroVideo = () => {
           ></iframe>
         </Grid>
 
-        <Grid item>
+        <Grid item xs={12} sm={12} md={6} lg={4}>
           <RegistrationForm />
         </Grid>
       </Grid>

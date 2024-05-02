@@ -33,7 +33,7 @@ const QuickLook = () => {
   return (
     <MainBox
       sx={{
-        padding: { xs: "0px", sm: "0px", md: "10px 10px", lg: "60px 25px" },
+        padding: { xs: "0px", sm: "0px", md: "10px 10px", lg: "60px 0px" },
       }}
     >
       <Grid container>
