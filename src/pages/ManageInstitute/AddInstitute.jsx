@@ -15,11 +15,11 @@ import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import TimezoneSelect from "react-timezone-select";
 import currencyCodes from "currency-codes";
-
 import avatar from "../../assets/images/avatar.jpg";
 import AddOrUpdateFiles from "../../forms/AddOrUpdateFiles";
 import PageHeader from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
+import currencyToSymbolMap from "currency-symbol-map/map";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -101,6 +101,7 @@ const admission_Options = [
 ];
 export default function AddInstitute({ initialValue }) {
   const navigate = useNavigate();
+  const symbol = Object.keys(currencyToSymbolMap);
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const currencies = currencyCodes.data.map((currency) => ({
     label: `${currency.currency} - ${currency.code}`,
@@ -199,11 +200,18 @@ export default function AddInstitute({ initialValue }) {
               variant="h6"
               component="h2"
               textAlign="start"
-              sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
+              sx={{
+                fontSize: "15px",
+                padding: 2,
+                borderBottom: "1px solid black",
+
+                fontWeight: "bold",
+              }}
             >
               Basic Information
             </Typography>
           </Grid>
+
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
@@ -262,6 +270,7 @@ export default function AddInstitute({ initialValue }) {
         </Grid>
       </FormBox>
       {/* Settings */}
+
       <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
@@ -270,17 +279,31 @@ export default function AddInstitute({ initialValue }) {
               variant="h6"
               component="h2"
               textAlign="start"
-              sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
+              sx={{
+                fontSize: "15px",
+                padding: 2,
+                fontWeight: "bold",
+                borderBottom: "1px solid black",
+              }}
             >
               Setting Information
             </Typography>
           </Grid>
+
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               name="currency"
               formik={entryFormik}
               label="Currency"
               options={currencies}
+              onChange={(event) => {
+                const selectedCurrency = event.target.value;
+                entryFormik.setFieldValue("currency", selectedCurrency);
+                entryFormik.setFieldValue(
+                  "currencySymbol",
+                  currencyToSymbolMap[selectedCurrency]
+                );
+              }}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -395,6 +418,7 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
         </Grid>
       </FormBox>
+
       {/* Social Info */}
       <FormBox>
         <Grid container spacing={2}>
@@ -404,7 +428,13 @@ export default function AddInstitute({ initialValue }) {
               variant="h6"
               component="h2"
               textAlign="start"
-              sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
+              sx={{
+                fontSize: "15px",
+
+                padding: 2,
+                fontWeight: "bold",
+                borderBottom: "1px solid black",
+              }}
             >
               Social Information
             </Typography>
@@ -464,6 +494,7 @@ export default function AddInstitute({ initialValue }) {
       </FormBox>
 
       {/* Banner Images */}
+
       <Box sx={{ padding: 2, marginBottom: "60px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={12}>
@@ -472,7 +503,11 @@ export default function AddInstitute({ initialValue }) {
               variant="h6"
               component="h2"
               textAlign="start"
-              sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
+              sx={{
+                fontSize: "15px",
+
+                fontWeight: "bold",
+              }}
             >
               Banner Image
             </Typography>
