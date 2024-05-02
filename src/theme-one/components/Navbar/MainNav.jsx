@@ -117,7 +117,8 @@ const MainNav = () => {
         sx={{
           backgroundColor: "#fff",
           color: "#333",
-          height: "100px",
+          height: "120px",
+
           px: { xs: 3, sm: 3, md: 3, lg: 12 },
         }}
       >
@@ -132,14 +133,10 @@ const MainNav = () => {
           <Link to="/">
             <img
               alt=""
-              style={{
-                objectFit: "contain",
-                maxWidth: "200px",
-                marginTop: "4px",
-                padding: "2px 0px",
-                height: "100px",
-              }}
+              width={200}
+              height={120}
               src={logo}
+              style={{ paddingTop: "4px" }}
             />
           </Link>
 
