@@ -9,7 +9,7 @@ const client = Axios.create({
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin":
-      "https://4be2-2404-ca40-fa02-3f00-41a-2944-e12c-a114.ngrok-free.app",
+      "https://6dbe-2404-ca40-fa02-3f00-11ca-165-9cb8-fa31.ngrok-free.app",
   },
 });
 
