@@ -6,6 +6,7 @@ export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
   baseURL: API_PREFIX,
+  // baseURL: "http://localhost:5000/ecamps/v1",
 });
 
 const setAuthToken = (config) => {
