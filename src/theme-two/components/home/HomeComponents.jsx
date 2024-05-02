@@ -131,7 +131,7 @@ const MuiMainBox = styled(Box)(({ theme }) => ({
   height: "100vh",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  // justifyContent: "center",
 }));
 
 const GridContainer = styled(Grid)(({ theme }) => ({
@@ -164,7 +164,7 @@ const Text = styled(Typography)(({ theme }) => ({
 }));
 
 const AnimationBox = styled(Box)(({ theme }) => ({
-  marginTop: "50px",
+  marginTop: "40px",
   letterSpacing: "0.2rem",
   [theme.breakpoints.down("sm")]: {
     fontSize: "30px",
@@ -207,10 +207,17 @@ export default function HomeComponents() {
             sx={{
               textAlign: { xs: "start", md: "left" },
               width: "fit-content",
+              padding: "80px 60px",
               // maxWidth: { xs: "100%", sm: "100%", md: "100%", lg: "80%" },
             }}
           >
-            <Box sx={{ borderLeft: "solid #ff4500", mt: 13 }}>
+            <Box
+              sx={{
+                borderLeft: `3px solid ${themeData.darkPalette.primary.main}`,
+                padding: "8px",
+                mt: 13,
+              }}
+            >
               <MovingText
                 type="slideInFromLeft"
                 duration="3000ms"
