@@ -3,20 +3,20 @@ import Theme2 from "../assets/images/theme2.png";
 
 const darkPalette = {
   primary: {
-    main: "#196838", // Blue for light mode
+    main: "#196838",
   },
   secondary: {
-    main: "#2c4c71", // Pink for light mode
+    main: "#2c4c71",
   },
   mode: "dark",
 };
 
 const lightPalette = {
   primary: {
-    main: "#196838", // Light Blue for dark mode
+    main: "#196838",
   },
   secondary: {
-    main: "#446285", // Light Pink for dark mode
+    main: "#446285",
   },
   mode: "light",
 };

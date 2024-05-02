@@ -33,14 +33,6 @@
   /* margin: auto; */
   margin-top: 1rem;
   margin-left: 1rem;
-  /* border: 5px solid; */
-  /* border-color: #db580d; */
-  /* background-color: #bc007d; */
-  /* border-color: #616a6b; */
-  /* background-color: #fff; */
-  /* -webkit-box-shadow: 0 35px 20px #777;
-  -moz-box-shadow: 0 35px 20px #777; */
-  /* box-shadow: 0 10px 20px #777; */
   transition: all 1s;
 }
 
@@ -84,4 +76,8 @@
     transform: scale(1);
     opacity: 0;
   }
+}
+
+.facilitiesMain:hover .facilitiesButton {
+  color: #196838;
 }
