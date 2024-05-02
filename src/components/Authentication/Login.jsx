@@ -136,7 +136,7 @@ const Login = () => {
               maxWidth: 370,
               width: "100%",
               background: "rgba(255,255,255,0.3)",
-              borderRadius: theme.shape.borderRadius,
+              borderRadius: "5px",
               padding: "30px",
               position: "relative",
             }}
@@ -282,7 +282,15 @@ const Login = () => {
 
               {/* Forgot password */}
 
-              <Grid xs={12} sm={12} md={12} lg={12} textAlign="center" mt={1}>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                textAlign="center"
+                mt={1}
+              >
                 <Link to="/forgot-password">
                   <Typography
                     sx={{ color: themeData.darkPalette.secondary.main }}
