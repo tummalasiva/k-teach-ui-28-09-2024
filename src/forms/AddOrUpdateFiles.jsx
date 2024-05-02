@@ -14,20 +14,14 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import { LoadingButton } from "@mui/lab";
 import { Close, Delete } from "@mui/icons-material";
 
-export default function AddOrUpdateFiles({
-  onUpdate = () => {},
-  styles = {},
-  title = "",
-}) {
+export default function AddOrUpdateFiles({ styles = {}, title = "" }) {
   const [open, setOpen] = useState(false);
   const [updatingFiles, setUpdatingFiles] = useState(false);
-  const [deletingFiles, setDeletingFiles] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const [image, setImage] = useState([]);
   const theme = useTheme();
   let fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -36,54 +30,28 @@ export default function AddOrUpdateFiles({
 
   const handleSelectFile = (e) => {
     const selectedFiles = e.target.files;
-
     if (selectedFiles.length > 0) {
-      let fileList = [];
+      let imageList = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-
-        fileList.push(file);
+        const previewUrl = URL.createObjectURL(file);
+        imageList.push(previewUrl);
       }
-      setSelectedFiles([...fileList]);
+
+      setImage([...imageList]);
     } else {
       console.log("No files selected");
     }
   };
+
   const handleRemoveFile = (i) => {
-    setSelectedFiles(selectedFiles.filter((f, index) => index !== i));
+    setImage(image.filter((f, index) => index !== i));
   };
 
-  const handleUpdateItem = async (e) => {
-    e.preventDefault();
-
-    try {
-      setUpdatingFiles(true);
-      const formData = new FormData();
-      selectedFiles.forEach((f) => formData.append("files", f));
-
-      setSelectedFiles([]);
-      setUpdatingFiles(false);
-    } catch (error) {
-      setUpdatingFiles(false);
-
-      console.log(error);
-    }
-  };
-
-  const handleDeleteFile = async (e, file) => {
-    e.preventDefault();
-    setDeletingFiles(true);
-    try {
-    } catch (error) {
-      console.log(error);
-      setDeletingFiles(false);
-    }
-  };
   return (
     <>
       <Button
         fullWidth
-        // startIcon={<RemoveRedEyeRoundedIcon fontSize="small" />}
         onClick={handleOpenDialog}
         size="small"
         variant="contained"
@@ -111,100 +79,53 @@ export default function AddOrUpdateFiles({
             padding: "10px",
           }}
         >
-          <Box sx={{ marginBottom: "20px" }}>
-            <Typography sx={{ fontWeight: "bold" }} mb={2}>
-              Uploaded Imgaes
-            </Typography>
-            {files.length ? (
-              files.map((f, i) => (
-                <Box
-                  key={i}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px",
-                    // border: "1px solid lightgray",
-                    borderRadius: "5px",
-                    background: "#5fa5f661",
-                    marginTop: "5px",
-                  }}
-                >
-                  <Typography>{`File ${i + 1}`}</Typography>
-                  <Stack direction="row" spacing={2}>
-                    <IconButton
-                      disabled={deletingFiles}
-                      onClick={(e) => handleDeleteFile(e, f)}
-                    >
-                      <Delete color="error" fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={() => window.open(f, "_blank")}>
-                      <RemoveRedEyeRoundedIcon fontSize="small" />
-                    </IconButton>
-                  </Stack>
-                </Box>
-              ))
-            ) : (
-              <Typography sx={{ textAlign: "center", fontSize: "12px" }}>
-                No images were uploaded for this institute
-              </Typography>
-            )}
-          </Box>
-          <Divider />
+          <Box sx={{ margin: "15px 0" }}>
+            <Typography sx={{ fontWeight: "bold" }}>Add Files</Typography>
 
-          <Box sx={{ margin: "20px 0" }}>
-            <Box
+            <TextField
+              name="images"
+              label="Select files"
+              fullWidth
+              onChange={handleSelectFile}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                mt: 2,
+                borderWidth: 1,
+                borderRadius: theme.shape.borderRadius,
+                maxWidth: "300px",
               }}
-            >
-              <Typography sx={{ fontWeight: "bold" }}>Add Files</Typography>
-              <TextField
-                name="images"
-                label="Select files"
-                fullWidth
-                onChange={handleSelectFile}
-                sx={{
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{ type: "file", multiple: true }}
+              InputProps={{
+                style: {
                   borderWidth: 1,
+                  height: "40px",
                   borderRadius: theme.shape.borderRadius,
-                  maxWidth: "300px",
-                }}
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{ type: "file", multiple: true }}
-                InputProps={{
-                  style: {
-                    borderWidth: 1,
-                    height: "40px",
-                    borderRadius: theme.shape.borderRadius,
-                  },
-                }}
-              />
-            </Box>
-            {selectedFiles.map((f, i) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "10px",
-                  // border: "1px solid lightgray",
-                  background: "#5fa5f661",
-                  borderRadius: "5px",
-                  marginTop: "5px",
-                }}
-                key={f.name + i.toString()}
-              >
-                <Typography>{f.name}</Typography>
-                <IconButton onClick={(e) => handleRemoveFile(i)}>
-                  <Close fontSize="small" />
-                </IconButton>
-              </Box>
-            ))}
+                },
+              }}
+            />
+
+            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+              {image.map((preview, index) => (
+                <Box key={index} sx={{ position: "relative" }}>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleRemoveFile(index)}
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      zIndex: 1,
+                    }}
+                  >
+                    <Delete fontSize="small" color="error" />
+                  </IconButton>
+                  <img src={preview} width={120} height={100} />
+                </Box>
+              ))}
+            </Stack>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -217,11 +138,10 @@ export default function AddOrUpdateFiles({
             Cancel
           </Button>
           <LoadingButton
-            disabled={!selectedFiles.length}
+            disabled={!image.length}
             size="small"
             loading={updatingFiles}
             variant="contained"
-            onClick={handleUpdateItem}
           >
             Add
           </LoadingButton>

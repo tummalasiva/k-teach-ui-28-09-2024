@@ -30,6 +30,13 @@ const MuiBox = styled(Box)({
   backgroundPosition: "center",
 });
 
+const FormBox = styled(Box)(({ theme }) => ({
+  border: "1px solid gray",
+  padding: "20px",
+  marginBottom: "20px",
+  borderRadius: theme.shape.borderRadius,
+}));
+
 const BasicData = styled(Box)({
   display: "flex",
   flexDirection: "column",
@@ -139,7 +146,7 @@ export default function AddInstitute({ initialValue }) {
       youtubeUrl: initialValue?.youtubeUrl || "",
       instagramUrl: initialValue?.instagramUrl || "",
       pinterestUrl: initialValue?.pinterestUrl || "",
-      studentAttendenceType: initialValue?.studentAttendenceType || "",
+      bannerImages: initialValue?.bannerImages || [],
     },
     onSubmit: console.log("nnnn"),
     enableReinitialize: true,
@@ -173,7 +180,7 @@ export default function AddInstitute({ initialValue }) {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="image"
+              name="logo"
               formik={entryFormik}
               label="Logo"
               type="file"
@@ -184,7 +191,7 @@ export default function AddInstitute({ initialValue }) {
       </BasicData>
 
       {/* Basic Info */}
-      <Paper elevation={0} sx={{ padding: 2, marginBottom: 2 }}>
+      <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
             <Typography
@@ -227,6 +234,7 @@ export default function AddInstitute({ initialValue }) {
               formik={entryFormik}
               label="Registration Date"
               name="regDate"
+              required={true}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -238,13 +246,7 @@ export default function AddInstitute({ initialValue }) {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="fax"
-              formik={entryFormik}
-              label="Fax"
-              // options={""}
-            />
+            <FormInput name="fax" formik={entryFormik} label="Fax" />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
@@ -258,9 +260,9 @@ export default function AddInstitute({ initialValue }) {
             <FormInput name="description" formik={entryFormik} label="Note" />
           </Grid>
         </Grid>
-      </Paper>
+      </FormBox>
       {/* Settings */}
-      <Paper elevation={0} sx={{ padding: 2, marginBottom: 2 }}>
+      <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
             <Typography
@@ -275,7 +277,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
-              required={true}
               name="currency"
               formik={entryFormik}
               label="Currency"
@@ -283,12 +284,11 @@ export default function AddInstitute({ initialValue }) {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
+            <FormInput
               name="currencySymbol"
               formik={entryFormik}
               label="Currency Symbol"
-              disabled={true}
+              disabled
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -299,6 +299,7 @@ export default function AddInstitute({ initialValue }) {
               openTo="month"
               inputFormat="MM"
               views={["month"]}
+              required={true}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -309,12 +310,12 @@ export default function AddInstitute({ initialValue }) {
               openTo="month"
               inputFormat="MM"
               views={["month"]}
+              required={true}
             />
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
-              required={true}
               name="rollNumberType"
               formik={entryFormik}
               label="Roll Number"
@@ -333,7 +334,6 @@ export default function AddInstitute({ initialValue }) {
 
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
-              required={true}
               name="admissionNo"
               formik={entryFormik}
               label="Admission Numder"
@@ -342,17 +342,11 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="latitude"
-              formik={entryFormik}
-              label="Latitude"
-            />
+            <FormInput name="latitude" formik={entryFormik} label="Latitude" />
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="longitude"
               formik={entryFormik}
               label="Longitude"
@@ -365,8 +359,13 @@ export default function AddInstitute({ initialValue }) {
                   ...baseStyle,
                   height: "42px",
                 }),
+                menu: (provided, state) => ({
+                  ...provided,
+                  zIndex: 1000,
+                  backgroundColor: "white",
+                }),
               }}
-              placeholder="Select default timezone"
+              placeholder="Select Default Timezone"
               name="defaultTimeZone"
               value={entryFormik.values.defaultTimeZone}
               onChange={(value) =>
@@ -378,7 +377,6 @@ export default function AddInstitute({ initialValue }) {
 
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="googleAnalyticsId"
               formik={entryFormik}
               label="Google Analytics Id"
@@ -386,7 +384,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
-              required={true}
               name="teacherActivityFeedbackEnabled"
               formik={entryFormik}
               label="Teacher Activity FeedackEnable"
@@ -397,9 +394,9 @@ export default function AddInstitute({ initialValue }) {
             />
           </Grid>
         </Grid>
-      </Paper>
+      </FormBox>
       {/* Social Info */}
-      <Paper elevation={0} sx={{ padding: 2, marginBottom: 2 }}>
+      <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
             <Typography
@@ -415,7 +412,6 @@ export default function AddInstitute({ initialValue }) {
 
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="facebookUrl"
               formik={entryFormik}
               label="Facebook URL"
@@ -423,7 +419,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="twitterUrl"
               formik={entryFormik}
               label="TwitterURL"
@@ -431,7 +426,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="linkedinUrl"
               formik={entryFormik}
               label="Linkedin Url"
@@ -439,7 +433,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="gplusUrl"
               formik={entryFormik}
               label="Google Plus Url"
@@ -455,7 +448,6 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="instagramUrl"
               formik={entryFormik}
               label="Instagram URL"
@@ -463,17 +455,16 @@ export default function AddInstitute({ initialValue }) {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="pinterestUrl"
               formik={entryFormik}
               label="Pinterest URL"
             />
           </Grid>
         </Grid>
-      </Paper>
+      </FormBox>
 
       {/* Banner Images */}
-      <Paper elevation={0} sx={{ padding: 2, marginBottom: "60px" }}>
+      <Box sx={{ padding: 2, marginBottom: "60px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={12}>
             <Typography
@@ -506,7 +497,7 @@ export default function AddInstitute({ initialValue }) {
             </Box>
           </Grid>
         </Grid>
-      </Paper>
+      </Box>
       <Grid container>
         <Grid item xs={12} md={12}>
           <StyledBox
