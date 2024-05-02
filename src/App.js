@@ -48,7 +48,7 @@ function App() {
   const theme = createTheme({
     palette: isDarkMode ? themeData.darkPalette : themeData.lightPalette,
     shape: {
-      borderRadius: themeData.shapeProperties.borderRadius,
+      borderRadius: 5,
     },
     typography: {
       allVariants: {
@@ -140,12 +140,14 @@ function App() {
   // get schools list
   const getAllSchools = async () => {
     const { data } = await get(PUBLIC_URLS.school.getSchools);
+    console.log(data, "datat");
     return data.result;
   };
 
   const { data, isLoading } = useQuery({
     queryKey: ["publicSchoolList"],
     queryFn: getAllSchools,
+    // refetchOnWindowFocus: false,
   });
 
   console.log(data, "data");

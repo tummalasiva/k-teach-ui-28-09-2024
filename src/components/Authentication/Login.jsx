@@ -63,6 +63,21 @@ const BoarderBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const BackButtonContainer = styled(Box)(() => ({
+  position: "absolute",
+  height: 70,
+  width: 70,
+  top: 0,
+  left: -70,
+  zIndex: 10000,
+  background: "rgba(255,255,255,0.3)",
+  borderTopLeftRadius: 35,
+  borderBottomLeftRadius: 35,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
 const Login = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
@@ -121,31 +136,16 @@ const Login = () => {
               maxWidth: 370,
               width: "100%",
               background: "rgba(255,255,255,0.3)",
-              borderRadius: theme.shape.borderRadius,
+              borderRadius: "5px",
               padding: "30px",
               position: "relative",
             }}
           >
-            <Box
-              sx={{
-                position: "absolute",
-                height: 70,
-                width: 70,
-                top: 0,
-                left: -70,
-                zIndex: 10000,
-                background: "rgba(255,255,255,0.3)",
-                borderTopLeftRadius: 35,
-                borderBottomLeftRadius: 35,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <BackButtonContainer>
               <IconButton onClick={() => navigate("/")}>
                 <ArrowBack fontSize="medium" />
               </IconButton>
-            </Box>
+            </BackButtonContainer>
 
             <img
               src={avatar}
@@ -282,7 +282,15 @@ const Login = () => {
 
               {/* Forgot password */}
 
-              <Grid xs={12} sm={12} md={12} lg={12} textAlign="center" mt={1}>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                textAlign="center"
+                mt={1}
+              >
                 <Link to="/forgot-password">
                   <Typography
                     sx={{ color: themeData.darkPalette.secondary.main }}

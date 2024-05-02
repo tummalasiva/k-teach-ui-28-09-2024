@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, useTheme } from "@mui/material";
+import { TextField } from "@mui/material";
 
 export default function FormInput({
   name,
@@ -12,8 +12,6 @@ export default function FormInput({
   containerStyle = {},
   ...rest
 }) {
-  const theme = useTheme();
-
   return (
     <TextField
       required={required}
@@ -32,7 +30,7 @@ export default function FormInput({
       sx={{
         mt: 2,
         borderWidth: 1,
-        borderRadius: theme.shape.borderRadius,
+        borderRadius: (theme) => theme.shape.borderRadius,
       }}
       variant="outlined"
       InputLabelProps={{
@@ -43,7 +41,7 @@ export default function FormInput({
         style: {
           borderWidth: 1,
           height: "42px",
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: (theme) => theme.shape.borderRadius,
         },
       }}
       {...rest}
