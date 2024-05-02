@@ -288,6 +288,7 @@ export default function AddInstitute({ initialValue }) {
               name="currencySymbol"
               formik={entryFormik}
               label="Currency Symbol"
+              disabled={true}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>

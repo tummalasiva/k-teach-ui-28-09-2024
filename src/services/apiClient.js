@@ -6,7 +6,11 @@ export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
   baseURL: API_PREFIX,
-  // baseURL: "http://localhost:5000/ecamps/v1",
+  headers: {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin":
+      "https://4be2-2404-ca40-fa02-3f00-41a-2944-e12c-a114.ngrok-free.app",
+  },
 });
 
 const setAuthToken = (config) => {

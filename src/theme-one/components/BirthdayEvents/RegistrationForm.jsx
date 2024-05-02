@@ -58,7 +58,7 @@ export default function RegistrationForm() {
       <Box
         sx={{
           backgroundColor: "#fff",
-          borderRadius: theme.shape.borderRadius,
+          // borderRadius: theme.shape.borderRadius,
           padding: "34px",
         }}
       >

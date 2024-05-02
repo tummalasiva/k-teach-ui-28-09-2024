@@ -59,6 +59,7 @@ const IntroVideo = () => {
               height: "53vh",
               width: "100%",
               borderRadius: "5px",
+              overflow: "hidden",
             }}
             src="https://www.youtube.com/embed/ZCKYz6cgiRs"
             title="YouTube video player"
