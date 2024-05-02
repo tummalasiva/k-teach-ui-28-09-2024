@@ -37,6 +37,15 @@ const FormBox = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
 }));
 
+const Title = styled(Typography)(({ theme }) => ({
+  textAlign: "start",
+
+  fontSize: "15px",
+  padding: "20px",
+  borderBottom: "1px solid black",
+  fontWeight: "bold",
+}));
+
 const BasicData = styled(Box)({
   display: "flex",
   flexDirection: "column",
@@ -195,21 +204,9 @@ export default function AddInstitute({ initialValue }) {
       <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
-            <Typography
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              textAlign="start"
-              sx={{
-                fontSize: "15px",
-                padding: 2,
-                borderBottom: "1px solid black",
-
-                fontWeight: "bold",
-              }}
-            >
+            <Title id="modal-modal-title" variant="h6" component="h2">
               Basic Information
-            </Typography>
+            </Title>
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
@@ -274,20 +271,9 @@ export default function AddInstitute({ initialValue }) {
       <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
-            <Typography
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              textAlign="start"
-              sx={{
-                fontSize: "15px",
-                padding: 2,
-                fontWeight: "bold",
-                borderBottom: "1px solid black",
-              }}
-            >
+            <Title id="modal-modal-title" variant="h6" component="h2">
               Setting Information
-            </Typography>
+            </Title>
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
@@ -423,21 +409,9 @@ export default function AddInstitute({ initialValue }) {
       <FormBox>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
-            <Typography
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              textAlign="start"
-              sx={{
-                fontSize: "15px",
-
-                padding: 2,
-                fontWeight: "bold",
-                borderBottom: "1px solid black",
-              }}
-            >
+            <Title id="modal-modal-title" variant="h6" component="h2">
               Social Information
-            </Typography>
+            </Title>
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
@@ -494,23 +468,12 @@ export default function AddInstitute({ initialValue }) {
       </FormBox>
 
       {/* Banner Images */}
-
-      <Box sx={{ padding: 2, marginBottom: "60px" }}>
+      <FormBox sx={{ marginBottom: "60px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={12}>
-            <Typography
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              textAlign="start"
-              sx={{
-                fontSize: "15px",
-
-                fontWeight: "bold",
-              }}
-            >
+            <Title id="modal-modal-title" variant="h6" component="h2">
               Banner Image
-            </Typography>
+            </Title>
           </Grid>
 
           <Grid
@@ -532,7 +495,7 @@ export default function AddInstitute({ initialValue }) {
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </FormBox>
       <Grid container>
         <Grid item xs={12} md={12}>
           <StyledBox
