@@ -63,6 +63,21 @@ const BoarderBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const BackButtonContainer = styled(Box)(() => ({
+  position: "absolute",
+  height: 70,
+  width: 70,
+  top: 0,
+  left: -70,
+  zIndex: 10000,
+  background: "rgba(255,255,255,0.3)",
+  borderTopLeftRadius: 35,
+  borderBottomLeftRadius: 35,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
 const Login = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
@@ -126,26 +141,11 @@ const Login = () => {
               position: "relative",
             }}
           >
-            <Box
-              sx={{
-                position: "absolute",
-                height: 70,
-                width: 70,
-                top: 0,
-                left: -70,
-                zIndex: 10000,
-                background: "rgba(255,255,255,0.3)",
-                borderTopLeftRadius: 35,
-                borderBottomLeftRadius: 35,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <BackButtonContainer>
               <IconButton onClick={() => navigate("/")}>
                 <ArrowBack fontSize="medium" />
               </IconButton>
-            </Box>
+            </BackButtonContainer>
 
             <img
               src={avatar}

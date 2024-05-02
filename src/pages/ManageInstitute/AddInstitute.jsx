@@ -69,45 +69,56 @@ const admission_Options = [
     value: "Auto ascending no",
   },
 ];
-export default function AddInstitute() {
+export default function AddInstitute({ initialValue }) {
   const navigate = useNavigate();
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const currencies = currencyCodes.data.map((currency) => ({
     label: `${currency.currency} - ${currency.code}`,
     value: currency.code,
   }));
+
   const entryFormik = useFormik({
     initialValues: {
-      schoolName: "",
-      address: "",
-      phoneNumber: "",
-      regDate: dayjs(new Date()),
-      email: "",
-      fax: "",
-      websiteFooter: "",
-      note: "",
-      image: "",
-      currency: "",
-      currencySymbol: "",
-      sessionStartMonth: dayjs(new Date()),
-      sessionEndMonth: dayjs(new Date()),
-      rollNumber: "",
-      attendenceType: "",
-      admissionNumber: "",
-      latitude: "",
-      longitude: "",
-      timeZone: "",
-      googleAnalytics: "",
-      teacherActivityFeedackEnable: "",
-      facebookUrl: "",
-      twitterUrl: "",
-      linkedinUrl: "",
-      googlePlusUrl: "",
-      youtubeUrl: "",
-      instagramUrl: "",
-      pinterestUrl: "",
+      name: initialValue?.name || "",
+      address: initialValue?.address || "",
+      phone: initialValue?.phone || "",
+      regDate:
+        initialValue && initialValue.regDate
+          ? dayjs(initialValue.regDate)
+          : null,
+      email: initialValue?.email || "",
+      fax: initialValue?.fax || "",
+      websiteFooter: initialValue?.websiteFooter || "",
+      description: initialValue?.description || "",
+      currency: initialValue?.currency || "",
+      currencySymbol: initialValue?.currencySymbol || "",
+      sessionStartMonth:
+        initialValue && initialValue.sessionStartMonth
+          ? dayjs(initialValue.sessionStartMonth)
+          : null,
+      sessionEndMonth:
+        initialValue && initialValue.sessionEndMonth
+          ? dayjs(initialValue.sessionEndMonth)
+          : null,
+      rollNumberType: initialValue?.rollNumberType || "",
+      studentAttendenceType: initialValue?.studentAttendenceType || "",
+      admissionNo: initialValue?.admissionNo || "",
+      latitude: initialValue?.latitude || "",
+      longitude: initialValue?.longitude || "",
+      defaultTimeZone: initialValue?.defaultTimeZone || "",
+      googleAnalyticsId: initialValue?.googleAnalyticsId || "",
+      teacherActivityFeedackEnable:
+        initialValue?.teacherActivityFeedackEnable || false,
+      facebookUrl: initialValue?.facebookUrl || "",
+      twitterUrl: initialValue?.twitterUrl || "",
+      linkedinUrl: initialValue?.linkedinUrl || "",
+      googlePlusUrl: initialValue?.googlePlusUrl || "",
+      youtubeUrl: initialValue?.youtubeUrl || "",
+      instagramUrl: initialValue?.instagramUrl || "",
+      pinterestUrl: initialValue?.pinterestUrl || "",
     },
     onSubmit: console.log("nnnn"),
+    enableReinitialize: true,
   });
 
   const handleImageChange = (event) => {
@@ -121,6 +132,7 @@ export default function AddInstitute() {
   return (
     <>
       <PageHeader title="Add Institute" showTextField={false} />
+      <Box></Box>
       <BasicData>
         <MuiBox>
           <img
@@ -146,6 +158,8 @@ export default function AddInstitute() {
           </Grid>
         </Grid>
       </BasicData>
+
+      {/* Basic Info */}
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
@@ -162,7 +176,7 @@ export default function AddInstitute() {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="schoolName"
+              name="name"
               formik={entryFormik}
               label="School Name"
             />
@@ -179,7 +193,7 @@ export default function AddInstitute() {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="phoneNumber"
+              name="number"
               formik={entryFormik}
               label="Phone number"
             />
@@ -210,7 +224,6 @@ export default function AddInstitute() {
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
-              required={true}
               name="websiteFooter"
               formik={entryFormik}
               label="Website Footer"
@@ -218,16 +231,11 @@ export default function AddInstitute() {
           </Grid>
 
           <Grid xs={12} md={12} lg={12} item>
-            <FormInput
-              required={true}
-              name="note"
-              formik={entryFormik}
-              label="Note"
-            />
+            <FormInput name="description" formik={entryFormik} label="Note" />
           </Grid>
         </Grid>
       </Paper>
-
+      {/* Settings */}
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
@@ -282,7 +290,7 @@ export default function AddInstitute() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="rollNumber"
+              name="rollNumberType"
               formik={entryFormik}
               label="Roll Number"
               options={rollNumber_Options}
@@ -301,7 +309,7 @@ export default function AddInstitute() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="admissionNumber"
+              name="admissionNo"
               formik={entryFormik}
               label="Admission Numder"
               options={admission_Options}
@@ -334,9 +342,11 @@ export default function AddInstitute() {
                 }),
               }}
               placeholder="Select default timezone"
-              name="timeZone"
-              value={entryFormik.values.timeZone}
-              onChange={(value) => entryFormik.setFieldValue("timeZone", value)}
+              name="defaultTimeZone"
+              value={entryFormik.values.defaultTimeZone}
+              onChange={(value) =>
+                entryFormik.setFieldValue("defaultTimeZone", value)
+              }
               label="Time Zone"
             />
           </Grid>
@@ -344,9 +354,9 @@ export default function AddInstitute() {
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="googleAnalytics"
+              name="googleAnalyticsId"
               formik={entryFormik}
-              label="Google Analytics"
+              label="Google Analytics Id"
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -356,14 +366,14 @@ export default function AddInstitute() {
               formik={entryFormik}
               label="Teacher Activity FeedackEnable"
               options={[
-                { label: "yes", value: "yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: true },
+                { label: "No", value: false },
               ]}
             />
           </Grid>
         </Grid>
       </Paper>
-
+      {/* Social Info */}
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid xs={12} md={12} lg={12} item>
@@ -437,6 +447,7 @@ export default function AddInstitute() {
         </Grid>
       </Paper>
 
+      {/* Banner Images */}
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={12}>

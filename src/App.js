@@ -48,7 +48,7 @@ function App() {
   const theme = createTheme({
     palette: isDarkMode ? themeData.darkPalette : themeData.lightPalette,
     shape: {
-      borderRadius: themeData.shapeProperties.borderRadius,
+      borderRadius: 5,
     },
     typography: {
       allVariants: {
