@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function ManageInstitute() {
   const [data, setData] = useState();
   const navigate = useNavigate();
-  const AddInstitute = (e) => {
+  const handleAddClick = (e) => {
     navigate("/sch/manage-institute/add-institute");
   };
   return (
@@ -20,7 +20,7 @@ export default function ManageInstitute() {
         bodyData={data}
         tableKeys={manageInstituteTableKeys}
       />
-      <AddForm title="Add Institute" onAddClick={AddInstitute} />
+      <AddForm title="Add Institute" onAddClick={handleAddClick} />
     </>
   );
 }
