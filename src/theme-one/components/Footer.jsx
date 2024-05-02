@@ -48,7 +48,7 @@ const UseFullLinks = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "flex-start",
   gap: "1rem",
-  textAlign: "center",
+  textAlign: "start",
 }));
 
 const MuiLeftUseFullBox = styled(Box)(({ theme }) => ({
@@ -56,15 +56,14 @@ const MuiLeftUseFullBox = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
-  gap: "20px",
+  gap: "30px",
 }));
 
 const LogoBox = styled(Box)(({ theme }) => ({
   display: "flex",
-  gap: "1.5rem",
-  justifyContent: "center",
-  flexDirection: "row",
+  justifyContent: "space-evenly",
   alignItems: "center",
+  flexDirection: "row",
 }));
 
 const AddressBox = styled(Box)(({ theme }) => ({
@@ -117,20 +116,21 @@ const Footer = () => {
               FOLLOW US
             </FooterSectionTitle>
 
-            <LogoBox>
+            <LogoBox sx={{ paddingBottom: "20px" }}>
+              {" "}
               <StyledLink to="" target="_blank">
                 {" "}
                 <FacebookIcon size={20} />{" "}
               </StyledLink>
-
               <StyledLink to="" target="_blank">
                 <TwitterIcon size={20} />
               </StyledLink>
-
               <StyledLink to="" target="_blank">
                 <InstagramIcon size={25} />{" "}
               </StyledLink>
+            </LogoBox>
 
+            <LogoBox>
               <StyledLink to="" target="_blank">
                 <GoogleIcon size={25} />
               </StyledLink>

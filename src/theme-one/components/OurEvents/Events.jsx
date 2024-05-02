@@ -91,6 +91,7 @@ const Arc = styled(Box)(({ theme }) => ({
 
 const CardImageWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
+  borderRadius: themeData.shapeProperties.borderRadius,
 }));
 
 const Events = ({ card }) => {
