@@ -14,7 +14,7 @@ import { LoadingButton } from "@mui/lab";
 export default function FormModal({
   formTitle = "",
   children,
-  entryFormik,
+  formik,
   open = false,
   onClose = () => {},
   submitButtonTitle = "",
@@ -37,7 +37,7 @@ export default function FormModal({
             ...styles,
           },
           component: "form",
-          //   onSubmit: entryFormik.handleSubmit,
+          onSubmit: formik.handleSubmit,
         }}
       >
         <DialogTitle sx={{ fontWeight: 600 }}>{formTitle}</DialogTitle>

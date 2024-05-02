@@ -71,7 +71,22 @@ export default function HomeFacilitiesTheme2() {
           padding: { xs: "80px 30px", lg: "80px 100px" },
         }}
       >
-        <CategoryBox>
+        <CategoryBox
+          sx={{
+            justifyContent: {
+              xs: "center",
+              sm: "center",
+              sm: "flex-start",
+              sm: "flex-start",
+            },
+            alignItems: {
+              xs: "center",
+              sm: "center",
+              sm: "flex-start",
+              sm: "flex-start",
+            },
+          }}
+        >
           <Browser>BROWSE TOP</Browser>
           <Trending>Our Top Facilities</Trending>
         </CategoryBox>

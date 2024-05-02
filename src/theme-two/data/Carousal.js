@@ -62,7 +62,7 @@ export const cardSettings = {
     },
 
     {
-      breakpoint: 900,
+      breakpoint: 920,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 1,
