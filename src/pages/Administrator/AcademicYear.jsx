@@ -14,14 +14,15 @@ import { get, post, put } from "../../services/apiMethods";
 export default function AcademicYear() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [dataToEdit, setDataToEdit] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
-      setData(data.result);
-      console.log(data, "op data");
+      setData(
+        data.result.map((d) => ({ ...d, academicYear: `${d.from}-${d.to}` }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +41,6 @@ export default function AcademicYear() {
     try {
       const payload = {
         ...values,
-        // meta: formFields,
       };
 
       setLoading(true);
@@ -49,12 +49,13 @@ export default function AcademicYear() {
           PRIVATE_URLS.academicYear.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.academicYear.create, payload);
+        getData();
       }
-      console.log(data, "gaga");
 
-      getData();
+      // getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -64,9 +65,9 @@ export default function AcademicYear() {
 
   const entryFormik = useFormik({
     initialValues: {
-      from: dataToEdit.from || "",
-      to: dataToEdit.to || "",
-      note: dataToEdit.note || "",
+      from: dataToEdit?.from || "",
+      to: dataToEdit?.to || "",
+      note: dataToEdit?.note || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -98,6 +99,7 @@ export default function AcademicYear() {
         formTitle="Add Academic Year"
         onClose={handleClose}
         submitButtonTitle="Submit"
+        adding={loading}
       >
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
