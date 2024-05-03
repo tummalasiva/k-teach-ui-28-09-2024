@@ -13,4 +13,7 @@ export const PRIVATE_URLS = {
     update: "/academicYear/update",
     delete: "/academicYear/delete",
   },
+  school: {
+    create: "/school/create",
+  },
 };
