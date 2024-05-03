@@ -112,7 +112,6 @@ export default function OfferLetter() {
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
-    entryFormik.resetForm();
   };
 
   const handleEditClick = (data) => {

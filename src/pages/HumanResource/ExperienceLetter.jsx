@@ -116,7 +116,6 @@ export default function ExperienceLetter() {
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
-    entryFormik.resetForm();
   };
 
   const handleEditClick = (data) => {
