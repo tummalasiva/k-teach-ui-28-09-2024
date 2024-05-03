@@ -21,6 +21,7 @@ export const PRIVATE_URLS = {
     delete: "/designation/delete",
   },
   school: {
+    list: "/school/list",
     create: "/school/create",
   },
 };
