@@ -1,14 +1,14 @@
 export const academicClassTableKeys = [
   {
     name: "Class",
-    key: "class",
+    key: "name",
   },
   {
-    name: "Status",
-    key: "status",
+    name: "Active",
+    key: "active",
   },
   {
-    name: "Is Publish",
-    key: "isPublish",
+    name: "Is-Public",
+    key: "isPublic",
   },
 ];

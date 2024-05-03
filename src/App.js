@@ -103,8 +103,8 @@ function App() {
             color: "#fff",
           },
           root: {
-            padding: "8px",
-            height: "40px",
+            padding: "4px",
+            height: "35px",
           },
         },
       },

@@ -1,20 +1,47 @@
-import React, { useContext } from "react";
-import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  ListSubheader,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import ThemeModeContext from "../context/ThemeModeContext";
+import SearchIcon from "@mui/icons-material/Search";
+
+const containsText = (text, searchText) =>
+  text?.toLowerCase().indexOf(searchText?.toLowerCase()) > -1;
 
 const FormSelect = ({
   label,
   name,
-  options,
+  options = [],
   formik,
   disabled = false,
   multiple,
   inputProps,
   disableLabel,
   required,
+  showSearch = false,
   ...rest
 }) => {
   const { setFieldValue, touched, errors } = formik;
+
+  const [blurred, setBlurred] = useState(false);
+
+  var inputRef = useRef(undefined);
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    setSearchText("");
+  }, [blurred]);
+
+  const displayedOptions = useMemo(
+    () => options.filter((option) => containsText(option.label, searchText)),
+    [searchText, options, blurred]
+  );
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -56,11 +83,38 @@ const FormSelect = ({
         multiple={multiple}
         value={formik.values[name]}
         inputProps={inputProps}
+        onAnimationEnd={() => inputRef?.current?.focus()}
+        MenuProps={{ autoFocus: false }}
+        onBlur={() => setBlurred(!blurred)}
         {...rest}
       >
-        {options?.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
+        {showSearch && (
+          <ListSubheader>
+            <TextField
+              onBlur={() => setBlurred(!blurred)}
+              size="small"
+              autoFocus
+              placeholder="Type to search..."
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Escape") {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          </ListSubheader>
+        )}
+        {displayedOptions.map((s, i) => (
+          <MenuItem key={i} value={s.value}>
+            {s.label}
           </MenuItem>
         ))}
       </Select>

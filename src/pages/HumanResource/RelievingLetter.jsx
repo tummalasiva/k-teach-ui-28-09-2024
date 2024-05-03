@@ -219,11 +219,17 @@ export default function RelievingLetter() {
               md={12}
               lg={12}
               item
+              gap={1}
               mt={6}
               display="flex"
               justifyContent="flex-end"
             >
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                onClick={() => setSelectValue(0)}
+                color="error"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <LoadingButton
@@ -231,7 +237,6 @@ export default function RelievingLetter() {
                 size="small"
                 type="submit"
                 variant="contained"
-                sx={{ ml: 2 }}
               >
                 Submit
               </LoadingButton>
@@ -277,10 +282,16 @@ export default function RelievingLetter() {
               lg={12}
               item
               mt={6}
+              gap={1}
               display="flex"
               justifyContent="flex-end"
             >
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                onClick={() => setSelectValue(0)}
+                color="error"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <LoadingButton
@@ -288,7 +299,6 @@ export default function RelievingLetter() {
                 size="small"
                 type="submit"
                 variant="contained"
-                sx={{ ml: 2 }}
               >
                 Submit
               </LoadingButton>
