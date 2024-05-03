@@ -191,63 +191,7 @@ export default function ExperienceLetter() {
         </form>
       </TabPanel>
 
-      <TabPanel index={2} value={value}>
-        <form onSubmit={entryFormik.handleSubmit}>
-          {" "}
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                type="text"
-                name="name"
-                formik={entryFormik}
-                label="Employee Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Joining Date"
-                name="joiningDate"
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <ReactQuill
-                theme="snow"
-                value={entryFormik.values.experienceLetter}
-                onChange={(value) =>
-                  entryFormik.setFieldValue("experienceLetter", value)
-                }
-                onBlur={entryFormik.handleBlur("experienceLetter")}
-                style={{
-                  height: "220px",
-                }}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-              item
-              mt={6}
-              display="flex"
-              justifyContent="flex-end"
-            >
-              <Button size="small" color="error" variant="contained">
-                Cancel
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                type="submit"
-                sx={{ ml: 2 }}
-              >
-                Submit
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </TabPanel>
+      <TabPanel index={2} value={value}></TabPanel>
     </>
   );
 }
