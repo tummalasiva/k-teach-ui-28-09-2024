@@ -109,6 +109,11 @@ export default function OfferLetter() {
       });
     }
   }, [dataToEdit]);
+  useEffect(() => {
+    if (value === 1) {
+      entryFormik.resetForm();
+    }
+  }, [value]);
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);

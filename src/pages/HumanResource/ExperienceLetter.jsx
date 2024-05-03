@@ -103,7 +103,6 @@ export default function ExperienceLetter() {
     onSubmit: handleCreateOrUpdate,
     // enableReinitialize: true,
   });
-
   useEffect(() => {
     if (dataToEdit) {
       entryFormik.setValues({
@@ -113,6 +112,11 @@ export default function ExperienceLetter() {
       });
     }
   }, [dataToEdit]);
+  useEffect(() => {
+    if (value === 1) {
+      entryFormik.resetForm();
+    }
+  }, [value]);
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
@@ -243,64 +247,66 @@ export default function ExperienceLetter() {
       </TabPanel>
 
       <TabPanel index={2} value={value}>
-        <form onSubmit={entryFormik.handleSubmit}>
-          {" "}
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                type="text"
-                name="name"
-                formik={entryFormik}
-                label="Employee Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Joining Date"
-                name="joiningDate"
-                required={true}
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <ReactQuill
-                theme="snow"
-                required
-                value={entryFormik.values.experienceLetter}
-                onChange={(value) =>
-                  entryFormik.setFieldValue("experienceLetter", value)
-                }
-                onBlur={entryFormik.handleBlur("experienceLetter")}
-                style={{
-                  height: "220px",
-                }}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-              item
-              mt={6}
-              display="flex"
-              justifyContent="flex-end"
-            >
-              <Button size="small" color="error" variant="contained">
-                Cancel
-              </Button>
-              <LoadingButton
-                size="small"
-                loading={loading}
-                variant="contained"
-                type="submit"
-                sx={{ ml: 2 }}
+        {dataToEdit && (
+          <form onSubmit={entryFormik.handleSubmit}>
+            {" "}
+            <Grid rowSpacing={1} columnSpacing={2} container>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  type="text"
+                  name="name"
+                  formik={entryFormik}
+                  label="Employee Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormDatePicker
+                  formik={entryFormik}
+                  label="Joining Date"
+                  name="joiningDate"
+                  required={true}
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <ReactQuill
+                  theme="snow"
+                  required
+                  value={entryFormik.values.experienceLetter}
+                  onChange={(value) =>
+                    entryFormik.setFieldValue("experienceLetter", value)
+                  }
+                  onBlur={entryFormik.handleBlur("experienceLetter")}
+                  style={{
+                    height: "220px",
+                  }}
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={12}
+                lg={12}
+                item
+                mt={6}
+                display="flex"
+                justifyContent="flex-end"
               >
-                Submit
-              </LoadingButton>
+                <Button size="small" color="error" variant="contained">
+                  Cancel
+                </Button>
+                <LoadingButton
+                  size="small"
+                  loading={loading}
+                  variant="contained"
+                  type="submit"
+                  sx={{ ml: 2 }}
+                >
+                  Submit
+                </LoadingButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
+          </form>
+        )}
       </TabPanel>
     </>
   );
