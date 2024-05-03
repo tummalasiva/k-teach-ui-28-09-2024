@@ -54,6 +54,13 @@ export const PRIVATE_URLS = {
     update: "/experienceLetter/update",
     delete: "/experienceLetter/delete",
   },
+
+  relievingLetter: {
+    list: "/relievingLetter/list",
+    create: "/relievingLetter/create",
+    update: "/relievingLetter/update",
+    delete: "/relievingLetter/delete",
+  },
   school: {
     list: "/school/list",
     create: "/school/create",

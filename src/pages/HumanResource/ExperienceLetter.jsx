@@ -1,6 +1,6 @@
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
 import { experienceTableKeys } from "../../data/tableKeys/experienceLetterData";
@@ -14,14 +14,26 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
+import { useReactToPrint } from "react-to-print";
+import LetterViewModal from "../../forms/LetterViewModal";
 
 export default function ExperienceLetter() {
+  const { selectedSetting } = useContext(SettingContext);
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { selectedSetting } = useContext(SettingContext);
-  const [showTabs, setShowTabs] = useState(false);
+  const componentRef = useRef();
+  const [modalData, setModalData] = useState({
+    open: false,
+    containt: "",
+    action: () => {},
+  });
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const getData = async () => {
     try {
@@ -42,7 +54,7 @@ export default function ExperienceLetter() {
     getData();
   }, []);
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
@@ -54,12 +66,14 @@ export default function ExperienceLetter() {
           PRIVATE_URLS.experienceLetter.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const data = await post(PRIVATE_URLS.experienceLetter.create, payload);
-
-        console.log(data, "llllllll");
+        getData();
       }
+
       setSelectValue(0);
+      resetForm();
     } catch (error) {
       console.log(error);
     }
@@ -90,8 +104,20 @@ export default function ExperienceLetter() {
     // enableReinitialize: true,
   });
 
-  console.log(entryFormik.values, "formikkkk");
-  const handleTabChange = (e, newValue) => setSelectValue(newValue);
+  useEffect(() => {
+    if (dataToEdit) {
+      entryFormik.setValues({
+        name: dataToEdit?.name,
+        joiningDate: dayjs(dataToEdit?.joiningDate),
+        experienceLetter: dataToEdit?.experienceLetter,
+      });
+    }
+  }, [dataToEdit]);
+
+  const handleTabChange = (e, newValue) => {
+    setSelectValue(newValue);
+    entryFormik.resetForm();
+  };
 
   const handleEditClick = (data) => {
     console.log(data);
@@ -107,9 +133,23 @@ export default function ExperienceLetter() {
       console.error(error);
     }
   };
+
+  const handleClickOpenView = (data) => {
+    setModalData({
+      ...modalData,
+      open: true,
+      containt: data.experienceLetter,
+      //  action: () => handleGetDownloadSheet(data._id),
+    });
+  };
+
+  const handleClose = () => {
+    setModalData({ ...modalData, open: false });
+  };
+
   return (
     <>
-      <PageHeader title="Employee" />
+      <PageHeader title="Experience Letter" />
       <TabList
         onChange={handleTabChange}
         value={value}
@@ -117,20 +157,29 @@ export default function ExperienceLetter() {
           dataToEdit && value === 2
             ? [
                 "Experience letter list",
-                "Add Experience Letter",
-                "Edit Experience Letter",
+                "Add experience letter",
+                "Edit experience letter",
               ]
-            : ["Experience letter list", "Add Experience Letter"]
+            : ["Experience letter list", "Add experience Letter"]
         }
       />
       <TabPanel index={0} value={value}>
         <CustomTable
-          actions={["edit", "delete"]}
+          actions={["view", "edit", "delete"]}
           tableKeys={experienceTableKeys}
           bodyDataModal="experience  letter"
           bodyData={data}
           onEditClick={handleEditClick}
           onDeleteClick={handleDelete}
+          onViewClick={handleClickOpenView}
+        />
+
+        <LetterViewModal
+          title={"Experience Letter"}
+          open={modalData.open}
+          content={modalData.containt}
+          onClose={handleClose}
+          onPrintClick={handlePrint}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -151,11 +200,13 @@ export default function ExperienceLetter() {
                 formik={entryFormik}
                 label="Joining Date"
                 name="joiningDate"
+                required={true}
               />
             </Grid>
             <Grid xs={12} md={12} lg={12} item>
               <ReactQuill
                 theme="snow"
+                required
                 value={entryFormik.values.experienceLetter}
                 onChange={(value) =>
                   entryFormik.setFieldValue("experienceLetter", value)
@@ -178,20 +229,80 @@ export default function ExperienceLetter() {
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>
-              <Button
+              <LoadingButton
                 size="small"
+                loading={loading}
                 variant="contained"
                 type="submit"
                 sx={{ ml: 2 }}
               >
                 Submit
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>
       </TabPanel>
 
-      <TabPanel index={2} value={value}></TabPanel>
+      <TabPanel index={2} value={value}>
+        <form onSubmit={entryFormik.handleSubmit}>
+          {" "}
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                required={true}
+                type="text"
+                name="name"
+                formik={entryFormik}
+                label="Employee Name"
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormDatePicker
+                formik={entryFormik}
+                label="Joining Date"
+                name="joiningDate"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={12} md={12} lg={12} item>
+              <ReactQuill
+                theme="snow"
+                required
+                value={entryFormik.values.experienceLetter}
+                onChange={(value) =>
+                  entryFormik.setFieldValue("experienceLetter", value)
+                }
+                onBlur={entryFormik.handleBlur("experienceLetter")}
+                style={{
+                  height: "220px",
+                }}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={12}
+              lg={12}
+              item
+              mt={6}
+              display="flex"
+              justifyContent="flex-end"
+            >
+              <Button size="small" color="error" variant="contained">
+                Cancel
+              </Button>
+              <LoadingButton
+                size="small"
+                loading={loading}
+                variant="contained"
+                type="submit"
+                sx={{ ml: 2 }}
+              >
+                Submit
+              </LoadingButton>
+            </Grid>
+          </Grid>
+        </form>
+      </TabPanel>
     </>
   );
 }
