@@ -44,7 +44,7 @@ const FormBox = styled(Box)(({ theme }) => ({
 
 const Title = styled(Typography)(({ theme }) => ({
   textAlign: "start",
-  fontSize: "15px",
+  fontSize: "14px",
   padding: "5px 10px",
   borderBottom: "1px solid",
   borderBottomColor: "lightgray",
