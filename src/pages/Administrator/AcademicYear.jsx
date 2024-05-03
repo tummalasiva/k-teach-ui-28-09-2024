@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
-// custome components
+// custom components
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import PageHeader from "../../components/PageHeader";
@@ -14,14 +14,15 @@ import { get, post, put } from "../../services/apiMethods";
 export default function AcademicYear() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [dataToEdit, setDataToEdit] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
-      setData(data.result);
-      console.log(data, "op data");
+      setData(
+        data.result.map((d) => ({ ...d, academicYear: `${d.from}-${d.to}` }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -33,6 +34,7 @@ export default function AcademicYear() {
 
   const handleClose = () => {
     setOpen(false);
+    setDataToEdit(null);
   };
 
   // create || update actions
@@ -40,21 +42,18 @@ export default function AcademicYear() {
     try {
       const payload = {
         ...values,
-        // meta: formFields,
       };
-
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.academicYear.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.academicYear.create, payload);
+        getData();
       }
-      console.log(data, "gaga");
-
-      getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -64,9 +63,9 @@ export default function AcademicYear() {
 
   const entryFormik = useFormik({
     initialValues: {
-      from: dataToEdit.from || "",
-      to: dataToEdit.to || "",
-      note: dataToEdit.note || "",
+      from: dataToEdit?.from || "",
+      to: dataToEdit?.to || "",
+      note: dataToEdit?.note || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -77,27 +76,47 @@ export default function AcademicYear() {
     getData();
   }, []);
 
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleToggleActiveStatus = async (academicYear) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.academicYear.toggleActiveStatus + "/" + academicYear._id
+      );
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Academic Year" />
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "switch"]}
         bodyDataModal="academic year"
         bodyData={data}
         tableKeys={academicYearTableKeys}
+        onEditClick={handleEditClick}
+        toggleStatus="active"
+        onToggleSwitch={handleToggleActiveStatus}
       />
 
       {/* ====== Fab button component =======*/}
       <AddForm title="Add Academic Year" onAddClick={AddDepartmentHandel} />
       {/* ================================== */}
 
-      {/* ==== add department ======== */}
+      {/* ==== add/edit academicYear ======== */}
       <FormModal
         open={open}
         formik={entryFormik}
         formTitle="Add Academic Year"
         onClose={handleClose}
         submitButtonTitle="Submit"
+        adding={loading}
       >
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
@@ -122,7 +141,6 @@ export default function AcademicYear() {
               formik={entryFormik}
               name="note"
               label="Drop a note"
-              required={true}
             />
           </Grid>
         </Grid>

@@ -12,6 +12,13 @@ export const PRIVATE_URLS = {
     create: "/academicYear/create",
     update: "/academicYear/update",
     delete: "/academicYear/delete",
+    toggleActiveStatus: "/academicYear/toggleActiveStatus",
+  },
+  designation: {
+    list: "/designation/list",
+    create: "/designation/create",
+    update: "/designation/update",
+    delete: "/designation/delete",
   },
   school: {
     create: "/school/create",
