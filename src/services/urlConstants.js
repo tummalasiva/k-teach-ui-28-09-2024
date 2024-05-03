@@ -27,6 +27,27 @@ export const PRIVATE_URLS = {
     update: "/department/update",
     delete: "/department/delete",
   },
+
+  employee: {
+    list: "/employee/list",
+    create: "/employee/create",
+    update: "/employee/update",
+    delete: "/employee/delete",
+  },
+
+  offerLetter: {
+    list: "/offerLetter/list",
+    create: "/offerLetter/create",
+    update: "/offerLetter/update",
+    delete: "/offerLetter/delete",
+  },
+
+  experienceLetter: {
+    list: "/experienceLetter/list",
+    create: "/experienceLetter/create",
+    update: "/experienceLetter/update",
+    delete: "/experienceLetter/delete",
+  },
   school: {
     create: "/school/create",
   },

@@ -11,14 +11,39 @@ import { Button, Grid, Paper } from "@mui/material";
 import FormDatePicker from "../../forms/FormDatePicker";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
 
 export default function OfferLetter() {
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+      };
+      setLoading(true);
+      if (dataToEdit) {
+        const data = await put(
+          PRIVATE_URLS.offerLetter.update + "/" + dataToEdit._id,
+          payload
+        );
+      } else {
+        const data = await post(PRIVATE_URLS.offerLetter.create, payload);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       name: "",
-      date: dayjs(new Date()),
+      joiningDate: dayjs(new Date()),
       offerLetter: `<p>Webpruce Company</p>
       <p>Rajajingar, Banglore, Karnataka</p>
       <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
@@ -36,9 +61,7 @@ export default function OfferLetter() {
       <p>HR, Manager</p>
       `,
     },
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: handleCreateOrUpdate,
   });
 
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
@@ -61,47 +84,53 @@ export default function OfferLetter() {
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="name"
-              formik={entryFormik}
-              label="Employee Name"
-            />
+        <form onSubmit={entryFormik.handleSubmit}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                required={true}
+                name="name"
+                formik={entryFormik}
+                label="Employee Name"
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormDatePicker
+                formik={entryFormik}
+                label="Joining Date"
+                name="joiningDate"
+              />
+            </Grid>
+            <Grid xs={12} md={12} lg={12} item>
+              <ReactQuill
+                theme="snow"
+                value={entryFormik.values.offerLetter}
+                onChange={(value) =>
+                  entryFormik.setFieldValue("offerLetter", value)
+                }
+                style={{
+                  height: "220px",
+                }}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={12}
+              lg={12}
+              item
+              mt={6}
+              display="flex"
+              justifyContent="flex-end"
+            >
+              <Button size="small" color="error" variant="contained">
+                Cancel
+              </Button>
+              <Button size="small" variant="contained" sx={{ ml: 2 }}>
+                Submit
+              </Button>
+            </Grid>
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormDatePicker formik={entryFormik} label="Date" name="date" />
-          </Grid>
-          <Grid xs={12} md={12} lg={12} item>
-            <ReactQuill
-              theme="snow"
-              value={entryFormik.values.offerLetter}
-              onChange={(value) =>
-                entryFormik.setFieldValue("offerLetter", value)
-              }
-              style={{
-                height: "220px",
-              }}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            md={12}
-            lg={12}
-            item
-            mt={6}
-            display="flex"
-            justifyContent="flex-end"
-          >
-            <Button size="small" color="error" variant="contained">
-              Cancel
-            </Button>
-            <Button size="small" variant="contained" sx={{ ml: 2 }}>
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
+        </form>
       </TabPanel>
     </>
   );
