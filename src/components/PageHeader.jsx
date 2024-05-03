@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import React, { useContext } from "react";
 import {
   FormControl,
@@ -12,13 +12,14 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SettingContext from "../context/SettingsContext";
 
-const Wrapper = styled(Paper)(({ theme }) => ({
+const Wrapper = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  borderRadius: theme.shape.borderRadius,
   padding: "10px",
   marginBottom: "20px",
+  borderBottom: "1px solid",
+  borderBottomColor: theme.palette.primary.light,
 }));
 
 export default function PageHeader({ title = "", showTextField = true }) {
@@ -31,7 +32,7 @@ export default function PageHeader({ title = "", showTextField = true }) {
   };
 
   return (
-    <Wrapper elevation={1}>
+    <Wrapper>
       <Typography component="h1" sx={{ fontWeight: "bold" }}>
         {title}
       </Typography>
