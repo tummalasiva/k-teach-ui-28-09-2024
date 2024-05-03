@@ -14,6 +14,12 @@ export const PRIVATE_URLS = {
     delete: "/academicYear/delete",
     toggleActiveStatus: "/academicYear/toggleActiveStatus",
   },
+  role: {
+    list: "/role/list",
+    create: "/role/create",
+    update: "/role/update",
+    delete: "/role/delete",
+  },
   designation: {
     list: "/designation/list",
     create: "/designation/create",
@@ -49,6 +55,25 @@ export const PRIVATE_URLS = {
     delete: "/experienceLetter/delete",
   },
   school: {
+    list: "/school/list",
     create: "/school/create",
+  },
+  class: {
+    list: "/class/list",
+    create: "/class/create",
+    update: "/class/update",
+    delete: "/class/delete",
+  },
+  section: {
+    list: "/section/list",
+    create: "/section/create",
+    update: "/section/update",
+    delete: "/section/delete",
+  },
+  subject: {
+    list: "/subject/list",
+    create: "/subject/create",
+    update: "/subject/update",
+    delete: "/subject/delete",
   },
 };

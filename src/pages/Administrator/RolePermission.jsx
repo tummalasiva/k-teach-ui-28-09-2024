@@ -27,13 +27,8 @@ import FormInput from "../../forms/FormInput";
 import TabList from "../../components/Tabs/Tablist";
 import FormModal from "../../forms/FormModal";
 import AddForm from "../../forms/AddForm";
-
-const data = [
-  {
-    _id: "1",
-    roleName: "abcc",
-  },
-];
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
 
 function toggleItemInArray(array, item) {
   const index = array.indexOf(item);
@@ -111,6 +106,18 @@ export default function RolePermission() {
   };
 
   const handleModalClose = () => setOpen(false);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list);
+      setRoles(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   // const handleAddOrUpdate = async (values) => {
   //   let payload = {
@@ -216,7 +223,7 @@ export default function RolePermission() {
         <CustomTable
           actions={["edit", "delete"]}
           bodyDataModal="role permission"
-          bodyData={data}
+          bodyData={roles}
           onEditClick={handleRoleEditClick}
           tableKeys={rolePermissionTableKeys}
         />
