@@ -20,8 +20,6 @@ import AddOrUpdateFiles from "../../forms/AddOrUpdateFiles";
 import PageHeader from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
 import currencyToSymbolMap from "currency-symbol-map/map";
-import { post } from "../../services/apiMethods";
-import { PRIVATE_URLS } from "../../services/urlConstants";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -119,20 +117,6 @@ export default function AddInstitute({ initialValue }) {
     value: currency.code,
   }));
 
-  const handleUpdateOrAdd = async (values) => {
-    try {
-      const payload = {
-        ...values,
-      };
-
-      const data = await post(PRIVATE_URLS.school.create, payload);
-
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const entryFormik = useFormik({
     initialValues: {
       name: initialValue?.name || "",
@@ -173,9 +157,8 @@ export default function AddInstitute({ initialValue }) {
       instagramUrl: initialValue?.instagramUrl || "",
       pinterestUrl: initialValue?.pinterestUrl || "",
       bannerImages: initialValue?.bannerImages || [],
-      logo: "",
     },
-    onSubmit: handleUpdateOrAdd,
+    onSubmit: console.log("nnnn"),
     enableReinitialize: true,
   });
 
@@ -191,352 +174,354 @@ export default function AddInstitute({ initialValue }) {
     <>
       <PageHeader title="Add Institute" showTextField={false} />
 
-      <form onSubmit={entryFormik.handleSubmit}>
-        <BasicData>
-          <MuiBox>
-            <img
-              src={previewCreateUrl || avatar}
-              style={{
-                width: "100px",
-                height: "100px",
-                objectFit: "contain",
-              }}
-              alt="Preview"
+      <BasicData>
+        <MuiBox>
+          <img
+            src={previewCreateUrl || avatar}
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "contain",
+            }}
+            alt="Preview"
+          />
+        </MuiBox>
+        <Grid container spacing={2} display="flex" justifyContent="center">
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="logo"
+              formik={entryFormik}
+              label="Logo"
+              type="file"
+              onChange={handleImageChange}
             />
-          </MuiBox>
-          <Grid container spacing={2} display="flex" justifyContent="center">
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                // required={true}
-                name="logo"
-                formik={entryFormik}
-                label="Logo"
-                type="file"
-                onChange={handleImageChange}
-              />
-            </Grid>
-          </Grid>
-        </BasicData>
-
-        {/* Basic Info */}
-        <FormBox>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Title id="modal-modal-title" variant="h6" component="h2">
-                Basic Information
-              </Title>
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="name"
-                formik={entryFormik}
-                label="School Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="address"
-                formik={entryFormik}
-                label="Address"
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="number"
-                formik={entryFormik}
-                label="Phone number"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Registration Date"
-                name="regDate"
-                required={true}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="email"
-                formik={entryFormik}
-                label="Email"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput name="fax" formik={entryFormik} label="Fax" />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="websiteFooter"
-                formik={entryFormik}
-                label="Website Footer"
-              />
-            </Grid>
-
-            <Grid xs={12} md={12} lg={12} item>
-              <FormInput name="description" formik={entryFormik} label="Note" />
-            </Grid>
-          </Grid>
-        </FormBox>
-        {/* Settings */}
-
-        <FormBox>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Title id="modal-modal-title" variant="h6" component="h2">
-                Setting Information
-              </Title>
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                name="currency"
-                formik={entryFormik}
-                label="Currency"
-                options={currencies}
-                onChange={(event) => {
-                  const selectedCurrency = event.target.value;
-                  entryFormik.setFieldValue("currency", selectedCurrency);
-                  entryFormik.setFieldValue(
-                    "currencySymbol",
-                    currencyToSymbolMap[selectedCurrency]
-                  );
-                }}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="currencySymbol"
-                formik={entryFormik}
-                label="Currency Symbol"
-                disabled
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Session Start Month"
-                name="sessionStartMonth"
-                openTo="month"
-                inputFormat="MM"
-                views={["month"]}
-                required={true}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Session End Month"
-                name="sessionEndMonth"
-                openTo="month"
-                inputFormat="MM"
-                views={["month"]}
-                required={true}
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                name="rollNumberType"
-                formik={entryFormik}
-                label="Roll Number"
-                options={rollNumber_Options}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="studentAttendenceType"
-                formik={entryFormik}
-                label="Attendence Type "
-                options={attendence_Type}
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                name="admissionNo"
-                formik={entryFormik}
-                label="Admission Numder"
-                options={admission_Options}
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="latitude"
-                formik={entryFormik}
-                label="Latitude"
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="longitude"
-                formik={entryFormik}
-                label="Longitude"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item mt={2}>
-              <TimezoneSelect
-                styles={{
-                  control: (baseStyle, state) => ({
-                    ...baseStyle,
-                    height: "42px",
-                  }),
-                  menu: (provided, state) => ({
-                    ...provided,
-                    zIndex: 1000,
-                    backgroundColor: "white",
-                  }),
-                }}
-                placeholder="Select Default Timezone"
-                name="defaultTimeZone"
-                value={entryFormik.values.defaultTimeZone}
-                onChange={(value) =>
-                  entryFormik.setFieldValue("defaultTimeZone", value)
-                }
-                label="Time Zone"
-              />
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="googleAnalyticsId"
-                formik={entryFormik}
-                label="Google Analytics Id"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                name="teacherActivityFeedbackEnabled"
-                formik={entryFormik}
-                label="Teacher Activity FeedackEnable"
-                options={[
-                  { label: "Yes", value: true },
-                  { label: "No", value: false },
-                ]}
-              />
-            </Grid>
-          </Grid>
-        </FormBox>
-
-        {/* Social Info */}
-        <FormBox>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Title id="modal-modal-title" variant="h6" component="h2">
-                Social Information
-              </Title>
-            </Grid>
-
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="facebookUrl"
-                formik={entryFormik}
-                label="Facebook URL"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="twitterUrl"
-                formik={entryFormik}
-                label="TwitterURL"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="linkedinUrl"
-                formik={entryFormik}
-                label="Linkedin Url"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="gplusUrl"
-                formik={entryFormik}
-                label="Google Plus Url"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="youtubeUrl"
-                formik={entryFormik}
-                label="Youtube URL"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="instagramUrl"
-                formik={entryFormik}
-                label="Instagram URL"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="pinterestUrl"
-                formik={entryFormik}
-                label="Pinterest URL"
-              />
-            </Grid>
-          </Grid>
-        </FormBox>
-
-        {/* Banner Images */}
-        <FormBox sx={{ marginBottom: "60px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12} lg={12}>
-              <Title id="modal-modal-title" variant="h6" component="h2">
-                Banner Image
-              </Title>
-            </Grid>
-
-            <Grid
-              container
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              justifyContent="flex-end"
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <AddOrUpdateFiles title="Upload Image" />
-              </Box>
-            </Grid>
-          </Grid>
-        </FormBox>
-        <Grid container>
-          <Grid item xs={12} md={12}>
-            <StyledBox>
-              <Stack spacing={2} direction="row">
-                <Button
-                  size="small"
-                  color="error"
-                  variant="contained"
-                  onClick={() => navigate(-1)}
-                >
-                  Cancel
-                </Button>
-                <Button size="small" type="submit" variant="contained">
-                  Submit
-                </Button>
-              </Stack>
-            </StyledBox>
           </Grid>
         </Grid>
-      </form>
+      </BasicData>
+
+      {/* Basic Info */}
+      <FormBox>
+        <Grid container spacing={2}>
+          <Grid xs={12} md={12} lg={12} item>
+            <Title id="modal-modal-title" variant="h6" component="h2">
+              Basic Information
+            </Title>
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="name"
+              formik={entryFormik}
+              label="School Name"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="address"
+              formik={entryFormik}
+              label="Address"
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="number"
+              formik={entryFormik}
+              label="Phone number"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormDatePicker
+              formik={entryFormik}
+              label="Registration Date"
+              name="regDate"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="email"
+              formik={entryFormik}
+              label="Email"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput name="fax" formik={entryFormik} label="Fax" />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="websiteFooter"
+              formik={entryFormik}
+              label="Website Footer"
+            />
+          </Grid>
+
+          <Grid xs={12} md={12} lg={12} item>
+            <FormInput name="description" formik={entryFormik} label="Note" />
+          </Grid>
+        </Grid>
+      </FormBox>
+      {/* Settings */}
+
+      <FormBox>
+        <Grid container spacing={2}>
+          <Grid xs={12} md={12} lg={12} item>
+            <Title id="modal-modal-title" variant="h6" component="h2">
+              Setting Information
+            </Title>
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              name="currency"
+              formik={entryFormik}
+              label="Currency"
+              options={currencies}
+              onChange={(event) => {
+                const selectedCurrency = event.target.value;
+                entryFormik.setFieldValue("currency", selectedCurrency);
+                entryFormik.setFieldValue(
+                  "currencySymbol",
+                  currencyToSymbolMap[selectedCurrency]
+                );
+              }}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="currencySymbol"
+              formik={entryFormik}
+              label="Currency Symbol"
+              disabled
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormDatePicker
+              formik={entryFormik}
+              label="Session Start Month"
+              name="sessionStartMonth"
+              openTo="month"
+              inputFormat="MM"
+              views={["month"]}
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormDatePicker
+              formik={entryFormik}
+              label="Session End Month"
+              name="sessionEndMonth"
+              openTo="month"
+              inputFormat="MM"
+              views={["month"]}
+              required={true}
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              name="rollNumberType"
+              formik={entryFormik}
+              label="Roll Number"
+              options={rollNumber_Options}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              required={true}
+              name="studentAttendenceType"
+              formik={entryFormik}
+              label="Attendence Type "
+              options={attendence_Type}
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              name="admissionNo"
+              formik={entryFormik}
+              label="Admission Numder"
+              options={admission_Options}
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput name="latitude" formik={entryFormik} label="Latitude" />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="longitude"
+              formik={entryFormik}
+              label="Longitude"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item mt={2}>
+            <TimezoneSelect
+              styles={{
+                control: (baseStyle, state) => ({
+                  ...baseStyle,
+                  height: "42px",
+                }),
+                menu: (provided, state) => ({
+                  ...provided,
+                  zIndex: 1000,
+                  backgroundColor: "white",
+                }),
+              }}
+              placeholder="Select Default Timezone"
+              name="defaultTimeZone"
+              value={entryFormik.values.defaultTimeZone}
+              onChange={(value) =>
+                entryFormik.setFieldValue("defaultTimeZone", value)
+              }
+              label="Time Zone"
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="googleAnalyticsId"
+              formik={entryFormik}
+              label="Google Analytics Id"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              name="teacherActivityFeedbackEnabled"
+              formik={entryFormik}
+              label="Teacher Activity FeedackEnable"
+              options={[
+                { label: "Yes", value: true },
+                { label: "No", value: false },
+              ]}
+            />
+          </Grid>
+        </Grid>
+      </FormBox>
+
+      {/* Social Info */}
+      <FormBox>
+        <Grid container spacing={2}>
+          <Grid xs={12} md={12} lg={12} item>
+            <Title id="modal-modal-title" variant="h6" component="h2">
+              Social Information
+            </Title>
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="facebookUrl"
+              formik={entryFormik}
+              label="Facebook URL"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="twitterUrl"
+              formik={entryFormik}
+              label="TwitterURL"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="linkedinUrl"
+              formik={entryFormik}
+              label="Linkedin Url"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="gplusUrl"
+              formik={entryFormik}
+              label="Google Plus Url"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="youtubeUrl"
+              formik={entryFormik}
+              label="Youtube URL"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="instagramUrl"
+              formik={entryFormik}
+              label="Instagram URL"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              name="pinterestUrl"
+              formik={entryFormik}
+              label="Pinterest URL"
+            />
+          </Grid>
+        </Grid>
+      </FormBox>
+
+      {/* Banner Images */}
+      <FormBox sx={{ marginBottom: "60px" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12} lg={12}>
+            <Title id="modal-modal-title" variant="h6" component="h2">
+              Banner Image
+            </Title>
+          </Grid>
+
+          <Grid
+            container
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            justifyContent="flex-end"
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              <AddOrUpdateFiles title="Upload Image" />
+            </Box>
+          </Grid>
+        </Grid>
+      </FormBox>
+      <Grid container>
+        <Grid item xs={12} md={12}>
+          <StyledBox
+          // sx={{
+          //   backgroundColor: (theme) =>
+          //     theme.palette.mode === "dark"
+          //       ? "rgba(32,33,32,1)"
+          //       : theme.palette.grey[100],
+          // }}
+          >
+            <Stack spacing={2} direction="row">
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
+              <Button size="small" variant="contained">
+                Submit
+              </Button>
+            </Stack>
+          </StyledBox>
+        </Grid>
+      </Grid>
     </>
   );
 }
