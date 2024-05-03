@@ -14,6 +14,12 @@ export const PRIVATE_URLS = {
     delete: "/academicYear/delete",
     toggleActiveStatus: "/academicYear/toggleActiveStatus",
   },
+  role: {
+    list: "/role/list",
+    create: "/role/create",
+    update: "/role/update",
+    delete: "/role/delete",
+  },
   designation: {
     list: "/designation/list",
     create: "/designation/create",
