@@ -34,6 +34,7 @@ export const PRIVATE_URLS = {
     delete: "/department/delete",
   },
   school: {
+    list: "/school/list",
     create: "/school/create",
   },
 };
