@@ -301,7 +301,7 @@ export default function AddInstitute({ initialValue }) {
             Setting Information
           </Title>
           <Box sx={{ padding: "10px" }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
                   name="currency"
