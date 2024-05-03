@@ -16,12 +16,24 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Avatar, Collapse, Stack, Switch } from "@mui/material";
+import {
+  Avatar,
+  Collapse,
+  Menu,
+  MenuItem,
+  Stack,
+  Switch,
+  Tooltip,
+} from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
+// icons
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import SettingsIcon from "@mui/icons-material/Settings";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
 
 import menu from "../data/menu";
 import Dashboard from "../pages/Dashboard";
@@ -139,6 +151,7 @@ import AddForm from "../forms/AddForm";
 import AddEmployee from "../pages/HumanResource/AddEmployee";
 import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
 import AddInstitute from "../pages/ManageInstitute/AddInstitute";
+import themeData from "../data/themeData";
 
 const drawerWidth = 270;
 
@@ -223,6 +236,16 @@ export default function NavDrawer() {
   const [sideMenuData, setSideMenuData] = React.useState([]);
   const navigate = useNavigate();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openProfile = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const { isDarkMode, setIsDarkMode } = React.useContext(ThemeModeContext);
   const [selecteSubMenu, setSelectedSubMenu] = React.useState("");
   const [selectedMenu, setSelectedMenu] = React.useState(null);
@@ -300,10 +323,17 @@ export default function NavDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" color="white">
-            School ERP
+          <Typography
+            variant="h6"
+            // noWrap
+            component="div"
+            color="white"
+            textAlign="center"
+            fontSize="18px"
+          >
+            ERP School [2025-2025]
           </Typography>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               width: "100%",
@@ -311,20 +341,120 @@ export default function NavDrawer() {
               justifyContent: "flex-end",
               alignItems: "center",
             }}
+          > */}
+          <Stack
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flex: 1,
+              width: "100%",
+              justifyContent: "flex-end",
+            }}
+            spacing={2}
+            direction="row"
           >
-            <Stack
-              sx={{ display: "flex", alignItems: "center" }}
-              spacing={1}
-              direction="row"
-            >
-              <IconButton>
-                <CircleNotificationsIcon fontSize="large" color="secondary" />
+            <Tooltip title="Notification">
+              <Link to="/sch/notifications">
+                <IconButton color="red">
+                  <NotificationsIcon
+                    fontSize="large"
+                    sx={{ color: "#BDBDBD" }}
+                  />
+                </IconButton>
+              </Link>
+            </Tooltip>
+            <Tooltip title="Account Settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={openProfile ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openProfile ? "true" : undefined}
+              >
+                <Avatar sx={{ width: 30, height: 30 }} />
               </IconButton>
-              <Avatar />
-            </Stack>
-          </Box>
+            </Tooltip>
+            <Tooltip title="websites">
+              <Link to="/">
+                <img
+                  src="/world-wide-web.png"
+                  alt="loading..."
+                  width={30}
+                  height={30}
+                  color="#fff"
+                />
+              </Link>
+            </Tooltip>
+          </Stack>
+          {/* </Box> */}
         </Toolbar>
       </AppBar>
+
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={openProfile}
+        onClose={handleClose}
+        onClick={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleClose}>
+          <Link
+            to="/profile"
+            style={{ display: "flex", textDecoration: "none" }}
+          >
+            <ListItemIcon>
+              <PersonIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText style={{ color: "black" }}>Profile</ListItemText>
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link
+            to="/sch/administrator/reset-password"
+            style={{ display: "flex", textDecoration: "none" }}
+          >
+            <ListItemIcon>
+              <LockResetIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText style={{ color: "black" }}>
+              Reset Password
+            </ListItemText>
+          </Link>
+        </MenuItem>
+      </Menu>
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader sx={{ justifyContent: "space-between" }}>
           <Box></Box>
