@@ -119,6 +119,10 @@ export default function CustomTable({
                               : "No"
                             : Object.keys(data[k.path] || {}).length > 0
                             ? data[k.path][k.key]
+                            : k.isDate
+                            ? data[k.key]
+                              ? new Date(data[k.key]).toLocaleString()
+                              : "NA"
                             : data[k.key] || "NA"}
                         </TableCell>
                       ))}
@@ -161,8 +165,14 @@ export default function CustomTable({
                         )}
                         {actions.includes("switch") && (
                           <Tooltip title={toggleStatus}>
-                            <IconButton onClick={() => onToggleSwitch(data)}>
-                              <Switch checked={data[toggleStatus] === true} />
+                            <IconButton
+                              size="small"
+                              onClick={() => onToggleSwitch(data)}
+                            >
+                              <Switch
+                                size="small"
+                                checked={data[toggleStatus] === true}
+                              />
                             </IconButton>
                           </Tooltip>
                         )}
@@ -189,6 +199,7 @@ export default function CustomTable({
           <NoTableData dataPresent={bodyData.length} title={bodyDataModal} />
         ) : null}
         <TablePagination
+          size="small"
           component="div"
           count={bodyData ? (bodyData.length ? bodyData.length : 0) : 0}
           page={page}

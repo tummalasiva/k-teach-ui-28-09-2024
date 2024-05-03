@@ -20,13 +20,18 @@ export const PRIVATE_URLS = {
     update: "/role/update",
     delete: "/role/delete",
   },
+  employee: {
+    list: "/employee/list",
+    create: "/employee/create",
+    update: "/employee/update",
+    delete: "/employee/delete",
+  },
   designation: {
     list: "/designation/list",
     create: "/designation/create",
     update: "/designation/update",
     delete: "/designation/delete",
   },
-
   department: {
     list: "/department/list",
     create: "/department/create",
