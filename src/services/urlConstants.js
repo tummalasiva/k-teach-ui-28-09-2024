@@ -20,6 +20,13 @@ export const PRIVATE_URLS = {
     update: "/designation/update",
     delete: "/designation/delete",
   },
+
+  department: {
+    list: "/department/list",
+    create: "/department/create",
+    update: "/department/update",
+    delete: "/department/delete",
+  },
   school: {
     create: "/school/create",
   },
