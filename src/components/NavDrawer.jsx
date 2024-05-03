@@ -152,6 +152,7 @@ import AddEmployee from "../pages/HumanResource/AddEmployee";
 import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
 import AddInstitute from "../pages/ManageInstitute/AddInstitute";
 import themeData from "../data/themeData";
+import Profile from "../pages/AccountSettings/Profile";
 
 const drawerWidth = 270;
 
@@ -431,7 +432,7 @@ export default function NavDrawer() {
       >
         <MenuItem onClick={handleClose}>
           <Link
-            to="/profile"
+            to="/sch/profile"
             style={{ display: "flex", textDecoration: "none" }}
           >
             <ListItemIcon>
@@ -834,6 +835,7 @@ export default function NavDrawer() {
             path="manage-institute/add-institute"
             element={<AddInstitute />}
           />
+          <Route path="profile" element={<Profile />} />
         </Routes>
         <Outlet />
       </Box>

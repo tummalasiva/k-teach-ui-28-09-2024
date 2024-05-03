@@ -19,7 +19,7 @@ function FormDatePicker({
         sx={{
           "& .MuiInputBase-input": {
             // Target the input element
-            height: "8px", // Adjust the height as needed
+            height: "8px",
           },
           marginTop: "16px",
           width: "100%",
