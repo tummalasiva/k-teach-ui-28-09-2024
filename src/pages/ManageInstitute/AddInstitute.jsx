@@ -473,7 +473,6 @@ export default function AddInstitute({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="youtubeUrl"
                   formik={entryFormik}
                   label="Youtube URL"

@@ -5,7 +5,7 @@ export const relievingLetterDataTableKeys = [
   },
   {
     name: "Joining Date",
-    key: "date",
+    key: "joiningDate",
   },
   {
     name: "Created At",
