@@ -3,7 +3,7 @@ import Theme2 from "../assets/images/theme2.png";
 
 const darkPalette = {
   primary: {
-    main: "#196838",
+    main: "#184880",
   },
   secondary: {
     main: "#2c4c71",
@@ -13,7 +13,7 @@ const darkPalette = {
 
 const lightPalette = {
   primary: {
-    main: "#196838",
+    main: "#184880",
   },
   secondary: {
     main: "#446285",

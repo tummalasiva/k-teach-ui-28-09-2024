@@ -110,7 +110,7 @@ export default function RolePermission() {
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
-      setRoles(data.result.filter((r) => r.name !== "SUPER ADMIN"));
+      setRoles(data.result);
     } catch (error) {
       console.log(error);
     }
