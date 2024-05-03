@@ -6,9 +6,11 @@ export const offerLetterTableKeys = [
   {
     name: "Joining Date",
     key: "joiningDate",
+    isDate: true,
   },
   {
     name: "Created At",
     key: "createdAt",
+    isDate: true,
   },
 ];

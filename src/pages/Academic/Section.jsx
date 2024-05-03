@@ -11,6 +11,17 @@ import FormInput from "../../forms/FormInput";
 import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import CustomSelect from "../../forms/CustomSelect";
+
+const Active = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const IS_PUBLIC = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
 
 export default function Section() {
   const { selectedSetting } = useContext(SettingContext);
@@ -19,13 +30,32 @@ export default function Section() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [classes, setClasses] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
+
+  const getEmployees = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setEmployees(
+        data.result
+          ?.filter((e) =>
+            e.role.name.toLowerCase().match(new RegExp(`Teacher`, "i"))
+          )
+          .map((d) => ({ label: d.basicInfo.name, value: d._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
-          class: entryFormik.values.class,
+          search: { class: selectedClass },
         },
       });
       setData(data.result);
@@ -41,6 +71,7 @@ export default function Section() {
       });
       setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
       if (data.result?.length) {
+        setSelectedClass(data.result[0]._id);
         entryFormik.setFieldValue("class", data.result[0]._id);
       }
     } catch (error) {
@@ -49,6 +80,7 @@ export default function Section() {
   };
 
   useEffect(() => {
+    getEmployees();
     getClasses();
   }, [selectedSetting]);
 
@@ -66,8 +98,12 @@ export default function Section() {
     try {
       const payload = {
         ...values,
+        class: selectedClass,
         schoolId: selectedSetting._id,
       };
+      if (!payload.sectionTeacher) {
+        delete payload.sectionTeacher;
+      }
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -89,7 +125,7 @@ export default function Section() {
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
-      class: dataToEdit?.class || "",
+      class: dataToEdit?.class?._id || "",
       sectionTeacher: dataToEdit?.sectionTeacher?._id || "",
       active: dataToEdit?.active || false,
       isPublic: dataToEdit?.isPublic || false,
@@ -100,15 +136,16 @@ export default function Section() {
   });
 
   useEffect(() => {
-    if (entryFormik.values.class) {
+    if (selectedClass) {
       getData();
     }
-  }, [entryFormik.values.class, selectedSetting]);
+  }, [selectedClass, selectedSetting]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
     setOpen(true);
   };
+
   const handleDelete = async (id) => {
     try {
       const res = await del(PRIVATE_URLS.section.delete + "/" + id);
@@ -118,6 +155,14 @@ export default function Section() {
     }
   };
 
+  const handleChangeSelectedClass = (e) => {
+    setSelectedClass(e.target.value);
+  };
+
+  useEffect(() => {
+    entryFormik.setFieldValue("class", selectedClass);
+  }, [selectedClass]);
+
   return (
     <>
       <PageHeader title="Section" />
@@ -125,19 +170,14 @@ export default function Section() {
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
+            <CustomSelect
               required={true}
-              name="class"
-              formik={entryFormik}
+              name="selectedClass"
+              value={selectedClass}
+              onChange={handleChangeSelectedClass}
               label="Select Class"
               options={classes}
             />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-            <Button size="small" variant="contained">
-              Find
-            </Button>
           </Grid>
         </Grid>
       </Paper>
@@ -178,26 +218,27 @@ export default function Section() {
               formik={entryFormik}
               name="sectionTeacher"
               label="Section Teacher"
-              // options={}
+              options={employees}
+              showSearch={true}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="active"
-              label="Status"
-              // options={}
+              label="Active"
+              options={Active}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="isPublic"
-              label="Public"
-              // options={}
+              label="Is-Public"
+              options={IS_PUBLIC}
             />
           </Grid>
-          <Grid xs={12} sm={12} md={12} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
         </Grid>
