@@ -1,15 +1,16 @@
 export const academicSectionTableKeys = [
-  { name: "Section Name", key: "section" },
+  { name: "Section Name", key: "name" },
+  // {
+  //   name: "Class",
+  //   path: "class",
+  //   key: "name",
+  // },
   {
-    name: "Class",
-    key: "class",
+    name: "Active",
+    key: "active",
   },
   {
-    name: "Status",
-    key: "status",
-  },
-  {
-    name: "Is Publish",
-    key: "isPublish",
+    name: "Is-Public",
+    key: "isPublic",
   },
 ];

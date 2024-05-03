@@ -49,7 +49,7 @@ export default function Class() {
       setEmployees(
         data.result
           ?.filter((e) =>
-            e.role.roleName.toLowerCase().match(new RegExp(`Teacher`, ""))
+            e.role.name.toLowerCase().match(new RegExp(`Teacher`, "i"))
           )
           .map((d) => ({ label: d.basicInfo.name, value: d._id }))
       );

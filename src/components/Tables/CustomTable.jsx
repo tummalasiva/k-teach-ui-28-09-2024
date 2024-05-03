@@ -36,6 +36,23 @@ const style = {
   p: 2,
 };
 
+const getDataValue = (data, k) => {
+  if (typeof data[k.key] === "boolean") {
+    return data[k.key] === true ? "Yes" : "No";
+  }
+  if (k.path) {
+    if (Object.keys(data[k.path] || {}).length > 0) {
+      return data[k.path][k.key] || "NA";
+    }
+  }
+
+  if (k.isDate) {
+    return data[k.key] ? new Date(data[k.key]).toLocaleString() : "NA";
+  } else {
+    return data[k.key] || "NA";
+  }
+};
+
 export default function CustomTable({
   bodyData = [],
   bodyDataModal = "",
@@ -113,17 +130,7 @@ export default function CustomTable({
                       <TableCell align="center">{index + 1}</TableCell>
                       {tableKeys.map((k, i) => (
                         <TableCell key={i} align="center">
-                          {typeof data[k.key] === "boolean"
-                            ? data[k.key] === true
-                              ? "Yes"
-                              : "No"
-                            : Object.keys(data[k.path] || {}).length > 0
-                            ? data[k.path][k.key]
-                            : k.isDate
-                            ? data[k.key]
-                              ? new Date(data[k.key]).toLocaleString()
-                              : "NA"
-                            : data[k.key] || "NA"}
+                          {getDataValue(data, k)}
                         </TableCell>
                       ))}
                       <TableCell align="center">
