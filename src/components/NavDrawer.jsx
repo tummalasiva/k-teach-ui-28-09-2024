@@ -153,6 +153,7 @@ import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
 import AddInstitute from "../pages/ManageInstitute/AddInstitute";
 import themeData from "../data/themeData";
 import Profile from "../pages/AccountSettings/Profile";
+import UpdateEmployee from "../pages/HumanResource/UpdateEmployee";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import { get } from "../services/apiMethods";
 import SettingContext from "../context/SettingsContext";
@@ -638,6 +639,10 @@ export default function NavDrawer() {
             element={<ManageDepartment />}
           />
           <Route path="human-resource/employee" element={<Employee />} />
+          <Route
+            path="human-resource/update-employee/:id"
+            element={<UpdateEmployee />}
+          />
           <Route path="human-resource/offer-letter" element={<OfferLetter />} />
           <Route
             path="human-resource/relieving-letter"

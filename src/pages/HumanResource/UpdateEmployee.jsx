@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -6,7 +7,7 @@ import { Grid, Typography, Button, Stack, styled, Box } from "@mui/material";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
-import { get, post, put } from "../../services/apiMethods";
+import { get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import PageHeader from "../../components/PageHeader";
@@ -126,10 +127,10 @@ const Salary_Type = [
   { label: "Hourly", value: "hourly" },
 ];
 
-export default function AddEmployee() {
+export default function UpdateEmployee() {
+  const location = useLocation();
+  const empData = location.state && location.state.data;
   const { selectedSetting } = useContext(SettingContext);
-  const [dataToEdit, setDataToEdit] = useState(null);
-
   const [loading, setLoading] = useState(false);
   const [designationData, setDesgnationData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
@@ -187,6 +188,7 @@ export default function AddEmployee() {
 
   const handleCreateOrUpdate = async (values) => {
     try {
+      setLoading(true);
       const payload = {
         basicInfo: {
           name: values.name,
@@ -222,20 +224,18 @@ export default function AddEmployee() {
         username: values.username,
         password: values.password,
         active: values.active,
-        photo: values.photo,
         schoolId: selectedSetting._id,
       };
-      setLoading(true);
-      if (dataToEdit) {
-        const data = await put(
-          PRIVATE_URLS.employee.update + "/" + dataToEdit._id,
-          payload
-        );
-      } else {
-        const { data } = await post(PRIVATE_URLS.employee.create, payload);
 
-        navigate("/sch/human-resource/employee");
-      }
+      const { data } = await put(
+        PRIVATE_URLS.employee.update + "/" + empData._id,
+        payload
+      );
+
+      console.log(data, "erttfyuygiu");
+
+      navigate("/sch/human-resource/employee");
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -244,39 +244,40 @@ export default function AddEmployee() {
 
   const entryFormik = useFormik({
     initialValues: {
-      name: "",
-      empId: "",
-      responsibility: "",
-      designation: "",
-      contactNumber: "",
-      secMobileNo: "",
-      gender: "",
-      bloodGroup: "",
-      religion: "",
-      presentAddress: "",
-      permanentAddress: "",
-      dob: dayjs(new Date()),
-      fatherName: "",
-      spouseName: "",
-      aadharNo: "",
-      fatherOccupation: "",
-      spouseOccupation: "",
-      qualification: "",
-      workExperience: "",
-      salaryGrade: "",
-      email: "",
-      salaryType: "",
-      role: "",
-      department: "",
-      joiningDate: dayjs(new Date()),
-      resume: "",
-      username: "",
-      password: "",
-      public: "",
-      showDetailsForWeb: "",
-      photo: "",
-      resume: "",
-      active: "",
+      name: empData ? empData.basicInfo.name : "",
+      empId: empData ? empData.basicInfo.empId : "",
+      responsibility: empData ? empData.basicInfo.responsibility : "",
+      designation: empData ? empData.basicInfo.designation._id : "",
+      contactNumber: empData ? empData.contactNumber : "",
+      secMobileNo: empData ? empData.basicInfo.secMobileNo : "",
+      gender: empData ? empData.basicInfo.gender : "",
+      bloodGroup: empData ? empData.basicInfo.bloodGroup : "",
+      religion: empData ? empData.basicInfo.religion : "",
+      presentAddress: empData ? empData.basicInfo.presentAddress : "",
+      permanentAddress: empData ? empData.basicInfo.permanentAddress : "",
+      dob: empData ? dayjs(empData.basicInfo.dob) : dayjs(new Date()),
+      fatherName: empData ? empData.basicInfo.fatherName : "",
+      spouseName: empData ? empData.basicInfo.spouseName : "",
+      aadharNo: empData ? empData.basicInfo.aadharNo : "",
+      fatherOccupation: empData ? empData.basicInfo.fatherOccupation : "",
+      spouseOccupation: empData ? empData.basicInfo.spouseOccupation : "",
+      qualification: empData ? empData.academicInfo.qualification : "",
+      workExperience: empData ? empData.academicInfoworkExperience : "",
+      salaryGrade: empData ? empData.academicInfosalaryGrade : "",
+      email: empData ? empData.academicInfo.email : "",
+      salaryType: empData ? empData.academicInfo.salaryType : "",
+      role: empData ? empData.role._id : "",
+      department: empData ? empData.academicInfo.department._id : "",
+      joiningDate: empData
+        ? dayjs(empData.academicInfo.joiningDate)
+        : dayjs(new Date()),
+      resume: empData ? empData.resume : "",
+      username: empData ? empData.username : "",
+      password: empData ? empData.password : "",
+      public: empData ? empData.public : "",
+      showDetailsForWeb: empData ? empData.showDetailsForWeb : false,
+      photo: empData ? empData.photo : "",
+      active: empData ? empData.active : "",
     },
     onSubmit: handleCreateOrUpdate,
   });
@@ -291,7 +292,7 @@ export default function AddEmployee() {
 
   return (
     <>
-      <PageHeader title="Add Employee" showTextField={false} />
+      <PageHeader title="Update Employee" showTextField={false} />
 
       <BasicData>
         <MuiBox>
@@ -632,7 +633,7 @@ export default function AddEmployee() {
                   size="small"
                   variant="contained"
                 >
-                  Submit
+                  Update
                 </LoadingButton>
               </Stack>
             </StyledBox>
