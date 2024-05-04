@@ -110,13 +110,18 @@ const Active = [
   { label: "Inactive", value: false },
 ];
 
-const Public = [
+const Is_Public = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const View_Web = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
 
 const Salary_Type = [
-  { label: "Monthly", value: "Monthly" },
+  { label: "Monthly", value: "monthly" },
   { label: "Hourly", value: "hourly" },
 ];
 
@@ -184,10 +189,37 @@ export default function AddEmployee({ initialValue }) {
           name: values.name,
           empId: values.empId,
           designation: values.designation,
+          secMobileNo: values.secMobileNo,
+          gender: values.gender,
+          religion: values.religion,
+          presentAddress: values.presentAddress,
+          permanentAddress: values.permanentAddress,
+          dob: dayjs(values.dob),
+          fatherName: values.fatherName,
+          spouseName: values.spouseName,
+          aadharNo: values.aadharNo,
+          fatherOccupation: values.fatherOccupation,
+          spouseOccupation: values.spouseOccupation,
         },
-        academicInfo: {},
-        otherInfo: {},
+        academicInfo: {
+          workExperience: values.workExperience,
+          salaryGrade: values.salaryGrade,
+          email: values.email,
+          salaryType: values.salaryType,
+
+          department: values.department,
+          joiningDate: dayjs(values.joiningDate),
+          resume: values.resume,
+        },
+        otherInfo: {
+          public: values.public,
+          showDetailsForWeb: values.showDetailsForWeb,
+        },
         contactNumber: values.contactNumber,
+        role: values.role,
+        username: values.username,
+        password: values.password,
+        active: values.active,
       };
       setLoading(true);
       if (dataToEdit) {
@@ -196,7 +228,9 @@ export default function AddEmployee({ initialValue }) {
           payload
         );
       } else {
-        const data = await post(PRIVATE_URLS.employee.create, payload);
+        const { data } = await post(PRIVATE_URLS.employee.create, payload);
+
+        console.log(data, "gcfhbjn");
       }
     } catch (error) {
       console.log(error);
@@ -214,7 +248,7 @@ export default function AddEmployee({ initialValue }) {
       secMobileNo: "",
       gender: "",
       bloodGroup: "",
-      Religon: "",
+      religion: "",
       presentAddress: "",
       permanentAddress: "",
       dob: dayjs(new Date()),
@@ -230,14 +264,15 @@ export default function AddEmployee({ initialValue }) {
       salaryType: "",
       role: "",
       department: "",
-      admisionDate: "",
+      joiningDate: dayjs(new Date()),
       resume: "",
       username: "",
       password: "",
-      viewOnWeb: "",
-      // detailsOnWeb: "",
+      public: "",
+      showDetailsForWeb: "",
       photo: "",
       resume: "",
+      active: "",
     },
     onSubmit: handleCreateOrUpdate,
   });
@@ -304,7 +339,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="responsibility"
                   formik={entryFormik}
                   label="Responsibility"
@@ -329,8 +363,7 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
-                  name="secondContactNumber"
+                  name="secMobileNo"
                   formik={entryFormik}
                   label="Secondary Contact Number"
                 />
@@ -346,7 +379,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={true}
                   name="bloodGroup"
                   formik={entryFormik}
                   label="Select Blood Group"
@@ -355,8 +387,7 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
-                  name="religon"
+                  name="religion"
                   formik={entryFormik}
                   label="Religon"
                 />
@@ -366,11 +397,11 @@ export default function AddEmployee({ initialValue }) {
                   formik={entryFormik}
                   label="Date of Birth"
                   name="dob"
+                  required={true}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="presentAddress"
                   formik={entryFormik}
                   label="Present Address"
@@ -378,7 +409,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="permanentAddress"
                   formik={entryFormik}
                   label="Permanent Address"
@@ -386,7 +416,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="fatherName"
                   formik={entryFormik}
                   label="Father Name"
@@ -394,7 +423,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="spouseName"
                   formik={entryFormik}
                   label="Spouse Name"
@@ -402,7 +430,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="aadharNo"
                   formik={entryFormik}
                   label="Aadhar No."
@@ -410,7 +437,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="fatherOccupation"
                   formik={entryFormik}
                   label="Father Occupation"
@@ -418,7 +444,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="spouseOccupation"
                   formik={entryFormik}
                   label="Spouse Occupation"
@@ -435,7 +460,6 @@ export default function AddEmployee({ initialValue }) {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="qualification"
                   formik={entryFormik}
                   label="Qualification              "
@@ -443,7 +467,6 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="workExperience"
                   formik={entryFormik}
                   label="Work Experience"
@@ -451,10 +474,9 @@ export default function AddEmployee({ initialValue }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  // required={true}
                   name="salaryGrade"
                   formik={entryFormik}
-                  label="Select Salary Grad"
+                  label="Select Salary Grade"
                   // options={""}
                 />
               </Grid>
@@ -494,16 +516,15 @@ export default function AddEmployee({ initialValue }) {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
+                <FormDatePicker
                   required={true}
-                  name="admisionDate"
+                  name="joiningDate"
                   formik={entryFormik}
-                  label="Admission Date"
+                  label="Joining Date"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  required={true}
                   name="resume"
                   formik={entryFormik}
                   label="Resume"
@@ -546,22 +567,20 @@ export default function AddEmployee({ initialValue }) {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={false}
-                  name="viewOnWeb"
+                  name="public"
                   formik={entryFormik}
-                  label="View on Web"
-                  options={Public}
+                  label="Is public"
+                  options={Is_Public}
                 />
               </Grid>
-              {/* <Grid xs={12} md={6} lg={3} item>
+              <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={false}
-                  name="detailsOnWeb"
+                  name="showDetailsForWeb"
                   formik={entryFormik}
-                  label="Details For Web"
-                  // options={""}
+                  label="Show Details For Web"
+                  options={View_Web}
                 />
-              </Grid> */}
+              </Grid>
               {/* <Grid xs={12} md={6} lg={3} item>
                 <FormInput
                   required={true}
@@ -582,8 +601,7 @@ export default function AddEmployee({ initialValue }) {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={false}
-                  name="status"
+                  name="active"
                   formik={entryFormik}
                   label="Status"
                   options={Active}
