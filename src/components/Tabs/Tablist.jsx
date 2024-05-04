@@ -29,7 +29,14 @@ export default function TabList({
         allowScrollButtonsMobile
       >
         {labels.map((l, index) => {
-          return <Tab key={l} label={l} {...a11yProps(index)} />;
+          return (
+            <Tab
+              sx={{ fontWeight: "bold", fontSize: "12px" }}
+              key={l}
+              label={l}
+              {...a11yProps(index)}
+            />
+          );
         })}
       </Tabs>
     </Box>
