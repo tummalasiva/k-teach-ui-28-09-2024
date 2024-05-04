@@ -180,7 +180,14 @@ export default function AddEmployee({ initialValue }) {
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
-        ...values,
+        basicInfo: {
+          name: values.name,
+          empId: values.empId,
+          designation: values.designation,
+        },
+        academicInfo: {},
+        otherInfo: {},
+        contactNumber: values.contactNumber,
       };
       setLoading(true);
       if (dataToEdit) {
