@@ -18,6 +18,8 @@ export default function Employee() {
   const [value, setSelectValue] = useState(0);
   const [activeData, setActiveData] = useState([]);
   const [InactiveData, setInactiveData] = useState([]);
+  const [overviewData, setOverviewData] = useState([]);
+  const [allEmployee, setAllEmployee] = useState([]);
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 
   const AddEmployeeHandle = (e) => {
@@ -31,6 +33,10 @@ export default function Employee() {
           schoolId: selectedSetting._id,
         },
       });
+
+      console.log(data.result, "employyeee");
+      setAllEmployee(data.result);
+
       const activeData = data.result
         .filter((item) => item.active)
         .map((s) => ({
@@ -54,8 +60,47 @@ export default function Employee() {
     }
   };
 
+  const getDataDepartment = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.department.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      console.log(data.result, "department");
+
+      const overviewData = data.result.map((department) => {
+        const maleCount = allEmployee.filter(
+          (emp) =>
+            emp.basicInfo.gender === "male" &&
+            emp.academicInfo.department._id === department._id
+        ).length;
+        const femaleCount = allEmployee.filter(
+          (emp) =>
+            emp.basicInfo.gender === "female" &&
+            emp.academicInfo.department._id === department._id
+        ).length;
+        const totalCount = maleCount + femaleCount;
+        return {
+          ...department,
+          male: maleCount,
+          female: femaleCount,
+          total: totalCount,
+        };
+      });
+
+      setOverviewData(overviewData);
+
+      console.log(overviewData, "mmmmmuuuuuuiu");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getData();
+    getDataDepartment();
   }, []);
 
   const handleDelete = async (id) => {
@@ -86,8 +131,9 @@ export default function Employee() {
       />
       <TabPanel index={0} value={value}>
         <CustomTable
+          actions={""}
           tableKeys={overviewTableKeys}
-          // bodyData={data}
+          bodyData={overviewData}
           bodyDataModal="employee"
         />
       </TabPanel>

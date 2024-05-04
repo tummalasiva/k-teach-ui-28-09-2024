@@ -222,6 +222,7 @@ export default function AddEmployee() {
         username: values.username,
         password: values.password,
         active: values.active,
+        photo: values.photo,
         schoolId: selectedSetting._id,
       };
       setLoading(true);
