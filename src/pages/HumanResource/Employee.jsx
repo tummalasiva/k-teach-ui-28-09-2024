@@ -35,6 +35,7 @@ export default function Employee() {
       const inactiveData = data.result.filter((item) => !item.active);
 
       const activeDatas = activeData.map((item) => ({
+        _id: item._id,
         name: item.basicInfo?.name,
         designation: item.basicInfo.designation.name,
         active: item.active,
@@ -43,6 +44,7 @@ export default function Employee() {
       }));
 
       const inactiveDatas = inactiveData.map((item) => ({
+        _id: item._id,
         name: item.basicInfo?.name,
         designation: item.basicInfo.designation.name,
         active: item.active,
