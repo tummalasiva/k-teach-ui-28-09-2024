@@ -31,7 +31,6 @@ export default function Employee() {
           schoolId: selectedSetting._id,
         },
       });
-      console.log(data.result);
       const activeData = data.result
         .filter((item) => item.active)
         .map((s) => ({
@@ -109,6 +108,7 @@ export default function Employee() {
           bodyDataModal="employee"
           bodyData={InactiveData}
           onDeleteClick={handleDelete}
+          onEditClick={handeleClickEdit}
         />
       </TabPanel>
 

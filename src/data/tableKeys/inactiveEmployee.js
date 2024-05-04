@@ -2,25 +2,30 @@ export const inactiveTableKeys = [
   {
     name: "Employee Id",
     key: "empId",
+    path: "basicInfo",
   },
   {
     name: "Photo",
-    key: "image",
+    key: "photo",
+    path: "basicInfo",
   },
   {
     name: "Name",
     key: "name",
+    path: "basicInfo",
   },
   {
     name: "Department",
-    key: "department",
+    key: "name",
+    path: "department",
   },
   {
     name: "Designation",
-    key: "designation",
+    key: "name",
+    path: "designation",
   },
   {
-    name: "Status",
+    name: "Active",
     key: "active",
   },
 ];
