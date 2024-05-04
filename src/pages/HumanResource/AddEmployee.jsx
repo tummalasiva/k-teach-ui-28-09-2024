@@ -228,7 +228,7 @@ export default function AddEmployee({ initialValue }) {
       username: "",
       password: "",
       viewOnWeb: "",
-      detailsOnWeb: "",
+      // detailsOnWeb: "",
       photo: "",
       resume: "",
     },
@@ -546,7 +546,7 @@ export default function AddEmployee({ initialValue }) {
                   options={Public}
                 />
               </Grid>
-              <Grid xs={12} md={6} lg={3} item>
+              {/* <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
                   required={false}
                   name="detailsOnWeb"
@@ -554,7 +554,7 @@ export default function AddEmployee({ initialValue }) {
                   label="Details For Web"
                   // options={""}
                 />
-              </Grid>
+              </Grid> */}
               {/* <Grid xs={12} md={6} lg={3} item>
                 <FormInput
                   required={true}
