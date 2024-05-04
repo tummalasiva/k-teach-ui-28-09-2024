@@ -13,14 +13,14 @@ export const inactiveTableKeys = [
   },
   {
     name: "Department",
-    key: "name",
+    key: "department",
   },
   {
     name: "Designation",
-    key: "name",
+    key: "designation",
   },
   {
     name: "Status",
-    key: "status",
+    key: "active",
   },
 ];

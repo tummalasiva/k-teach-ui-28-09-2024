@@ -126,9 +126,10 @@ const Salary_Type = [
   { label: "Hourly", value: "hourly" },
 ];
 
-export default function AddEmployee({ initialValue }) {
+export default function AddEmployee() {
   const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [designationData, setDesgnationData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
@@ -232,7 +233,7 @@ export default function AddEmployee({ initialValue }) {
       } else {
         const { data } = await post(PRIVATE_URLS.employee.create, payload);
 
-        console.log(data, "gcfhbjn");
+        navigate("/sch/human-resource/employee");
       }
     } catch (error) {
       console.log(error);
@@ -555,7 +556,7 @@ export default function AddEmployee({ initialValue }) {
                   required={true}
                   name="password"
                   formik={entryFormik}
-                  label="password"
+                  label="Password"
                 />
               </Grid>
             </Grid>
