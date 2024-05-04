@@ -11,6 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { get, del, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import { Add, Delete, Edit, ListAlt, Print, Search } from "@mui/icons-material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 
 export default function Employee() {
   const { selectedSetting } = useContext(SettingContext);
@@ -20,6 +28,8 @@ export default function Employee() {
   const [InactiveData, setInactiveData] = useState([]);
   const [overviewData, setOverviewData] = useState([]);
   const [allEmployee, setAllEmployee] = useState([]);
+  const [searchFilter, setSearchFilter] = useState([]);
+  const [search, setSearch] = useState("");
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 
   const AddEmployeeHandle = (e) => {
@@ -121,6 +131,23 @@ export default function Employee() {
     }
   };
 
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value.trim());
+    if (value.trim() !== "") {
+      activeData.length > 0 &&
+        setSearchFilter(
+          activeData.filter((ele) =>
+            ele.basicInfo.name
+              .toLowerCase()
+              .includes(value.toLowerCase().trim())
+          )
+        );
+    } else {
+      setSearchFilter([]);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Employee" />
@@ -138,10 +165,46 @@ export default function Employee() {
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            margin: "15px 0",
+          }}
+        >
+          <TextField
+            sx={{ ml: 1 }}
+            size="small"
+            value={search}
+            onChange={handleSearch}
+            placeholder="Search here..."
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" type="submit">
+                    <Search />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <Tooltip title="Print">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <Print />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Excel Sheet Download">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <ListAlt />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <CustomTable
           actions={["edit", "delete"]}
           tableKeys={employeeTableKeys}
-          bodyData={activeData}
+          bodyData={search ? searchFilter : activeData}
           bodyDataModal="employee"
           onDeleteClick={handleDelete}
           onEditClick={handeleClickEdit}
@@ -152,7 +215,7 @@ export default function Employee() {
           actions={["edit", "delete"]}
           tableKeys={inactiveTableKeys}
           bodyDataModal="employee"
-          bodyData={InactiveData}
+          bodyData={search ? searchFilter : InactiveData}
           onDeleteClick={handleDelete}
           onEditClick={handeleClickEdit}
         />
