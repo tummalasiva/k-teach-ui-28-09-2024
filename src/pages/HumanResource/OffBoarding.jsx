@@ -95,7 +95,7 @@ export default function OffBoarding() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Off-Boarding letter list", "Add Off-Boarding  Letter"]}
+        labels={["Off-Boarding letter list", "Add Off-Boarding"]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable

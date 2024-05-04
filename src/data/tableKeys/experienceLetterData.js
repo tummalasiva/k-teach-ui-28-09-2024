@@ -5,10 +5,12 @@ export const experienceTableKeys = [
   },
   {
     name: "Joining Date",
-    key: "date",
+    key: "joiningDate",
+    isDate: true,
   },
   {
     name: "Created At",
     key: "createdAt",
+    isDate: true,
   },
 ];
