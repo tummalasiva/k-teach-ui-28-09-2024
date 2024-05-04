@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import PageHeader from "../../components/PageHeader";
 import avatar from "../../assets/images/avatar.jpg";
+import SettingContext from "../../context/SettingsContext";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -126,6 +127,7 @@ const Salary_Type = [
 ];
 
 export default function AddEmployee({ initialValue }) {
+  const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [designationData, setDesgnationData] = useState([]);
@@ -206,20 +208,20 @@ export default function AddEmployee({ initialValue }) {
           salaryGrade: values.salaryGrade,
           email: values.email,
           salaryType: values.salaryType,
-
           department: values.department,
           joiningDate: dayjs(values.joiningDate),
           resume: values.resume,
         },
         otherInfo: {
           public: values.public,
-          showDetailsForWeb: values.showDetailsForWeb,
+          showDetailsForWeb: values.showDetailsForWeb || false,
         },
         contactNumber: values.contactNumber,
         role: values.role,
         username: values.username,
         password: values.password,
         active: values.active,
+        schoolId: selectedSetting._id,
       };
       setLoading(true);
       if (dataToEdit) {
