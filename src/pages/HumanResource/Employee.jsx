@@ -14,13 +14,14 @@ import SettingContext from "../../context/SettingsContext";
 
 export default function Employee() {
   const { selectedSetting } = useContext(SettingContext);
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const [value, setSelectValue] = useState(0);
   const [activeData, setActiveData] = useState([]);
   const [InactiveData, setInactiveData] = useState([]);
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+
   const AddEmployeeHandle = (e) => {
-    navigation("/sch/human-resource/add-employee");
+    navigate("/sch/human-resource/add-employee");
   };
 
   const getData = async () => {
@@ -31,28 +32,24 @@ export default function Employee() {
         },
       });
       console.log(data.result);
-      const activeData = data.result.filter((item) => item.active);
-      const inactiveData = data.result.filter((item) => !item.active);
+      const activeData = data.result
+        .filter((item) => item.active)
+        .map((s) => ({
+          ...s,
+          department: s.academicInfo.department,
+          designation: s.basicInfo.designation,
+        }));
 
-      const activeDatas = activeData.map((item) => ({
-        _id: item._id,
-        name: item.basicInfo?.name,
-        designation: item.basicInfo.designation.name,
-        active: item.active,
-        empId: item.basicInfo.empId,
-        department: item.academicInfo.department.name,
-      }));
+      const inactiveData = data.result
+        .filter((item) => !item.active)
+        .map((s) => ({
+          ...s,
+          department: s.academicInfo.department,
+          designation: s.basicInfo.designation,
+        }));
 
-      const inactiveDatas = inactiveData.map((item) => ({
-        _id: item._id,
-        name: item.basicInfo?.name,
-        designation: item.basicInfo.designation.name,
-        active: item.active,
-        empId: item.basicInfo.empId,
-        department: item.academicInfo.department.name,
-      }));
-      setActiveData(activeDatas);
-      setInactiveData(inactiveDatas);
+      setActiveData(activeData);
+      setInactiveData(inactiveData);
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +67,16 @@ export default function Employee() {
       console.error(error);
     }
   };
+  const handeleClickEdit = (data) => {
+    try {
+      navigate(`/sch/human-resource/update-employee/${data._id}`, {
+        state: { data: data },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Employee" />
@@ -92,6 +99,7 @@ export default function Employee() {
           bodyData={activeData}
           bodyDataModal="employee"
           onDeleteClick={handleDelete}
+          onEditClick={handeleClickEdit}
         />
       </TabPanel>
       <TabPanel index={2} value={value}>
