@@ -55,6 +55,26 @@ const BloodGroup_Options = [
   },
 ];
 
+const Active = [
+  { label: "Active", value: true },
+  { label: "Inactive", value: false },
+];
+
+const Public = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const Salary_Type = [
+  { label: "Monthly", value: "Monthly" },
+  { label: "Hourly", value: "hourly" },
+];
+
+const IS_PUBLIC = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
 export default function AddEmployee({ initialValue }) {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -382,7 +402,7 @@ export default function AddEmployee({ initialValue }) {
                 name="salaryType"
                 formik={entryFormik}
                 label="Select Salary Type"
-                // options={""}
+                options={Salary_Type}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -473,7 +493,7 @@ export default function AddEmployee({ initialValue }) {
                 name="viewOnWeb"
                 formik={entryFormik}
                 label="View on Web"
-                // options={""}
+                options={Public}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -515,7 +535,7 @@ export default function AddEmployee({ initialValue }) {
                 name="status"
                 formik={entryFormik}
                 label="Status"
-                // options={""}
+                options={Active}
               />
             </Grid>
           </Grid>
