@@ -1,13 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { Grid, Paper, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button, Stack, styled, Box } from "@mui/material";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import { LoadingButton } from "@mui/lab";
+import PageHeader from "../../components/PageHeader";
+import avatar from "../../assets/images/avatar.jpg";
+import SettingContext from "../../context/SettingsContext";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: theme.spacing(2),
+  position: "fixed",
+  bottom: 0,
+  right: 0,
+  left: 0,
+  background: "whitesmoke",
+  padding: theme.spacing(2),
+  zIndex: 1000,
+}));
+const FormBox = styled(Box)(({ theme }) => ({
+  border: "1px solid",
+  borderColor: "lightgray",
+  marginBottom: "20px",
+  borderRadius: theme.shape.borderRadius,
+  overflow: "hidden",
+}));
+const Title = styled(Typography)(({ theme }) => ({
+  textAlign: "start",
+  fontSize: "14px",
+  padding: "5px 10px",
+  borderBottom: "1px solid",
+  borderBottomColor: "lightgray",
+  fontWeight: "bold",
+  color: "white",
+  background: theme.palette.secondary.main,
+}));
+const MuiBox = styled(Box)({
+  background: "#ececec",
+  width: "100px",
+  height: "100px",
+  borderRadius: "50%",
+  overflow: "hidden",
+  backgroundPosition: "center",
+});
+
+const BasicData = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: "15px",
+  padding: "15px 0px",
+});
 
 const Gender_Options = [
   {
@@ -60,31 +111,30 @@ const Active = [
   { label: "Inactive", value: false },
 ];
 
-const Public = [
+const Is_Public = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const View_Web = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
 
 const Salary_Type = [
-  { label: "Monthly", value: "Monthly" },
+  { label: "Monthly", value: "monthly" },
   { label: "Hourly", value: "hourly" },
 ];
 
-const IS_PUBLIC = [
-  { label: "Yes", value: true },
-  { label: "No", value: false },
-];
-
 export default function AddEmployee({ initialValue }) {
+  const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [designationData, setDesgnationData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [rolesData, setRolesData] = useState([]);
-  const navigation = useNavigate();
-  const onCloseHandle = (e) => {
-    navigation(-1);
-  };
+  const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
+  const navigate = useNavigate();
 
   const getDesignationData = async () => {
     try {
@@ -103,8 +153,6 @@ export default function AddEmployee({ initialValue }) {
   const getDepartmentData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.department.list);
-
-      console.log(data.result, "resulttttttttttt");
       setDepartmentData(
         data.result.map((s) => ({
           label: s.name,
@@ -139,7 +187,41 @@ export default function AddEmployee({ initialValue }) {
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
-        ...values,
+        basicInfo: {
+          name: values.name,
+          empId: values.empId,
+          designation: values.designation,
+          secMobileNo: values.secMobileNo,
+          gender: values.gender,
+          religion: values.religion,
+          presentAddress: values.presentAddress,
+          permanentAddress: values.permanentAddress,
+          dob: dayjs(values.dob),
+          fatherName: values.fatherName,
+          spouseName: values.spouseName,
+          aadharNo: values.aadharNo,
+          fatherOccupation: values.fatherOccupation,
+          spouseOccupation: values.spouseOccupation,
+        },
+        academicInfo: {
+          workExperience: values.workExperience,
+          salaryGrade: values.salaryGrade,
+          email: values.email,
+          salaryType: values.salaryType,
+          department: values.department,
+          joiningDate: dayjs(values.joiningDate),
+          resume: values.resume,
+        },
+        otherInfo: {
+          public: values.public,
+          showDetailsForWeb: values.showDetailsForWeb || false,
+        },
+        contactNumber: values.contactNumber,
+        role: values.role,
+        username: values.username,
+        password: values.password,
+        active: values.active,
+        schoolId: selectedSetting._id,
       };
       setLoading(true);
       if (dataToEdit) {
@@ -148,7 +230,9 @@ export default function AddEmployee({ initialValue }) {
           payload
         );
       } else {
-        const data = await post(PRIVATE_URLS.employee.create, payload);
+        const { data } = await post(PRIVATE_URLS.employee.create, payload);
+
+        console.log(data, "gcfhbjn");
       }
     } catch (error) {
       console.log(error);
@@ -166,7 +250,7 @@ export default function AddEmployee({ initialValue }) {
       secMobileNo: "",
       gender: "",
       bloodGroup: "",
-      Religon: "",
+      religion: "",
       presentAddress: "",
       permanentAddress: "",
       dob: dayjs(new Date()),
@@ -182,382 +266,375 @@ export default function AddEmployee({ initialValue }) {
       salaryType: "",
       role: "",
       department: "",
-      admisionDate: "",
+      joiningDate: dayjs(new Date()),
       resume: "",
       username: "",
       password: "",
-      viewOnWeb: "",
-      detailsOnWeb: "",
+      public: "",
+      showDetailsForWeb: "",
       photo: "",
       resume: "",
+      active: "",
     },
     onSubmit: handleCreateOrUpdate,
   });
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewCreateUrl(imageUrl);
+    }
+  };
+
   return (
     <>
-      <form onSubmit={entryFormik.handleSubmit}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
-                Basic Information
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="name"
-                formik={entryFormik}
-                label="Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="empId"
-                formik={entryFormik}
-                label="Employee Id"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="responsibility"
-                formik={entryFormik}
-                label="Responsibility"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="designation"
-                formik={entryFormik}
-                label="Designation"
-                options={designationData}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="contactNumber"
-                formik={entryFormik}
-                label="Contact Number"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="secondContactNumber"
-                formik={entryFormik}
-                label="Secondary Contact Number"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="gender"
-                formik={entryFormik}
-                label="Select Gender"
-                options={Gender_Options}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="bloodGroup"
-                formik={entryFormik}
-                label="Select Blood Group"
-                options={BloodGroup_Options}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="religon"
-                formik={entryFormik}
-                label="Religon"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="Date of Birth"
-                name="dob"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="presentAddress"
-                formik={entryFormik}
-                label="Present Address"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="permanentAddress"
-                formik={entryFormik}
-                label="Permanent Address"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="fatherName"
-                formik={entryFormik}
-                label="Father Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="spouseName"
-                formik={entryFormik}
-                label="Spouse Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="aadharNo"
-                formik={entryFormik}
-                label="Aadhar No."
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="fatherOccupation"
-                formik={entryFormik}
-                label="Father Occupation"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="spouseOccupation"
-                formik={entryFormik}
-                label="Spouse Occupation"
-              />
-            </Grid>
-          </Grid>
-        </Paper>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
-                Academic Information
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="qualification"
-                formik={entryFormik}
-                label="Qualification              "
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="workExperience"
-                formik={entryFormik}
-                label="Work Experience"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="salaryGrade"
-                formik={entryFormik}
-                label="Select Salary Grad"
-                // options={""}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="email"
-                formik={entryFormik}
-                label="Email"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="salaryType"
-                formik={entryFormik}
-                label="Select Salary Type"
-                options={Salary_Type}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="role"
-                formik={entryFormik}
-                label="Select Role"
-                options={rolesData}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="department"
-                formik={entryFormik}
-                label="Select Department"
-                options={departmentData}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="admisionDate"
-                formik={entryFormik}
-                label="Admission Date"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="resume"
-                formik={entryFormik}
-                label="Resume"
-                type="file"
-              />
-            </Grid>
-          </Grid>
-        </Paper>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
-                Log In Information:
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="username"
-                formik={entryFormik}
-                label="User Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="password"
-                formik={entryFormik}
-                label="password"
-              />
-            </Grid>
-          </Grid>
-        </Paper>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
-                Other Information:
-              </Typography>
-            </Grid>
+      <PageHeader title="Add Employee" showTextField={false} />
 
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={false}
-                name="viewOnWeb"
-                formik={entryFormik}
-                label="View on Web"
-                options={Public}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={false}
-                name="detailsOnWeb"
-                formik={entryFormik}
-                label="Details For Web"
-                // options={""}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="photo"
-                formik={entryFormik}
-                label="Photo"
-                type="file"
-              />
-            </Grid>
+      <BasicData>
+        <MuiBox>
+          <img
+            src={previewCreateUrl || avatar}
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "contain",
+            }}
+            alt="Preview"
+          />
+        </MuiBox>
+        <Grid container spacing={2} display="flex" justifyContent="center">
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              // required={true}
+              name="photo"
+              formik={entryFormik}
+              label="Photo"
+              type="file"
+              onChange={handleImageChange}
+            />
           </Grid>
-        </Paper>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
-                Profile Information:
-              </Typography>
+        </Grid>
+      </BasicData>
+      <form onSubmit={entryFormik.handleSubmit}>
+        <FormBox>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Basic Information
+          </Title>
+          <Box sx={{ padding: "10px" }}>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="name"
+                  formik={entryFormik}
+                  label="Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="empId"
+                  formik={entryFormik}
+                  label="Employee Id"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="responsibility"
+                  formik={entryFormik}
+                  label="Responsibility"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="designation"
+                  formik={entryFormik}
+                  label="Designation"
+                  options={designationData}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="contactNumber"
+                  formik={entryFormik}
+                  label="Contact Number"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="secMobileNo"
+                  formik={entryFormik}
+                  label="Secondary Contact Number"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="gender"
+                  formik={entryFormik}
+                  label="Select Gender"
+                  options={Gender_Options}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="bloodGroup"
+                  formik={entryFormik}
+                  label="Select Blood Group"
+                  options={BloodGroup_Options}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="religion"
+                  formik={entryFormik}
+                  label="Religon"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormDatePicker
+                  formik={entryFormik}
+                  label="Date of Birth"
+                  name="dob"
+                  required={true}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="presentAddress"
+                  formik={entryFormik}
+                  label="Present Address"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="permanentAddress"
+                  formik={entryFormik}
+                  label="Permanent Address"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="fatherName"
+                  formik={entryFormik}
+                  label="Father Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="spouseName"
+                  formik={entryFormik}
+                  label="Spouse Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="aadharNo"
+                  formik={entryFormik}
+                  label="Aadhar No."
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="fatherOccupation"
+                  formik={entryFormik}
+                  label="Father Occupation"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="spouseOccupation"
+                  formik={entryFormik}
+                  label="Spouse Occupation"
+                />
+              </Grid>
             </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={false}
-                name="status"
-                formik={entryFormik}
-                label="Status"
-                options={Active}
-              />
+          </Box>
+        </FormBox>
+        <FormBox>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Academic Information
+          </Title>
+          <Box sx={{ padding: "10px" }}>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="qualification"
+                  formik={entryFormik}
+                  label="Qualification              "
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="workExperience"
+                  formik={entryFormik}
+                  label="Work Experience"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="salaryGrade"
+                  formik={entryFormik}
+                  label="Select Salary Grade"
+                  // options={""}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="email"
+                  formik={entryFormik}
+                  label="Email"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="salaryType"
+                  formik={entryFormik}
+                  label="Select Salary Type"
+                  options={Salary_Type}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="role"
+                  formik={entryFormik}
+                  label="Select Role"
+                  options={rolesData}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="department"
+                  formik={entryFormik}
+                  label="Select Department"
+                  options={departmentData}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormDatePicker
+                  required={true}
+                  name="joiningDate"
+                  formik={entryFormik}
+                  label="Joining Date"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="resume"
+                  formik={entryFormik}
+                  label="Resume"
+                  type="file"
+                />
+              </Grid>
             </Grid>
+          </Box>
+        </FormBox>
+        <FormBox>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Log In Information
+          </Title>
+          <Box sx={{ padding: "10px" }}>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="username"
+                  formik={entryFormik}
+                  label="User Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="password"
+                  formik={entryFormik}
+                  label="password"
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </FormBox>
+        <FormBox>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Other Information
+          </Title>
+          <Box sx={{ padding: "10px" }}>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="public"
+                  formik={entryFormik}
+                  label="Is public"
+                  options={Is_Public}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="showDetailsForWeb"
+                  formik={entryFormik}
+                  label="Show Details For Web"
+                  options={View_Web}
+                />
+              </Grid>
+              {/* <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="photo"
+                  formik={entryFormik}
+                  label="Photo"
+                  type="file"
+                />
+              </Grid> */}
+            </Grid>
+          </Box>
+        </FormBox>
+        <FormBox sx={{ marginBottom: "60px" }}>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Profile Information
+          </Title>
+          <Box sx={{ padding: "10px" }}>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="active"
+                  formik={entryFormik}
+                  label="Status"
+                  options={Active}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </FormBox>
+        <Grid container>
+          <Grid item xs={12} md={12}>
+            <StyledBox>
+              <Stack spacing={2} direction="row">
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
+                </Button>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                >
+                  Submit
+                </LoadingButton>
+              </Stack>
+            </StyledBox>
           </Grid>
-        </Paper>
-        <Grid
-          xs={12}
-          md={6}
-          lg={3}
-          style={{ alignSelf: "center", marginTop: "10px" }}
-          item
-        >
-          <Button
-            size="small"
-            color="error"
-            variant="contained"
-            onClick={onCloseHandle}
-          >
-            Cancel
-          </Button>
-          <Button size="small" type="submit" variant="contained" sx={{ ml: 2 }}>
-            Submit
-          </Button>
         </Grid>
       </form>
     </>
