@@ -211,6 +211,42 @@ export default function Employee() {
         />
       </TabPanel>
       <TabPanel index={2} value={value}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            margin: "15px 0",
+          }}
+        >
+          <TextField
+            sx={{ ml: 1 }}
+            size="small"
+            value={search}
+            onChange={handleSearch}
+            placeholder="Search here..."
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" type="submit">
+                    <Search />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <Tooltip title="Print">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <Print />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Excel Sheet Download">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <ListAlt />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <CustomTable
           actions={["edit", "delete"]}
           tableKeys={inactiveTableKeys}
