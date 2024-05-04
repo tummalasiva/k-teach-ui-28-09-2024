@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
   Paper,
@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 // icons
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -34,18 +36,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function FormTable() {
-  const [employee, setEmployee] = useState([]);
-
+export default function FormTable({ employee }) {
   const handleLinkClick = (url) => {
     window.open(url, "_blank");
   };
 
   return (
     <>
-      {employee.empPhoto && employee.empPhoto.link ? (
+      {employee?.photo ? (
         <img
-          src={employee.empPhoto.link}
+          src={employee.photo}
           height={75}
           width={75}
           style={{ borderRadius: "50%", alignSelf: "center" }}
@@ -75,17 +75,13 @@ export default function FormTable() {
               Name
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empName
-                ? employee.basicInfo.empName
-                : "NA"}
+              {employee.basicInfo.name || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               National Id
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.aadharNo
-                ? employee.basicInfo.aadharNo
-                : "NA"}
+              {employee.basicInfo.aadharNo || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -93,33 +89,27 @@ export default function FormTable() {
               Designation
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.designation
-                ? employee.basicInfo.designation.designation
-                : "NA"}
+              {employee.basicInfo.designation.name || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Phone{" "}
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.contactNumber ? employee.contactNumber : "NA"}
+              {employee.contactNumber || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-              Present Address{" "}
+              Present Address
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.presentAddress
-                ? employee.basicInfo.presentAddress
-                : "NA"}
+              {employee.basicInfo.presentAddress || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Permanent Address
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.permanentAddress
-                ? employee.basicInfo.permanentAddress
-                : "NA"}
+              {employee.basicInfo.permanentAddress || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -127,17 +117,13 @@ export default function FormTable() {
               Gender
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empGender
-                ? employee.basicInfo.empGender
-                : "NA"}
+              {employee.basicInfo.gender || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Blood Group
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empBloodGroup
-                ? employee.basicInfo.empBloodGroup.toUpperCase()
-                : "NA"}
+              {employee.basicInfo.bloodGroup.toUpperCase() || "NA"}
             </StyledTableCell>
           </StyledTableRow>
 
@@ -146,19 +132,13 @@ export default function FormTable() {
               Religion{" "}
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.Religion
-                ? employee.basicInfo.Religion
-                : "NA"}
+              {employee.basicInfo.religion || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Birth Date
             </StyledTableCell>
             <StyledTableCell align="left">
-              {dayjs(
-                employee.basicInfo && employee.basicInfo.dob
-                  ? employee.basicInfo.dob
-                  : "NA"
-              ).format("DD-MM-YYYY")}
+              {dayjs(employee.basicInfo.dob || "NA").format("DD-MM-YYYY")}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -166,17 +146,13 @@ export default function FormTable() {
               Email
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.academicInfo && employee.academicInfo.email
-                ? employee.academicInfo.email
-                : "NA"}
+              {employee.academicInfo.email || "NA"}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Role
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.role && employee.role.roleName
-                ? employee.role.roleName
-                : "NA"}
+              {employee.role.name || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -184,19 +160,25 @@ export default function FormTable() {
               Joining Date
             </StyledTableCell>
             <StyledTableCell align="left">
-              {dayjs(
-                employee.academicInfo && employee.academicInfo.joiningDate
-                  ? employee.academicInfo.joiningDate
-                  : "NA"
-              ).format("DD-MM-YYYY")}
+              {dayjs(employee.academicInfo.joiningDate || "NA").format(
+                "DD-MM-YYYY"
+              )}
             </StyledTableCell>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
               Resume
             </StyledTableCell>
             <StyledTableCell align="center">
-              <IconButton color="primary">
-                <FileDownloadIcon />
-              </IconButton>
+              {employee.academicInfo.resume ? (
+                <IconButton color="primary">
+                  <FileDownloadIcon
+                    onClick={() =>
+                      handleLinkClick(employee.academicInfo.resume)
+                    }
+                  />
+                </IconButton>
+              ) : (
+                "NA"
+              )}
             </StyledTableCell>
           </StyledTableRow>
         </TableBody>
@@ -224,9 +206,7 @@ export default function FormTable() {
               Name
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empName
-                ? employee.basicInfo.empName
-                : "NA"}
+              {employee.basicInfo.name || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -234,9 +214,7 @@ export default function FormTable() {
               National Id
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.aadharNo
-                ? employee.basicInfo.aadharNo
-                : "NA"}
+              {employee.basicInfo.aadharNo || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -244,17 +222,15 @@ export default function FormTable() {
               Designation
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.designation
-                ? employee.basicInfo.designation.designation
-                : "NA"}
+              {employee.basicInfo.designation.name || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-              Phone{" "}
+              Phone
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.contactNumber ? employee.contactNumber : "NA"}
+              {employee.contactNumber || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -262,9 +238,7 @@ export default function FormTable() {
               Present Address{" "}
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.presentAddress
-                ? employee.basicInfo.presentAddress
-                : "NA"}
+              {employee.basicInfo.presentAddress || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -272,9 +246,7 @@ export default function FormTable() {
               Permanent Address
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.permanentAddress
-                ? employee.basicInfo.permanentAddress
-                : "NA"}
+              {employee.basicInfo.permanentAddress || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -282,9 +254,7 @@ export default function FormTable() {
               Gender
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empGender
-                ? employee.basicInfo.empGender
-                : "NA"}
+              {employee.basicInfo.gender || "NA"}
             </StyledTableCell>
           </StyledTableRow>
 
@@ -293,9 +263,7 @@ export default function FormTable() {
               Blood Group
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.empBloodGroup
-                ? employee.basicInfo.empBloodGroup.toUpperCase()
-                : "NA"}
+              {employee.basicInfo.bloodGroup.toUpperCase() || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -303,11 +271,7 @@ export default function FormTable() {
               Birth Date
             </StyledTableCell>
             <StyledTableCell align="left">
-              {dayjs(
-                employee.basicInfo && employee.basicInfo.dob
-                  ? employee.basicInfo.dob
-                  : "NA"
-              ).format("DD-MM-YYYY")}
+              {dayjs(employee.basicInfo.dob || "NA").format("DD-MM-YYYY")}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -315,9 +279,7 @@ export default function FormTable() {
               Religion{" "}
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.basicInfo && employee.basicInfo.Religion
-                ? employee.basicInfo.Religion
-                : "NA"}
+              {employee.basicInfo.religion || "NA"}
             </StyledTableCell>
           </StyledTableRow>
 
@@ -326,9 +288,7 @@ export default function FormTable() {
               Email
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.academicInfo && employee.academicInfo.email
-                ? employee.academicInfo.email
-                : "NA"}
+              {employee.academicInfo.email || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -336,9 +296,7 @@ export default function FormTable() {
               Role
             </StyledTableCell>
             <StyledTableCell align="left">
-              {employee.role && employee.role.roleName
-                ? employee.role.roleName
-                : "NA"}
+              {employee.role.name || "NA"}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -346,11 +304,9 @@ export default function FormTable() {
               Joining Date
             </StyledTableCell>
             <StyledTableCell align="left">
-              {dayjs(
-                employee.academicInfo && employee.academicInfo.joiningDate
-                  ? employee.academicInfo.joiningDate
-                  : "NA"
-              ).format("DD-MM-YYYY")}
+              {dayjs(employee.academicInfo.joiningDate || "NA").format(
+                "DD-MM-YYYY"
+              )}
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
@@ -358,21 +314,17 @@ export default function FormTable() {
               Resume
             </StyledTableCell>
             <StyledTableCell align="center">
-              {/* {employee.academicInfo.resume ? (
-                  <IconButton color="primary">
-                    <FileDownloadIcon
-                      onClick={() =>
-                        handleLinkClick(
-                          employee.academicInfo && employee.academicInfo.resume
-                            ? employee.academicInfo.resume.link
-                            : "NA"
-                        )
-                      }
-                    />
-                  </IconButton>
-                ) : (
-                  "NA"
-                )} */}
+              {employee.academicInfo.resume ? (
+                <IconButton color="primary">
+                  <FileDownloadIcon
+                    onClick={() =>
+                      handleLinkClick(employee.academicInfo.resume)
+                    }
+                  />
+                </IconButton>
+              ) : (
+                "NA"
+              )}
             </StyledTableCell>
           </StyledTableRow>
         </TableBody>

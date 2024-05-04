@@ -153,6 +153,9 @@ import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
 import AddInstitute from "../pages/ManageInstitute/AddInstitute";
 import themeData from "../data/themeData";
 import Profile from "../pages/AccountSettings/Profile";
+import { PRIVATE_URLS } from "../services/urlConstants";
+import { get } from "../services/apiMethods";
+import SettingContext from "../context/SettingsContext";
 
 const drawerWidth = 270;
 
@@ -232,6 +235,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function NavDrawer() {
   const theme = useTheme();
+  const { selectedSetting } = React.useContext(SettingContext);
   const [open, setOpen] = React.useState(true);
   // const { setUser, user } = React.useContext(UserContext);
   const [sideMenuData, setSideMenuData] = React.useState([]);
@@ -239,6 +243,7 @@ export default function NavDrawer() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openProfile = Boolean(anchorEl);
+  const [activeYear, setActiveYear] = React.useState([]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -251,9 +256,21 @@ export default function NavDrawer() {
   const [selecteSubMenu, setSelectedSubMenu] = React.useState("");
   const [selectedMenu, setSelectedMenu] = React.useState(null);
   const { SIDE_MENU_DATA } = menu;
+
   React.useEffect(() => {
     setSideMenuData(SIDE_MENU_DATA);
+    getActiveAcademicYear();
   });
+
+  //get academic year
+  const getActiveAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setActiveYear(data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // on load if any selected sub-menu was there then open
   React.useEffect(() => {
@@ -332,7 +349,8 @@ export default function NavDrawer() {
             textAlign="center"
             fontSize="18px"
           >
-            ERP School [2025-2025]
+            {selectedSetting.name} [{activeYear ? activeYear.from : "-"} -{" "}
+            {activeYear ? activeYear.to : "-"}]
           </Typography>
           {/* <Box
             sx={{
