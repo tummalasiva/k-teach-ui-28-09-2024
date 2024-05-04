@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -6,16 +6,115 @@ import { Grid, Paper, Typography, Button } from "@mui/material";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
-import { post, put } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+
+const Gender_Options = [
+  {
+    label: "Male",
+    value: "male",
+  },
+  {
+    label: "Female",
+    value: "female",
+  },
+];
+
+const BloodGroup_Options = [
+  {
+    label: "A+",
+    value: "a",
+  },
+  {
+    label: "A-",
+    value: "a-",
+  },
+  {
+    label: "B+",
+    value: "b+",
+  },
+  {
+    label: "B-",
+    value: "b-",
+  },
+  {
+    label: "O+",
+    value: "o+",
+  },
+  {
+    label: "O-",
+    value: "o-",
+  },
+  {
+    label: "AB+",
+    value: "ab+",
+  },
+  {
+    label: "AB-",
+    value: "ab-",
+  },
+];
 
 export default function AddEmployee({ initialValue }) {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [designationData, setDesgnationData] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+  const [rolesData, setRolesData] = useState([]);
   const navigation = useNavigate();
   const onCloseHandle = (e) => {
     navigation(-1);
   };
+
+  const getDesignationData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.designation.list);
+      setDesgnationData(
+        data.result.map((s) => ({
+          label: s.name,
+          value: s._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDepartmentData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.department.list);
+
+      console.log(data.result, "resulttttttttttt");
+      setDepartmentData(
+        data.result.map((s) => ({
+          label: s.name,
+          value: s._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRoles = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list);
+      setRolesData(
+        data.result.map((r) => ({
+          label: r.name,
+          value: r._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDesignationData();
+    getDepartmentData();
+    getRoles();
+  }, []);
 
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -39,8 +138,8 @@ export default function AddEmployee({ initialValue }) {
 
   const entryFormik = useFormik({
     initialValues: {
-      name: initialValue.name || "",
-      EmpId: "",
+      name: "",
+      empId: "",
       responsibility: "",
       designation: "",
       contactNumber: "",
@@ -102,7 +201,7 @@ export default function AddEmployee({ initialValue }) {
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
-                name="EmpId"
+                name="empId"
                 formik={entryFormik}
                 label="Employee Id"
               />
@@ -116,11 +215,12 @@ export default function AddEmployee({ initialValue }) {
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
-              <FormInput
+              <FormSelect
                 required={true}
                 name="designation"
                 formik={entryFormik}
                 label="Designation"
+                options={designationData}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -145,7 +245,7 @@ export default function AddEmployee({ initialValue }) {
                 name="gender"
                 formik={entryFormik}
                 label="Select Gender"
-                // options={""}
+                options={Gender_Options}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -154,7 +254,7 @@ export default function AddEmployee({ initialValue }) {
                 name="bloodGroup"
                 formik={entryFormik}
                 label="Select Blood Group"
-                // options={""}
+                options={BloodGroup_Options}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -291,7 +391,7 @@ export default function AddEmployee({ initialValue }) {
                 name="role"
                 formik={entryFormik}
                 label="Select Role"
-                // options={""}
+                options={rolesData}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -300,7 +400,7 @@ export default function AddEmployee({ initialValue }) {
                 name="department"
                 formik={entryFormik}
                 label="Select Department"
-                // options={""}
+                options={departmentData}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
