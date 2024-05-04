@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import {
@@ -17,6 +17,8 @@ import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get, post } from "../../services/apiMethods";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -73,42 +75,86 @@ const Gender = [
   { label: "Female", value: "female" },
 ];
 
-export default function ProfileUpdate() {
+const Blood_Group = [
+  { label: "A+", value: "a+" },
+  { label: "B+", value: "b+" },
+  { label: "A-", value: "a-" },
+  { label: "B-", value: "b-" },
+  { label: "O+", value: "o+" },
+  { label: "O-", value: "o-" },
+  { label: "AB+", value: "ab+" },
+  { label: "AB-", value: "ab-" },
+];
+
+export default function ProfileUpdate({
+  handleCreateOrUpdate = () => {},
+  employee = "",
+}) {
   const navigate = useNavigate();
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
-  const [dataToEdit, setDataToEdit] = useState(false);
+  const [designations, setDesignations] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const getDesignation = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.designation.list);
+      console.log(data, "ress");
+      setDesignations(
+        data.result.map((m) => ({ label: m.name, value: m.name.toLowerCase() }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEmpPhoto = async (e) => {
+    const formData = new FormData();
+    console.log(e, "hawa");
+    formData.append("files", e.target.files[0]);
+    try {
+      const res = await post(PRIVATE_URLS.fileUpload.create, formData);
+      console.log(res, "fafa");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getDesignation();
+  }, []);
 
   const entryFormik = useFormik({
     initialValues: {
-      name: dataToEdit?.name || "",
-      aadharNo: dataToEdit.aadharNo || "",
-      designation: dataToEdit.designation || "",
-      contactNumber: dataToEdit?.contactNumber || "",
-      gender: dataToEdit?.gender || "",
-      bloodGroup: dataToEdit?.bloodGroup || "",
-      religion: dataToEdit?.religion || "",
-      dob: dataToEdit && dataToEdit.dob ? dayjs(dataToEdit.dob) : null,
-      presentAddress: dataToEdit?.presentAddress || "",
-      permanentAddress: dataToEdit?.permanentAddress || "",
-      email: dataToEdit?.email || "",
-      username: dataToEdit?.username || "",
-      joiningDate:
-        dataToEdit && dataToEdit.joiningDate
-          ? dayjs(dataToEdit.joiningDate)
-          : null,
-      resume: dataToEdit?.resume || "",
-      facebookUrl: dataToEdit?.facebookUrl || "",
-      twitterUrl: dataToEdit?.twitterUrl || "",
-      linkedinUrl: dataToEdit?.linkedinUrl || "",
-      gplusUrl: dataToEdit?.gplusUrl || "",
-      youtubeUrl: dataToEdit?.youtubeUrl || "",
-      instagramUrl: dataToEdit?.instagramUrl || "",
-      pinterestUrl: dataToEdit?.pinterestUrl || "",
+      name: employee?.basicInfo?.name || "",
+      aadharNo: employee.basicInfo.aadharNo || "",
+      designation: employee.basicInfo?.designation || "",
+      gender: employee?.basicInfo.gender || "",
+      bloodGroup: employee?.basicInfo.bloodGroup || "",
+      religion: employee?.basicInfo.religion || "",
+      dob: employee?.basicInfo.dob ? dayjs(employee.dob) : null,
+      presentAddress: employee?.basicInfo.presentAddress || "",
+      permanentAddress: employee?.basicInfo.permanentAddress || "",
+      email: employee?.academicInfo.email || "",
+      joiningDate: employee.academicInfo.joiningDate
+        ? dayjs(employee.academicInfo.joiningDate)
+        : null,
+      resume: employee?.academicInfo.resume || "",
+      facebookUrl: employee?.otherInfo.facebookUrl || "",
+      twitterUrl: employee?.otherInfo.twitterUrl || "",
+      linkedinUrl: employee?.otherInfo.linkedinUrl || "",
+      gplusUrl: employee?.otherInfo.gplusUrl || "",
+      youtubeUrl: employee?.otherInfo.youtubeUrl || "",
+      instagramUrl: employee?.otherInfo.instagramUrl || "",
+      pinterestUrl: employee?.otherInfo.pinterestUrl || "",
+      username: employee?.username || "",
+      contactNumber: employee?.contactNumber || "",
+      photo: employee?.photo || "",
     },
-    onSubmit: console.log("soon..."),
-    enableReinitialize: true,
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: false,
   });
+
+  console.log(entryFormik.values, "entryFormik");
 
   return (
     <>
@@ -133,7 +179,7 @@ export default function ProfileUpdate() {
                 formik={entryFormik}
                 label="Logo"
                 type="file"
-                // onChange={handleImageChange}
+                onChange={(e) => handleEmpPhoto(e)}
               />
             </Grid>
           </Grid>
@@ -161,13 +207,14 @@ export default function ProfileUpdate() {
                   label="National Id"
                 />
               </Grid>
+
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
                   required={true}
                   name="designation"
                   formik={entryFormik}
                   label="Designation"
-                  //   options={}
+                  options={designations}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -193,7 +240,7 @@ export default function ProfileUpdate() {
                   name="bloodGroup"
                   formik={entryFormik}
                   label="Blood Group"
-                  //   options={}
+                  options={Blood_Group}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>

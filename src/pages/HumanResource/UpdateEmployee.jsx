@@ -268,7 +268,7 @@ export default function UpdateEmployee() {
       email: empData ? empData.academicInfo.email : "",
       salaryType: empData ? empData.academicInfo.salaryType : "",
       role: empData ? empData.role._id : "",
-      department: empData ? empData.academicInfo.department : "",
+      department: empData ? empData.academicInfo.department._id : "",
       joiningDate: empData
         ? dayjs(empData.academicInfo.joiningDate)
         : dayjs(new Date()),

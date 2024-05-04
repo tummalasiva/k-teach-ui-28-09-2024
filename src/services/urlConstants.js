@@ -25,6 +25,7 @@ export const PRIVATE_URLS = {
     create: "/employee/create",
     update: "/employee/update",
     delete: "/employee/delete",
+    getEmpById: "/employee/details",
   },
   designation: {
     list: "/designation/list",
@@ -87,5 +88,11 @@ export const PRIVATE_URLS = {
     create: "/subject/create",
     update: "/subject/update",
     delete: "/subject/delete",
+  },
+  fileUpload: {
+    list: "/fileUpload/list",
+    create: "/fileUpload/create",
+    update: "/fileUpload/update",
+    delete: "/fileUpload/delete",
   },
 };
