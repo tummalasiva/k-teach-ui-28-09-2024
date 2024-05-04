@@ -1,5 +1,5 @@
 import { Button, Grid, Paper } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -10,28 +10,120 @@ import dayjs from "dayjs";
 import FormDatePicker from "../../forms/FormDatePicker";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 export default function TeacherActivity() {
+  const { selectedSetting } = useContext(SettingContext);
   const [value, setSelectValue] = useState(0);
+  const [dataToEdit, setDataToEdit] = useState(null);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
+      // if (data.result?.length) {
+      //   setSelectedClass(data.result[0]._id);
+      //   entryFormik.setFieldValue("class", data.result[0]._id);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      // if (data.result?.length) {
+      //   setSelectedClass(data.result[0]._id);
+      //   entryFormik.setFieldValue("class", data.result[0]._id);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getSubject = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.subject.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setSubjects(data.result.map((d) => ({ label: d.name, value: d._id })));
+      // if (data.result?.length) {
+      //   setSelectedClass(data.result[0]._id);
+      //   entryFormik.setFieldValue("class", data.result[0]._id);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // create || update actions
+  const handleCreateOrUpdate = async (values) => {
+    console.log(values, "valuesvaluesvalues");
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.teacherActivity.update + "/" + dataToEdit._id,
+          payload
+        );
+        // getData();
+      } else {
+        const { data } = await post(
+          PRIVATE_URLS.teacherActivity.create,
+          payload
+        );
+        // getData();
+      }
+      // handleClose();
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getClasses();
+    getSections();
+    getSubject();
+  }, []);
+
   const entryFormik = useFormik({
     initialValues: {
-      teacher: "",
-      class: "",
-      section: "",
-      subject: "",
-      fromDate: dayjs(new Date()),
-      toDate: dayjs(new Date()),
+      class: dataToEdit?.class || "",
+      section: dataToEdit?.section || "",
+      subject: dataToEdit?.subject || "",
+      topic: dataToEdit?.topic || "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
   });
+
   const formik = useFormik({
     initialValues: {
-      class: "",
-      section: "",
-      studentt: "",
-      note: "",
+      teacher: "",
+      selectedClass: "",
+      selectedSection: "",
+      selectedSubject: "",
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: console.log("nnnn"),
   });
@@ -59,16 +151,16 @@ export default function TeacherActivity() {
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
-                name="class"
+                name="selectedClass"
                 formik={entryFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
-                name="seecion"
+                name="selectedSeecion"
                 formik={entryFormik}
                 label="Select Section"
                 // options={""}
@@ -77,7 +169,7 @@ export default function TeacherActivity() {
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
-                name="subject"
+                name="selectedSubject"
                 formik={entryFormik}
                 label="Select Subject"
                 // options={""}
@@ -112,41 +204,45 @@ export default function TeacherActivity() {
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+        <Paper
+          sx={{ padding: 2, marginBottom: 2 }}
+          component="form"
+          onClick={entryFormik.handleSubmit}
+        >
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="class"
-                formik={formik}
+                formik={entryFormik}
                 label="Select Class"
-                // options={""}
+                // options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="section"
-                formik={formik}
+                formik={entryFormik}
                 label="Select Section"
-                // options={""}
+                options={sections}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
-                name="student"
-                formik={formik}
-                label="Select Student"
-                // options={""}
+                name="subject"
+                formik={entryFormik}
+                label="Select subject"
+                options={subjects}
               />
             </Grid>
 
             <Grid xs={12} md={12} lg={12} item>
               <FormInput
                 required={true}
-                name="note"
-                formik={formik}
+                name="topic"
+                formik={entryFormik}
                 label="Topic coverd"
               />
             </Grid>

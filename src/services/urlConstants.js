@@ -40,13 +40,6 @@ export const PRIVATE_URLS = {
     delete: "/department/delete",
   },
 
-  employee: {
-    list: "/employee/list",
-    create: "/employee/create",
-    update: "/employee/update",
-    delete: "/employee/delete",
-  },
-
   offerLetter: {
     list: "/offerLetter/list",
     create: "/offerLetter/create",
@@ -94,5 +87,17 @@ export const PRIVATE_URLS = {
     create: "/fileUpload/create",
     update: "/fileUpload/update",
     delete: "/fileUpload/delete",
+  },
+  student: {
+    getAllStudents: "/student/getAllStudents",
+    create: "/student/create",
+    update: "/student/update",
+    delete: "/student/delete",
+  },
+  teacherActivity: {
+    list: "/teacherActivity/list",
+    create: "/teacherActivity/create",
+    update: "/teacherActivity/update",
+    delete: "/teacherActivity/delete",
   },
 };
