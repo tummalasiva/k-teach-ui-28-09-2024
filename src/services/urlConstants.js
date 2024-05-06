@@ -95,4 +95,11 @@ export const PRIVATE_URLS = {
     update: "/fileUpload/update",
     delete: "/fileUpload/delete",
   },
+
+  notice: {
+    list: "/notice/list",
+    create: "/notice/create",
+    update: "/notice/update",
+    delete: "/notice/delete",
+  },
 };

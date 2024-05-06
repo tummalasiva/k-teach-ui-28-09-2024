@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { noticeTableKeys } from "../../data/tableKeys/noticeData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -10,8 +10,11 @@ import { Grid } from "@mui/material";
 
 import FormDatePicker from "../../forms/FormDatePicker";
 import { useFormik } from "formik";
-import { get } from "../../services/apiMethods";
+import { post, put, get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+
+import dayjs from "dayjs";
+import SettingContext from "../../context/SettingsContext";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -19,11 +22,30 @@ const Is_Public = [
 ];
 
 export default function Notice() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [rolesData, setRolesData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.notice.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      // setData(data.result);
+
+      console.log(data, "result");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getRoles = async () => {
     try {
@@ -56,22 +78,37 @@ export default function Notice() {
     try {
       const payload = {
         ...values,
+        date: dayjs(values.date).format("YYYY-MM-DD"),
+        schoolId: selectedSetting._id,
       };
+      setLoading(true);
+      if (dataToEdit) {
+        const data = await put(
+          PRIVATE_URLS.notice.update + "/" + dataToEdit._id,
+          payload
+        );
+        getData();
+      } else {
+        const data = await post(PRIVATE_URLS.notice.create, payload);
+        getData();
+      }
+      handleClose();
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const entryFormik = useFormik({
     initialValues: {
-      title: dataToEdit?.title || "",
-      date: dataToEdit?.dayjs(dataToEdit.date),
-      noticeFor: dataToEdit?.noticeFor || "",
-      notice: dataToEdit?.notice || "",
-      isPublic: dataToEdit?.isPublic || "",
+      title: "",
+      date: dayjs(new Date()),
+      noticeFor: "",
+      notice: "",
+      isPublic: "",
     },
     onSubmit: handleCreateOrUpdate,
-    enableReinitialize: true,
+    // enableReinitialize: true,
   });
 
   return (
@@ -82,6 +119,7 @@ export default function Notice() {
         bodyDataModal="Notice"
         bodyData={data}
         tableKeys={noticeTableKeys}
+        adding={loading}
       />
       <AddForm title="Add Notice" onAddClick={AddNotice} />
 
