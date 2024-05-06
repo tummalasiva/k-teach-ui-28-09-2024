@@ -5,6 +5,8 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
 import { popupSplashNewsTableKeys } from "../../data/tableKeys/popupSplashNewsData";
 import { horizontalSplashNewsTableKeys } from "../../data/tableKeys/horizontalSplashNewsData";
+import AddHorizontalSplash from "./AddHorizontalSplash";
+import AddPopup from "./AddPopup";
 
 export default function SplashNews() {
   const [data, setData] = useState([]);
@@ -28,6 +30,8 @@ export default function SplashNews() {
           bodyData={data}
           tableKeys={horizontalSplashNewsTableKeys}
         />
+
+        <AddHorizontalSplash />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
@@ -36,6 +40,7 @@ export default function SplashNews() {
           bodyData={data}
           tableKeys={popupSplashNewsTableKeys}
         />
+        <AddPopup />
       </TabPanel>
     </>
   );

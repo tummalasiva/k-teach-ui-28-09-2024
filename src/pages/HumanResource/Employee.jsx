@@ -109,8 +109,10 @@ export default function Employee() {
   };
 
   useEffect(() => {
-    getData();
     getDataDepartment();
+  }, [overviewData]);
+  useEffect(() => {
+    getData();
   }, []);
 
   const handleDelete = async (id) => {
