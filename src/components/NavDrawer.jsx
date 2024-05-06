@@ -342,18 +342,19 @@ export default function NavDrawer() {
           >
             <MenuIcon />
           </IconButton>
+
           <Typography
             variant="h6"
-            // noWrap
             component="div"
             color="white"
             textAlign="center"
             fontSize="18px"
+            sx={{ display: { xs: "none", md: "block" } }}
           >
             {selectedSetting.name} [{activeYear ? activeYear.from : "-"} -{" "}
             {activeYear ? activeYear.to : "-"}]
           </Typography>
-          {/* <Box
+          <Box
             sx={{
               display: "flex",
               width: "100%",
@@ -361,53 +362,59 @@ export default function NavDrawer() {
               justifyContent: "flex-end",
               alignItems: "center",
             }}
-          > */}
-          <Stack
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flex: 1,
-              width: "100%",
-              justifyContent: "flex-end",
-            }}
-            spacing={2}
-            direction="row"
           >
-            <Tooltip title="Notification">
-              <Link to="/sch/notifications">
-                <IconButton color="red">
-                  <NotificationsIcon
-                    fontSize="large"
-                    sx={{ color: "#BDBDBD" }}
-                  />
+            <Stack
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              spacing={2}
+              direction="row"
+            >
+              <Tooltip title="Notification">
+                <Link to="/sch/notifications">
+                  <IconButton>
+                    <NotificationsIcon
+                      fontSize="large"
+                      sx={{ color: "#BDBDBD" }}
+                    />
+                  </IconButton>
+                </Link>
+              </Tooltip>
+              <Tooltip title="Account Settings">
+                <IconButton
+                  onClick={handleClick}
+                  // size="small"
+                  // sx={{ ml: 2 }}
+                  aria-controls={openProfile ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openProfile ? "true" : undefined}
+                >
+                  <Avatar sx={{ width: 30, height: 30 }} />
                 </IconButton>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Account Settings">
-              <IconButton
-                onClick={handleClick}
-                size="small"
-                sx={{ ml: 2 }}
-                aria-controls={openProfile ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={openProfile ? "true" : undefined}
-              >
-                <Avatar sx={{ width: 30, height: 30 }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="websites">
-              <Link to="/">
-                <img
+              </Tooltip>
+              <Tooltip title="websites">
+                <Link to="/">
+                  <IconButton>
+                    <Avatar
+                      src="/world-wide-web.png"
+                      alt="loading..."
+                      sx={{ width: 30, height: 30 }}
+                    />
+                  </IconButton>
+
+                  {/* <img
                   src="/world-wide-web.png"
                   alt="loading..."
                   width={30}
                   height={30}
                   color="#fff"
-                />
-              </Link>
-            </Tooltip>
-          </Stack>
-          {/* </Box> */}
+                /> */}
+                </Link>
+              </Tooltip>
+            </Stack>
+          </Box>
         </Toolbar>
       </AppBar>
 
