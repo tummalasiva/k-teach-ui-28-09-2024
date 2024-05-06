@@ -4,7 +4,7 @@ export const popupSplashNewsTableKeys = [
     key: "title",
   },
   {
-    name: "Web View",
+    name: "Is_Public",
     key: "isPublic",
   },
 ];

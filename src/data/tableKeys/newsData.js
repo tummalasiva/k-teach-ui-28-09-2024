@@ -8,7 +8,7 @@ export const newsTableKeys = [
     key: "date",
   },
   {
-    name: "Web View",
+    name: "Is_Public",
     key: "isPublic",
   },
 ];

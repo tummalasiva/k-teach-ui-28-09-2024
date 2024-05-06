@@ -12,7 +12,7 @@ export const holidayTableKeys = [
     key: "toDate",
   },
   {
-    name: "Web View",
+    name: "Is_Public",
     key: "isPublic",
   },
 ];

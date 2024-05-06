@@ -79,8 +79,8 @@ export default function AwardsAndAchievements() {
         formik={entryFormik}
         formTitle={
           dataToEdit
-            ? "Update Awards $ Achievement"
-            : "Add Awards $ Achievement"
+            ? "Update Awards & Achievement"
+            : "Add Awards & Achievement"
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}

@@ -8,7 +8,7 @@ export const noticeTableKeys = [
     key: "date",
   },
   {
-    name: "Web View",
+    name: "Is_Public",
     key: "isPublic",
   },
 ];
