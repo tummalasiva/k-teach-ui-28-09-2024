@@ -5,7 +5,6 @@ import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
-import FormDatePicker from "../../forms/FormDatePicker";
 import { useState } from "react";
 
 const Is_Public = [
@@ -41,9 +40,7 @@ export default function AddHorizontalSplash() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-
       text: dataToEdit?.text || "",
-
       isPublic: dataToEdit?.isPublic || "",
     },
     onSubmit: handleCreateOrUpdate,

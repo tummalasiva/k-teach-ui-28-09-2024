@@ -52,7 +52,6 @@ export default function AwardsAndAchievements() {
       hostedBy: dataToEdit?.hostedBy || "",
       headlines: dataToEdit?.headlines || "",
 
-      shortAward: dataToEdit?.shortAward || "",
       note: dataToEdit?.note || "",
       image: dataToEdit?.image || "",
       isPublic: dataToEdit?.isPublic || "",
@@ -131,15 +130,6 @@ export default function AwardsAndAchievements() {
               formik={entryFormik}
               name="headlines"
               label="Headlines"
-              required={true}
-            />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="Short Award"
-              label="shortAward"
               required={true}
             />
           </Grid>
