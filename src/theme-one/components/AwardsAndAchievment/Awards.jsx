@@ -42,7 +42,7 @@ const Awards = ({ awardsDetails }) => {
   };
 
   return (
-    <Box>
+    <>
       <Card
         sx={{
           maxWidth: 345,
@@ -77,7 +77,7 @@ const Awards = ({ awardsDetails }) => {
           </Button>
         </CardActions>
       </Card>
-    </Box>
+    </>
   );
 };
 

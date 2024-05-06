@@ -25,25 +25,26 @@ const Para = styled(Typography)(({ theme }) => ({
 
   [theme.breakpoints.down(900)]: {
     textAlign: "center",
-    margin: "5px 15px",
+    // margin: "5px 5px",
   },
   [theme.breakpoints.down(600)]: {
-    padding: "0px 50px",
+    padding: "0px 10px",
     textAlign: "center",
   },
   [theme.breakpoints.down(480)]: {
-    padding: "0px 20px",
+    padding: "0px 10px",
     textAlign: "center",
   },
 }));
 
 const TimeIcon = styled(AccessTimeIcon)(() => ({
-  fontSize: "0.7rem",
-  marginTop: "2px",
+  fontSize: "16px",
+  marginTop: "4px",
   color: themeData.darkPalette.primary.main,
 }));
 const Times = styled(Box)(({ theme }) => ({
   display: "flex",
+  alignSelf: "center",
   gap: "5px",
   [theme.breakpoints.down("md")]: {
     justifyContent: "center",
@@ -72,7 +73,8 @@ const Date = styled(Typography)(() => ({
 }));
 
 const Time = styled(Typography)(() => ({
-  fontSize: "0.7rem",
+  fontSize: "16px",
+  color: "black",
 }));
 
 const Arc = styled(Box)(({ theme }) => ({
@@ -91,7 +93,6 @@ const Arc = styled(Box)(({ theme }) => ({
 
 const CardImageWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
-  borderRadius: themeData.shapeProperties.borderRadius,
 }));
 
 const Events = ({ card }) => {
@@ -108,7 +109,7 @@ const Events = ({ card }) => {
   };
 
   return (
-    <Container maxWidth="xl">
+    <>
       <Grid
         container
         spacing={2}
@@ -123,7 +124,12 @@ const Events = ({ card }) => {
             <Arc>
               <Typography
                 variant="h4"
-                sx={{ color: "#ffffff", textAlign: "start", lineHeight: "1" }}
+                sx={{
+                  color: "#ffffff",
+                  textAlign: "start",
+                  fontSize: "25px",
+                  lineHeight: "1",
+                }}
               >
                 {specificDate}
               </Typography>
@@ -135,6 +141,7 @@ const Events = ({ card }) => {
                 transform: "scale(1)",
                 transition: "transform 0.3s ease-in-out",
                 cursor: "pointer",
+                borderRadius: "5px",
               }}
               onClick={handleNavigate}
               component="img"
@@ -145,13 +152,14 @@ const Events = ({ card }) => {
           </CardImageWrapper>
         </Grid>
         <Grid item xs={12} md={5}>
-          <CardContent>
+          <Box sx={{ paddingLeft: { lg: "15px", md: "15px" } }}>
             <Random>
               <Typography
                 variant="body1"
                 sx={{
                   fontWeight: "bold",
                   fontSize: "25px",
+                  color: "black",
                 }}
                 gutterBottom
               >
@@ -164,7 +172,7 @@ const Events = ({ card }) => {
             </Times>
 
             <Para>{card?.content?.substring(0, 150) + "....."}</Para>
-          </CardContent>
+          </Box>
           <CardActions>
             <Random>
               <ReadButton onClick={handleNavigate}>
@@ -175,7 +183,7 @@ const Events = ({ card }) => {
           </CardActions>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 
