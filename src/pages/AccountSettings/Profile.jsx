@@ -48,40 +48,37 @@ export default function Profile() {
 
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
-    console.log(values, "valuesvaluesvalues");
     try {
       const payload = {
-        ...values,
         schoolId: selectedSetting._id,
-
-        // basicInfo: {
-        //   name: employee.basicInfo.name,
-        //   designation: employee.basicInfo.designation,
-        //   gender: employee.basicInfo.gender,
-        //   bloodGroup: employee.basicInfo.bloodGroup,
-        //   religion: employee.basicInfo.religion,
-        //   dob: employee.basicInfo.dob,
-        //   presentAddress: employee.basicInfo.presentAddress,
-        //   permanentAddress: employee.basicInfo.permanentAddress,
-        //   aadharNo: employee.basicInfo.aadharNo,
-        // },
-        // academicInfo: {
-        //   email: employee.academicInfo.email,
-        //   joiningDate: employee.academicInfo.joiningDate,
-        //   resume: employee.academicInfo.resume,
-        // },
-        // otherInfo: {
-        //   facebookUrl: employee.otherInfo?.facebookUrl,
-        //   twitterUrl: employee.otherInfo?.twitterUrl,
-        //   linkedinUrl: employee.otherInfo?.linkedinUrl,
-        //   googlePlusUrl: employee.otherInfo?.googlePlusUrl,
-        //   youtubeUrl: employee.otherInfo?.youtubeUrl,
-        //   instagramUrl: employee.otherInfo?.instagramUrl,
-        //   pinterestUrl: employee.otherInfo?.pinterestUrl,
-        // },
-        // username: employee.username,
-        // photo: employee.photo,
-        // contactNumber: employee.contactNumber,
+        basicInfo: {
+          name: values.name,
+          designation: values.designation,
+          gender: values.gender,
+          bloodGroup: values.bloodGroup,
+          religion: values.religion,
+          dob: values.dob,
+          presentAddress: values.presentAddress,
+          permanentAddress: values.permanentAddress,
+          aadharNo: values.aadharNo,
+        },
+        academicInfo: {
+          email: value.email,
+          joiningDate: value.joiningDate,
+          resume: value.resume,
+        },
+        otherInfo: {
+          facebookUrl: values?.facebookUrl,
+          twitterUrl: values?.twitterUrl,
+          linkedinUrl: values?.linkedinUrl,
+          googlePlusUrl: values?.googlePlusUrl,
+          youtubeUrl: values?.youtubeUrl,
+          instagramUrl: values?.instagramUrl,
+          pinterestUrl: values?.pinterestUrl,
+        },
+        username: values.username,
+        photo: values.photo,
+        contactNumber: values.contactNumber,
       };
       setLoading(true);
       if (employee) {

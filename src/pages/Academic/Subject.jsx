@@ -41,7 +41,7 @@ export default function Subject() {
       setEmployees(
         data.result
           ?.filter((e) =>
-            e.role.name.toLowerCase().match(new RegExp(`Super admin`, "i"))
+            e.role.name.toLowerCase().match(new RegExp(`Teacher`, "i"))
           )
           .map((d) => ({ label: d.basicInfo.name, value: d._id }))
       );
