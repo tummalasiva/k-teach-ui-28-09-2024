@@ -261,13 +261,13 @@ export default function NavDrawer() {
   React.useEffect(() => {
     setSideMenuData(SIDE_MENU_DATA);
     getActiveAcademicYear();
-  });
+  }, []);
 
   //get academic year
   const getActiveAcademicYear = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
-      setActiveYear(data.data[0]);
+      setActiveYear(data.result[0]);
     } catch (error) {
       console.log(error);
     }

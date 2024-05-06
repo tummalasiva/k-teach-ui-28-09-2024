@@ -17,15 +17,19 @@ import {
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
+import themeData from "../../data/themeData";
+import { Padding } from "@mui/icons-material";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    // backgroundColor: themeData.lightPalette.primary.main,
-    width: "100%",
+    backgroundColor: "#44628561",
+    // width: "100%",
   },
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  width: 200,
+  padding: "13px 5px",
   border: "1px solid gray",
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -57,9 +61,8 @@ export default function FormTable({ employee }) {
 
       <Table
         aria-label="customized table"
-        className="profile-table"
         sx={{
-          width: 500,
+          width: 660,
           my: 2,
           display: {
             xs: "none",
@@ -67,6 +70,7 @@ export default function FormTable({ employee }) {
             md: "block",
             lg: "block",
           },
+          borderRadius: "5px",
         }}
       >
         <TableBody>
@@ -187,7 +191,6 @@ export default function FormTable({ employee }) {
       {/* ======== Mobile view table ============ */}
       <Table
         aria-label="customized table"
-        className="profile-table-mobile"
         sx={{
           width: "100%",
           mx: 2,

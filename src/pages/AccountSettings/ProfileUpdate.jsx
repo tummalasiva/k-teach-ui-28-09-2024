@@ -98,9 +98,8 @@ export default function ProfileUpdate({
   const getDesignation = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.designation.list);
-      console.log(data, "ress");
       setDesignations(
-        data.result.map((m) => ({ label: m.name, value: m.name.toLowerCase() }))
+        data.result.map((m) => ({ label: m.name, value: m._id }))
       );
     } catch (error) {
       console.error(error);
@@ -127,7 +126,7 @@ export default function ProfileUpdate({
     initialValues: {
       name: employee?.basicInfo?.name || "",
       aadharNo: employee.basicInfo.aadharNo || "",
-      designation: employee.basicInfo?.designation || "",
+      designation: employee.basicInfo?.designation?._id || "",
       gender: employee?.basicInfo.gender || "",
       bloodGroup: employee?.basicInfo.bloodGroup || "",
       religion: employee?.basicInfo.religion || "",
