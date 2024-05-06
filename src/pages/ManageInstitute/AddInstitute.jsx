@@ -137,7 +137,6 @@ export default function AddInstitute({ initialValue }) {
       const { data } = await post(PRIVATE_URLS.school.create, payload);
       // getData();
       console.log(data, "haha");
-      alert("hee");
     } catch (error) {
       console.log(error);
     }

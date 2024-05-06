@@ -100,4 +100,17 @@ export const PRIVATE_URLS = {
     update: "/teacherActivity/update",
     delete: "/teacherActivity/delete",
   },
+  gallery: {
+    list: "/gallery/list",
+    create: "/gallery/create",
+    update: "/gallery/update",
+    delete: "/gallery/delete",
+    sendGalleryImage: "/gallery/sendGalleryImage",
+  },
+  assignment: {
+    list: "/assignment/list",
+    create: "/assignment/create",
+    update: "/assignment/update",
+    delete: "/assignment/delete",
+  },
 };
