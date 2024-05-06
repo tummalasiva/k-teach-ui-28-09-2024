@@ -131,7 +131,7 @@ export default function Event() {
             <FormInput formik={entryFormik} name="hostedBy" label="Hosted By" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput formik={entryFormik} name="video" label="Video Link" />
+            <FormInput formik={entryFormik} name="video" label="Video " />
           </Grid>
 
           <Grid xs={12} sm={6} md={6} item>

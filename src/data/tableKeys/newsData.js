@@ -8,7 +8,7 @@ export const newsTableKeys = [
     key: "date",
   },
   {
-    name: "Is_Public",
+    name: "Is Public",
     key: "isPublic",
   },
 ];

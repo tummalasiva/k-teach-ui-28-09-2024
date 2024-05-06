@@ -12,7 +12,7 @@ export const awardAchievementTableKeys = [
     key: "location",
   },
   {
-    name: "Is_Public",
+    name: "Is Public",
     key: "isPublic",
   },
 ];
