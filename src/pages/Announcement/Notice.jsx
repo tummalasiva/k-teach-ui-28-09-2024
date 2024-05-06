@@ -28,12 +28,13 @@ export default function Notice() {
   const getRoles = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
-      setRolesData(
-        data.result.map((r) => ({
-          label: r.name,
-          value: r._id,
-        }))
-      );
+      const roles = data.result.map((r) => ({
+        label: r.name,
+        value: r._id,
+      }));
+
+      const rolesAllOption = [{ label: "All", value: "all" }, ...roles];
+      setRolesData(rolesAllOption);
     } catch (error) {
       console.log(error);
     }
