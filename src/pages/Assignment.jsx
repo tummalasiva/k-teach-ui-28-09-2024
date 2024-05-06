@@ -195,7 +195,7 @@ export default function Assignment() {
                 required={true}
                 name="assignmentType"
                 formik={entryFormik}
-                label="Select Type"
+                label="Select Assignment Type"
                 options={[
                   { label: "Class", value: "class" },
                   { label: "Assignment", value: "assignment" },
@@ -234,7 +234,7 @@ export default function Assignment() {
               />
             </Grid>
             <Grid xs={12} md={12} lg={12} item>
-              <FormInput name="note" formik={entryFormik} label="Note here" />
+              <FormInput name="note" formik={entryFormik} label="Note" />
             </Grid>
             <Grid
               xs={12}

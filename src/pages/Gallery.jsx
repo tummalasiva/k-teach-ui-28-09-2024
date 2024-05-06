@@ -128,7 +128,7 @@ export default function Gallery() {
                 required={true}
                 name="isPublic"
                 formik={entryFormik}
-                label="Web View"
+                label="Public Web"
                 options={[
                   { label: "yes", value: true },
                   { label: "No", value: false },
@@ -147,7 +147,7 @@ export default function Gallery() {
               />
             </Grid>
             <Grid xs={12} md={12} lg={12} item>
-              <FormInput name="note" formik={entryFormik} label="Note here" />
+              <FormInput name="note" formik={entryFormik} label="Note" />
             </Grid>
 
             <Grid

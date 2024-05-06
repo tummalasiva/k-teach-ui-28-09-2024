@@ -1,14 +1,14 @@
 import { useState } from "react";
+import { useFormik } from "formik";
+import dayjs from "dayjs";
+import { Grid } from "@mui/material";
 import PageHeader from "../components/PageHeader";
 import CustomTable from "../components/Tables/CustomTable";
 import { eventTableKeys } from "../data/tableKeys/eventData";
-
-import { Grid } from "@mui/material";
-import FormSelect from "../forms/FormSelect";
-import FormInput from "../forms/FormInput";
-import { useFormik } from "formik";
 import AddForm from "../forms/AddForm";
 import FormModal from "../forms/FormModal";
+import FormInput from "../forms/FormInput";
+import FormSelect from "../forms/FormSelect";
 import FormDatePicker from "../forms/FormDatePicker";
 
 const Is_Public = [
@@ -20,47 +20,34 @@ const Event_Fors = [{ label: "All", value: "all" }];
 
 export default function Event() {
   const [data, setData] = useState([]);
-
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const AddDepartmentHandel = () => {
+    setOpen(true);
+  };
+
+  const entryFormik = useFormik({
+    initialValues: {
+      eventTitle: dataToEdit?.eventTitle || "",
+      eventFor: dataToEdit?.eventFor || "",
+      location: dataToEdit?.location || "",
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
+      image: dataToEdit?.image || "",
+      webView: dataToEdit?.webView || "",
+      shortEvent: dataToEdit?.shortEvent || "",
+      note: dataToEdit?.note || "",
+    },
+    onSubmit: console.log("hhh"),
+    enableReinitialize: true,
+  });
 
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
   };
-  const AddEvent = () => {
-    setOpen(true);
-  };
-
-  const handleCreateOrUpdate = async (values) => {
-    try {
-      const payload = {
-        ...values,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const entryFormik = useFormik({
-    initialValues: {
-      title: dataToEdit?.title || "",
-      fromDate: dataToEdit?.dayjs(dataToEdit.fromDate),
-      toDate: dataToEdit?.dayjs(dataToEdit.toDate),
-      eventFor: dataToEdit?.eventFor || "",
-      location: dataToEdit?.location || "",
-
-      shortEvent: dataToEdit?.shortEvent || "",
-      hostedBy: dataToEdit?.hostedBy || "",
-      note: dataToEdit?.note || "",
-      image: dataToEdit?.image || "",
-      video: dataToEdit?.video || "",
-      isPublic: dataToEdit?.isPublic || "",
-    },
-    onSubmit: handleCreateOrUpdate,
-    enableReinitialize: true,
-  });
   return (
     <>
       <PageHeader title="Events" />
@@ -71,36 +58,37 @@ export default function Event() {
         tableKeys={eventTableKeys}
       />
 
-      <AddForm title="Add Event" onAddClick={AddEvent} />
+      {/* ====== Fab button component =======*/}
+      <AddForm title="Add Events" onAddClick={AddDepartmentHandel} />
+      {/* ================================== */}
 
+      {/* ==== add/edit academicYear ======== */}
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? "Update Event" : "Add Event"}
+        formTitle="Add Events"
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        submitButtonTitle="Submit"
         adding={loading}
       >
-        <Grid rowSpacing={0} columnSpacing={2} container>
+        <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="title"
-              label="Title"
+              name="eventTitle"
+              label="Event Title"
               required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="eventFor"
-              label="Event For"
+              label="Select Event"
               required={true}
-              options={Event_Fors}
+              // options={}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -109,56 +97,52 @@ export default function Event() {
               required={true}
             />
           </Grid>
-
-          <Grid xs={12} md={6} lg={6} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormDatePicker
-              required={true}
-              name="fromDate"
               formik={entryFormik}
+              name="fromDate"
               label="From Date"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={6} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormDatePicker
               required={true}
-              name="toDate"
               formik={entryFormik}
+              name="toDate"
               label="To Date"
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="hostedBy" label="Hosted By" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput formik={entryFormik} name="video" label="Video " />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="image"
-              label="Image"
               type="file"
-              required={true}
+              name="image"
+              label="Select Image"
+              inputProps={{
+                accept: "image/*",
+              }}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={entryFormik}
+              name="webView"
+              label="Web View"
+              options={[
+                { label: "Yes", value: true },
+                { label: "No", value: false },
+              ]}
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={6} item>
-            <FormSelect
-              name="isPublic"
-              formik={entryFormik}
-              label="Is Public"
-              options={Is_Public}
-              required={true}
-            />
-          </Grid>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput
               formik={entryFormik}
               name="shortEvent"
-              label="Short Event"
-              required={true}
+              label="Short event"
             />
           </Grid>
           <Grid xs={12} sm={12} md={12} item>
