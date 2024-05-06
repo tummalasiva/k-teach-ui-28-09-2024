@@ -130,7 +130,7 @@ export default function Gallery() {
                 formik={entryFormik}
                 label="Public Web"
                 options={[
-                  { label: "yes", value: true },
+                  { label: "Yes", value: true },
                   { label: "No", value: false },
                 ]}
               />
