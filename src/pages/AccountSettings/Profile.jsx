@@ -129,6 +129,7 @@ export default function Profile() {
         <ProfileUpdate
           handleCreateOrUpdate={handleCreateOrUpdate}
           employee={employee}
+          setSelectValue={setSelectValue}
         />
       </TabPanel>
     </>

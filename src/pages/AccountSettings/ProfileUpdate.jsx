@@ -32,7 +32,7 @@ const MuiBox = styled(Box)({
 const FormBox = styled(Box)(({ theme }) => ({
   border: "1px solid",
   borderColor: "lightgray",
-  marginBottom: "20px",
+  marginBottom: "50px",
   borderRadius: theme.shape.borderRadius,
   overflow: "hidden",
 }));
@@ -89,6 +89,7 @@ const Blood_Group = [
 export default function ProfileUpdate({
   handleCreateOrUpdate = () => {},
   employee = "",
+  setSelectValue = 0,
 }) {
   const navigate = useNavigate();
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
@@ -383,26 +384,26 @@ export default function ProfileUpdate({
           </Box>
         </FormBox>
 
-        {/* <StyledBox> */}
-        <Stack spacing={2} direction="row" justifyContent="flex-end">
-          <Button
-            size="small"
-            color="error"
-            variant="contained"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
-          <LoadingButton
-            loading={loading}
-            type="submit"
-            size="small"
-            variant="contained"
-          >
-            Update
-          </LoadingButton>
-        </Stack>
-        {/* </StyledBox> */}
+        <StyledBox>
+          <Stack spacing={2} direction="row" justifyContent="flex-end">
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={() => setSelectValue(0)}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              size="small"
+              variant="contained"
+            >
+              Update
+            </LoadingButton>
+          </Stack>
+        </StyledBox>
       </form>
     </>
   );

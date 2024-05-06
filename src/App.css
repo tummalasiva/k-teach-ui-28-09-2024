@@ -81,3 +81,10 @@
 .facilitiesMain:hover .facilitiesButton {
   color: #196838;
 }
+
+@media (max-width: 650px) {
+  .navbarResponsive {
+    display: flex;
+    flex-direction: column;
+  }
+}
