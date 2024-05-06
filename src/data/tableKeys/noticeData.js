@@ -6,6 +6,7 @@ export const noticeTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Is Public",

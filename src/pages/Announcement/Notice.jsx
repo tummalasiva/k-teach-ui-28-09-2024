@@ -36,9 +36,7 @@ export default function Notice() {
           schoolId: selectedSetting._id,
         },
       });
-      // setData(data.result);
-
-      console.log(data, "result");
+      setData(data.result);
     } catch (error) {
       console.log(error);
     }
