@@ -12,6 +12,12 @@ export default function FormInput({
   containerStyle = {},
   ...rest
 }) {
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
+    formik.setFieldValue(name, capitalizedValue);
+  };
+
   return (
     <TextField
       required={required}
@@ -24,7 +30,7 @@ export default function FormInput({
       placeholder={`Enter ${label}`}
       fullWidth
       value={formik.values[name] || ""}
-      onChange={formik.handleChange}
+      onChange={handleInputChange}
       error={formik.touched[name] && Boolean(formik.errors[name])}
       helperText={formik.touched[name] && formik.errors[name]}
       sx={{

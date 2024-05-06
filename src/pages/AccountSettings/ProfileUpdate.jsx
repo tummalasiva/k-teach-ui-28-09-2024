@@ -180,6 +180,9 @@ export default function ProfileUpdate({
                 label="Logo"
                 type="file"
                 onChange={(e) => handleEmpPhoto(e)}
+                inputProps={{
+                  accept: "image/*",
+                }}
               />
             </Grid>
           </Grid>
