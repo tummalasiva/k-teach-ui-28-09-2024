@@ -63,9 +63,9 @@ export default function Profile() {
           aadharNo: values.aadharNo,
         },
         academicInfo: {
-          email: value.email,
-          joiningDate: value.joiningDate,
-          resume: value.resume,
+          email: values.email,
+          joiningDate: values.joiningDate,
+          resume: values.resume,
         },
         otherInfo: {
           facebookUrl: values?.facebookUrl,

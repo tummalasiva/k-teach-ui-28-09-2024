@@ -51,7 +51,6 @@ export default function OverviewTable() {
         {/* ========= Desktop view =============== */}
         <Table
           aria-label="customized table"
-          className="profile-table"
           sx={{
             display: {
               xs: "none",
@@ -151,7 +150,6 @@ export default function OverviewTable() {
         {/* ======== Tablet view table ============ */}
         <Table
           aria-label="customized table"
-          className="profile-table"
           sx={{
             display: {
               xs: "none",
@@ -234,7 +232,6 @@ export default function OverviewTable() {
         {/* ======== Mobile view table ============ */}
         <Table
           aria-label="customized table"
-          className="profile-table"
           sx={{
             display: {
               xs: "inline-block",
