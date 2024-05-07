@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { newsTableKeys } from "../../data/tableKeys/newsData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -9,6 +9,11 @@ import { useFormik } from "formik";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import FormDatePicker from "../../forms/FormDatePicker";
+import { del, get, post, put } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -16,11 +21,43 @@ const Is_Public = [
 ];
 
 export default function News() {
+  const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [rolesData, setRolesData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = React.useState(
+    dataToEdit && dataToEdit.image ? dataToEdit.image : null
+  );
+
+  useEffect(() => {
+    if (dataToEdit && Object.keys(dataToEdit).length) {
+      setImageFile(dataToEdit.image);
+    }
+  }, [dataToEdit]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    setImageFile(URL.createObjectURL(file));
+  };
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.news.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -32,26 +69,70 @@ export default function News() {
 
   const handleCreateOrUpdate = async (values) => {
     try {
-      const payload = {
-        ...values,
-      };
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("schoolId", selectedSetting._id);
+      formData.append("date", values.date);
+      formData.append("news", values.news);
+      formData.append("shortNews", values.shortNews);
+      formData.append("isPublic", values.isPublic);
+      formData.append("file", selectedImage);
+      setLoading(true);
+      if (dataToEdit) {
+        const data = await put(
+          PRIVATE_URLS.news.update + "/" + dataToEdit._id,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        getData();
+      } else {
+        const data = await post(PRIVATE_URLS.news.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        console.log(data, "sdfghjnkm,.");
+
+        getData();
+      }
+      handleClose();
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-      date: dataToEdit?.dayjs(dataToEdit.date),
+
+      date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
+
       image: dataToEdit?.image || "",
       news: dataToEdit?.news || "",
       shortNews: dataToEdit?.shortNews || "",
-      isPublic: dataToEdit?.isPublic || "",
+      isPublic: dataToEdit?.isPublic || false,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleEditClick = (data) => {
+    console.log(data);
+    setDataToEdit(data);
+    setImageFile(data.image);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.news.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <PageHeader title="News" />
@@ -60,6 +141,9 @@ export default function News() {
         bodyDataModal="News"
         bodyData={data}
         tableKeys={newsTableKeys}
+        adding={loading}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       <AddForm title="Add News" onAddClick={AddNews} />
@@ -104,6 +188,7 @@ export default function News() {
               name="image"
               type="file"
               label="Image"
+              onChange={handleFileChange}
             />
           </Grid>
 
@@ -123,6 +208,11 @@ export default function News() {
               label="News"
               required={true}
             />
+          </Grid>
+          <Grid xs={12} sm={12} md={12} item>
+            {selectedImage && (
+              <img src={imageFile} alt="Preview" style={{ maxWidth: "100%" }} />
+            )}
           </Grid>
         </Grid>
       </FormModal>

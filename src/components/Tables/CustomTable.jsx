@@ -47,7 +47,7 @@ const getDataValue = (data, k) => {
   }
 
   if (k.isDate) {
-    return data[k.key] ? new Date(data[k.key]).toLocaleString() : "NA";
+    return data[k.key] ? new Date(data[k.key]).toDateString() : "NA";
   } else {
     return data[k.key] || "NA";
   }

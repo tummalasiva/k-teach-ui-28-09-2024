@@ -119,4 +119,11 @@ export const PRIVATE_URLS = {
     update: "/notice/update",
     delete: "/notice/delete",
   },
+
+  news: {
+    list: "/news/list",
+    create: "/news/create",
+    update: "/news/update",
+    delete: "/news/delete",
+  },
 };

@@ -10,7 +10,7 @@ import { Grid } from "@mui/material";
 
 import FormDatePicker from "../../forms/FormDatePicker";
 import { useFormik } from "formik";
-import { post, put, get } from "../../services/apiMethods";
+import { post, put, get, del } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 
 import dayjs from "dayjs";
@@ -76,7 +76,7 @@ export default function Notice() {
     try {
       const payload = {
         ...values,
-        date: dayjs(values.date).format("YYYY-MM-DD"),
+
         schoolId: selectedSetting._id,
       };
       setLoading(true);
@@ -99,15 +99,30 @@ export default function Notice() {
 
   const entryFormik = useFormik({
     initialValues: {
-      title: "",
-      date: dayjs(new Date()),
-      noticeFor: "",
-      notice: "",
-      isPublic: "",
+      title: dataToEdit ? dataToEdit.title : "",
+      date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
+      noticeFor: dataToEdit ? dataToEdit.noticeFor : "",
+      notice: dataToEdit ? dataToEdit.notice : "",
+      isPublic: dataToEdit ? dataToEdit.isPublic : false,
     },
     onSubmit: handleCreateOrUpdate,
-    // enableReinitialize: true,
+    enableReinitialize: true,
   });
+
+  const handleEditClick = (data) => {
+    console.log(data);
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.notice.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -118,6 +133,8 @@ export default function Notice() {
         bodyData={data}
         tableKeys={noticeTableKeys}
         adding={loading}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
       <AddForm title="Add Notice" onAddClick={AddNotice} />
 
@@ -135,6 +152,7 @@ export default function Notice() {
               formik={entryFormik}
               name="title"
               label="Title"
+              type="text"
               required={true}
             />
           </Grid>
@@ -150,6 +168,7 @@ export default function Notice() {
           <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               name="noticeFor"
+              type="text"
               formik={entryFormik}
               label="Notice For"
               options={rolesData}
