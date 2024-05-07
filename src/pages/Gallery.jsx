@@ -54,7 +54,7 @@ export default function Gallery() {
   };
 
   const handleRemoveFile = (fileName, index) => {
-    console.log(fileName, "gii");
+    // console.log(fileName, "gii");
     setSelectImg(selectImg.filter((img) => img.name != fileName));
   };
 

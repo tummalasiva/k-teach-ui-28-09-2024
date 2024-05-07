@@ -126,4 +126,10 @@ export const PRIVATE_URLS = {
     update: "/news/update",
     delete: "/news/delete",
   },
+  event: {
+    list: "/event/list",
+    create: "/event/create",
+    update: "/event/update",
+    delete: "/event/delete",
+  },
 };
