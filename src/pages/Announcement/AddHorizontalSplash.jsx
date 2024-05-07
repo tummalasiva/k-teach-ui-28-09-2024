@@ -12,17 +12,12 @@ import SettingContext from "../../context/SettingsContext";
 import CustomTable from "../../components/Tables/CustomTable";
 import { horizontalSplashNewsTableKeys } from "../../data/tableKeys/horizontalSplashNewsData";
 
-const Is_Enabled = [
-  { label: "Yes", value: true },
-  { label: "No", value: false },
-];
-
 export default function AddHorizontalSplash() {
   const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [horizontalData, setHorizonntalData] = useState([]);
+  const [data, setData] = useState([]);
 
   const getData = async () => {
     try {
@@ -31,9 +26,11 @@ export default function AddHorizontalSplash() {
           schoolId: selectedSetting._id,
         },
       });
-      setHorizonntalData(data.result);
 
-      console.log(data.result, "result");
+      const horizontalvalues = data.result.filter(
+        (newitem) => newitem.type !== "Popup"
+      );
+      setData(horizontalvalues);
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +97,7 @@ export default function AddHorizontalSplash() {
 
   const handleToggle = async (data) => {
     try {
-      const res = await del(PRIVATE_URLS.splashNews.toggle + "/" + data._id);
+      const res = await put(PRIVATE_URLS.splashNews.toggle + "/" + data._id);
       getData();
     } catch (error) {
       console.error(error);
@@ -111,7 +108,7 @@ export default function AddHorizontalSplash() {
       <CustomTable
         actions={["edit", "delete", "switch"]}
         bodyDataModal="Horizontal Splash News"
-        bodyData={horizontalData}
+        bodyData={data}
         tableKeys={horizontalSplashNewsTableKeys}
         adding={loading}
         onEditClick={handleEditClick}
@@ -142,14 +139,6 @@ export default function AddHorizontalSplash() {
             <FormInput formik={entryFormik} name="title" label="Title" />
           </Grid>
 
-          {/* <Grid xs={12} md={6} lg={6} item>
-            <FormSelect
-              name="enabled"
-              formik={entryFormik}
-              label="Enable"
-              options={Is_Enabled}
-            />
-          </Grid> */}
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="text" label="Text" />
           </Grid>

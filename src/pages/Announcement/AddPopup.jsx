@@ -37,7 +37,12 @@ export default function AddPopup() {
           schoolId: selectedSetting._id,
         },
       });
-      setData(data.result);
+
+      const popupvalues = data.result.filter(
+        (newitem) => newitem.type === "Popup"
+      );
+
+      setData(popupvalues);
 
       console.log(data.result, "result");
     } catch (error) {
@@ -119,7 +124,7 @@ export default function AddPopup() {
 
   const handleToggle = async (data) => {
     try {
-      const res = await del(PRIVATE_URLS.splashNews.toggle + "/" + data._id);
+      const res = await put(PRIVATE_URLS.splashNews.toggle + "/" + data._id);
       getData();
     } catch (error) {
       console.error(error);
