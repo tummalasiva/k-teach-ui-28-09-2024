@@ -60,18 +60,17 @@ export default function AddPopup() {
   const AddHorizontalSplashNews = () => {
     setOpen(true);
   };
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("link", values.link);
+    formData.append("text", values.text);
+    formData.append("type", "Popup");
+    formData.append("contentType", values.contentType);
+    formData.append("schoolId", selectedSetting._id);
+    selectImg.forEach((file) => formData.append("image", file));
+    selectDocument.forEach((file) => formData.append("document", file));
     try {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("link", values.link);
-      formData.append("text", values.text);
-      formData.append("type", "Popup");
-      formData.append("contentType", values.contentType);
-      formData.append("schoolId", selectedSetting._id);
-      selectImg.forEach((file) => formData.append("image", file));
-      selectDocument.forEach((file) => formData.append("document", file));
-
       setLoading(true);
       if (dataToEdit) {
         const data = await put(
@@ -86,6 +85,7 @@ export default function AddPopup() {
         const data = await post(PRIVATE_URLS.splashNews.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        resetForm();
         getData();
       }
       handleClose();
@@ -113,9 +113,9 @@ export default function AddPopup() {
     setOpen(true);
   };
 
-  const handleDelete = async (data) => {
+  const handleDelete = async (id) => {
     try {
-      const res = await del(PRIVATE_URLS.splashNews.delete + "/" + data._id);
+      const res = await del(PRIVATE_URLS.splashNews.delete + "/" + id);
       getData();
     } catch (error) {
       console.error(error);

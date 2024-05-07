@@ -47,7 +47,7 @@ export default function AddHorizontalSplash() {
     setOpen(true);
   };
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       setLoading(true);
       const payload = {
@@ -61,8 +61,10 @@ export default function AddHorizontalSplash() {
           PRIVATE_URLS.splashNews.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const data = await post(PRIVATE_URLS.splashNews.create, payload);
+        resetForm();
         getData();
       }
       handleClose();
