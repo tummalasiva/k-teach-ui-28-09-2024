@@ -26,6 +26,22 @@ export default function News() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = React.useState(
+    dataToEdit && dataToEdit.image ? dataToEdit.image : null
+  );
+
+  useEffect(() => {
+    if (dataToEdit && Object.keys(dataToEdit).length) {
+      setImageFile(dataToEdit.image);
+    }
+  }, [dataToEdit]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    setImageFile(URL.createObjectURL(file));
+  };
 
   const getData = async () => {
     try {
@@ -51,22 +67,32 @@ export default function News() {
     setOpen(true);
   };
 
-  const handleCreateOrUpdate = async (values, { resetForm }) => {
+  const handleCreateOrUpdate = async (values) => {
     try {
-      const payload = {
-        ...values,
-
-        schoolId: selectedSetting._id,
-      };
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("schoolId", selectedSetting._id);
+      formData.append("date", values.date);
+      formData.append("news", values.news);
+      formData.append("shortNews", values.shortNews);
+      formData.append("isPublic", values.isPublic);
+      formData.append("file", selectedImage);
       setLoading(true);
       if (dataToEdit) {
         const data = await put(
           PRIVATE_URLS.news.update + "/" + dataToEdit._id,
-          payload
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
         getData();
       } else {
-        const data = await post(PRIVATE_URLS.news.create, payload);
+        const data = await post(PRIVATE_URLS.news.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        console.log(data, "sdfghjnkm,.");
 
         getData();
       }
@@ -95,6 +121,7 @@ export default function News() {
   const handleEditClick = (data) => {
     console.log(data);
     setDataToEdit(data);
+    setImageFile(data.image);
     setOpen(true);
   };
 
@@ -161,6 +188,7 @@ export default function News() {
               name="image"
               type="file"
               label="Image"
+              onChange={handleFileChange}
             />
           </Grid>
 
@@ -180,6 +208,11 @@ export default function News() {
               label="News"
               required={true}
             />
+          </Grid>
+          <Grid xs={12} sm={12} md={12} item>
+            {selectedImage && (
+              <img src={imageFile} alt="Preview" style={{ maxWidth: "100%" }} />
+            )}
           </Grid>
         </Grid>
       </FormModal>
