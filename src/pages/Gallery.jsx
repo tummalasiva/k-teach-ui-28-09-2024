@@ -13,6 +13,8 @@ import FormInput from "../forms/FormInput";
 import SettingContext from "../context/SettingsContext";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import { get, post, put } from "../services/apiMethods";
+import AddOrUpdateFiles from "../forms/AddOrUpdateFiles";
+import FileSelect from "../forms/FileSelect";
 
 export default function Gallery() {
   const { selectedSetting } = useContext(SettingContext);
@@ -20,6 +22,8 @@ export default function Gallery() {
   const [value, setSelectValue] = useState(0);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectImg, setSelectImg] = useState([]);
+  const [date, setDate] = useState(dataToEdit ? dayjs(dataToEdit.date) : null);
 
   const getData = async () => {
     try {
@@ -28,32 +32,56 @@ export default function Gallery() {
           schoolId: selectedSetting._id,
         },
       });
-      console.log(data, "gallery list");
+      // console.log(data, "gallery list");
       setData(data.result);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setSelectImg(fileList);
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    console.log(fileName, "gii");
+    setSelectImg(selectImg.filter((img) => img.name != fileName));
+  };
+
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
-    try {
-      const payload = {
-        ...values,
-        schoolId: selectedSetting._id,
-      };
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("date", values.date);
+    formData.append("isPublic", values.isPublic ? true : false);
+    formData.append("note", values.note);
+    selectImg.forEach((file) => formData.append("file", file));
+    formData.append("schoolId", selectedSetting._id);
 
+    try {
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.gallery.update + "/" + dataToEdit._id,
-          payload
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
-        getData();
       } else {
-        const { data } = await post(PRIVATE_URLS.gallery.create, payload);
-        getData();
-        console.log(data, "gallery podt");
+        const { data } = await post(PRIVATE_URLS.gallery.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
       handleClose();
     } catch (error) {
@@ -70,22 +98,35 @@ export default function Gallery() {
     initialValues: {
       title: dataToEdit?.title || "",
       note: dataToEdit?.note || "",
-      isPublic: dataToEdit?.isPublic || "",
-      date: dayjs(new Date()),
-      images: "",
+      isPublic: dataToEdit?.isPublic || false,
+      date: dataToEdit?.date || null,
     },
     onSubmit: handleCreateOrUpdate,
-    enableReinitialize: false,
+    enableReinitialize: true,
   });
 
   const handleClose = () => {
-    // setSelectValue(0);
+    setSelectValue(0);
     setDataToEdit(null);
+    setSelectImg([]);
+    getData();
   };
 
   useEffect(() => {
     getData();
   }, []);
+
+  const handleEditClick = (data) => {
+    // console.log(data, "fff");
+    setDataToEdit(data);
+    setSelectValue(1);
+  };
+
+  useEffect(() => {
+    if (value === 0) {
+      entryFormik.resetForm();
+    }
+  }, [value]);
 
   return (
     <>
@@ -93,13 +134,17 @@ export default function Gallery() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Gallery List", "Add Gallery"]}
+        labels={[
+          "Gallery List",
+          `${dataToEdit && value != 0 ? "Edit Gallery" : "Add Gallery"}`,
+        ]}
       />
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit", "delete"]}
           bodyDataModal="Gallery"
           bodyData={data}
+          onEditClick={handleEditClick}
           tableKeys={galleryListTableKeys}
         />
       </TabPanel>
@@ -128,28 +173,25 @@ export default function Gallery() {
                 required={true}
                 name="isPublic"
                 formik={entryFormik}
-                label="Public Web"
+                label="Is Public Web"
                 options={[
-                  { label: "yes", value: true },
+                  { label: "Yes", value: true },
                   { label: "No", value: false },
                 ]}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="images"
-                formik={entryFormik}
-                label="Select Image"
-                type="file"
-                inputProps={{
-                  accept: "image/*",
-                }}
+              <FileSelect
+                name={`images`}
+                onChange={(e) => handleChangeFiles(e)}
+                customOnChange={true}
+                selectedFiles={selectImg}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
               />
             </Grid>
             <Grid xs={12} md={12} lg={12} item>
               <FormInput name="note" formik={entryFormik} label="Note" />
             </Grid>
-
             <Grid
               xs={12}
               md={6}

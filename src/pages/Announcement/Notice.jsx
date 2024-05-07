@@ -7,13 +7,10 @@ import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import { Grid } from "@mui/material";
-
 import FormDatePicker from "../../forms/FormDatePicker";
 import { useFormik } from "formik";
 import { post, put, get, del } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-
-import dayjs from "dayjs";
 import SettingContext from "../../context/SettingsContext";
 
 const Is_Public = [
@@ -76,7 +73,6 @@ export default function Notice() {
     try {
       const payload = {
         ...values,
-
         schoolId: selectedSetting._id,
       };
       setLoading(true);
@@ -100,7 +96,7 @@ export default function Notice() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit ? dataToEdit.title : "",
-      date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
+      date: dataToEdit?.date || null,
       noticeFor: dataToEdit ? dataToEdit.noticeFor : "",
       notice: dataToEdit ? dataToEdit.notice : "",
       isPublic: dataToEdit ? dataToEdit.isPublic : false,

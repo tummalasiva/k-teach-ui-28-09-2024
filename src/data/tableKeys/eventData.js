@@ -10,13 +10,15 @@ export const eventTableKeys = [
   {
     name: "From Date",
     key: "fromDate",
+    isDate: true,
   },
   {
     name: "To Date",
     key: "toDate",
+    isDate: true,
   },
   {
-    name: "HostedBy",
+    name: "Hosted By",
     key: "hostedBy",
   },
 ];

@@ -35,7 +35,7 @@ function FormDatePicker({
         closeOnSelect
         views={views}
         inputFormat={inputFormat}
-        value={formik.values[name]}
+        value={dayjs(formik.values[name]) || null}
         onChange={(value) => formik.setFieldValue(name, dayjs(value))}
         // renderInput={(params) => (
         //   <TextField

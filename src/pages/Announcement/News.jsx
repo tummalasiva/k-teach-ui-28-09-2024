@@ -13,7 +13,6 @@ import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { useEffect } from "react";
-import dayjs from "dayjs";
 import FileSelect from "../../forms/FileSelect";
 
 const Is_Public = [
@@ -27,7 +26,7 @@ export default function News() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectImg, setSelectImg] = useState([]);
 
   const getData = async () => {
     try {
@@ -62,7 +61,7 @@ export default function News() {
       formData.append("news", values.news);
       formData.append("shortNews", values.shortNews);
       formData.append("isPublic", values.isPublic);
-      formData.append("file", selectedImage);
+      selectImg.forEach((file) => formData.append("file", file));
 
       setLoading(true);
       if (dataToEdit) {
@@ -92,9 +91,7 @@ export default function News() {
     initialValues: {
       title: dataToEdit?.title || "",
 
-      date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
-
-      image: dataToEdit?.image || null,
+      date: dataToEdit?.date || null,
       news: dataToEdit?.news || "",
       shortNews: dataToEdit?.shortNews || "",
       isPublic: dataToEdit?.isPublic || false,
@@ -119,8 +116,23 @@ export default function News() {
     }
   };
 
-  const handleFileChange = (file) => {
-    setSelectedImage(file);
+  const handleRemoveFile = (fileName, index) => {
+    console.log(fileName, "gii");
+    setSelectImg(selectImg.filter((img) => img.name != fileName));
+  };
+
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setSelectImg(fileList);
+    } else {
+      console.log("No files selected");
+    }
   };
   return (
     <>
@@ -171,10 +183,14 @@ export default function News() {
               required={true}
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item mt={2.5}>
+          <Grid xs={12} sm={6} md={6} item>
             <FileSelect
-              onSelect={handleFileChange}
-              imageUrl={dataToEdit?.image}
+              multi={false}
+              name={`images`}
+              onChange={(e) => handleChangeFiles(e)}
+              customOnChange={true}
+              selectedFiles={selectImg}
+              onRemove={(fileName) => handleRemoveFile(fileName)}
             />
           </Grid>
 

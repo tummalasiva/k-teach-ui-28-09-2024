@@ -30,13 +30,14 @@ export default function Event() {
 
   const entryFormik = useFormik({
     initialValues: {
-      eventTitle: dataToEdit?.eventTitle || "",
+      title: dataToEdit?.title || "",
       eventFor: dataToEdit?.eventFor || "",
       location: dataToEdit?.location || "",
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
       image: dataToEdit?.image || "",
-      webView: dataToEdit?.webView || "",
+      isPublic: dataToEdit?.isPublic || "",
+      video: dataToEdit?.video || "",
       shortEvent: dataToEdit?.shortEvent || "",
       note: dataToEdit?.note || "",
     },
@@ -75,7 +76,7 @@ export default function Event() {
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="eventTitle"
+              name="title"
               label="Event Title"
               required={true}
             />
@@ -119,6 +120,18 @@ export default function Event() {
             <FormInput
               formik={entryFormik}
               type="file"
+              name="video"
+              label="Select video"
+              inputProps={{
+                accept: "video/*",
+              }}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              required={true}
+              formik={entryFormik}
+              type="file"
               name="image"
               label="Select Image"
               inputProps={{
@@ -129,7 +142,7 @@ export default function Event() {
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
-              name="webView"
+              name="isPublic"
               label="Web View"
               options={[
                 { label: "Yes", value: true },
@@ -138,8 +151,9 @@ export default function Event() {
             />
           </Grid>
 
-          <Grid xs={12} sm={12} md={12} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormInput
+              required={true}
               formik={entryFormik}
               name="shortEvent"
               label="Short event"
