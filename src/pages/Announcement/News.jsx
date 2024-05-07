@@ -14,6 +14,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import FileSelect from "../../forms/FileSelect";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -27,21 +28,6 @@ export default function News() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [imageFile, setImageFile] = React.useState(
-    dataToEdit && dataToEdit.image ? dataToEdit.image : null
-  );
-
-  useEffect(() => {
-    if (dataToEdit && Object.keys(dataToEdit).length) {
-      setImageFile(dataToEdit.image);
-    }
-  }, [dataToEdit]);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-    setImageFile(URL.createObjectURL(file));
-  };
 
   const getData = async () => {
     try {
@@ -77,6 +63,7 @@ export default function News() {
       formData.append("shortNews", values.shortNews);
       formData.append("isPublic", values.isPublic);
       formData.append("file", selectedImage);
+
       setLoading(true);
       if (dataToEdit) {
         const data = await put(
@@ -109,7 +96,7 @@ export default function News() {
 
       date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
 
-      image: dataToEdit?.image || "",
+      image: dataToEdit?.image || null,
       news: dataToEdit?.news || "",
       shortNews: dataToEdit?.shortNews || "",
       isPublic: dataToEdit?.isPublic || false,
@@ -121,7 +108,7 @@ export default function News() {
   const handleEditClick = (data) => {
     console.log(data);
     setDataToEdit(data);
-    setImageFile(data.image);
+
     setOpen(true);
   };
 
@@ -132,6 +119,10 @@ export default function News() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleFileChange = (file) => {
+    setSelectedImage(file);
   };
   return (
     <>
@@ -183,12 +174,9 @@ export default function News() {
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="image"
-              type="file"
-              label="Image"
-              onChange={handleFileChange}
+            <FileSelect
+              onSelect={handleFileChange}
+              imageUrl={dataToEdit?.image}
             />
           </Grid>
 
@@ -208,11 +196,6 @@ export default function News() {
               label="News"
               required={true}
             />
-          </Grid>
-          <Grid xs={12} sm={12} md={12} item>
-            {selectedImage && (
-              <img src={imageFile} alt="Preview" style={{ maxWidth: "100%" }} />
-            )}
           </Grid>
         </Grid>
       </FormModal>
