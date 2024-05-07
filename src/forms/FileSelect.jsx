@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
 
 const FileSelect = ({ onSelect, imageUrl }) => {
@@ -17,24 +17,48 @@ const FileSelect = ({ onSelect, imageUrl }) => {
   };
 
   return (
-    <Box mt={3} sx={{ display: "flex" }}>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+    <>
+      <Button fullWidth component="label" size="small" variant="outlined">
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+        Select Image
+      </Button>
       {imageUrl ? (
-        <Box>
-          <img src={imageUrl} alt="Preview" style={{ maxWidth: "100px" }} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={imageUrl}
+            alt="Preview"
+            style={{ maxWidth: "100px", marginTop: "2px" }}
+          />
         </Box>
       ) : (
         imagePreview && (
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <img
               src={imagePreview}
               alt="Preview"
-              style={{ maxWidth: "100px" }}
+              style={{ maxWidth: "100px", marginTop: "2px" }}
             />
           </Box>
         )
       )}
-    </Box>
+    </>
   );
 };
 

@@ -171,7 +171,7 @@ export default function News() {
               required={true}
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
+          <Grid xs={12} sm={6} md={6} item mt={2.5}>
             <FileSelect
               onSelect={handleFileChange}
               imageUrl={dataToEdit?.image}
