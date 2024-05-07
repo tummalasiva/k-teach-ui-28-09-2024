@@ -5,6 +5,6 @@ export const galleryListTableKeys = [
   },
   {
     name: "Is view on web",
-    key: "web",
+    key: "isPublic",
   },
 ];

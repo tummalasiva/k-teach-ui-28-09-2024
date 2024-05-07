@@ -105,7 +105,7 @@ export const PRIVATE_URLS = {
     create: "/gallery/create",
     update: "/gallery/update",
     delete: "/gallery/delete",
-    sendGalleryImage: "/gallery/sendGalleryImage",
+    addFiles: "/gallery/addFiles",
   },
   assignment: {
     list: "/assignment/list",
