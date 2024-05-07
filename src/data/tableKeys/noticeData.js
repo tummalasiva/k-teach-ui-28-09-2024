@@ -6,9 +6,10 @@ export const noticeTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
-    name: "Web View",
-    key: "isWebView",
+    name: "Is Public",
+    key: "isPublic",
   },
 ];

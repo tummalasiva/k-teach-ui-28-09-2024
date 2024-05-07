@@ -11,6 +11,13 @@ import FormInput from "../forms/FormInput";
 import FormSelect from "../forms/FormSelect";
 import FormDatePicker from "../forms/FormDatePicker";
 
+const Is_Public = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const Event_Fors = [{ label: "All", value: "all" }];
+
 export default function Event() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -42,7 +49,6 @@ export default function Event() {
     setOpen(false);
     setDataToEdit(null);
   };
-
   return (
     <>
       <PageHeader title="Events" />

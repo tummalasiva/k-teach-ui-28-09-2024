@@ -553,14 +553,14 @@ export default function UpdateEmployee() {
                   label="User Name"
                 />
               </Grid>
-              <Grid xs={12} md={6} lg={3} item>
+              {/* <Grid xs={12} md={6} lg={3} item>
                 <FormInput
                   required={true}
                   name="password"
                   formik={entryFormik}
                   label="Password"
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
         </FormBox>

@@ -113,4 +113,10 @@ export const PRIVATE_URLS = {
     update: "/assignment/update",
     delete: "/assignment/delete",
   },
+  notice: {
+    list: "/notice/list",
+    create: "/notice/create",
+    update: "/notice/update",
+    delete: "/notice/delete",
+  },
 };

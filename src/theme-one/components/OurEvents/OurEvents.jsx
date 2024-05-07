@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { Grid, Box, Button, createTheme, styled } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
+import {
+  Grid,
+  Box,
+  Button,
+  createTheme,
+  styled,
+  Container,
+} from "@mui/material";
 import Events from "./Events";
 import Header from "../Header";
 import themeData from "../../../data/themeData";
@@ -64,37 +70,12 @@ export const cards = [
   },
 ];
 
-const ViewAll = styled(Grid)(({ theme }) => ({
+const View = styled(Grid)(({ theme }) => ({
   textAlign: "right",
-  marginRight: "5%",
-  [theme.breakpoints.down("md")]: {
-    textAlign: "right",
-    marginRight: "10px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    marginTop: "5%",
-    textAlign: "center",
-  },
+  paddingBottom: "10px",
 }));
 
-const ViewLess = styled(Grid)(({ theme }) => ({
-  textAlign: "right",
-  marginRight: "5%",
-  [theme.breakpoints.down("md")]: {
-    textAlign: "right",
-  },
-  [theme.breakpoints.down("sm")]: {
-    textAlign: "center",
-  },
-}));
-
-const ViewMore = styled(Button)(({ theme }) => ({
-  fontSize: "10px",
-  color: themeData.darkPalette.primary.main,
-  border: "1px solid",
-}));
-
-const ViewLessEvents = styled(Button)(({ theme }) => ({
+const ViewButton = styled(Button)(({ theme }) => ({
   fontSize: "10px",
   color: themeData.darkPalette.primary.main,
   border: "1px solid",
@@ -102,17 +83,17 @@ const ViewLessEvents = styled(Button)(({ theme }) => ({
 
 const ViewAllButton = ({ handleClick }) => {
   return (
-    <ViewAll item xs={12} md={12}>
-      <ViewMore onClick={handleClick}>View All</ViewMore>
-    </ViewAll>
+    <View item xs={12} md={12}>
+      <ViewButton onClick={handleClick}>View All</ViewButton>
+    </View>
   );
 };
 
 const ViewLessButton = ({ handleClick }) => {
   return (
-    <ViewLess item xs={12}>
-      <ViewLessEvents onClick={handleClick}>View Less</ViewLessEvents>
-    </ViewLess>
+    <View item xs={12}>
+      <ViewButton onClick={handleClick}>View Less</ViewButton>
+    </View>
   );
 };
 
@@ -128,34 +109,32 @@ const OurEvents = () => {
   };
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Box pt={3}>
-          {" "}
-          <Header title1="Our" title2="Events" />
-        </Box>
-        {cards.length >= 4 && !showAll && (
-          <ViewAllButton handleClick={handleViewAllClick} />
-        )}
+    <Container maxWidth="xl">
+      <Box pt={3}>
+        {" "}
+        <Header title1="Our" title2="Events" />
+      </Box>
+      {cards.length >= 4 && !showAll && (
+        <ViewAllButton handleClick={handleViewAllClick} />
+      )}
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
-            <React.Fragment key={index}>
-              <Events card={card} />
-            </React.Fragment>
-          ))}
-        </Box>
-        {showAll && <ViewLessButton handleClick={handleViewLessClick} />}
-      </ThemeProvider>
-    </>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        {cards.slice(0, showAll ? cards.length : 3).map((card, index) => (
+          <React.Fragment key={index}>
+            <Events card={card} />
+          </React.Fragment>
+        ))}
+      </Box>
+      {showAll && <ViewLessButton handleClick={handleViewLessClick} />}
+    </Container>
   );
 };
 
