@@ -14,15 +14,9 @@ import { useContext } from "react";
 import SettingContext from "../../context/SettingsContext";
 import FileSelect from "../../forms/FileSelect";
 
-const Is_Public = [
-  { label: "Yes", value: true },
-  { label: "No", value: false },
-];
-
-const Contennt_Type_Options = [
+const Content_Type_Options = [
   { label: "Link", value: "Link" },
   { label: "Text", value: "Text" },
-
   { label: "Image", value: "Image" },
   { label: "Document", value: "Document" },
 ];
@@ -133,22 +127,23 @@ export default function AddPopup() {
   };
 
   const handleRemoveFile = (fileName, index) => {
-    console.log(fileName, "gii");
     setSelectImg(selectImg.filter((img) => img.name != fileName));
-    setSelectdocument(selectDocument.filter((img) => img.name != fileName));
+    setSelectdocument(selectDocument.filter((doc) => doc.name != fileName));
   };
 
   const handleChangeFiles = (e, index) => {
     const { files } = e.target;
     let fileList = [];
+    let documentList = [];
 
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         fileList.push(file);
+        documentList.push(file);
       }
       setSelectImg(fileList);
-      setSelectdocument(fileList);
+      setSelectdocument(documentList);
     } else {
       console.log("No files selected");
     }
@@ -194,7 +189,7 @@ export default function AddPopup() {
               name="contentType"
               label="Content Type"
               required={true}
-              options={Contennt_Type_Options}
+              options={Content_Type_Options}
             />
           </Grid>
           {entryFormik.values.contentType === "Link" && (
