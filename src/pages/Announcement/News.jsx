@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { newsTableKeys } from "../../data/tableKeys/newsData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -9,6 +9,11 @@ import { useFormik } from "formik";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import FormDatePicker from "../../forms/FormDatePicker";
+import { del, get, post, put } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -16,11 +21,27 @@ const Is_Public = [
 ];
 
 export default function News() {
+  const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [rolesData, setRolesData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.news.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -30,28 +51,61 @@ export default function News() {
     setOpen(true);
   };
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
+
+        schoolId: selectedSetting._id,
       };
+      setLoading(true);
+      if (dataToEdit) {
+        const data = await put(
+          PRIVATE_URLS.news.update + "/" + dataToEdit._id,
+          payload
+        );
+        getData();
+      } else {
+        const data = await post(PRIVATE_URLS.news.create, payload);
+
+        getData();
+      }
+      handleClose();
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-      date: dataToEdit?.dayjs(dataToEdit.date),
+
+      date: dataToEdit?.date ? dayjs(dataToEdit.date) : null,
+
       image: dataToEdit?.image || "",
       news: dataToEdit?.news || "",
       shortNews: dataToEdit?.shortNews || "",
-      isPublic: dataToEdit?.isPublic || "",
+      isPublic: dataToEdit?.isPublic || false,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleEditClick = (data) => {
+    console.log(data);
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.news.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <PageHeader title="News" />
@@ -60,6 +114,9 @@ export default function News() {
         bodyDataModal="News"
         bodyData={data}
         tableKeys={newsTableKeys}
+        adding={loading}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       <AddForm title="Add News" onAddClick={AddNews} />
