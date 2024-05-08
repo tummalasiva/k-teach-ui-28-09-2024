@@ -12,18 +12,7 @@ const MuiBox = styled(Box)(() => ({
   textAlign: "center",
 }));
 
-const defaultPopupData = {
-  title: "Hii",
-  text: "ergergerg",
-};
-const defaultPopupData2 = {
-  title: "By",
-  text: "ergergerg",
-};
-
-const SplashNewsHorizontal = ({
-  horizontalData = [defaultPopupData, defaultPopupData2],
-}) => {
+const SplashNewsHorizontal = ({ horizontalData = [] }) => {
   let text = horizontalData.map((d) => `${d.text}`);
 
   return (
