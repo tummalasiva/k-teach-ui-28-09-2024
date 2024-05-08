@@ -33,26 +33,24 @@ export default function FileSelect({
   return (
     <>
       <Wrapper mt={1}>
-        {multi && (
-          <Typography
-            component="div"
-            onClick={() => setOpen(true)}
-            sx={{
-              fontWeight: "bold",
-              borderRadius: "5px",
-              padding: "5px",
-              backgroundColor: "white",
-              border: "1px solid lightgray",
-              color: "black",
-              height: "30px",
-              width: "30px",
-              textAlign: "center",
-              cursor: "pointer",
-            }}
-          >
-            {selectedFiles.length}
-          </Typography>
-        )}
+        <Typography
+          component="div"
+          onClick={() => setOpen(true)}
+          sx={{
+            fontWeight: "bold",
+            borderRadius: "5px",
+            padding: "5px",
+            backgroundColor: "white",
+            border: "1px solid lightgray",
+            color: "black",
+            height: "30px",
+            width: "30px",
+            textAlign: "center",
+            cursor: "pointer",
+          }}
+        >
+          {selectedFiles.length}
+        </Typography>
 
         <Button fullWidth component="label" size="medium" variant="outlined">
           <input
