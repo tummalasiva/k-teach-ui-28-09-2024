@@ -52,6 +52,7 @@ const SpalshNewsPopup = ({
     window.open(link, "_blank");
   };
 
+  if (!open || window.location.pathname.startsWith("/sch")) return null;
   return (
     <>
       {sharedData?.contentType === "Link" && (

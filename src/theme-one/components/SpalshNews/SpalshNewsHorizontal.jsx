@@ -15,6 +15,8 @@ const MuiBox = styled(Box)(() => ({
 const SplashNewsHorizontal = ({ horizontalData = [] }) => {
   let text = horizontalData.map((d) => `${d.text}`);
 
+  if (window.location.pathname.startsWith("/sch")) return null;
+
   return (
     <MuiBox>
       <marquee direction="left">
