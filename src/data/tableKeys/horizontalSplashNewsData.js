@@ -7,8 +7,4 @@ export const horizontalSplashNewsTableKeys = [
     name: "Text",
     key: "text",
   },
-  {
-    name: "Is Public",
-    key: "isPublic",
-  },
 ];
