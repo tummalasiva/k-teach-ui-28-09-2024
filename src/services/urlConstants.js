@@ -126,6 +126,12 @@ export const PRIVATE_URLS = {
     update: "/news/update",
     delete: "/news/delete",
   },
+  holiday: {
+    list: "/holiday/list",
+    create: "/holiday/create",
+    update: "/holiday/update",
+    delete: "/holiday/delete",
+  },
   splashNews: {
     list: "/splashNews/list",
     create: "/splashNews/create",
