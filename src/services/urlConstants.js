@@ -132,4 +132,24 @@ export const PRIVATE_URLS = {
     update: "/event/update",
     delete: "/event/delete",
   },
+
+  holiday: {
+    list: "/holiday/list",
+    create: "/holiday/create",
+    update: "/holiday/update",
+    delete: "/holiday/delete",
+  },
+  awards: {
+    list: "/awards/list",
+    create: "/awards/create",
+    update: "/awards/update",
+    delete: "/awards/delete",
+  },
+  splashNews: {
+    list: "/splashNews/list",
+    create: "/splashNews/create",
+    update: "/splashNews/update",
+    delete: "/splashNews/delete",
+    toggle: "/splashNews/toggleEnable",
+  },
 };

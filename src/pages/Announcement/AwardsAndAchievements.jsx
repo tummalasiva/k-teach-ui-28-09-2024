@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { holidayTableKeys } from "../../data/tableKeys/holidayData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { awardAchievementTableKeys } from "../../data/tableKeys/awardAchievementsData";
-
 import { Grid } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
@@ -11,6 +10,10 @@ import { useFormik } from "formik";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import FormDatePicker from "../../forms/FormDatePicker";
+import SettingContext from "../../context/SettingsContext";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get, post, put, del } from "../../services/apiMethods";
+import FileSelect from "../../forms/FileSelect";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -18,11 +21,14 @@ const Is_Public = [
 ];
 
 export default function AwardsAndAchievements() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [selectImg, setSelectImg] = useState([]);
 
   const handleClose = () => {
     setOpen(false);
@@ -33,13 +39,38 @@ export default function AwardsAndAchievements() {
   };
 
   const handleCreateOrUpdate = async (values) => {
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("date", values.date);
+    formData.append("awardFor", values.awardFor);
+    formData.append("location", values.location);
+    formData.append("hostedBy", values.hostedBy);
+    formData.append("headlines", values.headlines);
+    formData.append("note", values.note);
+    formData.append("awardFor", values.awardFor);
+    formData.append("isPublic", values.isPublic);
+    selectImg.forEach((file) => formData.append("file", file));
+    formData.append("schoolId", selectedSetting._id);
     try {
-      const payload = {
-        ...values,
-      };
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.awards.update + "/" + dataToEdit._id,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.awards.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      handleClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
+    setLoading(false);
   };
 
   const entryFormik = useFormik({
@@ -54,19 +85,39 @@ export default function AwardsAndAchievements() {
 
       note: dataToEdit?.note || "",
       image: dataToEdit?.image || "",
-      isPublic: dataToEdit?.isPublic || "",
+      isPublic: dataToEdit?.isPublic || false,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setSelectImg(fileList);
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    console.log(fileName, "gii");
+    setSelectImg(selectImg.filter((img) => img.name != fileName));
+  };
   return (
     <>
-      <PageHeader title="Award and Achievements" />
+      <PageHeader title="Award And Achievements" />
       <CustomTable
         actions={["edit", "delete"]}
         bodyDataModal="Award and Achievements"
         bodyData={data}
         tableKeys={awardAchievementTableKeys}
+        adding={loading}
       />
 
       <AddForm
@@ -135,12 +186,13 @@ export default function AwardsAndAchievements() {
           </Grid>
 
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
+            <FileSelect
+              multi={false}
               name="image"
-              label="Image"
-              type="file"
-              required={true}
+              onChange={(e) => handleChangeFiles(e)}
+              customOnChange={true}
+              selectedFiles={selectImg}
+              onRemove={(fileName) => handleRemoveFile(fileName)}
             />
           </Grid>
 

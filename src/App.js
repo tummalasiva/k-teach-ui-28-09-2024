@@ -15,7 +15,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 
 import { get } from "./services/apiMethods";
-import { PUBLIC_URLS } from "./services/urlConstants";
+import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
+import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
+import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -29,6 +31,51 @@ function App() {
   const [selectedSetting, setSelectedSetting] = useState({
     name: "ABC School",
   });
+
+  const [popupData, setPopupData] = useState({
+    open: false,
+    data: {},
+  });
+  const [horizontalData, setHorizontalData] = useState([]);
+  const handleClosePopup = () => setPopupData({ open: false, data: null });
+
+  const getSplashNews = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.splashNews.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      console.log(selectedSetting, "mmmmmm");
+      if (data.result.length) {
+        let allSplashNews = data.result;
+        setHorizontalData(
+          allSplashNews.filter((s) => s.type !== "Popup" && s.enabled === true)
+        );
+        setPopupData({
+          open: false,
+          data: allSplashNews.filter(
+            (s) => s.type === "Popup" && s.enabled === true
+          )[0],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedSetting && selectedSetting._id) {
+      getSplashNews();
+    }
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (popupData.data) {
+      setPopupData({ ...popupData, open: true });
+    }
+  }, [popupData.data]);
 
   useEffect(() => {
     let theme = window.localStorage.getItem("selectedTheme");
@@ -264,6 +311,14 @@ function App() {
     >
       <WebsiteThemeContext.Provider value={{ selectedTheme, setSelectedTheme }}>
         <ThemeProvider theme={webTheme}>
+          <SpalshNewsPopup
+            open={popupData.open}
+            sharedData={popupData.data}
+            handleClose={handleClosePopup}
+          />
+          {horizontalData.length ? (
+            <SplashNewsHorizontal horizontalData={horizontalData} />
+          ) : null}
           <Routes>
             <Route
               path="/*"

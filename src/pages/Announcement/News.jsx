@@ -186,7 +186,7 @@ export default function News() {
           <Grid xs={12} sm={6} md={6} item>
             <FileSelect
               multi={false}
-              name={`images`}
+              name="image"
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectImg}
