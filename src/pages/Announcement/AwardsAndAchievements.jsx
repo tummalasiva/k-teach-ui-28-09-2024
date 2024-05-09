@@ -35,6 +35,8 @@ export default function AwardsAndAchievements() {
         },
       });
       setData(data.result);
+
+      console.log(data.result, "bbbbbbbbbbbbbbbbbbbb");
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +53,7 @@ export default function AwardsAndAchievements() {
     setOpen(true);
   };
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("date", values.date);
@@ -77,6 +79,7 @@ export default function AwardsAndAchievements() {
         const { data } = await post(PRIVATE_URLS.awards.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        resetForm();
         getData();
       }
       handleClose();
@@ -137,6 +140,8 @@ export default function AwardsAndAchievements() {
       console.error(error);
     }
   };
+
+  console.log(dataToEdit, "dataToEdittttt");
   return (
     <>
       <PageHeader title="Award And Achievements" />
@@ -233,6 +238,18 @@ export default function AwardsAndAchievements() {
           </Grid>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
+          </Grid>
+
+          <Grid xs={12} sm={12} md={12} item>
+            {dataToEdit && dataToEdit.image && (
+              <>
+                <img
+                  src={dataToEdit.image}
+                  alt="image"
+                  style={{ maxWidth: "100px", marginTop: "10px" }}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
       </FormModal>
