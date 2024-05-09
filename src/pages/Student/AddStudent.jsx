@@ -598,11 +598,12 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
+                <FileSelect
                   name="fatherPhoto"
-                  formik={entryFormik}
-                  label="Select Photo"
-                  type="file"
+                  onChange={(e) => handleChangeFiles(e)}
+                  customOnChange={true}
+                  selectedFiles={selectedImg}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
                 />
               </Grid>
             </Grid>
@@ -652,11 +653,12 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
+                <FileSelect
                   name="motherPhoto"
-                  formik={entryFormik}
-                  label="Select Photo"
-                  type="file"
+                  onChange={(e) => handleChangeFiles(e)}
+                  customOnChange={true}
+                  selectedFiles={selectedImg}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
                 />
               </Grid>
             </Grid>
