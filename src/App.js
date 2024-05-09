@@ -309,16 +309,16 @@ function App() {
         setSelectedSetting,
       }}
     >
-      <SpalshNewsPopup
-        open={popupData.open}
-        sharedData={popupData.data}
-        handleClose={handleClosePopup}
-      />
-      {horizontalData.length ? (
-        <SplashNewsHorizontal horizontalData={horizontalData} />
-      ) : null}
       <WebsiteThemeContext.Provider value={{ selectedTheme, setSelectedTheme }}>
         <ThemeProvider theme={webTheme}>
+          <SpalshNewsPopup
+            open={popupData.open}
+            sharedData={popupData.data}
+            handleClose={handleClosePopup}
+          />
+          {horizontalData.length ? (
+            <SplashNewsHorizontal horizontalData={horizontalData} />
+          ) : null}
           <Routes>
             <Route
               path="/*"

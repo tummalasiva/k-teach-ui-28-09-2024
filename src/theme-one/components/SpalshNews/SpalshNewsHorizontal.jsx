@@ -1,6 +1,7 @@
 import { Box, Typography, styled } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import themeData from "../../../data/themeData";
+import { useLocation } from "react-router-dom";
 
 const MuiBox = styled(Box)(() => ({
   overflow: "hidden",
@@ -14,8 +15,9 @@ const MuiBox = styled(Box)(() => ({
 
 const SplashNewsHorizontal = ({ horizontalData = [] }) => {
   let text = horizontalData.map((d) => `${d.text}`);
+  const location = useLocation();
 
-  if (window.location.pathname.startsWith("/sch")) return null;
+  if (location.pathname.startsWith("/sch")) return null;
 
   return (
     <MuiBox>
