@@ -16,13 +16,13 @@ export default function CircularWaves() {
   return (
     <>
       <Box
-        className={Style.circular1}
+        className="circular1"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <Box className={Style.circular2}></Box>
-        <Box className={Style.circular3}></Box>
-        <Box className={Style.circular4}></Box>
+        <Box className="circular2"></Box>
+        <Box className="circular3"></Box>
+        <Box className="circular4"></Box>
       </Box>
     </>
   );

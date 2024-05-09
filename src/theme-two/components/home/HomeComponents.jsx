@@ -10,13 +10,15 @@ import {
   Modal,
   keyframes,
   css,
+  IconButton,
 } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
 import CircularWaves from "../animated-button/CircularWaves";
 // icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import themeData from "../../../data/themeData";
-
+import { Cancel } from "@mui/icons-material";
+import CancelIcon from "@mui/icons-material/Cancel";
 const rippleAnimation = keyframes`
   0% {
     transform: scale(0);
@@ -39,6 +41,18 @@ to {
 
 const RotateImg = css`
   animation: ${Rotate} 100s infinite linear;
+`;
+
+const RotatePencile = css`
+  animation: ${Rotate} 80s infinite linear;
+`;
+
+const RotateMegnify = css`
+  animation: ${Rotate} 150s infinite linear;
+`;
+
+const RotateScience = css`
+  animation: ${Rotate} 70s infinite linear;
 `;
 
 const style = {
@@ -64,14 +78,30 @@ const AnimatedImage = styled("img")(({ theme }) => ({
   ...RotateImg,
 }));
 
+const AnimatedPencile = styled("img")(({ theme }) => ({
+  objectFit: "contain",
+  ...RotatePencile,
+}));
+
+const AnimatedMegnify = styled("img")(({ theme }) => ({
+  objectFit: "contain",
+  ...RotateMegnify,
+}));
+
+const AnimatedScience = styled("img")(({ theme }) => ({
+  objectFit: "contain",
+  ...RotateScience,
+}));
+
 const VideoPlayButton = styled(Box)(({ theme }) => ({
   color: "white",
+  position: "relative",
   borderRadius: "50%",
   background: themeData.lightPalette.secondary.main,
-  height: "60px",
-  width: "60px",
+  height: "50px",
+  width: "50px",
   display: "flex",
-  // zIndex: 30,
+  zIndex: 20,
   alignItems: "center",
   justifyContent: "center",
   "&:hover": {
@@ -275,8 +305,9 @@ export default function HomeComponents() {
               <Button
                 variant="contained"
                 sx={{
+                  background: themeData.darkPalette.secondary.main,
                   "&:hover": {
-                    bgcolor: "transparent",
+                    background: "transparent",
                     color: "#fff",
                     border: `1px solid ${themeData.lightPalette.secondary.main}`,
                   },
@@ -284,24 +315,24 @@ export default function HomeComponents() {
               >
                 GET ADMISSION
               </Button>
-              {/* <Box
-                // sx={{ zIndex: 10, position: "relative" }}
-                // onClick={handleOpen}
-              > */}
-              {/* <Box sx={{ zIndex: 10, position: "relative" }}>
-                  <CircularWaves />
-                </Box> */}
 
-              <RippleVideoButton>
+              <Box onClick={handleOpen}>
+                <Box
+                  sx={{
+                    zIndex: 10,
+                    position: "relative",
+                  }}
+                >
+                  <CircularWaves />
+                </Box>
                 <VideoPlayButton>
                   <PlayArrowIcon />
                 </VideoPlayButton>
-              </RippleVideoButton>
-              {/* </Box> */}
+              </Box>
 
               <Modal
-                // open={open}
-                // onClose={handleClose}
+                open={open}
+                onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
@@ -321,31 +352,29 @@ export default function HomeComponents() {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   ></iframe>
-                  <Button
+                  <IconButton
                     variant="contained"
+                    size="large"
+                    color="error"
                     sx={{
-                      zIndex: 10,
                       position: "absolute",
-                      left: "103%",
-                      top: "0%",
-                      bgcolor: "#ff4500",
-                      "&:hover": { bgcolor: "#1779f7" },
+                      right: -60,
+                      top: 0,
                     }}
-                    // onClick={handleClose}
+                    onClick={handleClose}
                   >
-                    cancel
-                    {/* <Cancel /> */}
-                  </Button>
+                    <CancelIcon fontSize="40px" color="error" />
+                  </IconButton>
                 </Box>
               </Modal>
             </Box>
           </Box>
           <PencileBox>
-            <AnimatedImage
+            <AnimatedPencile
               src="pencile.png"
               width={100}
               height={100}
-              style={{ position: "absolute", top: "220px " }}
+              style={{ position: "absolute", top: "235px " }}
             />
           </PencileBox>
           <IconBox>
@@ -356,17 +385,17 @@ export default function HomeComponents() {
               style={{
                 position: "absolute",
                 right: "30px",
-                top: "380px ",
+                top: "390px ",
               }}
             />
-            <AnimatedImage
+            <AnimatedMegnify
               src="magnifying.png"
               width={100}
               height={100}
               style={{
                 position: "absolute",
                 right: "70px",
-                top: "560px ",
+                top: "580px ",
               }}
             />
             <Box
@@ -376,14 +405,14 @@ export default function HomeComponents() {
                 alignItems: "center",
               }}
             >
-              <AnimatedImage
+              <AnimatedScience
                 src="science.png"
                 width={100}
                 height={100}
                 style={{
                   position: "absolute",
                   marginLeft: "2px",
-                  top: "200px ",
+                  top: "230px ",
                 }}
               />
               <AnimatedImage
@@ -392,8 +421,8 @@ export default function HomeComponents() {
                 height={100}
                 style={{
                   position: "absolute",
-                  marginLeft: "2px",
-                  bottom: "-10px",
+                  marginLeft: "10px",
+                  bottom: -10,
                 }}
               />
             </Box>
