@@ -69,6 +69,15 @@ const Blood_Group = [
   { label: "AB-", value: "ab-" },
 ];
 
+const Relation_With_Guardian = [
+  { label: "Father", value: "Father" },
+  { label: "Mother", value: "Mother" },
+  { label: "Sister", value: "Sister" },
+  { label: "Brother", value: "Brother" },
+  { label: "Uncle", value: "Uncle" },
+  { label: "Other Relative", value: "Other Relative" },
+];
+
 const RTE_Options = [
   { label: "Yes", value: "yes" },
   { label: "No", value: "no" },
@@ -99,7 +108,7 @@ export default function AddStudent() {
     }
   };
 
-  const getSection = async (classId) => {
+  const getSection = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
@@ -108,7 +117,6 @@ export default function AddStudent() {
         },
       });
       setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      console.log(data.result, "sectioooooo");
     } catch (error) {
       console.log(error);
     }
@@ -123,8 +131,6 @@ export default function AddStudent() {
         setSelectedClass(data.result[0]._id);
         entryFormik.setFieldValue("class", data.result[0]._id);
       }
-
-      console.log(data.result, "mmmmmmmm");
     } catch (error) {
       console.log(error);
     }
@@ -188,9 +194,11 @@ export default function AddStudent() {
         otherInfo: {
           email: values.email,
           healthCondition: values.healthCondition,
-          hostelMember: values.hostelMember,
-          transportMember: values.transportMemberl,
+          hostelMember: values.hostelMember || false,
+          transportMember: values.transportMemberl || false,
+          libraryMember: values.libraryMember || false,
           busStop: values.busStop,
+          extraInfo: values.extraInfo,
         },
         contactInfo: {
           guardianName: values.guardianName,
@@ -202,7 +210,7 @@ export default function AddStudent() {
           permanentAddress: values.permanentAddress,
         },
         prevSchInfo: {
-          name: values.name,
+          name: values.prevSchName,
           tcNo: values.tcNo,
           prevClass: values.prevClass,
         },
@@ -246,25 +254,44 @@ export default function AddStudent() {
       academicYear: "",
       name: "",
       admissionDate: null,
+      motherTongue: "",
       dob: null,
       gender: "",
       bloodGroup: "",
       cicn: "",
       religion: "",
       cast: "",
-      contactNumber: "",
-      fatherName: "",
       rte: "",
-      fatherContactNumber: "",
-      motherName: "",
-      motherContactNumber: "",
+      aadharNo: "",
+      satNo: "",
+      grNo: "",
+      birthPlace: "",
+
       class: "",
       section: "",
       rollNo: "",
-      active: "",
+
+      contactNumber: "",
+      guardianName: "",
+      guardianContactNumber: "",
+      guardianContactNumberSecondary: "",
+      guardianRelation: "",
+      nationId: "",
+      presentAddress: "",
+      permanentAddress: "",
+
+      prevSchName: "",
       prevClass: "",
-      satNo: "",
-      grNo: "",
+      tcNo: "",
+
+      email: "",
+      healthCondition: "",
+      transportMember: "",
+      hostelMember: "",
+      libraryMember: "",
+      busStop: "",
+      extraInfo: "",
+      active: "",
 
       fatherName: "",
       fatherPhone: "",
@@ -494,29 +521,29 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="guardianNo"
+                  name="guardianContactNumber"
                   formik={entryFormik}
                   label="Guardian Number"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="alternateNo"
+                  name="guardianContactNumberSecondary"
                   formik={entryFormik}
                   label="Alternate Number"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  name="relationGuardian"
+                  name="guardianRelation"
                   formik={entryFormik}
                   label="Select Relation With Guardian"
-                  // options={""}
+                  options={Relation_With_Guardian}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="nationalId"
+                  name="nationId"
                   formik={entryFormik}
                   label="Select National Id"
                 />
@@ -601,6 +628,7 @@ export default function AddStudent() {
                 <FileSelect
                   name="transferCertificate"
                   label="Select File"
+                  multi={false}
                   onChange={(e) => handleChangePhoto(e, "transferCertificate")}
                   customOnChange={true}
                   selectedFiles={transferCertificate}
@@ -656,6 +684,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="fatherPhoto"
+                  multi={false}
                   label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "father")}
                   customOnChange={true}
@@ -713,6 +742,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   label="Select Photo"
+                  multi={false}
                   name="motherPhoto"
                   onChange={(e) => handleChangePhoto(e, "mother")}
                   customOnChange={true}
@@ -758,9 +788,9 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  name="hostel"
+                  name="hostelMember"
                   formik={entryFormik}
-                  label="Select Hostel"
+                  label="Select Hostel Member"
                   options={[
                     { label: "Yes", value: true },
                     { label: "No", value: false },
@@ -769,9 +799,21 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  name="transport"
+                  name="transportMember"
                   formik={entryFormik}
-                  label="Select Transport"
+                  label="Select Transport Member"
+                  options={[
+                    { label: "Yes", value: false },
+                    { label: "No", value: true },
+                  ]}
+                />
+              </Grid>
+
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="libraryMember"
+                  formik={entryFormik}
+                  label="Select Library Member"
                   options={[
                     { label: "Yes", value: false },
                     { label: "No", value: true },
@@ -795,6 +837,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="studentPhoto"
+                  multi={false}
                   label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "studentPhoto")}
                   customOnChange={true}
