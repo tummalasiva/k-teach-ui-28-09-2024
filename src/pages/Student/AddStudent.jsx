@@ -195,6 +195,7 @@ export default function AddStudent() {
         academicYear: values.academicYear,
         schoolId: selectedSetting._id,
         contactNumber: values.contactNumber,
+        active: values.active,
       };
       const formData = new FormData();
       formData.append("body", JSON.stringify(payload));
@@ -246,7 +247,7 @@ export default function AddStudent() {
       class: "",
       section: "",
       rollNo: "",
-      status: "",
+      active: "",
       prevClass: "",
       satNo: "",
       grNo: "",
