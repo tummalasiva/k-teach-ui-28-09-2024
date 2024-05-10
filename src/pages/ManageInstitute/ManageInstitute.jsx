@@ -4,7 +4,7 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { manageInstituteTableKeys } from "../../data/tableKeys/manageInstituteData";
 import AddForm from "../../forms/AddForm";
 import { useNavigate } from "react-router-dom";
-import { get } from "../../services/apiMethods";
+import { get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 
 export default function ManageInstitute() {
@@ -26,6 +26,21 @@ export default function ManageInstitute() {
   useEffect(() => {
     getData();
   }, []);
+
+  const handleToggleSwitch = async (school) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.school.toggleActiveStatus + "/" + school._id
+      );
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = (data) => {
+    navigate(`/sch/manage-institute/edit-institute/${data._id}`);
+  };
   return (
     <>
       <PageHeader title="Manage Institute" />
@@ -35,7 +50,8 @@ export default function ManageInstitute() {
         bodyData={data}
         tableKeys={manageInstituteTableKeys}
         toggleStatus="active"
-        // onToggleSwitch={handleToggleSwitch}
+        onToggleSwitch={handleToggleSwitch}
+        onEditClick={handleEdit}
       />
       <AddForm title="Add Institute" onAddClick={handleAddClick} />
     </>

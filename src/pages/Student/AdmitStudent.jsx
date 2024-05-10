@@ -117,22 +117,20 @@ export default function AdmitStudent() {
 
   const getList = async (values) => {
     try {
-      const { academicYear, class: selectedClass, section, active } = values;
-
-      const params = {
-        schoolId: selectedSetting._id,
-        search: {
-          academicYear,
-          class: selectedClass,
-          section,
-          active,
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            academicYear: values.academicYear,
+            "academicInfo.class": values.class,
+            "academicInfo.section": values.section,
+            active: values.active,
+          },
         },
-      };
-
-      const { data } = await get(PRIVATE_URLS.student.list, { params });
-      setData(data.result);
+      });
+      setData(data.result, "kkkkkkk");
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log(error);
     }
   };
 
@@ -147,6 +145,10 @@ export default function AdmitStudent() {
     enableReinitialize: true,
   });
 
+  const handleClassChange = (e) => {
+    const selectedClassId = e.target.value;
+    setSelectedClass(selectedClassId);
+  };
   return (
     <>
       <PageHeader title="Students" />
@@ -169,6 +171,7 @@ export default function AdmitStudent() {
                 formik={entryFormik}
                 label="Select Class"
                 options={classData}
+                onChange={handleClassChange}
               />
             </Grid>
 

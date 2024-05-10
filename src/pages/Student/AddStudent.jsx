@@ -143,10 +143,10 @@ export default function AddStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      // if (data.result?.length) {
-      //   setSelectedClass(data.result[0]._id);
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
-      // }
+      if (data.result?.length) {
+        setSelectedClass(data.result[0]._id);
+        entryFormik.setFieldValue("class", data.result[0]._id);
+      }
     } catch (error) {
       console.log(error);
     }

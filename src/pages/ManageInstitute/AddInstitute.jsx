@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import {
@@ -20,9 +20,9 @@ import currencyCodes from "currency-codes";
 import avatar from "../../assets/images/avatar.jpg";
 import AddOrUpdateFiles from "../../forms/AddOrUpdateFiles";
 import PageHeader from "../../components/PageHeader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import currencyToSymbolMap from "currency-symbol-map/map";
-import { post, put } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
@@ -117,11 +117,26 @@ const Admission_Options = [
 ];
 export default function AddInstitute({ initialValue = null }) {
   const navigate = useNavigate();
+  const { id } = useParams();
   const symbol = Object.keys(currencyToSymbolMap);
   const [dataToEdit, setDataToEdit] = useState(initialValue);
   const [loading, setLoading] = useState(false);
   const [logo, setLogo] = useState([]);
   const [bannerImages, setBannerImages] = useState([]);
+
+  const getSchoolDetails = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.school.details + "/" + id);
+      setDataToEdit(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      getSchoolDetails();
+    }
+  }, [id]);
 
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
@@ -164,10 +179,21 @@ export default function AddInstitute({ initialValue = null }) {
       formData.append("bodyData", JSON.stringify(payload));
       logo.forEach((f) => formData.append("logo", f));
 
-      const { data } = await post(PRIVATE_URLS.school.create, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log(data, "datat schooll");
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.school.update + "/" + dataToEdit._id,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.school.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
+      entryFormik.resetForm();
+      setLogo([]);
+      navigate(-1);
     } catch (error) {
       console.log(error);
     }
@@ -179,8 +205,7 @@ export default function AddInstitute({ initialValue = null }) {
       name: dataToEdit?.name || "",
       address: dataToEdit?.address || "",
       phone: dataToEdit?.phone || "",
-      regDate:
-        dataToEdit && dataToEdit.regDate ? dayjs(dataToEdit.regDate) : null,
+      regDate: dataToEdit && dataToEdit.regDate ? dataToEdit.regDate : null,
       email: dataToEdit?.email || "",
       fax: dataToEdit?.fax || "",
       websiteFooter: dataToEdit?.websiteFooter || "",
@@ -189,11 +214,11 @@ export default function AddInstitute({ initialValue = null }) {
       currencySymbol: dataToEdit?.currencySymbol || "",
       sessionStartMonth:
         dataToEdit && dataToEdit.sessionStartMonth
-          ? dayjs(dataToEdit.sessionStartMonth)
+          ? dataToEdit.sessionStartMonth
           : null,
       sessionEndMonth:
         dataToEdit && dataToEdit.sessionEndMonth
-          ? dayjs(dataToEdit.sessionEndMonth)
+          ? dataToEdit.sessionEndMonth
           : null,
       rollNumberType: dataToEdit?.rollNumberType || "",
       studentAttendenceType: dataToEdit?.studentAttendenceType || "",
@@ -216,14 +241,6 @@ export default function AddInstitute({ initialValue = null }) {
     enableReinitialize: true,
   });
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewCreateUrl(imageUrl);
-    }
-  };
-
   return (
     <>
       <PageHeader title="Add Institute" showTextField={false} />
@@ -232,7 +249,7 @@ export default function AddInstitute({ initialValue = null }) {
         <BasicData>
           <MuiBox>
             <img
-              src={previewCreateUrl || avatar}
+              src={dataToEdit?.logo || avatar}
               style={{
                 width: "100px",
                 height: "100px",
@@ -469,7 +486,7 @@ export default function AddInstitute({ initialValue = null }) {
         </FormBox>
 
         {/* Social Info */}
-        <FormBox sx={{ marginBottom: !dataToEdit ? "60px" : 0 }}>
+        <FormBox sx={{ marginBottom: !dataToEdit ? "60px" : "20px" }}>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Social Information
           </Title>
@@ -579,7 +596,7 @@ export default function AddInstitute({ initialValue = null }) {
                   size="small"
                   variant="contained"
                 >
-                  Submit
+                  {dataToEdit ? "Update" : "Submit"}
                 </LoadingButton>
               </Stack>
             </StyledBox>

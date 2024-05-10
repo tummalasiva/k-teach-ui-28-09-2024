@@ -21,39 +21,20 @@ export default function StudentActivity() {
   const [loading, setLoading] = useState(false);
   const [academicYearList, setAcademicYearList] = useState([]);
   const [students, setStudents] = useState([]);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    class: "",
+    section: "",
+    academicYear: "",
+    student: "",
+  });
   const [classes, setClasses] = useState([]);
-
-  //get academic year
-  const getClasses = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.class.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          // search: {
-          //   class: formData.class,
-          // },
-        },
-      });
-      console.log(data, "aca");
-      setClasses(
-        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
-      );
-
-      // if (data.result?.length) {
-      //        setFormData(data.result[0]._id);
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
-      // }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [sections, setSections] = useState([]);
 
   //get academic year
   const getAcademicYear = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
-      setFormData({ academicYear: data.result[0]._id });
+      Formik.setFieldValue("academicYear", data.result[0]._id);
       setAcademicYearList(
         data.result.map((d) => ({
           ...d,
@@ -61,10 +42,43 @@ export default function StudentActivity() {
           value: d._id,
         }))
       );
-      // if (data.result?.length) {
-      //   setFormData(data.result[0]._id);
-      //   entryFormik.setFieldValue("academicYear", data.result[0]._id);
-      // }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get class year
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setClasses(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+      Formik.setFieldValue("class", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get sections year
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: Formik.values.class,
+          },
+        },
+      });
+      Formik.setFieldValue("section", data.result[0]?._id);
+      setSections(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -76,12 +90,13 @@ export default function StudentActivity() {
       const { data } = await get(PRIVATE_URLS.student.list, {
         params: {
           schoolId: selectedSetting._id,
-          // search: {
-          //   academicYear: dataToEdit.academicYear,
-          // },
+          search: {
+            academicYear: Formik.values.academicYear,
+            "academicInfo.class": Formik.values.class,
+            "academicInfo.section": Formik.values.section,
+          },
         },
       });
-      // console.log(data, "aca");
       setStudents(
         data.result.map((d) => ({
           ...d,
@@ -133,8 +148,7 @@ export default function StudentActivity() {
 
   const entryFormik = useFormik({
     initialValues: {
-      academicYear: dataToEdit?.academicYear || "",
-      student: dataToEdit?.student || "",
+      name: dataToEdit?.name || "",
       date: dataToEdit?.date || "",
       description: dataToEdit?.description || "",
     },
@@ -149,16 +163,24 @@ export default function StudentActivity() {
       section: "",
       student: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: console.log,
   });
+
+  const getActivityList = (e) => {};
+
+  useEffect(() => {
+    if (Formik.values.class) {
+      getSections();
+    }
+  }, [Formik.values.class]);
 
   useEffect(() => {
     getAcademicYear();
-  }, []);
+    getClasses();
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     getStudents();
-    getClasses();
   }, [formData?.academicYear, selectedSetting]);
 
   return (
@@ -188,10 +210,10 @@ export default function StudentActivity() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="sectiion"
+              name="section"
               formik={Formik}
               label="Select Section"
-              // options={""}
+              options={sections}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -203,18 +225,25 @@ export default function StudentActivity() {
               options={students}
             />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={12}
-            lg={12}
-            display="flex"
-            justifyContent="flex-end"
-          >
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-          </Grid>
+          {academicYearList && classes && sections && students && (
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end"
+            >
+              <Button
+                size="small"
+                type="submit"
+                variant="contained"
+                onClick={getActivityList}
+              >
+                Find
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Paper>
       <CustomTable
@@ -240,7 +269,7 @@ export default function StudentActivity() {
         adding={loading}
       >
         <Grid rowSpacing={0} columnSpacing={2} container>
-          <Grid xs={12} sm={6} md={6} item>
+          {/* <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="academicYear"
@@ -248,8 +277,8 @@ export default function StudentActivity() {
               required={true}
               options={academicYearList}
             />
-          </Grid>
-          <Grid xs={12} sm={6} md={6} item>
+          </Grid> */}
+          {/* <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="student"
@@ -258,7 +287,7 @@ export default function StudentActivity() {
               showSearch={true}
               options={students}
             />
-          </Grid>
+          </Grid> */}
           <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="name" label="Activity Name" />
           </Grid>
