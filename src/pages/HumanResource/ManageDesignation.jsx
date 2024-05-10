@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 import FormInput from "../../forms/FormInput";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get, post, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 
 export default function ManageDesignation() {
   const [data, setData] = useState([]);
@@ -77,15 +77,25 @@ export default function ManageDesignation() {
     setOpen(true);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await del(PRIVATE_URLS.designation.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Designation" />
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={designationTableKeys}
         bodyDataModal="designation"
         bodyData={data}
         onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
       {/* ====== Add form fab button =======*/}
       <AddForm title="Add Desigation" onAddClick={AddDesigationHandel} />
