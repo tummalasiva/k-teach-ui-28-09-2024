@@ -25,6 +25,7 @@ import currencyToSymbolMap from "currency-symbol-map/map";
 import { post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
+import FileSelect from "../../forms/FileSelect";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -114,11 +115,36 @@ const Admission_Options = [
     value: "Auto ascending no",
   },
 ];
-export default function AddInstitute({ initialValue }) {
+export default function AddInstitute({ initialValue = null }) {
   const navigate = useNavigate();
   const symbol = Object.keys(currencyToSymbolMap);
-  const [dataToEdit, setDataToEdit] = useState(null);
+  const [dataToEdit, setDataToEdit] = useState(initialValue);
   const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState([]);
+  const [bannerImages, setBannerImages] = useState([]);
+
+  const handleChangePhoto = (e, type) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      if (type === "logo") {
+        setLogo(fileList);
+      } else if (type === "bannerImages") {
+        setBannerImages(fileList);
+      }
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setLogo(logo.filter((img) => img.name != fileName));
+    setBannerImages(bannerImages.filter((img) => img.name != fileName));
+  };
 
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const currencies = currencyCodes.data.map((currency) => ({
@@ -180,7 +206,6 @@ export default function AddInstitute({ initialValue }) {
       youtubeUrl: dataToEdit?.youtubeUrl || "",
       instagramUrl: dataToEdit?.instagramUrl || "",
       pinterestUrl: dataToEdit?.pinterestUrl || "",
-      bannerImages: dataToEdit?.bannerImages || [],
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -213,13 +238,15 @@ export default function AddInstitute({ initialValue }) {
           </MuiBox>
           <Grid container spacing={2} display="flex" justifyContent="center">
             <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                // required={true}
+              <FileSelect
+                multi={false}
                 name="logo"
-                formik={entryFormik}
-                label="Logo"
-                type="file"
-                onChange={handleImageChange}
+                label="Select Logo"
+                onChange={(e) => handleChangePhoto(e, "logo")}
+                customOnChange={true}
+                selectedFiles={logo}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/jpeg, image/png"
               />
             </Grid>
           </Grid>
@@ -437,7 +464,7 @@ export default function AddInstitute({ initialValue }) {
         </FormBox>
 
         {/* Social Info */}
-        <FormBox>
+        <FormBox sx={{ marginBottom: !dataToEdit ? "60px" : 0 }}>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Social Information
           </Title>
@@ -497,33 +524,38 @@ export default function AddInstitute({ initialValue }) {
         </FormBox>
 
         {/* Banner Images */}
-        <FormBox sx={{ marginBottom: "60px" }}>
-          <Title id="modal-modal-title" variant="h6" component="h2">
-            Banner Image
-          </Title>
-          <Box sx={{ padding: "10px" }}>
-            <Grid container spacing={2}>
-              <Grid
-                container
-                item
-                xs={12}
-                sm={12}
-                md={12}
-                justifyContent="flex-end"
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                  }}
+        {dataToEdit ? (
+          <FormBox sx={{ marginBottom: "60px" }}>
+            <Title id="modal-modal-title" variant="h6" component="h2">
+              Banner Image
+            </Title>
+            <Box sx={{ padding: "10px" }}>
+              <Grid container spacing={2}>
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  justifyContent="flex-end"
                 >
-                  <AddOrUpdateFiles title="Upload Image" />
-                </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <AddOrUpdateFiles
+                      accept="image/jpeg, image/png"
+                      title="Upload Image"
+                    />
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        </FormBox>
+            </Box>
+          </FormBox>
+        ) : null}
         <Grid container>
           <Grid item xs={12} md={12}>
             <StyledBox>

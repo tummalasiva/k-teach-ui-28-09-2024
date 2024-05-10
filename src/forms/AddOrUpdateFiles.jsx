@@ -17,7 +17,12 @@ import React, { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { Close, Delete } from "@mui/icons-material";
 
-export default function AddOrUpdateFiles({ styles = {}, title = "" }) {
+export default function AddOrUpdateFiles({
+  styles = {},
+  title = "",
+  accept = "",
+  setFiles = () => {},
+}) {
   const [open, setOpen] = useState(false);
   const [updatingFiles, setUpdatingFiles] = useState(false);
 
@@ -97,7 +102,11 @@ export default function AddOrUpdateFiles({ styles = {}, title = "" }) {
               InputLabelProps={{
                 shrink: true,
               }}
-              inputProps={{ type: "file", multiple: true }}
+              inputProps={{
+                type: "file",
+                multiple: true,
+                accept: accept,
+              }}
               InputProps={{
                 style: {
                   borderWidth: 1,
@@ -142,6 +151,7 @@ export default function AddOrUpdateFiles({ styles = {}, title = "" }) {
             size="small"
             loading={updatingFiles}
             variant="contained"
+            // onClick={onAddClick}
           >
             Add
           </LoadingButton>

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
-import dayjs from "dayjs";
 import {
   Box,
   Button,
@@ -78,7 +77,6 @@ const RTE_Options = [
 export default function AddStudent() {
   const { selectedSetting } = useContext(SettingContext);
   const navigate = useNavigate();
-  const [data, setDate] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedStudentPhoto, setSelectedStuentPhoto] = useState([]);
@@ -86,9 +84,7 @@ export default function AddStudent() {
   const [selectedFatherPhoto, setSelectedFatherPhoto] = useState([]);
   const [transferCertificate, setTransperCertificate] = useState([]);
   const [academicYear, setAcademicYear] = useState([]);
-
   const [classData, setClassData] = useState([]);
-
   const [sectionData, setSectionData] = useState([]);
 
   const getAcademicYear = async () => {
@@ -148,20 +144,23 @@ export default function AddStudent() {
           birthPlace: values.birthPlace,
           aadharNo: values.aadharNo,
           cicn: values.cicn,
+
+          satNo: values.satNo,
+          grNo: values.grNo,
         },
         motherInfo: {
           name: values.motherName,
           contactNumber: values.motherPhone,
           education: values.motherEdu,
           profession: values.motherProfession,
-          designation: values.designation,
+          designation: values.motherDesignation,
         },
         fatherInfo: {
           name: values.fatherName,
           contactNumber: values.fatherPhone,
           education: values.fatherEdu,
           profession: values.fatherProfession,
-          designation: values.motherDesignation,
+          designation: values.fatherDesignation,
         },
         academicInfo: {
           class: values.class,
@@ -193,6 +192,7 @@ export default function AddStudent() {
         academicYear: values.academicYear,
         schoolId: selectedSetting._id,
         contactNumber: values.contactNumber,
+        active: values.active,
       };
       const formData = new FormData();
       formData.append("body", JSON.stringify(payload));
@@ -205,7 +205,6 @@ export default function AddStudent() {
       selectedMotherPhoto.forEach((file) =>
         formData.append("motherPhoto", file)
       );
-
       transferCertificate.forEach((file) =>
         formData.append("transferCertificate", file)
       );
@@ -245,18 +244,21 @@ export default function AddStudent() {
       class: "",
       section: "",
       rollNo: "",
-      status: "",
+      active: "",
+      prevClass: "",
+      satNo: "",
+      grNo: "",
 
       fatherName: "",
       fatherPhone: "",
       fatherEdu: "",
       fatherProfession: "",
-      motherDesignation: "",
+      fatherDesignation: "",
 
-      fatherName: "",
-      fatherPhone: "",
-      fatherEdu: "",
-      fatherProfession: "",
+      motherName: "",
+      motherPhone: "",
+      motherEdu: "",
+      motherProfession: "",
       motherDesignation: "",
     },
     onSubmit: handleCreateOrUpdate,
@@ -269,11 +271,11 @@ export default function AddStudent() {
         const file = files[i];
         fileList.push(file);
       }
-      if (type === "father") {
+      if (type === "fatherPhoto") {
         setSelectedFatherPhoto(fileList);
-      } else if (type === "mother") {
+      } else if (type === "motherPhoto") {
         setSelectedMotherPhoto(fileList);
-      } else if (type === "transfer") {
+      } else if (type === "transferCertificate") {
         setTransperCertificate(fileList);
       } else {
         setSelectedStuentPhoto(fileList);
@@ -401,7 +403,6 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={true}
                   name="rte"
                   formik={entryFormik}
                   label="Select RTE"
@@ -439,17 +440,17 @@ export default function AddStudent() {
                   label="Aadhar No."
                 />
               </Grid>
-              {/* <Grid xs={12} md={6} lg={3} item>
-              <FormInput name="satNo" formik={entryFormik} label="SAT No." />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="grNo"
-                formik={entryFormik}
-                label="GR No."
-              />
-            </Grid> */}
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput name="satNo" formik={entryFormik} label="SAT No." />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="grNo"
+                  formik={entryFormik}
+                  label="GR No."
+                />
+              </Grid>
             </Grid>
           </Box>
         </FormBox>
@@ -575,14 +576,16 @@ export default function AddStudent() {
                   label="Previous Class"
                 />
               </Grid>
+
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput name="tcNo" formik={entryFormik} label="TC No." />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
-                  name="transfer"
+                  multi={false}
+                  name="transferCertificate"
                   label="Select File"
-                  onChange={(e) => handleChangePhoto(e, "transfer")}
+                  onChange={(e) => handleChangePhoto(e, "transferCertificate")}
                   customOnChange={true}
                   selectedFiles={transferCertificate}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -636,6 +639,7 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
+                  multi={false}
                   name="fatherPhoto"
                   label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "father")}
@@ -693,6 +697,7 @@ export default function AddStudent() {
 
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
+                  multi={false}
                   label="Select Photo"
                   name="motherPhoto"
                   onChange={(e) => handleChangePhoto(e, "mother")}
@@ -775,9 +780,10 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
+                  multi={false}
                   name="studentPhoto"
                   label="Select Photo"
-                  onChange={(e) => handleChangePhoto(e, "student")}
+                  onChange={(e) => handleChangePhoto(e, "studentPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedStudentPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}

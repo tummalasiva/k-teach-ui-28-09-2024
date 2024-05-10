@@ -23,6 +23,7 @@ export default function FileSelect({
   setSelectedFiles = () => {},
   customOnChange = false,
   onRemove = () => {},
+  accept = "",
   ...rest
 }) {
   const theme = useTheme();
@@ -56,6 +57,7 @@ export default function FileSelect({
           <input
             type="file"
             multiple={multi}
+            accept={accept}
             // style={{ visibility: "hidden" }}
             hidden
             onChange={

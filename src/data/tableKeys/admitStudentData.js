@@ -6,6 +6,7 @@ export const admitStudentTableKeys = [
   {
     name: "Name",
     key: "name",
+    path: "basicInfo",
   },
   {
     name: "Status",
