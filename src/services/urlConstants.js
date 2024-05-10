@@ -106,6 +106,7 @@ export const PRIVATE_URLS = {
     update: "/gallery/update",
     delete: "/gallery/delete",
     addFiles: "/gallery/addFiles",
+    removeFile: "/gallery/removeFile",
   },
   assignment: {
     list: "/assignment/list",
@@ -132,7 +133,6 @@ export const PRIVATE_URLS = {
     update: "/event/update",
     delete: "/event/delete",
   },
-
   holiday: {
     list: "/holiday/list",
     create: "/holiday/create",
@@ -157,5 +157,11 @@ export const PRIVATE_URLS = {
     create: "/student/create",
     update: "/student/update",
     delete: "/student/delete",
+  },
+  studentActivity: {
+    list: "/studentActivity/list",
+    create: "/studentActivity/create",
+    update: "/studentActivity/update",
+    delete: "/studentActivity/delete",
   },
 };

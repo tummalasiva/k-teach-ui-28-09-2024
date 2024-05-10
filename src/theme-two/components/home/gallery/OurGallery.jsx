@@ -21,6 +21,7 @@ import { settings } from "../../../data/Carousal";
 // icons
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Close } from "@mui/icons-material";
+import Dots from "../../../data/Dots";
 
 const TextBox = styled(Box)(({ theme }) => ({
   textAlign: "center",
@@ -130,6 +131,7 @@ export default function OurGallery() {
       <TextBox>
         <Heading>DISCOVER NEW</Heading>
         <TypographyMain>OUR GALLERY</TypographyMain>
+        <Dots />
       </TextBox>
 
       <Main>
