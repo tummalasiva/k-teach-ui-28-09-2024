@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { PrintSharp } from "@mui/icons-material";
@@ -18,14 +18,35 @@ import { useFormik } from "formik";
 import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
 import { Link, useNavigate } from "react-router-dom";
 import AddForm from "../../forms/AddForm";
+import SettingContext from "../../context/SettingsContext";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
 
 export default function AdmitStudent() {
+  const { selectedSetting } = useContext(SettingContext);
   const navigation = useNavigate();
-  const [data, setDate] = useState([]);
+  const [data, setData] = useState([]);
 
   const handelAddStudent = (e) => {
     navigation("/sch/student/add-student");
   };
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const entryFormik = useFormik({
     initialValues: {

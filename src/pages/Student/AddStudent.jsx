@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
-import dayjs from "dayjs";
 import {
   Box,
   Button,
@@ -78,7 +77,6 @@ const RTE_Options = [
 export default function AddStudent() {
   const { selectedSetting } = useContext(SettingContext);
   const navigate = useNavigate();
-  const [data, setDate] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedStudentPhoto, setSelectedStuentPhoto] = useState([]);
@@ -86,9 +84,7 @@ export default function AddStudent() {
   const [selectedFatherPhoto, setSelectedFatherPhoto] = useState([]);
   const [transferCertificate, setTransperCertificate] = useState([]);
   const [academicYear, setAcademicYear] = useState([]);
-
   const [classData, setClassData] = useState([]);
-
   const [sectionData, setSectionData] = useState([]);
 
   const getAcademicYear = async () => {
@@ -110,6 +106,7 @@ export default function AddStudent() {
         },
       });
       setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
+      console.log(data.result, "sectioooooo");
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +117,8 @@ export default function AddStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+
+      console.log(data.result, "mmmmmmmm");
     } catch (error) {
       console.log(error);
     }
@@ -204,8 +203,9 @@ export default function AddStudent() {
       selectedMotherPhoto.forEach((file) =>
         formData.append("motherPhoto", file)
       );
-
-      transferCertificate.forEach((file) => formData.append("transfer", file));
+      transferCertificate.forEach((file) =>
+        formData.append("transferCertificate", file)
+      );
 
       setLoading(true);
       if (dataToEdit) {
@@ -266,11 +266,11 @@ export default function AddStudent() {
         const file = files[i];
         fileList.push(file);
       }
-      if (type === "father") {
+      if (type === "fatherPhoto") {
         setSelectedFatherPhoto(fileList);
-      } else if (type === "mother") {
+      } else if (type === "motherPhoto") {
         setSelectedMotherPhoto(fileList);
-      } else if (type === "transfer") {
+      } else if (type === "transferCertificate") {
         setTransperCertificate(fileList);
       } else {
         setSelectedStuentPhoto(fileList);
@@ -577,8 +577,8 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
-                  name="transfer"
-                  onChange={(e) => handleChangePhoto(e, "transfer")}
+                  name="transferCertificate"
+                  onChange={(e) => handleChangePhoto(e, "transferCertificate")}
                   customOnChange={true}
                   selectedFiles={transferCertificate}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -770,7 +770,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="studentPhoto"
-                  onChange={(e) => handleChangePhoto(e, "student")}
+                  onChange={(e) => handleChangePhoto(e, "studentPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedStudentPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
