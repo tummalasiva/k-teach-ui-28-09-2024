@@ -10,7 +10,7 @@ import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get, post, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 
 export default function StudentActivity() {
@@ -31,17 +31,17 @@ export default function StudentActivity() {
   const [sections, setSections] = useState([]);
 
   //get activity list
-  const getData = async () => {
+  const getData = async (values) => {
     try {
       const { data } = await get(PRIVATE_URLS.studentActivity.list, {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            student: Formik.values.student,
+            student: values.student,
+            academicYear: values.academicYear,
           },
         },
       });
-      // console.log(data.result, "activuty");
       setDate(data.result);
     } catch (error) {
       console.log(error);
@@ -133,17 +133,19 @@ export default function StudentActivity() {
   };
 
   const handleClose = () => {
+    Formik.handleSubmit();
     setOpen(false);
     setDataToEdit(null);
-    getData();
   };
 
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
-    console.log(values, "jjjj");
     try {
       const payload = {
-        ...values,
+        student: values.student,
+        description: values.description,
+        name: values.name,
+        academicYear: values.academicYear,
         schoolId: selectedSetting._id,
       };
 
@@ -166,11 +168,6 @@ export default function StudentActivity() {
     setLoading(false);
   };
 
-  // find activity
-  const getActivityList = (e) => {
-    getData();
-  };
-
   const Formik = useFormik({
     initialValues: {
       academicYear: "",
@@ -178,14 +175,13 @@ export default function StudentActivity() {
       section: "",
       student: "",
     },
-    onSubmit: getActivityList,
+    onSubmit: getData,
     enableReinitialize: true,
   });
 
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
-      date: dataToEdit?.date || "",
       description: dataToEdit?.description || "",
       student: Formik.values.student || "",
       academicYear: Formik.values.academicYear || "",
@@ -203,7 +199,6 @@ export default function StudentActivity() {
   useEffect(() => {
     getAcademicYear();
     getClasses();
-    // getData();
   }, [selectedSetting._id]);
 
   useEffect(() => {
@@ -238,6 +233,17 @@ export default function StudentActivity() {
       getData();
     }
   }, [Formik.values.academicYear]);
+
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await del(
+        PRIVATE_URLS.studentActivity.delete + "/" + id
+      );
+      Formik.handleSubmit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -300,7 +306,7 @@ export default function StudentActivity() {
               type="submit"
               variant="contained"
               disabled={!Formik.values.student}
-              onClick={getActivityList}
+              onClick={Formik.handleSubmit}
             >
               Find
             </Button>
@@ -308,11 +314,12 @@ export default function StudentActivity() {
         </Grid>
       </Paper>
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={studentActivityTableKeys}
         bodyDataModal="student activity"
         bodyData={data}
         onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       {/* ====== Fab button component =======*/}
@@ -354,18 +361,11 @@ export default function StudentActivity() {
               options={students}
             />
           </Grid> */}
-          <Grid xs={12} sm={6} md={6} item>
+          <Grid xs={12} sm={12} item>
             <FormInput formik={entryFormik} name="name" label="Activity Name" />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormDatePicker
-              formik={entryFormik}
-              name="date"
-              label="Select Date"
-            />
-          </Grid>
 
-          <Grid xs={12} sm={12} md={12} item>
+          <Grid xs={12} sm={12} item>
             <FormInput
               formik={entryFormik}
               name="description"

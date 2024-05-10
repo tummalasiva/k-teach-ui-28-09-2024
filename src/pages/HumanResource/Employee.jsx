@@ -78,19 +78,19 @@ export default function Employee() {
         },
       });
 
-      console.log(data.result, "department");
-
       const overviewData = data.result.map((department) => {
-        const maleCount = allEmployee.filter(
-          (emp) =>
-            emp.basicInfo.gender === "male" &&
-            emp.academicInfo.department._id === department._id
-        ).length;
-        const femaleCount = allEmployee.filter(
-          (emp) =>
-            emp.basicInfo.gender === "female" &&
-            emp.academicInfo.department._id === department._id
-        ).length;
+        const maleCount =
+          allEmployee.filter(
+            (emp) =>
+              emp.basicInfo.gender === "male" &&
+              emp.academicInfo.department._id === department._id
+          ).length || 0;
+        const femaleCount =
+          allEmployee.filter(
+            (emp) =>
+              emp.basicInfo.gender === "female" &&
+              emp.academicInfo.department._id === department._id
+          ).length || 0;
         const totalCount = maleCount + femaleCount;
         return {
           ...department,
@@ -101,8 +101,6 @@ export default function Employee() {
       });
 
       setOverviewData(overviewData);
-
-      console.log(overviewData, "mmmmmuuuuuuiu99999999");
     } catch (error) {
       console.log(error);
     }
@@ -110,10 +108,11 @@ export default function Employee() {
 
   useEffect(() => {
     getDataDepartment();
-  }, [overviewData]);
+  }, [allEmployee, selectedSetting._id]);
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting._id]);
 
   const handleDelete = async (id) => {
     try {
