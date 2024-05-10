@@ -152,4 +152,10 @@ export const PRIVATE_URLS = {
     delete: "/splashNews/delete",
     toggle: "/splashNews/toggleEnable",
   },
+  student: {
+    list: "/student/list",
+    create: "/student/create",
+    update: "/student/update",
+    delete: "/student/delete",
+  },
 };

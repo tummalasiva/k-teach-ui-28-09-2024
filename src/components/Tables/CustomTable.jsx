@@ -112,12 +112,14 @@ export default function CustomTable({
             <TableRow>
               <TableCell align="center">S.No</TableCell>
               {tableKeys.map((r, i) => (
-                <TableCell key={i} align="center">
+                <TableCell sx={{ fontWeight: "bold" }} key={i} align="center">
                   {r.name}
                 </TableCell>
               ))}
               {actions.length ? (
-                <TableCell align="center">Action</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Action
+                </TableCell>
               ) : null}
             </TableRow>
           </TableHead>

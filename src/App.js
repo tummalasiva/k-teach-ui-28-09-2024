@@ -18,6 +18,7 @@ import { get } from "./services/apiMethods";
 import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
+import { Box } from "@mui/material";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
