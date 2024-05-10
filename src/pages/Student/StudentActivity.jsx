@@ -58,7 +58,7 @@ export default function StudentActivity() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      Formik.setFieldValue("class", data.result[0]?._id);
+      Formik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -79,6 +79,7 @@ export default function StudentActivity() {
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+      Formik.setFieldValue("section", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -101,9 +102,10 @@ export default function StudentActivity() {
         data.result.map((d) => ({
           ...d,
           label: d.basicInfo.name,
-          value: d.basicInfo._id,
+          value: d._id,
         }))
       );
+      Formik.setFieldValue("student", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -146,16 +148,6 @@ export default function StudentActivity() {
     setLoading(false);
   };
 
-  const entryFormik = useFormik({
-    initialValues: {
-      name: dataToEdit?.name || "",
-      date: dataToEdit?.date || "",
-      description: dataToEdit?.description || "",
-    },
-    onSubmit: handleCreateOrUpdate,
-    enableReinitialize: true,
-  });
-
   const Formik = useFormik({
     initialValues: {
       academicYear: "",
@@ -163,7 +155,19 @@ export default function StudentActivity() {
       section: "",
       student: "",
     },
-    onSubmit: console.log,
+    onSubmit: console.log(""),
+  });
+
+  const entryFormik = useFormik({
+    initialValues: {
+      name: dataToEdit?.name || "",
+      date: dataToEdit?.date || "",
+      description: dataToEdit?.description || "",
+      student: Formik.values.student || "",
+      academicYear: Formik.values.academicYear || "",
+    },
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
 
   const getActivityList = (e) => {};
@@ -180,14 +184,38 @@ export default function StudentActivity() {
   }, [selectedSetting._id]);
 
   useEffect(() => {
-    getStudents();
-  }, [formData?.academicYear, selectedSetting]);
+    if (
+      Formik.values.academicYear &&
+      Formik.values.class &&
+      Formik.values.section &&
+      selectedSetting
+    ) {
+      getStudents();
+    }
+  }, [
+    Formik.values.academicYear,
+    Formik.values.class,
+    Formik.values.section,
+    selectedSetting,
+  ]);
+
+  useEffect(() => {
+    if (Formik.values.class) {
+      getSections();
+    }
+  }, [Formik.values.class]);
 
   return (
     <>
       <PageHeader title="Student Activity" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
+        <Grid
+          rowSpacing={1}
+          columnSpacing={2}
+          container
+          component="div"
+          onSubmit={Formik.handleSubmit}
+        >
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -225,25 +253,23 @@ export default function StudentActivity() {
               options={students}
             />
           </Grid>
-          {academicYearList && classes && sections && students && (
-            <Grid
-              item
-              xs={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end"
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            display="flex"
+            justifyContent="flex-end"
+          >
+            <Button
+              size="small"
+              type="submit"
+              variant="contained"
+              // onClick={getActivityList}
             >
-              <Button
-                size="small"
-                type="submit"
-                variant="contained"
-                onClick={getActivityList}
-              >
-                Find
-              </Button>
-            </Grid>
-          )}
+              Find
+            </Button>
+          </Grid>
         </Grid>
       </Paper>
       <CustomTable
