@@ -6,5 +6,6 @@ export const studentActivityTableKeys = [
   {
     name: "Date",
     key: "createdAt",
+    isDate: true,
   },
 ];
