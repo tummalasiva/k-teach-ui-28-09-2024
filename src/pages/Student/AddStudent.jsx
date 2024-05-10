@@ -147,6 +147,9 @@ export default function AddStudent() {
           birthPlace: values.birthPlace,
           aadharNo: values.aadharNo,
           cicn: values.cicn,
+
+          satNo: values.satNo,
+          grNo: values.grNo,
         },
         motherInfo: {
           name: values.motherName,
@@ -187,6 +190,7 @@ export default function AddStudent() {
         prevSchInfo: {
           name: values.name,
           tcNo: values.tcNo,
+          prevClass: values.prevClass,
         },
         academicYear: values.academicYear,
         schoolId: selectedSetting._id,
@@ -243,6 +247,9 @@ export default function AddStudent() {
       section: "",
       rollNo: "",
       status: "",
+      prevClass: "",
+      satNo: "",
+      grNo: "",
 
       fatherName: "",
       fatherPhone: "",
@@ -398,7 +405,6 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  required={true}
                   name="rte"
                   formik={entryFormik}
                   label="Select RTE"
@@ -436,17 +442,17 @@ export default function AddStudent() {
                   label="Aadhar No."
                 />
               </Grid>
-              {/* <Grid xs={12} md={6} lg={3} item>
-              <FormInput name="satNo" formik={entryFormik} label="SAT No." />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="grNo"
-                formik={entryFormik}
-                label="GR No."
-              />
-            </Grid> */}
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput name="satNo" formik={entryFormik} label="SAT No." />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="grNo"
+                  formik={entryFormik}
+                  label="GR No."
+                />
+              </Grid>
             </Grid>
           </Box>
         </FormBox>
@@ -566,11 +572,20 @@ export default function AddStudent() {
               </Grid>
 
               <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="prevClass"
+                  formik={entryFormik}
+                  label="Previous Class"
+                />
+              </Grid>
+
+              <Grid xs={12} md={6} lg={3} item>
                 <FormInput name="tcNo" formik={entryFormik} label="TC No." />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="transferCertificate"
+                  label="Select File"
                   onChange={(e) => handleChangePhoto(e, "transferCertificate")}
                   customOnChange={true}
                   selectedFiles={transferCertificate}
@@ -626,6 +641,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="fatherPhoto"
+                  label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "father")}
                   customOnChange={true}
                   selectedFiles={selectedFatherPhoto}
@@ -681,6 +697,7 @@ export default function AddStudent() {
 
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
+                  label="Select Photo"
                   name="motherPhoto"
                   onChange={(e) => handleChangePhoto(e, "mother")}
                   customOnChange={true}
@@ -763,6 +780,7 @@ export default function AddStudent() {
               <Grid xs={12} md={6} lg={3} item>
                 <FileSelect
                   name="studentPhoto"
+                  label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "studentPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedStudentPhoto}

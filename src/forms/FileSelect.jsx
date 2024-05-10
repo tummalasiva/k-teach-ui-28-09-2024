@@ -52,7 +52,7 @@ export default function FileSelect({
           {selectedFiles.length}
         </Typography>
 
-        <Button fullWidth component="label" size="medium" variant="outlined">
+        <Button fullWidth component="label" size="small" variant="outlined">
           <input
             type="file"
             multiple={multi}
@@ -78,7 +78,7 @@ export default function FileSelect({
                   }
             }
           />
-          Select files
+          {label}
         </Button>
       </Wrapper>
       <FileListModal
