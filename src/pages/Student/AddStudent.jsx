@@ -733,7 +733,7 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  name="status"
+                  name="active"
                   formik={entryFormik}
                   label="Select Status"
                   options={[
