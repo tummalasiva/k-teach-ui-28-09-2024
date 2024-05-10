@@ -39,6 +39,8 @@ export default function AdmitStudent() {
         },
       });
       setData(data.result);
+
+      console.log(data.result, "hhhhhhhhhhhhh");
     } catch (error) {
       console.log(error);
     }
