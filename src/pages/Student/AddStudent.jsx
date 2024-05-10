@@ -86,6 +86,7 @@ export default function AddStudent() {
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
 
   const getAcademicYear = async () => {
     try {
@@ -98,11 +99,12 @@ export default function AddStudent() {
     }
   };
 
-  const getSection = async () => {
+  const getSection = async (classId) => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
+          search: { class: selectedClass },
         },
       });
       setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
@@ -117,6 +119,10 @@ export default function AddStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+      if (data.result?.length) {
+        setSelectedClass(data.result[0]._id);
+        entryFormik.setFieldValue("class", data.result[0]._id);
+      }
 
       console.log(data.result, "mmmmmmmm");
     } catch (error) {
@@ -128,8 +134,17 @@ export default function AddStudent() {
   useEffect(() => {
     getAcademicYear();
     getClass();
-    getSection();
   }, []);
+
+  useEffect(() => {
+    if (selectedClass) {
+      getSection();
+    }
+  }, [selectedClass, selectedSetting]);
+
+  useEffect(() => {
+    entryFormik.setFieldValue("class", selectedClass);
+  }, [selectedClass]);
 
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -141,13 +156,12 @@ export default function AddStudent() {
           gender: values.gender,
           bloodGroup: values.bloodGroup,
           religion: values.religion,
-          rte: values.rte || false,
+          rte: values.rte || "no",
           caste: values.caste,
           motherTongue: values.motherTongue,
           birthPlace: values.birthPlace,
           aadharNo: values.aadharNo,
           cicn: values.cicn,
-
           satNo: values.satNo,
           grNo: values.grNo,
         },
@@ -195,7 +209,7 @@ export default function AddStudent() {
         academicYear: values.academicYear,
         schoolId: selectedSetting._id,
         contactNumber: values.contactNumber,
-        active: values.active,
+        active: values.active || true,
       };
       const formData = new FormData();
       formData.append("body", JSON.stringify(payload));
@@ -304,6 +318,10 @@ export default function AddStudent() {
     );
   };
 
+  const handleClassChange = (e) => {
+    const selectedClassId = e.target.value;
+    setSelectedClass(selectedClassId);
+  };
   return (
     <>
       <PageHeader title="Admit Student" />
@@ -447,12 +465,7 @@ export default function AddStudent() {
                 <FormInput name="satNo" formik={entryFormik} label="SAT No." />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  required={true}
-                  name="grNo"
-                  formik={entryFormik}
-                  label="GR No."
-                />
+                <FormInput name="grNo" formik={entryFormik} label="GR No." />
               </Grid>
             </Grid>
           </Box>
@@ -539,6 +552,7 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Class"
                   options={classData}
+                  onChange={handleClassChange}
                 />
               </Grid>
 
