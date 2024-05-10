@@ -50,7 +50,9 @@ export default function AdmitStudent() {
           schoolId: selectedSetting._id,
         },
       });
-      setData(data.result);
+      setData(
+        data.result.map((s) => ({ ...s, section: s.academicInfo.section }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -70,46 +72,6 @@ export default function AdmitStudent() {
       console.log(error);
     }
   };
-
-  const getSection = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.section.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: { class: selectedClass },
-        },
-      });
-      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getClass = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.class.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-
-      setSelectedClass(data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAcademicYear();
-    getClass();
-  }, []);
-  useEffect(() => {
-    if (selectedClass) {
-      getSection();
-    }
-  }, [selectedClass, selectedSetting]);
-
-  useEffect(() => {
-    entryFormik.setFieldValue("class", selectedClass);
-  }, [selectedClass]);
 
   const getList = async (values) => {
     try {
@@ -141,10 +103,41 @@ export default function AdmitStudent() {
     enableReinitialize: true,
   });
 
-  const handleClassChange = (e) => {
-    const selectedClassId = e.target.value;
-    setSelectedClass(selectedClassId);
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: entryFormik.values.class },
+        },
+      });
+      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get data on page load
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+  }, []);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
 
   const handleDelete = async (id) => {
     try {
@@ -176,7 +169,6 @@ export default function AdmitStudent() {
                 formik={entryFormik}
                 label="Select Class"
                 options={classData}
-                onChange={handleClassChange}
               />
             </Grid>
 

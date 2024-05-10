@@ -6,11 +6,11 @@ export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
   baseURL:
-    "https://cdaf-2404-ca40-fa02-3f00-856b-f088-3862-f21f.ngrok-free.app/ecamps/v1",
+    "https://0ef4-2404-ca40-fa02-3f00-d490-8c4-be1d-8f99.ngrok-free.app/ecamps/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin":
-      "https://cdaf-2404-ca40-fa02-3f00-856b-f088-3862-f21f.ngrok-free.app",
+      "https://0ef4-2404-ca40-fa02-3f00-d490-8c4-be1d-8f99.ngrok-free.app",
   },
 });
 

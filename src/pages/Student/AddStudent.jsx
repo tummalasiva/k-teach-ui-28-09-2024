@@ -124,47 +124,6 @@ export default function AddStudent() {
     }
   };
 
-  const getSection = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.section.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: { class: selectedClass },
-        },
-      });
-      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getClass = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.class.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      setSelectedClass(data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // get data on page load
-  useEffect(() => {
-    getAcademicYear();
-    getClass();
-  }, []);
-
-  useEffect(() => {
-    if (selectedClass) {
-      getSection();
-    }
-  }, [selectedClass, selectedSetting]);
-
-  useEffect(() => {
-    entryFormik.setFieldValue("class", selectedClass);
-  }, [selectedClass]);
-
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
@@ -251,11 +210,16 @@ export default function AddStudent() {
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.student.update + "/" + dataToEdit._id,
-          formData
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
         navigate("/sch/student/admit-student");
       } else {
-        const { data } = await post(PRIVATE_URLS.student.create, formData);
+        const { data } = await post(PRIVATE_URLS.student.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         navigate("/sch/student/admit-student");
       }
     } catch (error) {
@@ -281,12 +245,8 @@ export default function AddStudent() {
       grNo: dataToEdit?.basicInfo.grNo || "",
       birthPlace: dataToEdit?.basicInfo.birthPlace || "",
 
-      class: dataToEdit?.academicInfo?.class
-        ? dataToEdit?.academicInfo?.class._id
-        : "",
-      section: dataToEdit?.academicInfo?.section
-        ? dataToEdit?.academicInfo?.section._id
-        : "",
+      class: dataToEdit?.academicInfo?.class?._id || "",
+      section: dataToEdit?.academicInfo?.section?._id || "",
       rollNumber: dataToEdit?.academicInfo?.rollNumber || "",
       admissionNumber: dataToEdit?.academicInfo?.admissionNumber || "",
 
@@ -330,6 +290,42 @@ export default function AddStudent() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: entryFormik.values.class },
+        },
+      });
+      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get data on page load
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+  }, []);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
     let fileList = [];
@@ -368,10 +364,6 @@ export default function AddStudent() {
     );
   };
 
-  const handleClassChange = (e) => {
-    const selectedClassId = e.target.value;
-    setSelectedClass(selectedClassId);
-  };
   return (
     <>
       <PageHeader title="Admit Student" />
@@ -602,7 +594,6 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Class"
                   options={classData}
-                  onChange={handleClassChange}
                 />
               </Grid>
 

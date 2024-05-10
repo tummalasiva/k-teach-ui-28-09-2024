@@ -161,6 +161,7 @@ export const PRIVATE_URLS = {
     update: "/student/update",
     delete: "/student/delete",
     details: "/student/details",
+    overView: "/student/overView",
   },
   studentActivity: {
     list: "/studentActivity/list",

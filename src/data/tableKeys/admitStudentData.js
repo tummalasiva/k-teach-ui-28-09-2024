@@ -15,8 +15,8 @@ export const admitStudentTableKeys = [
   },
   {
     name: "Section",
-    key: "section",
-    // path: "academicInfo",
+    key: "name",
+    path: "section",
   },
   {
     name: "Roll No",
