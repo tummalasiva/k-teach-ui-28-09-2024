@@ -14,7 +14,7 @@ import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { LoadingButton } from "@mui/lab";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
@@ -96,6 +96,21 @@ export default function AddStudent() {
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
+
+  const { id } = useParams();
+  const getStudentDetails = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.details + "/" + id);
+      console.log(data.result, "==========");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      getStudentDetails();
+    }
+  }, [id, selectedSetting]);
 
   const getAcademicYear = async () => {
     try {
@@ -270,6 +285,7 @@ export default function AddStudent() {
       class: "",
       section: "",
       rollNo: "",
+      admissionNumber: dataToEdit?.academicInfo?.admissionNumber || "",
 
       contactNumber: "",
       guardianName: "",
@@ -633,6 +649,7 @@ export default function AddStudent() {
                   customOnChange={true}
                   selectedFiles={transferCertificate}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/*,.pdf"
                 />
               </Grid>
             </Grid>
@@ -690,6 +707,7 @@ export default function AddStudent() {
                   customOnChange={true}
                   selectedFiles={selectedFatherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/jpeg, image/png"
                 />
               </Grid>
             </Grid>
@@ -748,6 +766,7 @@ export default function AddStudent() {
                   customOnChange={true}
                   selectedFiles={selectedMotherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/jpeg, image/png"
                 />
               </Grid>
             </Grid>
@@ -843,6 +862,7 @@ export default function AddStudent() {
                   customOnChange={true}
                   selectedFiles={selectedStudentPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/jpeg, image/png"
                 />
               </Grid>
             </Grid>

@@ -691,8 +691,9 @@ export default function NavDrawer() {
 
           <Route path="class-routine" element={<ClassRoutine />} />
           <Route path="student/overview" element={<Overview />} />
-
           <Route path="student/admit-student" element={<AdmitStudent />} />
+          <Route path="student/add-student" element={<AddStudent />} />
+          <Route path="student/edit-student/:id" element={<AddStudent />} />
           <Route path="student/reshuffle" element={<Reshuffle />} />
           <Route path="student/promotion" element={<Promotion />} />
           <Route path="student/bulk-admission" element={<BulkAdmission />} />
@@ -866,7 +867,6 @@ export default function NavDrawer() {
             path="manage-institute/add-institute"
             element={<AddInstitute />}
           />
-          <Route path="student/add-student" element={<AddStudent />} />
           <Route path="profile" element={<Profile />} />
         </Routes>
         <Outlet />
