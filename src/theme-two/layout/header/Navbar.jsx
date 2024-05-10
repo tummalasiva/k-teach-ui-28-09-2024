@@ -67,10 +67,8 @@ const MainBox = styled(Box)(({ theme }) => ({
 export default function Navbar() {
   let navigate = useNavigate();
   const { pathname } = useLocation();
-
   const { selectedSetting } = useContext(SettingContext);
   const [showMenuItem, setShowMenuItem] = useState(false);
-
   const [about, setAbout] = useState(null);
   const open1 = Boolean(about);
 
@@ -269,8 +267,8 @@ export default function Navbar() {
       <MainBox>
         <Link to="/">
           <img
-            height={130}
-            width={140}
+            height={100}
+            width={120}
             src={selectedSetting?.logo?.link || KayakaLogo}
           />
         </Link>

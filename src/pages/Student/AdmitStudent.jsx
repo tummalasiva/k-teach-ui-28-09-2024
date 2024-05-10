@@ -16,10 +16,17 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AddForm from "../../forms/AddForm";
 
 export default function AdmitStudent() {
+  const navigation = useNavigate();
   const [data, setDate] = useState([]);
+
+  const handelAddStudent = (e) => {
+    navigation("/sch/student/add-student");
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -119,6 +126,8 @@ export default function AdmitStudent() {
         bodyDataModal="students"
         bodyData={data}
       />
+      {/* add student */}
+      <AddForm title="Add Students" onAddClick={handelAddStudent} />
     </>
   );
 }

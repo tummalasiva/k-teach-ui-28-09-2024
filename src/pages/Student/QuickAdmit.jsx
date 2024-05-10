@@ -53,7 +53,7 @@ export default function QuickAdmit() {
               fontWeight="bold"
               sx={{ display: "inline" }}
             >
-              Note:
+              Note:{" "}
             </Typography>
             <Typography
               variant="h6"

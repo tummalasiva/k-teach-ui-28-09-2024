@@ -6,6 +6,7 @@ export const awardAchievementTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Location",

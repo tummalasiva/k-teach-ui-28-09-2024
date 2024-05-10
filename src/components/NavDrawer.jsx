@@ -157,6 +157,7 @@ import UpdateEmployee from "../pages/HumanResource/UpdateEmployee";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import { get } from "../services/apiMethods";
 import SettingContext from "../context/SettingsContext";
+import AddStudent from "../pages/Student/AddStudent";
 
 const drawerWidth = 270;
 
@@ -865,6 +866,7 @@ export default function NavDrawer() {
             path="manage-institute/add-institute"
             element={<AddInstitute />}
           />
+          <Route path="student/add-student" element={<AddStudent />} />
           <Route path="profile" element={<Profile />} />
         </Routes>
         <Outlet />

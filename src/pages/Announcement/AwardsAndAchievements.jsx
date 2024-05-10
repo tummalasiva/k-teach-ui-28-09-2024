@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import { holidayTableKeys } from "../../data/tableKeys/holidayData";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { awardAchievementTableKeys } from "../../data/tableKeys/awardAchievementsData";
@@ -23,12 +22,28 @@ const Is_Public = [
 export default function AwardsAndAchievements() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
-
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [selectImg, setSelectImg] = useState([]);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.awards.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setData(data.result);
+
+      console.log(data.result, "bbbbbbbbbbbbbbbbbbbb");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -38,16 +53,14 @@ export default function AwardsAndAchievements() {
     setOpen(true);
   };
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("date", values.date);
-    formData.append("awardFor", values.awardFor);
     formData.append("location", values.location);
     formData.append("hostedBy", values.hostedBy);
     formData.append("headlines", values.headlines);
     formData.append("note", values.note);
-    formData.append("awardFor", values.awardFor);
     formData.append("isPublic", values.isPublic);
     selectImg.forEach((file) => formData.append("file", file));
     formData.append("schoolId", selectedSetting._id);
@@ -61,10 +74,13 @@ export default function AwardsAndAchievements() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.awards.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        resetForm();
+        getData();
       }
       handleClose();
     } catch (error) {
@@ -76,9 +92,8 @@ export default function AwardsAndAchievements() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-      date: dataToEdit?.dayjs(dataToEdit.date),
+      date: dataToEdit?.date || null,
 
-      awardFor: dataToEdit?.awardFor || "",
       location: dataToEdit?.location || "",
       hostedBy: dataToEdit?.hostedBy || "",
       headlines: dataToEdit?.headlines || "",
@@ -109,6 +124,24 @@ export default function AwardsAndAchievements() {
     console.log(fileName, "gii");
     setSelectImg(selectImg.filter((img) => img.name != fileName));
   };
+
+  const handleEditClick = (data) => {
+    console.log(data);
+    setDataToEdit(data);
+
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.awards.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log(dataToEdit, "dataToEdittttt");
   return (
     <>
       <PageHeader title="Award And Achievements" />
@@ -118,6 +151,8 @@ export default function AwardsAndAchievements() {
         bodyData={data}
         tableKeys={awardAchievementTableKeys}
         adding={loading}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       <AddForm
@@ -163,9 +198,6 @@ export default function AwardsAndAchievements() {
               label="Date"
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput formik={entryFormik} name="awardFor" label="Award For" />
-          </Grid>
 
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
@@ -206,6 +238,18 @@ export default function AwardsAndAchievements() {
           </Grid>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
+          </Grid>
+
+          <Grid xs={12} sm={12} md={12} item>
+            {dataToEdit && dataToEdit.image && (
+              <>
+                <img
+                  src={dataToEdit.image}
+                  alt="image"
+                  style={{ maxWidth: "100px", marginTop: "10px" }}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
       </FormModal>

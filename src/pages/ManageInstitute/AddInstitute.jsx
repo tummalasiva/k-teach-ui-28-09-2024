@@ -294,8 +294,8 @@ export default function AddInstitute({ initialValue }) {
             </Grid>
           </Box>
         </FormBox>
-        {/* Settings */}
 
+        {/* Settings */}
         <FormBox>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Setting Information
