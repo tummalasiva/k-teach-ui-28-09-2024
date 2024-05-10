@@ -143,10 +143,7 @@ export default function AddStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      if (data.result?.length) {
-        setSelectedClass(data.result[0]._id);
-        entryFormik.setFieldValue("class", data.result[0]._id);
-      }
+      setSelectedClass(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +208,7 @@ export default function AddStudent() {
           email: values.email,
           healthCondition: values.healthCondition,
           hostelMember: values.hostelMember || false,
-          transportMember: values.transportMemberl || false,
+          transportMember: values.transportMember || false,
           libraryMember: values.libraryMember || false,
           busStop: values.busStop,
           extraInfo: values.extraInfo,
@@ -277,7 +274,7 @@ export default function AddStudent() {
       bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
       cicn: dataToEdit?.basicInfo.cicn || "",
       religion: dataToEdit?.basicInfo.religion || "",
-      cast: dataToEdit?.basicInfo.cast || "",
+      caste: dataToEdit?.basicInfo.caste || "",
       rte: dataToEdit?.basicInfo.rte || "",
       aadharNo: dataToEdit?.basicInfo.aadharNo || "",
       satNo: dataToEdit?.basicInfo.satNo || "",
@@ -290,7 +287,7 @@ export default function AddStudent() {
       section: dataToEdit?.academicInfo?.section
         ? dataToEdit?.academicInfo?.section._id
         : "",
-      rollNo: dataToEdit?.academicInfo?.rollNo || "",
+      rollNumber: dataToEdit?.academicInfo?.rollNumber || "",
       admissionNumber: dataToEdit?.academicInfo?.admissionNumber || "",
 
       contactNumber: dataToEdit?.contactNumber || "",
@@ -318,17 +315,17 @@ export default function AddStudent() {
       extraInfo: dataToEdit?.otherInfo.extraInfo || "",
       active: dataToEdit?.active || true,
 
-      fatherName: dataToEdit?.fatherInfo.fatherName || "",
-      fatherPhone: dataToEdit?.fatherInfo.fatherPhone || "",
-      fatherEdu: dataToEdit?.fatherInfo.fatherEdu || "",
-      fatherProfession: dataToEdit?.fatherInfo.fatherProfession || "",
-      fatherDesignation: dataToEdit?.fatherInfo.fatherDesignation || "",
+      fatherName: dataToEdit?.fatherInfo.name || "",
+      fatherPhone: dataToEdit?.fatherInfo.contactNumber || "",
+      fatherEdu: dataToEdit?.fatherInfo.education || "",
+      fatherProfession: dataToEdit?.fatherInfo.profession || "",
+      fatherDesignation: dataToEdit?.fatherInfo.designation || "",
 
-      motherName: dataToEdit?.motherInfo.motherName || "",
-      motherPhone: dataToEdit?.motherInfo.motherPhone || "",
-      motherEdu: dataToEdit?.motherInfo.motherEdu || "",
-      motherProfession: dataToEdit?.motherInfo.motherProfession || "",
-      motherDesignation: dataToEdit?.motherInfo.motherDesignation || "",
+      motherName: dataToEdit?.motherInfo.name || "",
+      motherPhone: dataToEdit?.motherInfo.contactNumber || "",
+      motherEdu: dataToEdit?.motherInfo.education || "",
+      motherProfession: dataToEdit?.motherInfo.profession || "",
+      motherDesignation: dataToEdit?.motherInfo.designation || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -484,7 +481,7 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput name="cast" formik={entryFormik} label="Cast" />
+                <FormInput name="caste" formik={entryFormik} label="Cast" />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
@@ -509,7 +506,7 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="aadhar"
+                  name="aadharNo"
                   formik={entryFormik}
                   label="Aadhar No."
                 />
@@ -619,7 +616,11 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput name="rollNo" formik={entryFormik} label="Roll No" />
+                <FormInput
+                  name="rollNumber"
+                  formik={entryFormik}
+                  label="Roll No"
+                />
               </Grid>
             </Grid>
           </Box>
@@ -698,7 +699,7 @@ export default function AddStudent() {
                 <FormInput
                   name="fatherProfession"
                   formik={entryFormik}
-                  label="father Profession"
+                  label="Father Profession"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -713,7 +714,7 @@ export default function AddStudent() {
                   name="fatherPhoto"
                   multi={false}
                   label="Select Photo"
-                  onChange={(e) => handleChangePhoto(e, "father")}
+                  onChange={(e) => handleChangePhoto(e, "fatherPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedFatherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -772,7 +773,7 @@ export default function AddStudent() {
                   label="Select Photo"
                   multi={false}
                   name="motherPhoto"
-                  onChange={(e) => handleChangePhoto(e, "mother")}
+                  onChange={(e) => handleChangePhoto(e, "motherPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedMotherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -832,8 +833,8 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Transport Member"
                   options={[
-                    { label: "Yes", value: false },
-                    { label: "No", value: true },
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
                   ]}
                 />
               </Grid>
@@ -844,8 +845,8 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Library Member"
                   options={[
-                    { label: "Yes", value: false },
-                    { label: "No", value: true },
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
                   ]}
                 />
               </Grid>

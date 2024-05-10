@@ -3,7 +3,6 @@ import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { PrintSharp } from "@mui/icons-material";
 import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
-
 import FormSelect from "../../forms/FormSelect";
 import {
   Box,
@@ -19,8 +18,9 @@ import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
 import { Link, useNavigate } from "react-router-dom";
 import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { del, get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+
 const Status_Options = [
   { label: "Active", value: true },
   { label: "InActive", value: false },
@@ -41,8 +41,6 @@ export default function AdmitStudent() {
 
   const handleEditClick = (data) => {
     navigation(`/sch/student/edit-student/${data._id}`);
-
-    console.log(data, "kkkk");
   };
 
   const getData = async () => {
@@ -92,10 +90,8 @@ export default function AdmitStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      if (data.result?.length) {
-        setSelectedClass(data.result[0]._id);
-        entryFormik.setFieldValue("class", data.result[0]._id);
-      }
+
+      setSelectedClass(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -128,7 +124,7 @@ export default function AdmitStudent() {
           },
         },
       });
-      setData(data.result, "kkkkkkk");
+      setData(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -148,6 +144,15 @@ export default function AdmitStudent() {
   const handleClassChange = (e) => {
     const selectedClassId = e.target.value;
     setSelectedClass(selectedClassId);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.student.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <>
@@ -237,11 +242,12 @@ export default function AdmitStudent() {
         </Box>
       </Paper>
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={admitStudentTableKeys}
         bodyDataModal="students"
         bodyData={data}
         onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
       {/* add student */}
       <AddForm title="Add Students" onAddClick={handelAddStudent} />

@@ -11,19 +11,21 @@ export const admitStudentTableKeys = [
   },
   {
     name: "Status",
-    key: "status",
+    key: "active",
   },
   {
     name: "Section",
     key: "section",
+    // path: "academicInfo",
   },
   {
     name: "Roll No",
     key: "rollNo",
+    path: "academicInfo",
   },
   {
     name: "Admission No",
-    key: "admissionNo",
-    path: "basicInfo",
+    key: "admissionNumber",
+    path: "academicInfo",
   },
 ];
