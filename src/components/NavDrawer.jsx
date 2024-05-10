@@ -693,6 +693,7 @@ export default function NavDrawer() {
           <Route path="student/overview" element={<Overview />} />
 
           <Route path="student/admit-student" element={<AdmitStudent />} />
+          <Route path="edit-student/:id" element={<AdmitStudent />} />
           <Route path="student/reshuffle" element={<Reshuffle />} />
           <Route path="student/promotion" element={<Promotion />} />
           <Route path="student/bulk-admission" element={<BulkAdmission />} />

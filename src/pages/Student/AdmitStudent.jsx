@@ -31,6 +31,12 @@ export default function AdmitStudent() {
     navigation("/sch/student/add-student");
   };
 
+  const handleEditClick = (data) => {
+    navigation(`/sch/edit-student/${data._id}`);
+
+    console.log(data, "kkkk");
+  };
+
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.student.list, {
@@ -39,8 +45,6 @@ export default function AdmitStudent() {
         },
       });
       setData(data.result);
-
-      console.log(data.result, "hhhhhhhhhhhhh");
     } catch (error) {
       console.log(error);
     }
@@ -59,6 +63,7 @@ export default function AdmitStudent() {
     },
     onSubmit: console.log("nnnn"),
   });
+
   return (
     <>
       <PageHeader title="Students" />
@@ -148,6 +153,7 @@ export default function AdmitStudent() {
         tableKeys={admitStudentTableKeys}
         bodyDataModal="students"
         bodyData={data}
+        onEditClick={handleEditClick}
       />
       {/* add student */}
       <AddForm title="Add Students" onAddClick={handelAddStudent} />
