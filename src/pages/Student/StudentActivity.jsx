@@ -30,6 +30,24 @@ export default function StudentActivity() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
 
+  //get activity list
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.studentActivity.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            student: Formik.values.student,
+          },
+        },
+      });
+      // console.log(data.result, "activuty");
+      setDate(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //get academic year
   const getAcademicYear = async () => {
     try {
@@ -47,7 +65,7 @@ export default function StudentActivity() {
     }
   };
 
-  //get class year
+  //get class
   const getClasses = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.class.list, {
@@ -64,7 +82,7 @@ export default function StudentActivity() {
     }
   };
 
-  //get sections year
+  //get sections
   const getSections = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
@@ -79,13 +97,12 @@ export default function StudentActivity() {
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      Formik.setFieldValue("section", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
   };
 
-  //get academic year
+  //get students
   const getStudents = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.student.list, {
@@ -118,6 +135,7 @@ export default function StudentActivity() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    getData();
   };
 
   // create || update actions
@@ -148,6 +166,11 @@ export default function StudentActivity() {
     setLoading(false);
   };
 
+  // find activity
+  const getActivityList = (e) => {
+    getData();
+  };
+
   const Formik = useFormik({
     initialValues: {
       academicYear: "",
@@ -155,7 +178,8 @@ export default function StudentActivity() {
       section: "",
       student: "",
     },
-    onSubmit: console.log(""),
+    onSubmit: getActivityList,
+    enableReinitialize: true,
   });
 
   const entryFormik = useFormik({
@@ -170,8 +194,6 @@ export default function StudentActivity() {
     enableReinitialize: true,
   });
 
-  const getActivityList = (e) => {};
-
   useEffect(() => {
     if (Formik.values.class) {
       getSections();
@@ -181,6 +203,7 @@ export default function StudentActivity() {
   useEffect(() => {
     getAcademicYear();
     getClasses();
+    // getData();
   }, [selectedSetting._id]);
 
   useEffect(() => {
@@ -204,6 +227,17 @@ export default function StudentActivity() {
       getSections();
     }
   }, [Formik.values.class]);
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    if (Formik.values.academicYear) {
+      getData();
+    }
+  }, [Formik.values.academicYear]);
 
   return (
     <>
@@ -265,7 +299,8 @@ export default function StudentActivity() {
               size="small"
               type="submit"
               variant="contained"
-              // onClick={getActivityList}
+              disabled={!Formik.values.student}
+              onClick={getActivityList}
             >
               Find
             </Button>
@@ -277,10 +312,15 @@ export default function StudentActivity() {
         tableKeys={studentActivityTableKeys}
         bodyDataModal="student activity"
         bodyData={data}
+        onEditClick={handleEditClick}
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Student Activity" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        title="Student Activity"
+        onAddClick={AddDepartmentHandel}
+        disabled={!Formik.values.student}
+      />
       {/* ================================== */}
 
       {/* ==== add/edit classes ======== */}
