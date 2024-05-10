@@ -51,7 +51,7 @@ export default function Assignment() {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
-          search: { class: selectedClass },
+          // search: { class: selectedClass },
         },
       });
       console.log(data, "section");
