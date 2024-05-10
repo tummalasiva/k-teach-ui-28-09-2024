@@ -160,9 +160,14 @@ export default function AddInstitute({ initialValue = null }) {
       };
       setLoading(true);
 
-      const { data } = await post(PRIVATE_URLS.school.create, payload);
-      // getData();
-      console.log(data, "haha");
+      const formData = new FormData();
+      formData.append("bodyData", JSON.stringify(payload));
+      logo.forEach((f) => formData.append("logo", f));
+
+      const { data } = await post(PRIVATE_URLS.school.create, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(data, "datat schooll");
     } catch (error) {
       console.log(error);
     }

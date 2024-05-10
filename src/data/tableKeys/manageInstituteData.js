@@ -5,6 +5,7 @@ export const manageInstituteTableKeys = [
   },
   {
     name: "Logo",
+    type: "image",
     key: "logo",
   },
 ];

@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   IconButton,
@@ -130,11 +131,31 @@ export default function CustomTable({
                   .map((data, index) => (
                     <TableRow key={data._id}>
                       <TableCell align="center">{index + 1}</TableCell>
-                      {tableKeys.map((k, i) => (
-                        <TableCell key={i} align="center">
-                          {getDataValue(data, k)}
-                        </TableCell>
-                      ))}
+                      {tableKeys.map((k, i) =>
+                        k.type === "image" ? (
+                          <TableCell key={i} align="center">
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Avatar
+                                sx={{
+                                  alignSelf: "center",
+                                  objectFit: "contain",
+                                }}
+                                src={data[k.key]}
+                              />
+                            </Box>
+                          </TableCell>
+                        ) : (
+                          <TableCell key={i} align="center">
+                            {getDataValue(data, k)}
+                          </TableCell>
+                        )
+                      )}
                       <TableCell align="center">
                         {actions.includes("edit") && (
                           <Tooltip title="Edit">

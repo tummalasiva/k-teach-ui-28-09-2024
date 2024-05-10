@@ -35,6 +35,7 @@ export default function ManageInstitute() {
         bodyData={data}
         tableKeys={manageInstituteTableKeys}
         toggleStatus="active"
+        // onToggleSwitch={handleToggleSwitch}
       />
       <AddForm title="Add Institute" onAddClick={handleAddClick} />
     </>
