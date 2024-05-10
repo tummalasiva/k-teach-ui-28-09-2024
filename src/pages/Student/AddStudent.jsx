@@ -153,14 +153,14 @@ export default function AddStudent() {
           contactNumber: values.motherPhone,
           education: values.motherEdu,
           profession: values.motherProfession,
-          designation: values.designation,
+          designation: values.motherDesignation,
         },
         fatherInfo: {
           name: values.fatherName,
           contactNumber: values.fatherPhone,
           education: values.fatherEdu,
           profession: values.fatherProfession,
-          designation: values.motherDesignation,
+          designation: values.fatherDesignation,
         },
         academicInfo: {
           class: values.class,
@@ -248,12 +248,12 @@ export default function AddStudent() {
       fatherPhone: "",
       fatherEdu: "",
       fatherProfession: "",
-      motherDesignation: "",
+      fatherDesignation: "",
 
-      fatherName: "",
-      fatherPhone: "",
-      fatherEdu: "",
-      fatherProfession: "",
+      motherName: "",
+      motherPhone: "",
+      motherEdu: "",
+      motherProfession: "",
       motherDesignation: "",
     },
     onSubmit: handleCreateOrUpdate,
@@ -565,13 +565,6 @@ export default function AddStudent() {
                 />
               </Grid>
 
-              <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  name="prevClass"
-                  formik={entryFormik}
-                  label="Previous Class"
-                />
-              </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput name="tcNo" formik={entryFormik} label="TC No." />
               </Grid>
