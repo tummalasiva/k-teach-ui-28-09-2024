@@ -164,7 +164,7 @@ export default function Credential() {
         </Grid>
       </Paper>
       <CustomTable
-        actions={["edit"]}
+        actions={[]}
         tableKeys={studentCrendentialsTableKeys}
         bodyDataModal="credentials"
         bodyData={data}
