@@ -102,6 +102,7 @@ export default function AddStudent() {
     try {
       const { data } = await get(PRIVATE_URLS.student.details + "/" + id);
       console.log(data.result, "==========");
+      setDataToEdit(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -142,10 +143,10 @@ export default function AddStudent() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      if (data.result?.length) {
-        setSelectedClass(data.result[0]._id);
-        entryFormik.setFieldValue("class", data.result[0]._id);
-      }
+      // if (data.result?.length) {
+      //   setSelectedClass(data.result[0]._id);
+      //   entryFormik.setFieldValue("class", data.result[0]._id);
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -255,6 +256,7 @@ export default function AddStudent() {
           PRIVATE_URLS.student.update + "/" + dataToEdit._id,
           formData
         );
+        navigate("/sch/student/admit-student");
       } else {
         const { data } = await post(PRIVATE_URLS.student.create, formData);
         navigate("/sch/student/admit-student");
@@ -266,62 +268,70 @@ export default function AddStudent() {
   };
   const entryFormik = useFormik({
     initialValues: {
-      academicYear: "",
-      name: "",
-      admissionDate: null,
-      motherTongue: "",
-      dob: null,
-      gender: "",
-      bloodGroup: "",
-      cicn: "",
-      religion: "",
-      cast: "",
-      rte: "",
-      aadharNo: "",
-      satNo: "",
-      grNo: "",
-      birthPlace: "",
+      academicYear: dataToEdit?.academicYear._id || "",
+      name: dataToEdit?.basicInfo.name || "",
+      admissionDate: dataToEdit?.basicInfo.admissionDate || null,
+      motherTongue: dataToEdit?.basicInfo.motherTongue || "",
+      dob: dataToEdit?.basicInfo.dob || null,
+      gender: dataToEdit?.basicInfo.gender || "",
+      bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
+      cicn: dataToEdit?.basicInfo.cicn || "",
+      religion: dataToEdit?.basicInfo.religion || "",
+      cast: dataToEdit?.basicInfo.cast || "",
+      rte: dataToEdit?.basicInfo.rte || "",
+      aadharNo: dataToEdit?.basicInfo.aadharNo || "",
+      satNo: dataToEdit?.basicInfo.satNo || "",
+      grNo: dataToEdit?.basicInfo.grNo || "",
+      birthPlace: dataToEdit?.basicInfo.birthPlace || "",
 
-      class: "",
-      section: "",
-      rollNo: "",
+      class: dataToEdit?.academicInfo?.class
+        ? dataToEdit?.academicInfo?.class._id
+        : "",
+      section: dataToEdit?.academicInfo?.section
+        ? dataToEdit?.academicInfo?.section._id
+        : "",
+      rollNo: dataToEdit?.academicInfo?.rollNo || "",
       admissionNumber: dataToEdit?.academicInfo?.admissionNumber || "",
 
-      contactNumber: "",
-      guardianName: "",
-      guardianContactNumber: "",
-      guardianContactNumberSecondary: "",
-      guardianRelation: "",
-      nationId: "",
-      presentAddress: "",
-      permanentAddress: "",
+      contactNumber: dataToEdit?.contactNumber || "",
 
-      prevSchName: "",
-      prevClass: "",
-      tcNo: "",
+      guardianName: dataToEdit?.contactInfo?.guardianName || "",
+      guardianContactNumber:
+        dataToEdit?.contactInfo?.guardianContactNumber || "",
+      guardianContactNumberSecondary:
+        dataToEdit?.contactInfo?.guardianContactNumberSecondary || "",
+      guardianRelation: dataToEdit?.contactInfo?.guardianRelation || "",
+      nationId: dataToEdit?.contactInfo?.nationId || "",
+      presentAddress: dataToEdit?.contactInfo?.presentAddress || "",
+      permanentAddress: dataToEdit?.contactInfo?.permanentAddress || "",
 
-      email: "",
-      healthCondition: "",
-      transportMember: "",
-      hostelMember: "",
-      libraryMember: "",
-      busStop: "",
-      extraInfo: "",
-      active: "",
+      prevSchName: dataToEdit?.prevSchInfo?.name || "",
+      tcNo: dataToEdit?.prevSchInfo?.tcNo || "",
+      prevClass: dataToEdit?.prevSchInfo?.prevClass || "",
 
-      fatherName: "",
-      fatherPhone: "",
-      fatherEdu: "",
-      fatherProfession: "",
-      fatherDesignation: "",
+      email: dataToEdit?.otherInfo.email || "",
+      healthCondition: dataToEdit?.otherInfo.healthCondition || "",
+      transportMember: dataToEdit?.otherInfo.transportMember || "",
+      hostelMember: dataToEdit?.otherInfo.hostelMember || "",
+      libraryMember: dataToEdit?.otherInfo.libraryMember || "",
+      busStop: dataToEdit?.otherInfo.busStop || "",
+      extraInfo: dataToEdit?.otherInfo.extraInfo || "",
+      active: dataToEdit?.active || true,
 
-      motherName: "",
-      motherPhone: "",
-      motherEdu: "",
-      motherProfession: "",
-      motherDesignation: "",
+      fatherName: dataToEdit?.fatherInfo.fatherName || "",
+      fatherPhone: dataToEdit?.fatherInfo.fatherPhone || "",
+      fatherEdu: dataToEdit?.fatherInfo.fatherEdu || "",
+      fatherProfession: dataToEdit?.fatherInfo.fatherProfession || "",
+      fatherDesignation: dataToEdit?.fatherInfo.fatherDesignation || "",
+
+      motherName: dataToEdit?.motherInfo.motherName || "",
+      motherPhone: dataToEdit?.motherInfo.motherPhone || "",
+      motherEdu: dataToEdit?.motherInfo.motherEdu || "",
+      motherProfession: dataToEdit?.motherInfo.motherProfession || "",
+      motherDesignation: dataToEdit?.motherInfo.motherDesignation || "",
     },
     onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
@@ -623,7 +633,7 @@ export default function AddStudent() {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="prevSchool"
+                  name="prevSchName"
                   formik={entryFormik}
                   label="Previous School"
                 />
