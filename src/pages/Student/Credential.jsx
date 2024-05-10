@@ -12,7 +12,7 @@ import SettingContext from "../../context/SettingsContext";
 
 export default function Credential() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setDate] = useState([]);
+  const [data, setData] = useState([]);
   const [academicYearList, setAcademicYearList] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
@@ -87,13 +87,21 @@ export default function Credential() {
           },
         },
       });
-      console.log(data, "serach");
-      setDate(data.result);
+      setData(
+        data.result.map((student) => ({
+          username: student.username,
+          fatherName: student.fatherInfo.name,
+          name: student.basicInfo.name,
+          rollNumber: student.basicInfo.rollNumber,
+        }))
+      );
     } catch (error) {
       console.error(error);
     }
     setLoader(false);
   };
+
+  console.log(data, "datata==========");
 
   const entryFormik = useFormik({
     initialValues: {
