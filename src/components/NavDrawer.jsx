@@ -867,6 +867,14 @@ export default function NavDrawer() {
             path="manage-institute/add-institute"
             element={<AddInstitute />}
           />
+          <Route
+            path="manage-institute/add-institute"
+            element={<AddInstitute />}
+          />
+          <Route
+            path="manage-institute/edit-institute/:id"
+            element={<AddInstitute />}
+          />
           <Route path="profile" element={<Profile />} />
         </Routes>
         <Outlet />

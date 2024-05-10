@@ -64,6 +64,8 @@ export const PRIVATE_URLS = {
     list: "/school/list",
     create: "/school/create",
     toggleActiveStatus: "/school/toggleActiveStatus",
+    update: "/school/update",
+    details: "/school/details",
   },
   class: {
     list: "/class/list",

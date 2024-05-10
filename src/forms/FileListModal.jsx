@@ -42,7 +42,9 @@ export default function FileListModal({
         },
       }}
     >
-      <DialogTitle>Selected files</DialogTitle>
+      <DialogTitle>
+        {selectedFiles.length > 1 ? "Selected files" : "Selected file"}
+      </DialogTitle>
       <Divider />
       <DialogContent
         sx={{
