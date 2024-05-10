@@ -9,6 +9,7 @@ import { calculateSlidersSetting } from "../../data/Carousal";
 import EventCards from "./EventCards";
 import themeData from "../../../data/themeData";
 import { AppSlider } from "../../data/AppSlider";
+import Dots from "../../data/Dots";
 
 export const arrData = [
   {
@@ -99,6 +100,7 @@ export default function OurEvents() {
       <Container sx={{ marginTop: "8rem" }} maxWidth="xl">
         <TypographyMain variant="h5" my={6}>
           OUR EVENTS
+          <Dots />
         </TypographyMain>
         {/* <Box
           sx={{

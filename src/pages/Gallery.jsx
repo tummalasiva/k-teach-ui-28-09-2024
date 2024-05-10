@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, IconButton, Paper } from "@mui/material";
 import { galleryListTableKeys } from "../data/tableKeys/galleryListData";
 import PageHeader from "../components/PageHeader";
 import TabList from "../components/Tabs/Tablist";
@@ -15,6 +15,7 @@ import { PRIVATE_URLS } from "../services/urlConstants";
 import { get, post, put } from "../services/apiMethods";
 import AddOrUpdateFiles from "../forms/AddOrUpdateFiles";
 import FileSelect from "../forms/FileSelect";
+import { Clear } from "@mui/icons-material";
 
 export default function Gallery() {
   const { selectedSetting } = useContext(SettingContext);
@@ -24,6 +25,8 @@ export default function Gallery() {
   const [loading, setLoading] = useState(false);
   const [selectImg, setSelectImg] = useState([]);
   const [date, setDate] = useState(dataToEdit ? dayjs(dataToEdit.date) : null);
+
+  console.log(dataToEdit, "gall dataToEdit");
 
   const getData = async () => {
     try {
@@ -56,6 +59,18 @@ export default function Gallery() {
   const handleRemoveFile = (fileName, index) => {
     // console.log(fileName, "gii");
     setSelectImg(selectImg.filter((img) => img.name != fileName));
+  };
+
+  const handleRemoveImg = async (img) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.gallery.removeFile + "/" + dataToEdit._id,
+        { file: img }
+      );
+      setDataToEdit(data.result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // create || update actions
@@ -192,10 +207,46 @@ export default function Gallery() {
             <Grid xs={12} md={12} lg={12} item>
               <FormInput name="note" formik={entryFormik} label="Note" />
             </Grid>
+            {dataToEdit?.images.map((galleryImg, i) => (
+              <Grid
+                xs={6}
+                sm={6}
+                md={2}
+                lg={2}
+                item
+                sx={{
+                  display: "flex",
+                  position: "relative",
+                }}
+                key={i}
+              >
+                <img
+                  src={galleryImg}
+                  alt="loading..."
+                  width={70}
+                  height={70}
+                  style={{ objectFit: "contain", borderRadius: "10px" }}
+                />
+                <IconButton
+                  size="small"
+                  color="error"
+                  sx={{
+                    position: "absolute",
+                    top: "40%",
+                    right: 0,
+                    transform: "translateY(-50%)",
+                  }}
+                  onClick={() => handleRemoveImg(galleryImg)}
+                >
+                  <Clear color="error" fontSize="small" />
+                </IconButton>
+              </Grid>
+            ))}
+
             <Grid
               xs={12}
-              md={6}
-              lg={3}
+              md={12}
+              lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
               item
             >

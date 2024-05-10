@@ -49,28 +49,33 @@ export default function FileListModal({
           padding: "10px",
         }}
       >
-        {selectedFiles.map((f, i) => (
-          <Box
-            key={i}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography>{f.name}</Typography>{" "}
-            <IconButton
-              size="small"
-              onClick={
-                customOnChage
-                  ? () => onRemove(f.name)
-                  : () => handleRemoveImage(f.name)
-              }
-            >
-              <Close fontSize="small" />
-            </IconButton>
-          </Box>
-        ))}
+        {selectedFiles.map(
+          (f, i) => (
+            console.log(f.name, "gg"),
+            (
+              <Box
+                key={i}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography>{f.name}</Typography>
+                <IconButton
+                  size="small"
+                  onClick={
+                    customOnChage
+                      ? () => onRemove(f.name)
+                      : () => handleRemoveImage(f.name)
+                  }
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </Box>
+            )
+          )
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} size="small" variant="contained">

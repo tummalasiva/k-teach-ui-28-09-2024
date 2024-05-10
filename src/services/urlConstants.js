@@ -106,6 +106,7 @@ export const PRIVATE_URLS = {
     update: "/gallery/update",
     delete: "/gallery/delete",
     addFiles: "/gallery/addFiles",
+    removeFile: "/gallery/removeFile",
   },
   assignment: {
     list: "/assignment/list",

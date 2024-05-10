@@ -23,6 +23,8 @@ export default function Assignment() {
   const [subject, setSubject] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
 
+  console.log(selectedClass, "usha");
+
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
   };
@@ -32,11 +34,13 @@ export default function Assignment() {
       const { data } = await get(PRIVATE_URLS.class.list, {
         params: { schoolId: selectedSetting._id },
       });
+      console.log(data, "clss");
+
       setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
-      // if (data.result?.length) {
-      //   setSelectedClass(data.result[0]?._id);
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
-      // }
+      if (data.result?.length) {
+        setSelectedClass(data.result[0]?._id);
+        entryFormik.setFieldValue("class", data.result[0]._id);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -45,9 +49,14 @@ export default function Assignment() {
   const getSections = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
-        params: { schoolId: selectedSetting._id },
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: selectedClass },
+        },
       });
+      console.log(data, "section");
       setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      setSections(data.result.filter((d) => ({ label: d.name, value: d._id })));
       // if (data.result?.length) {
       //   setSelectedClass(data.result[0]?._id);
       //   entryFormik.setFieldValue("class", data.result[0]._id);

@@ -3,6 +3,7 @@ import { Box, Card, Typography, css, keyframes, styled } from "@mui/material";
 import themeData from "../../../../data/themeData";
 import NewsDetails from "./NewsDetails";
 import image from "../../../assets/images/school-white.avif";
+import Dots from "../../../data/Dots";
 
 const bubbleAnimation = keyframes`
   0% {
@@ -88,6 +89,7 @@ export default function NewsAndNotice() {
         <MuiCard>
           <TypographyMain sx={{ mt: 3 }} variant="h3">
             NEWS & NOTICE
+            <Dots />
           </TypographyMain>
 
           <MuiBox>
