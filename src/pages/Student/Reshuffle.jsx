@@ -140,6 +140,8 @@ export default function Reshuffle() {
         studentIds: checkBox,
       };
 
+      console.log(payload, "mmmm");
+
       const { data } = await put(PRIVATE_URLS.student.resuffle, payload);
 
       console.log(data, "kkkkkkkkk");
