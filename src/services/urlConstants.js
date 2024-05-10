@@ -19,6 +19,7 @@ export const PRIVATE_URLS = {
     create: "/role/create",
     update: "/role/update",
     delete: "/role/delete",
+    getRoleKeys: "/role/getRoleKeys",
   },
   employee: {
     list: "/employee/list",

@@ -27,8 +27,8 @@ import FormInput from "../../forms/FormInput";
 import TabList from "../../components/Tabs/Tablist";
 import FormModal from "../../forms/FormModal";
 import AddForm from "../../forms/AddForm";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get } from "../../services/apiMethods";
 
 function toggleItemInArray(array, item) {
   const index = array.indexOf(item);
@@ -89,6 +89,34 @@ export default function RolePermission() {
     "delete",
   ]);
 
+  const getRoleKeys = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.getRoleKeys);
+
+      if (roleToEdit) {
+        let allKeys = [...roleToEdit.permissions];
+        for (let key of data.result) {
+          if (!allKeys.find((k) => k.module == key.module)) {
+            allKeys.push(key);
+          }
+        }
+        setRoleKeys(allKeys);
+      } else {
+        setRoleKeys(data.result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    getRoleKeys();
+    if (value == 0) {
+      setRoleToEdit(null);
+    }
+  }, [value]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -119,49 +147,50 @@ export default function RolePermission() {
     getData();
   }, []);
 
-  // const handleAddOrUpdate = async (values) => {
-  //   let payload = {
-  //     ...values,
-  //     permissions: roleKeys,
-  //   };
+  const handleAddOrUpdate = async (values) => {
+    let payload = {
+      ...values,
+      permissions: roleKeys,
+    };
 
-  //   if (!roleToEdit) {
-  //     payload["permissions"] = roleKeys.map((r) => ({ ...r, permissions: [] }));
-  //   }
+    if (!roleToEdit) {
+      payload["permissions"] = roleKeys.map((r) => ({ ...r, permissions: [] }));
+    }
 
-  //   try {
-  //     if (roleToEdit) {
-  //       const { data } = await put(
-  //         URLS.roles.update + "/" + roleToEdit._id,
-  //         payload
-  //       );
-  //       setValue(0);
-  //       getRoles();
-  //     } else {
-  //       const { data } = await post(URLS.roles.create, payload);
-  //       setValue(0);
-  //       getRoles();
-  //     }
+    try {
+      if (roleToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.role.update + "/" + roleToEdit._id,
+          payload
+        );
+        setValue(0);
+        getData();
+      } else {
+        const { data } = await post(PRIVATE_URLS.role.create, payload);
+        setValue(0);
+        getData();
+      }
 
-  //     formik.resetForm();
-  //     setOpen(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      formik.resetForm();
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
-      role: "",
+      name: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleAddOrUpdate,
+    enableReinitialize: true,
   });
 
   const formikUpdate = useFormik({
     initialValues: {
       name: roleToEdit?.name || "",
     },
-    onSubmit: console.log("hbhj"),
+    onSubmit: handleAddOrUpdate,
     enableReinitialize: true,
   });
 
@@ -210,6 +239,15 @@ export default function RolePermission() {
     setAllPermissionUpdate(allPermissions);
   }, [roleKeys]);
 
+  const handleDeleteRole = async (id) => {
+    try {
+      const { data } = await del(PRIVATE_URLS.role.delete + "/" + id);
+      setRoles(roles.filter((r) => r._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Role Permission" />
@@ -226,6 +264,7 @@ export default function RolePermission() {
           bodyData={roles}
           onEditClick={handleRoleEditClick}
           tableKeys={rolePermissionTableKeys}
+          onDeleteClick={handleDeleteRole}
         />
         <AddForm title="Add Role" onAddClick={openRoleAddUpdateModal} />
       </TabPanel>
@@ -233,16 +272,16 @@ export default function RolePermission() {
       <FormModal
         open={open}
         formik={formik}
-        formTitle="Add Role"
+        formTitle="Create Role"
         onClose={handleModalClose}
-        submitButtonTitle="Apply"
+        submitButtonTitle="Create"
       >
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput
               type="text"
               formik={formik}
-              name="role"
+              name="name"
               label="Role Name"
               required={true}
             />
@@ -279,8 +318,21 @@ export default function RolePermission() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Module Name</TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    sx={{
+                      color: (theme) =>
+                        theme.palette.mode === "dark" ? "white" : "black",
+                    }}
+                  >
+                    Module Name
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      color: (theme) =>
+                        theme.palette.mode === "dark" ? "white" : "black",
+                    }}
+                    align="center"
+                  >
                     View
                     <Checkbox
                       onChange={() => handleUpdateAll("view")}
@@ -288,7 +340,13 @@ export default function RolePermission() {
                       checked={allPermissionUpdate.includes("view")}
                     />
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    sx={{
+                      color: (theme) =>
+                        theme.palette.mode === "dark" ? "white" : "black",
+                    }}
+                    align="center"
+                  >
                     Add{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("add")}
@@ -296,7 +354,13 @@ export default function RolePermission() {
                       name="add"
                     />{" "}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    sx={{
+                      color: (theme) =>
+                        theme.palette.mode === "dark" ? "white" : "black",
+                    }}
+                    align="center"
+                  >
                     Update{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("update")}
@@ -304,7 +368,13 @@ export default function RolePermission() {
                       name="update"
                     />
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    sx={{
+                      color: (theme) =>
+                        theme.palette.mode === "dark" ? "white" : "black",
+                    }}
+                    align="center"
+                  >
                     Delete{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("delete")}
@@ -374,12 +444,14 @@ export default function RolePermission() {
                     onClick={handleCancelClick}
                     variant="outlined"
                     color="error"
+                    size="small"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={formikUpdate.handleSubmit}
                     variant="contained"
+                    size="small"
                   >
                     Update
                   </Button>
