@@ -5,22 +5,24 @@ export const assignmentTableKeys = [
   },
   {
     name: "Class",
-    key: "class",
+    key: "className",
   },
   {
     name: "Subject",
-    key: "subject",
+    key: "subjectName",
   },
   {
     name: "Created At",
-    key: "createAt",
+    key: "createdAt",
+    isDate: true,
   },
   {
     name: "Deadline",
     key: "deadline",
+    isDate: true,
   },
-  {
-    name: "Get Assignment",
-    key: "assignment",
-  },
+  // {
+  //   name: "Get Assignment",
+  //   key: "assignment",
+  // },
 ];
