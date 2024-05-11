@@ -11,7 +11,7 @@ import FormSelect from "../forms/FormSelect";
 import FormDatePicker from "../forms/FormDatePicker";
 import FormInput from "../forms/FormInput";
 import { PRIVATE_URLS } from "../services/urlConstants";
-import { get, post, put } from "../services/apiMethods";
+import { del, get, post, put } from "../services/apiMethods";
 import SettingContext from "../context/SettingsContext";
 import FileSelect from "../forms/FileSelect";
 import { LoadingButton } from "@mui/lab";
@@ -24,28 +24,54 @@ export default function Assignment() {
   const [value, setSelectValue] = useState(0);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
-
+  const Section_Options = [{ label: "All", value: "all" }, ...sections];
   // get section
   const getData = async (values) => {
     try {
-      const { data } = await get(PRIVATE_URLS.assignment.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: {
-            class: values.class,
-            section: values.section,
+      if (values?.section === "all") {
+        const { data } = await get(PRIVATE_URLS.assignment.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              class: values.class,
+            },
           },
-        },
-      });
+        });
+        console.log(data.responseCode, "all");
 
-      setData(
-        data.result.map((assignment) => ({
-          ...assignment,
-          className: assignment.class.name,
-          subjectName: assignment.subject.name,
-          id: assignment._id,
-        }))
-      );
+        if (data.responseCode === "OK") {
+          setData(
+            data.result.map((assignment) => ({
+              ...assignment,
+              className: assignment.class.name,
+              subjectName: assignment.subject.name,
+              id: assignment._id,
+            }))
+          );
+        }
+      } else {
+        const { data } = await get(PRIVATE_URLS.assignment.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              class: values.class,
+              section: values.section,
+            },
+          },
+        });
+        console.log(data, "kikikiiiii");
+
+        if (data.responseCode === "OK") {
+          setData(
+            data.result.map((assignment) => ({
+              ...assignment,
+              className: assignment.class.name,
+              subjectName: assignment.subject.name,
+              id: assignment._id,
+            }))
+          );
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -122,13 +148,34 @@ export default function Assignment() {
     setSelectValue(1);
   };
 
+  const handleClickOpenView = (data) => {
+    // console.log(data, "pppppp");
+    try {
+      if (data.file) {
+        window.open(data.file, "_blank");
+      } else {
+        window.open(data.link, "_blank");
+      }
+    } catch (error) {
+      console.error("No file or link found in the data");
+    }
+  };
+
   useEffect(() => {
     if (value === 0) {
       setDataToEdit(null);
     }
   }, [value]);
 
-  // console.log(dataToEdit, "dataToEdit");
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.assignment.delete + "/" + id);
+      getData();
+      entryFormik.handleSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -165,7 +212,7 @@ export default function Assignment() {
                 name="section"
                 formik={entryFormik}
                 label="Select Section"
-                options={sections}
+                options={Section_Options}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
@@ -186,6 +233,8 @@ export default function Assignment() {
           bodyData={data}
           tableKeys={assignmentTableKeys}
           onEditClick={handleEditClick}
+          onViewClick={handleClickOpenView}
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>

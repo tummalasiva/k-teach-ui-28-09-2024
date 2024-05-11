@@ -182,7 +182,7 @@ export default function Promotion() {
           </Typography>
         </Box>
         <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={2} item>
+          <Grid xs={12} md={6} lg={4} item>
             <FormSelect
               required={true}
               name="promoteAcademicYearId"
@@ -191,7 +191,7 @@ export default function Promotion() {
               options={academicYear}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={2} item>
+          <Grid xs={12} md={6} lg={4} item>
             <FormSelect
               required={true}
               name="currentClassId"
@@ -201,7 +201,7 @@ export default function Promotion() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={2} item>
+          <Grid xs={12} md={6} lg={4} item>
             <FormSelect
               required={true}
               name="currentSectionId"
@@ -215,7 +215,7 @@ export default function Promotion() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={2} item>
+          <Grid xs={12} md={6} lg={4} item>
             <FormSelect
               required={true}
               name="promoteClassId"
@@ -227,7 +227,7 @@ export default function Promotion() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={2} item>
+          <Grid xs={12} md={6} lg={4} item>
             <FormSelect
               required={true}
               name="promoteSectionId"
@@ -244,10 +244,11 @@ export default function Promotion() {
           <Grid
             item
             xs={12}
-            md={12}
-            lg={12}
+            md={6}
+            lg={2}
             display="flex"
-            justifyContent="flex-end"
+            alignItems="center"
+            // justifyContent="flex-end"
           >
             <Button
               disabled={!hasAllValues(entryFormik.values, [], false)}
