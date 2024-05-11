@@ -1,7 +1,8 @@
 export const admitStudentTableKeys = [
   {
     name: "Photo",
-    key: "image",
+    key: "photo",
+    type: "image",
   },
   {
     name: "Name",
@@ -10,18 +11,21 @@ export const admitStudentTableKeys = [
   },
   {
     name: "Status",
-    key: "status",
+    key: "active",
   },
   {
     name: "Section",
-    key: "section",
+    key: "name",
+    path: "section",
   },
   {
     name: "Roll No",
     key: "rollNo",
+    path: "academicInfo",
   },
   {
     name: "Admission No",
-    key: "admissionNo",
+    key: "admissionNumber",
+    path: "academicInfo",
   },
 ];

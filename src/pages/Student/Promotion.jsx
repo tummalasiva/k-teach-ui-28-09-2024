@@ -1,24 +1,174 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 
 import FormSelect from "../../forms/FormSelect";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import { promotionTableKeys } from "../../data/tableKeys/promotionData";
+import SettingContext from "../../context/SettingsContext";
+import { get, put } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { hasAllValues } from "../../utils";
+import { toast } from "react-toastify";
+import StickyBar from "../../components/StickyBar";
+import { LoadingButton } from "@mui/lab";
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function Promotion() {
-  const [data, setDate] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
+  const [data, setData] = useState([]);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [classData, setClassData] = useState([]);
+  const [sectionData, setSectionData] = useState([]);
+  const [activeAcademicYear, setActiveAcademicYear] = useState({});
+  const [checkBox, setCheckBox] = useState([]);
+  const [promoting, setPromoting] = useState(false);
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter pagination==========
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  // ==============
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setAcademicYear(
+        data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
+      );
+      setActiveAcademicYear(data.result.find((a) => a.active));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStudentList = async (values) => {
+    try {
+      if (!hasAllValues(values, [])) {
+        return;
+      }
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          search: {
+            academicYear: activeAcademicYear._id,
+            "academicInfo.section": values.currentSectionId,
+            "academicInfo.class": values.currentClassId,
+          },
+        },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
-      academicYear: "",
-      currentClass: "",
-      currentSection: "",
-      promoteClass: "",
-      promoteSection: "",
+      promoteAcademicYearId: "",
+      currentClassId: "",
+      currentSectionId: "",
+      promoteClassId: "",
+      promoteSectionId: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getStudentList,
   });
+
+  useEffect(() => {
+    setData([]);
+  }, [entryFormik.values]);
+
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setSectionData(
+        data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClassData(
+        data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get data on page load
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+    getSection();
+  }, [selectedSetting._id]);
+
+  const handlePromotionCheckBox = (_id, e) => {
+    if (e.target.checked) {
+      setCheckBox((prev) => [...prev, _id]);
+    } else {
+      setCheckBox(checkBox.filter((item) => item !== _id));
+    }
+  };
+
+  const handleMultipleChecks = (e) => {
+    if (e.target.checked) {
+      const ids = data.map((item) => item._id);
+      setCheckBox([...ids]);
+    } else {
+      setCheckBox([]);
+    }
+  };
+
+  const handlePromotion = async () => {
+    try {
+      const payload = {
+        schoolId: selectedSetting._id,
+        ...entryFormik.values,
+        studentIds: checkBox,
+      };
+      setPromoting(true);
+      const { data } = await put(PRIVATE_URLS.student.promote, payload);
+      entryFormik.resetForm();
+    } catch (error) {
+      console.log(error);
+    }
+    setPromoting(false);
+  };
+
   return (
     <>
       <PageHeader title="Promotion" />
@@ -28,56 +178,66 @@ export default function Promotion() {
             Running Session:{" "}
           </Typography>
           <Typography component="span" fontWeight="bold">
-            2023-2024
+            {activeAcademicYear?.from}-{activeAcademicYear?.to}
           </Typography>
         </Box>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} md={6} lg={2} item>
             <FormSelect
               required={true}
-              name="academicYear"
+              name="promoteAcademicYearId"
               formik={entryFormik}
               label="Promote To Session"
-              // options={""}
+              options={academicYear}
             />
           </Grid>
           <Grid xs={12} md={6} lg={2} item>
             <FormSelect
               required={true}
-              name="currentClass"
+              name="currentClassId"
               formik={entryFormik}
               label="Current Class"
-              // options={""}
+              options={classData}
             />
           </Grid>
 
           <Grid xs={12} md={6} lg={2} item>
             <FormSelect
               required={true}
-              name="currentSectionn"
+              name="currentSectionId"
               formik={entryFormik}
               label="Current Section"
-              // options={""}
+              options={sectionData
+                .filter(
+                  (s) => s.class._id === entryFormik.values.currentClassId
+                )
+                .map((s) => ({ label: s.name, value: s._id }))}
             />
           </Grid>
 
           <Grid xs={12} md={6} lg={2} item>
             <FormSelect
               required={true}
-              name="promoteClass"
+              name="promoteClassId"
               formik={entryFormik}
               label="Promote Class"
-              // options={""}
+              options={classData
+                .filter((s) => s._id !== entryFormik.values.currentClassId)
+                .map((s) => ({ label: s.name, value: s._id }))}
             />
           </Grid>
 
           <Grid xs={12} md={6} lg={2} item>
             <FormSelect
               required={true}
-              name="promoteSection"
+              name="promoteSectionId"
               formik={entryFormik}
               label="Promote Section"
-              // options={""}
+              options={sectionData
+                .filter(
+                  (s) => s.class._id === entryFormik.values.promoteClassId
+                )
+                .map((s) => ({ label: s.name, value: s._id }))}
             />
           </Grid>
 
@@ -89,18 +249,138 @@ export default function Promotion() {
             display="flex"
             justifyContent="flex-end"
           >
-            <Button size="small" variant="contained">
+            <Button
+              disabled={!hasAllValues(entryFormik.values, [], false)}
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained"
+            >
               Find
             </Button>
           </Grid>
         </Grid>
       </Paper>
-      <CustomTable
-        actions={["edit"]}
-        tableKeys={promotionTableKeys}
-        bodyDataModal="students"
-        bodyData={data}
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table" size="small">
+          <TableHead sx={{ background: (theme) => theme.palette.primary.main }}>
+            <TableRow>
+              <TableCell align="center">#SL</TableCell>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Roll No</TableCell>
+              <TableCell align="center">Father Name</TableCell>
+              <TableCell align="center">
+                <Checkbox
+                  onClick={handleMultipleChecks}
+                  {...label}
+                  sx={{
+                    padding: 0,
+                    color: "#fff",
+                    "&.Mui-checked": {
+                      color: "#fff",
+                    },
+                  }}
+                />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => (
+                <TableRow
+                  key={row._id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <TableCell align="center">{index + 1}</TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {row.basicInfo.name}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {row.academicInfo.rollNumber}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {row.fatherInfo.name}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    <Checkbox
+                      size="small"
+                      checked={checkBox.includes(row._id)}
+                      onChange={(e) => handlePromotionCheckBox(row._id, e)}
+                      {...label}
+                      sx={{
+                        color: "#1b3779",
+                        "&.Mui-checked": {
+                          color: "#1b3779",
+                        },
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        {!data.length && (
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}
+          >
+            No data found
+          </Typography>
+        )}
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          my: 1,
+        }}
       />
+
+      {data.length > 0 && (
+        <StickyBar
+          content={
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <LoadingButton
+                loading={promoting}
+                varient="contained"
+                size="small"
+                type="submit"
+                onClick={handlePromotion}
+                sx={{
+                  background: "#1b3779",
+                  ":hover": { background: "#1b3779" },
+                  color: "#fff",
+                }}
+              >
+                Promote
+              </LoadingButton>
+            </div>
+          }
+        />
+      )}
     </>
   );
 }

@@ -92,12 +92,7 @@ export const PRIVATE_URLS = {
     update: "/fileUpload/update",
     delete: "/fileUpload/delete",
   },
-  student: {
-    getAllStudents: "/student/getAllStudents",
-    create: "/student/create",
-    update: "/student/update",
-    delete: "/student/delete",
-  },
+
   teacherActivity: {
     list: "/teacherActivity/list",
     create: "/teacherActivity/create",
@@ -162,6 +157,8 @@ export const PRIVATE_URLS = {
     update: "/student/update",
     delete: "/student/delete",
     details: "/student/details",
+    overView: "/student/overView",
+    promote: "/student/promote",
   },
   studentActivity: {
     list: "/studentActivity/list",
