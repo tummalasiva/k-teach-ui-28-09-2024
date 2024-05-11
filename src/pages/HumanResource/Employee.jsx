@@ -122,14 +122,9 @@ export default function Employee() {
       console.error(error);
     }
   };
+
   const handeleClickEdit = (data) => {
-    try {
-      navigate(`/sch/human-resource/update-employee/${data._id}`, {
-        state: { data: data },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    navigate(`/sch/human-resource/edit-employee/${data._id}`);
   };
 
   const handleSearch = (e) => {

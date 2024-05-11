@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
-import CustomTable from "../../components/Tables/CustomTable";
-
 import FormSelect from "../../forms/FormSelect";
 import {
   Button,
@@ -12,14 +10,18 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { studentReshuffleTableKeys } from "../../data/tableKeys/reshuffleData";
 import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get, post, put } from "../../services/apiMethods";
+import { get, put } from "../../services/apiMethods";
 import { Checkbox } from "@mui/material";
+import { hasAllValues } from "../../utils";
+import StickyBar from "../../components/StickyBar";
+import { LoadingButton } from "@mui/lab";
+
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function Reshuffle() {
@@ -30,6 +32,20 @@ export default function Reshuffle() {
   const [changedSectionData, setChangedSectionData] = useState([]);
   const [studentReshuffle, setStudentReshuffle] = useState([]);
   const [checkBox, setCheckBox] = useState([]);
+  const [reshuffle, setReshuffle] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter pagination==========
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  // ==============
 
   const handleMultipleChecks = (e) => {
     if (e.target.checked) {
@@ -61,6 +77,9 @@ export default function Reshuffle() {
 
   const getList = async (values) => {
     try {
+      if (!hasAllValues(values, [])) {
+        return;
+      }
       const { data } = await get(PRIVATE_URLS.student.list, {
         params: {
           schoolId: selectedSetting._id,
@@ -72,8 +91,6 @@ export default function Reshuffle() {
         },
       });
       setStudentReshuffle(data.result);
-
-      console.log(data.result, "==========-----------");
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +105,10 @@ export default function Reshuffle() {
     },
     onSubmit: getList,
   });
+
+  useEffect(() => {
+    setStudentReshuffle([]);
+  }, [entryFormik.values]);
 
   const getSection = async () => {
     try {
@@ -140,14 +161,14 @@ export default function Reshuffle() {
         studentIds: checkBox,
       };
 
-      console.log(payload, "mmmm");
+      setReshuffle(true);
 
       const { data } = await put(PRIVATE_URLS.student.resuffle, payload);
-
-      console.log(data, "kkkkkkkkk");
+      entryFormik.resetForm();
     } catch (error) {
       console.log(error);
     }
+    setReshuffle(false);
   };
 
   return (
@@ -275,14 +296,44 @@ export default function Reshuffle() {
         </Table>
       </TableContainer>
 
-      <Button
-        variant="contained"
-        size="small"
-        type="submit"
-        onClick={handleReshuffle}
-      >
-        Reshuffle
-      </Button>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={studentReshuffle.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          my: 1,
+        }}
+      />
+
+      {studentReshuffle.length > 0 && (
+        <StickyBar
+          content={
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <LoadingButton
+                loading={reshuffle}
+                varient="contained"
+                size="small"
+                type="submit"
+                onClick={handleReshuffle}
+                sx={{
+                  background: "#1b3779",
+                  ":hover": { background: "#1b3779" },
+                  color: "#fff",
+                }}
+              >
+                Reshuffle
+              </LoadingButton>
+            </div>
+          }
+        />
+      )}
     </>
   );
 }

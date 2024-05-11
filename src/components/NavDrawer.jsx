@@ -863,6 +863,11 @@ export default function NavDrawer() {
           <Route path="help-desk" element={<HelpDesk />} />
           <Route path="guardian-feedback" element={<GuardianFeedback />} />
           <Route path="human-resource/add-employee" element={<AddEmployee />} />
+
+          <Route
+            path="human-resource/edit-employee/:id"
+            element={<AddEmployee />}
+          />
           <Route
             path="manage-institute/add-institute"
             element={<AddInstitute />}

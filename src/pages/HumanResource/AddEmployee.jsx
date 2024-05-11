@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Button, Stack, styled, Box } from "@mui/material";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
@@ -12,6 +12,7 @@ import { LoadingButton } from "@mui/lab";
 import PageHeader from "../../components/PageHeader";
 import avatar from "../../assets/images/avatar.jpg";
 import SettingContext from "../../context/SettingsContext";
+import FileSelect from "../../forms/FileSelect";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -135,7 +136,27 @@ export default function AddEmployee() {
   const [departmentData, setDepartmentData] = useState([]);
   const [rolesData, setRolesData] = useState([]);
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState([]);
+  const [resume, setResume] = useState([]);
+
   const navigate = useNavigate();
+
+  const { id } = useParams();
+
+  const getEmployeeDetails = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.getEmpById + "/" + id);
+      console.log(data.result, "==========");
+      setDataToEdit(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      getEmployeeDetails();
+    }
+  }, [id, selectedSetting]);
 
   const getDesignationData = async () => {
     try {
@@ -197,12 +218,13 @@ export default function AddEmployee() {
           religion: values.religion,
           presentAddress: values.presentAddress,
           permanentAddress: values.permanentAddress,
-          dob: dayjs(values.dob),
+          dob: values.dob,
           fatherName: values.fatherName,
           spouseName: values.spouseName,
           aadharNo: values.aadharNo,
           fatherOccupation: values.fatherOccupation,
           spouseOccupation: values.spouseOccupation,
+          responsibility: values.responsibility,
         },
         academicInfo: {
           workExperience: values.workExperience,
@@ -214,7 +236,7 @@ export default function AddEmployee() {
           resume: values.resume,
         },
         otherInfo: {
-          public: values.public,
+          public: values.public || false,
           showDetailsForWeb: values.showDetailsForWeb || false,
         },
         contactNumber: values.contactNumber,
@@ -226,16 +248,27 @@ export default function AddEmployee() {
         schoolId: selectedSetting._id,
       };
       setLoading(true);
+
+      const formData = new FormData();
+      formData.append("body", JSON.stringify(payload));
+      selectedPhoto.forEach((file) => formData.append("employeePhoto", file));
+      resume.forEach((file) => formData.append("resume", file));
+
       if (dataToEdit) {
         const data = await put(
           PRIVATE_URLS.employee.update + "/" + dataToEdit._id,
-          payload
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
       } else {
-        const { data } = await post(PRIVATE_URLS.employee.create, payload);
-
-        navigate("/sch/human-resource/employee");
+        const { data } = await post(PRIVATE_URLS.employee.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
+
+      navigate("/sch/human-resource/employee");
     } catch (error) {
       console.log(error);
     }
@@ -244,41 +277,41 @@ export default function AddEmployee() {
 
   const entryFormik = useFormik({
     initialValues: {
-      name: "",
-      empId: "",
-      responsibility: "",
-      designation: "",
-      contactNumber: "",
-      secMobileNo: "",
-      gender: "",
-      bloodGroup: "",
-      religion: "",
-      presentAddress: "",
-      permanentAddress: "",
-      dob: dayjs(new Date()),
-      fatherName: "",
-      spouseName: "",
-      aadharNo: "",
-      fatherOccupation: "",
-      spouseOccupation: "",
-      qualification: "",
-      workExperience: "",
-      salaryGrade: "",
-      email: "",
-      salaryType: "",
-      role: "",
-      department: "",
-      joiningDate: dayjs(new Date()),
-      resume: "",
-      username: "",
-      password: "",
-      public: "",
-      showDetailsForWeb: "",
-      photo: "",
-      resume: "",
-      active: "",
+      name: dataToEdit?.basicInfo.name || "",
+      empId: dataToEdit?.basicInfo.empId || "",
+      responsibility: dataToEdit?.basicInfo.responsibility || "",
+      designation: dataToEdit?.basicInfo.designation._id || "",
+      contactNumber: dataToEdit?.contactNumber || "",
+      secMobileNo: dataToEdit?.basicInfo.secMobileNo || "",
+      gender: dataToEdit?.basicInfo.gender || "",
+      bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
+      religion: dataToEdit?.basicInfo.religion || "",
+      presentAddress: dataToEdit?.basicInfo.presentAddress || "",
+      permanentAddress: dataToEdit?.basicInfo.permanentAddress || "",
+      dob: dataToEdit?.basicInfo.dob || null,
+      fatherName: dataToEdit?.basicInfo.fatherName || "",
+      spouseName: dataToEdit?.basicInfo.spouseName || "",
+      aadharNo: dataToEdit?.basicInfo.aadharNo || "",
+      fatherOccupation: dataToEdit?.basicInfo.fatherOccupation || "",
+      spouseOccupation: dataToEdit?.basicInfo.spouseOccupation || "",
+      qualification: dataToEdit?.academicInfo.qualification || "",
+      workExperience: dataToEdit?.academicInfo.workExperience || "",
+      salaryGrade: dataToEdit?.academicInfo.salaryGrade || "",
+      email: dataToEdit?.academicInfo.email || "",
+      salaryType: dataToEdit?.academicInfo.salaryType || "",
+      role: dataToEdit?.role._id || "",
+      department: dataToEdit?.academicInfo.department._id || "",
+      joiningDate: dataToEdit?.academicInfo.joiningDate || null,
+
+      username: dataToEdit?.username || "",
+      password: dataToEdit?.otherInfo.password || "",
+      public: dataToEdit?.otherInfo.public || false,
+      showDetailsForWeb: dataToEdit?.otherInfo.showDetailsForWeb || false,
+
+      active: dataToEdit?.active || true,
     },
     onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
 
   const handleImageChange = (event) => {
@@ -289,6 +322,29 @@ export default function AddEmployee() {
     }
   };
 
+  const handleChangePhoto = (e, type) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      if (type === "resume") {
+        setResume(fileList);
+      } else {
+        setSelectedPhoto(fileList);
+      }
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setSelectedPhoto(selectedPhoto.filter((img) => img.name != fileName));
+    setResume(resume.filter((img) => img.name != fileName));
+  };
+
   return (
     <>
       <PageHeader title="Add Employee" showTextField={false} />
@@ -296,24 +352,26 @@ export default function AddEmployee() {
       <BasicData>
         <MuiBox>
           <img
-            src={previewCreateUrl || avatar}
+            src={dataToEdit?.photo || avatar}
             style={{
               width: "100px",
               height: "100px",
               objectFit: "contain",
             }}
-            alt="Preview"
+            alt="photo"
           />
         </MuiBox>
         <Grid container spacing={2} display="flex" justifyContent="center">
           <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              // required={true}
-              name="photo"
-              formik={entryFormik}
-              label="Photo"
-              type="file"
-              onChange={handleImageChange}
+            <FileSelect
+              name="employeePhoto"
+              multi={false}
+              label="Select Photo"
+              onChange={(e) => handleChangePhoto(e, "employeePhoto")}
+              customOnChange={true}
+              selectedFiles={selectedPhoto}
+              onRemove={(fileName) => handleRemoveFile(fileName)}
+              accept="image/jpeg, image/png"
             />
           </Grid>
         </Grid>
@@ -528,11 +586,15 @@ export default function AddEmployee() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
+                <FileSelect
+                  multi={false}
                   name="resume"
-                  formik={entryFormik}
-                  label="Resume"
-                  type="file"
+                  label="Select File"
+                  onChange={(e) => handleChangePhoto(e, "resume")}
+                  customOnChange={true}
+                  selectedFiles={resume}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/*,.pdf"
                 />
               </Grid>
             </Grid>
@@ -552,14 +614,17 @@ export default function AddEmployee() {
                   label="User Name"
                 />
               </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  required={true}
-                  name="password"
-                  formik={entryFormik}
-                  label="Password"
-                />
-              </Grid>
+
+              {!dataToEdit && (
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormInput
+                    required={true}
+                    name="password"
+                    formik={entryFormik}
+                    label="Password"
+                  />
+                </Grid>
+              )}
             </Grid>
           </Box>
         </FormBox>
@@ -585,15 +650,6 @@ export default function AddEmployee() {
                   options={View_Web}
                 />
               </Grid>
-              {/* <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  required={true}
-                  name="photo"
-                  formik={entryFormik}
-                  label="Photo"
-                  type="file"
-                />
-              </Grid> */}
             </Grid>
           </Box>
         </FormBox>

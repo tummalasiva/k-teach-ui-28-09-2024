@@ -8,6 +8,7 @@ export const inactiveTableKeys = [
     name: "Photo",
     key: "photo",
     path: "basicInfo",
+    type: "image",
   },
   {
     name: "Name",

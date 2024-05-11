@@ -8,6 +8,7 @@ export const employeeTableKeys = [
     name: "Photo",
     key: "photo",
     path: "basicInfo",
+    type: "image",
   },
   {
     name: "Name",
