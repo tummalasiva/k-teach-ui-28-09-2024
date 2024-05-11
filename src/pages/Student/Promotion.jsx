@@ -261,8 +261,15 @@ export default function Promotion() {
         </Grid>
       </Paper>
       <TableContainer component={Paper}>
-        <Table aria-label="simple table" size="small">
-          <TableHead sx={{ background: (theme) => theme.palette.primary.main }}>
+        <Table>
+          <TableHead
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light,
+            }}
+          >
             <TableRow>
               <TableCell align="center">#SL</TableCell>
               <TableCell align="center">Name</TableCell>
@@ -287,35 +294,14 @@ export default function Promotion() {
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => (
-                <TableRow
-                  key={row._id}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow key={row._id}>
                   <TableCell align="center">{index + 1}</TableCell>
-                  <TableCell
-                    align="center"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    {row.basicInfo.name}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    style={{ textTransform: "capitalize" }}
-                  >
+                  <TableCell align="center">{row.basicInfo.name}</TableCell>
+                  <TableCell align="center">
                     {row.academicInfo.rollNumber}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    {row.fatherInfo.name}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    style={{ textTransform: "capitalize" }}
-                  >
+                  <TableCell align="center">{row.fatherInfo.name}</TableCell>
+                  <TableCell align="center">
                     <Checkbox
                       size="small"
                       checked={checkBox.includes(row._id)}
@@ -362,22 +348,17 @@ export default function Promotion() {
       {data.length > 0 && (
         <StickyBar
           content={
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <LoadingButton
                 loading={promoting}
                 varient="contained"
                 size="small"
                 type="submit"
                 onClick={handlePromotion}
-                sx={{
-                  background: "#1b3779",
-                  ":hover": { background: "#1b3779" },
-                  color: "#fff",
-                }}
               >
                 Promote
               </LoadingButton>
-            </div>
+            </Box>
           }
         />
       )}
