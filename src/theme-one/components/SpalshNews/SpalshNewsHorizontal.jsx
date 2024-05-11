@@ -17,7 +17,13 @@ const SplashNewsHorizontal = ({ horizontalData = [] }) => {
   let text = horizontalData.map((d) => `${d.text}`);
   const location = useLocation();
 
-  if (location.pathname.startsWith("/sch")) return null;
+  if (
+    window.location.pathname.startsWith("/sch") ||
+    window.location.pathname.startsWith("/login") ||
+    window.location.pathname.startsWith("/forgot-password")
+  ) {
+    return null;
+  }
 
   return (
     <MuiBox>

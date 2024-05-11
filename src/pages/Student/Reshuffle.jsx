@@ -250,7 +250,7 @@ export default function Reshuffle() {
             }}
           >
             <TableRow>
-              <TableCell align="center">#SL</TableCell>
+              <TableCell align="center">S.No</TableCell>
               <TableCell align="center">Name</TableCell>
               <TableCell align="center">Roll No</TableCell>
               <TableCell align="center">Father Name</TableCell>
