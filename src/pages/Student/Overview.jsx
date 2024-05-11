@@ -232,7 +232,7 @@ export default function Overview() {
                                 <Divider sx={{ background: "grey" }} />
                                 <StudentCount
                                   title="Total"
-                                  count={overview.totalStudents}
+                                  count={overview.count}
                                 />
                               </Box>
                             </TableCell>
