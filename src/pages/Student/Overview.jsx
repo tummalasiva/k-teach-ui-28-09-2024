@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import {
   Box,
@@ -17,6 +17,10 @@ import {
   styled,
 } from "@mui/material";
 import StudentCount from "../../components/Student/StudentCount";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
+import CustomSelect from "../../forms/CustomSelect";
+import SettingContext from "../../context/SettingsContext";
 
 const TableHeader = styled(TableCell)(({ theme }) => ({
   borderRight: "1px solid grey",
@@ -37,6 +41,14 @@ const DataContiner = styled(Box)(({ theme }) => ({
 }));
 
 export default function Overview() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [selectAcademicYear, setSelectAcademicYear] = useState("");
+  const [overviewDetails, setOverviewDetails] = useState([]);
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalMaleStudents, setTotalMaleStudents] = useState(0);
+  const [totalFemaleStudents, setTotalFemaleStudents] = useState(0);
+
   const [data, setData] = useState([
     {
       className: "4",
@@ -55,6 +67,49 @@ export default function Overview() {
     },
   ]);
 
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setAcademicYear(
+        data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
+      );
+      setSelectAcademicYear(data.result[0]?._id, "llllll");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAcademicYear();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    const academicYearChanged = async () => {
+      try {
+        if (selectAcademicYear) {
+          const { data } = await get(PRIVATE_URLS.student.overView, {
+            params: {
+              schoolId: selectedSetting._id,
+              academicYear: selectAcademicYear,
+            },
+          });
+
+          setOverviewDetails(data?.result);
+
+          setTotalStudents(data.result.totalStudentsCount);
+          setTotalMaleStudents(data.result.totalMaleStudentsCount);
+          setTotalFemaleStudents(data.result.totalFemaleStudentsCount);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    academicYearChanged();
+  }, [selectAcademicYear, selectedSetting]);
+
+  console.log(overviewDetails, "bbbbbb");
+
   return (
     <>
       <PageHeader title="Overview" />
@@ -62,26 +117,23 @@ export default function Overview() {
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={3}>
-            <FormControl size="small" required fullWidth>
-              <InputLabel id="demo-simple-select-filled-label">
-                Academic Year
-              </InputLabel>
-              <Select
-                label="Academic Year"
-                labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-filled"
-                name="academicYear"
-              ></Select>
-            </FormControl>
+            <CustomSelect
+              required={true}
+              name="academicYear"
+              value={selectAcademicYear}
+              onChange={(e) => setSelectAcademicYear(e.target.value)}
+              label="Select Academic Year"
+              options={academicYear}
+            />
           </Grid>
         </Grid>
       </Paper>
 
       <Box sx={{ fontSize: { md: "15px", sm: "12px" }, padding: "1.2rem" }}>
         <Box sx={{ display: "flex", gap: "1rem" }}>
-          <Box>Total Students:456</Box>
-          <Box>Total Male Students:78</Box>
-          <Box>Total Female Students:</Box>
+          <Box>Total Students:{totalStudents}</Box>
+          <Box>Total Male Students:{totalMaleStudents}</Box>
+          <Box>Total Female Students:{totalFemaleStudents}</Box>
         </Box>
       </Box>
 
@@ -104,13 +156,13 @@ export default function Overview() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((overview, i) => (
+            {overviewDetails?.data?.map((overview, i) => (
               <TableRow key={overview.className}>
                 <TableCell
                   sx={{ borderRight: "1px solid grey" }}
                   align="center"
                 >
-                  {overview.className}
+                  {overview.name}
                 </TableCell>
 
                 <TableCell
@@ -150,7 +202,7 @@ export default function Overview() {
                         }}
                       >
                         <TableRow>
-                          {overview.overviewData.map((overview, index) => (
+                          {overview.sections.map((overview, index) => (
                             <TableCell align="left">
                               {overview.section}
                             </TableCell>
@@ -159,7 +211,7 @@ export default function Overview() {
                       </TableHead>
                       <TableBody>
                         <TableRow>
-                          {overview.overviewData.map((overview, index) => (
+                          {overview.sections.map((overview, index) => (
                             <TableCell align="left" key={index}>
                               <Box
                                 sx={{
@@ -170,17 +222,17 @@ export default function Overview() {
                               >
                                 <StudentCount
                                   title="Male"
-                                  count={overview.femaleCount}
-                                />
-                                <Divider sx={{ background: "grey" }} />
-                                <StudentCount
-                                  title="Female"
                                   count={overview.maleCount}
                                 />
                                 <Divider sx={{ background: "grey" }} />
                                 <StudentCount
+                                  title="Female"
+                                  count={overview.femaleCount}
+                                />
+                                <Divider sx={{ background: "grey" }} />
+                                <StudentCount
                                   title="Total"
-                                  count={overview.total}
+                                  count={overview.totalStudents}
                                 />
                               </Box>
                             </TableCell>

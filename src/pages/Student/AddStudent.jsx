@@ -102,6 +102,7 @@ export default function AddStudent() {
     try {
       const { data } = await get(PRIVATE_URLS.student.details + "/" + id);
       console.log(data.result, "==========");
+      setDataToEdit(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -122,50 +123,6 @@ export default function AddStudent() {
       console.log(error);
     }
   };
-
-  const getSection = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.section.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: { class: selectedClass },
-        },
-      });
-      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getClass = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.class.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      if (data.result?.length) {
-        setSelectedClass(data.result[0]._id);
-        entryFormik.setFieldValue("class", data.result[0]._id);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // get data on page load
-  useEffect(() => {
-    getAcademicYear();
-    getClass();
-  }, []);
-
-  useEffect(() => {
-    if (selectedClass) {
-      getSection();
-    }
-  }, [selectedClass, selectedSetting]);
-
-  useEffect(() => {
-    entryFormik.setFieldValue("class", selectedClass);
-  }, [selectedClass]);
 
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -210,7 +167,7 @@ export default function AddStudent() {
           email: values.email,
           healthCondition: values.healthCondition,
           hostelMember: values.hostelMember || false,
-          transportMember: values.transportMemberl || false,
+          transportMember: values.transportMember || false,
           libraryMember: values.libraryMember || false,
           busStop: values.busStop,
           extraInfo: values.extraInfo,
@@ -253,10 +210,16 @@ export default function AddStudent() {
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.student.update + "/" + dataToEdit._id,
-          formData
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
         );
+        navigate("/sch/student/admit-student");
       } else {
-        const { data } = await post(PRIVATE_URLS.student.create, formData);
+        const { data } = await post(PRIVATE_URLS.student.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         navigate("/sch/student/admit-student");
       }
     } catch (error) {
@@ -266,63 +229,104 @@ export default function AddStudent() {
   };
   const entryFormik = useFormik({
     initialValues: {
-      academicYear: "",
-      name: "",
-      admissionDate: null,
-      motherTongue: "",
-      dob: null,
-      gender: "",
-      bloodGroup: "",
-      cicn: "",
-      religion: "",
-      cast: "",
-      rte: "",
-      aadharNo: "",
-      satNo: "",
-      grNo: "",
-      birthPlace: "",
+      academicYear: dataToEdit?.academicYear._id || "",
+      name: dataToEdit?.basicInfo.name || "",
+      admissionDate: dataToEdit?.basicInfo.admissionDate || null,
+      motherTongue: dataToEdit?.basicInfo.motherTongue || "",
+      dob: dataToEdit?.basicInfo.dob || null,
+      gender: dataToEdit?.basicInfo.gender || "",
+      bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
+      cicn: dataToEdit?.basicInfo.cicn || "",
+      religion: dataToEdit?.basicInfo.religion || "",
+      caste: dataToEdit?.basicInfo.caste || "",
+      rte: dataToEdit?.basicInfo.rte || "",
+      aadharNo: dataToEdit?.basicInfo.aadharNo || "",
+      satNo: dataToEdit?.basicInfo.satNo || "",
+      grNo: dataToEdit?.basicInfo.grNo || "",
+      birthPlace: dataToEdit?.basicInfo.birthPlace || "",
 
-      class: "",
-      section: "",
-      rollNo: "",
+      class: dataToEdit?.academicInfo?.class?._id || "",
+      section: dataToEdit?.academicInfo?.section?._id || "",
+      rollNumber: dataToEdit?.academicInfo?.rollNumber || "",
       admissionNumber: dataToEdit?.academicInfo?.admissionNumber || "",
 
-      contactNumber: "",
-      guardianName: "",
-      guardianContactNumber: "",
-      guardianContactNumberSecondary: "",
-      guardianRelation: "",
-      nationId: "",
-      presentAddress: "",
-      permanentAddress: "",
+      contactNumber: dataToEdit?.contactNumber || "",
 
-      prevSchName: "",
-      prevClass: "",
-      tcNo: "",
+      guardianName: dataToEdit?.contactInfo?.guardianName || "",
+      guardianContactNumber:
+        dataToEdit?.contactInfo?.guardianContactNumber || "",
+      guardianContactNumberSecondary:
+        dataToEdit?.contactInfo?.guardianContactNumberSecondary || "",
+      guardianRelation: dataToEdit?.contactInfo?.guardianRelation || "",
+      nationId: dataToEdit?.contactInfo?.nationId || "",
+      presentAddress: dataToEdit?.contactInfo?.presentAddress || "",
+      permanentAddress: dataToEdit?.contactInfo?.permanentAddress || "",
 
-      email: "",
-      healthCondition: "",
-      transportMember: "",
-      hostelMember: "",
-      libraryMember: "",
-      busStop: "",
-      extraInfo: "",
-      active: "",
+      prevSchName: dataToEdit?.prevSchInfo?.name || "",
+      tcNo: dataToEdit?.prevSchInfo?.tcNo || "",
+      prevClass: dataToEdit?.prevSchInfo?.prevClass || "",
 
-      fatherName: "",
-      fatherPhone: "",
-      fatherEdu: "",
-      fatherProfession: "",
-      fatherDesignation: "",
+      email: dataToEdit?.otherInfo?.email || "",
+      healthCondition: dataToEdit?.otherInfo?.healthCondition || "",
+      transportMember: dataToEdit?.otherInfo?.transportMember || "",
+      hostelMember: dataToEdit?.otherInfo?.hostelMember || "",
+      libraryMember: dataToEdit?.otherInfo?.libraryMember || "",
+      busStop: dataToEdit?.otherInfo?.busStop || "",
+      extraInfo: dataToEdit?.otherInfo?.extraInfo || "",
+      active: dataToEdit?.active || true,
 
-      motherName: "",
-      motherPhone: "",
-      motherEdu: "",
-      motherProfession: "",
-      motherDesignation: "",
+      fatherName: dataToEdit?.fatherInfo.name || "",
+      fatherPhone: dataToEdit?.fatherInfo.contactNumber || "",
+      fatherEdu: dataToEdit?.fatherInfo.education || "",
+      fatherProfession: dataToEdit?.fatherInfo.profession || "",
+      fatherDesignation: dataToEdit?.fatherInfo.designation || "",
+
+      motherName: dataToEdit?.motherInfo.name || "",
+      motherPhone: dataToEdit?.motherInfo.contactNumber || "",
+      motherEdu: dataToEdit?.motherInfo.education || "",
+      motherProfession: dataToEdit?.motherInfo.profession || "",
+      motherDesignation: dataToEdit?.motherInfo.designation || "",
     },
     onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
+
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: entryFormik.values.class },
+        },
+      });
+      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get data on page load
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+  }, []);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
+
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
     let fileList = [];
@@ -361,10 +365,6 @@ export default function AddStudent() {
     );
   };
 
-  const handleClassChange = (e) => {
-    const selectedClassId = e.target.value;
-    setSelectedClass(selectedClassId);
-  };
   return (
     <>
       <PageHeader title="Admit Student" />
@@ -474,7 +474,7 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput name="cast" formik={entryFormik} label="Cast" />
+                <FormInput name="caste" formik={entryFormik} label="Cast" />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
@@ -499,7 +499,7 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="aadhar"
+                  name="aadharNo"
                   formik={entryFormik}
                   label="Aadhar No."
                 />
@@ -595,7 +595,6 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Class"
                   options={classData}
-                  onChange={handleClassChange}
                 />
               </Grid>
 
@@ -609,7 +608,11 @@ export default function AddStudent() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput name="rollNo" formik={entryFormik} label="Roll No" />
+                <FormInput
+                  name="rollNumber"
+                  formik={entryFormik}
+                  label="Roll No"
+                />
               </Grid>
             </Grid>
           </Box>
@@ -623,7 +626,7 @@ export default function AddStudent() {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
-                  name="prevSchool"
+                  name="prevSchName"
                   formik={entryFormik}
                   label="Previous School"
                 />
@@ -688,7 +691,7 @@ export default function AddStudent() {
                 <FormInput
                   name="fatherProfession"
                   formik={entryFormik}
-                  label="father Profession"
+                  label="Father Profession"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -703,7 +706,7 @@ export default function AddStudent() {
                   name="fatherPhoto"
                   multi={false}
                   label="Select Photo"
-                  onChange={(e) => handleChangePhoto(e, "father")}
+                  onChange={(e) => handleChangePhoto(e, "fatherPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedFatherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -762,7 +765,7 @@ export default function AddStudent() {
                   label="Select Photo"
                   multi={false}
                   name="motherPhoto"
-                  onChange={(e) => handleChangePhoto(e, "mother")}
+                  onChange={(e) => handleChangePhoto(e, "motherPhoto")}
                   customOnChange={true}
                   selectedFiles={selectedMotherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
@@ -822,8 +825,8 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Transport Member"
                   options={[
-                    { label: "Yes", value: false },
-                    { label: "No", value: true },
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
                   ]}
                 />
               </Grid>
@@ -834,8 +837,8 @@ export default function AddStudent() {
                   formik={entryFormik}
                   label="Select Library Member"
                   options={[
-                    { label: "Yes", value: false },
-                    { label: "No", value: true },
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
                   ]}
                 />
               </Grid>
