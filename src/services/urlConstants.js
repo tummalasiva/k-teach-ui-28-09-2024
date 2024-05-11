@@ -159,6 +159,7 @@ export const PRIVATE_URLS = {
     details: "/student/details",
     overView: "/student/overView",
     promote: "/student/promote",
+    resuffle: "/student/resuffle",
   },
   studentActivity: {
     list: "/studentActivity/list",

@@ -12,6 +12,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
@@ -293,6 +294,14 @@ export default function Reshuffle() {
               </TableRow>
             ))}
           </TableBody>
+          {!studentReshuffle.length && (
+            <Typography
+              variant="h6"
+              sx={{ textAlign: "center", margin: "5px", padding: "5px" }}
+            >
+              No data found
+            </Typography>
+          )}
         </Table>
       </TableContainer>
 
