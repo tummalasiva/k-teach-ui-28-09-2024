@@ -56,18 +56,32 @@ export default function AdmitStudent() {
 
   const getList = async (values) => {
     try {
-      const { data } = await get(PRIVATE_URLS.student.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: {
-            academicYear: values.academicYear,
-            "academicInfo.class": values.class,
-            "academicInfo.section": values.section,
-            active: values.active,
+      if (values.section === "all") {
+        const { data } = await get(PRIVATE_URLS.student.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              academicYear: values.academicYear,
+              "academicInfo.class": values.class,
+              active: values.active,
+            },
           },
-        },
-      });
-      setData(data.result);
+        });
+        setData(data.result);
+      } else {
+        const { data } = await get(PRIVATE_URLS.student.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              academicYear: values.academicYear,
+              "academicInfo.class": values.class,
+              "academicInfo.section": values.section,
+              active: values.active,
+            },
+          },
+        });
+        setData(data.result);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -77,7 +91,7 @@ export default function AdmitStudent() {
     initialValues: {
       academicYear: "",
       class: "",
-      section: "",
+      section: "all",
       active: true,
     },
     onSubmit: getList,
@@ -92,8 +106,16 @@ export default function AdmitStudent() {
           search: { class: entryFormik.values.class },
         },
       });
-      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      entryFormik.setFieldValue("section", data.result[0]?._id);
+
+      const section = data.result.map((s) => ({
+        label: s.name,
+        value: s._id,
+      }));
+
+      const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+      setSectionData(sectionAllOption);
+      // entryFormik.setFieldValue("section", data.result[0]?._id);
+      entryFormik.setFieldValue("section", "all");
     } catch (error) {
       console.log(error);
     }
