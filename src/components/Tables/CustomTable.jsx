@@ -113,7 +113,11 @@ export default function CustomTable({
             <TableRow>
               <TableCell align="center">S.No</TableCell>
               {tableKeys.map((r, i) => (
-                <TableCell sx={{ fontWeight: "bold" }} key={i} align="center">
+                <TableCell
+                  sx={{ fontWeight: "bold" }}
+                  key={i + r.name}
+                  align="center"
+                >
                   {r.name}
                 </TableCell>
               ))}
@@ -156,57 +160,61 @@ export default function CustomTable({
                           </TableCell>
                         )
                       )}
-                      <TableCell align="center">
-                        {actions.includes("edit") && (
-                          <Tooltip title="Edit">
-                            <IconButton onClick={() => onEditClick(data)}>
-                              <EditIcon color="primary" fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        {actions.includes("delete") && (
-                          <Tooltip title="Delete">
-                            <IconButton onClick={() => handleDeleteClick(data)}>
-                              <DeleteIcon fontSize="small" color="error" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
+                      {actions.length ? (
+                        <TableCell align="center">
+                          {actions.includes("edit") && (
+                            <Tooltip title="Edit">
+                              <IconButton onClick={() => onEditClick(data)}>
+                                <EditIcon color="primary" fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                          {actions.includes("delete") && (
+                            <Tooltip title="Delete">
+                              <IconButton
+                                onClick={() => handleDeleteClick(data)}
+                              >
+                                <DeleteIcon fontSize="small" color="error" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
 
-                        {actions.includes("view") && (
-                          <Tooltip title="View">
-                            <IconButton onClick={() => onViewClick(data)}>
-                              <RemoveRedEyeRoundedIcon
-                                fontSize="small"
-                                color="primary"
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        {actions.includes("card") && (
-                          <Tooltip title="Unbundle">
-                            <Button
-                              size="small"
-                              variant="contained"
-                              onClick={() => onCardClick(data)}
-                            >
-                              Card
-                            </Button>
-                          </Tooltip>
-                        )}
-                        {actions.includes("switch") && (
-                          <Tooltip title={toggleStatus}>
-                            <IconButton
-                              size="small"
-                              onClick={() => onToggleSwitch(data)}
-                            >
-                              <Switch
+                          {actions.includes("view") && (
+                            <Tooltip title="View">
+                              <IconButton onClick={() => onViewClick(data)}>
+                                <RemoveRedEyeRoundedIcon
+                                  fontSize="small"
+                                  color="primary"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                          {actions.includes("card") && (
+                            <Tooltip title="Unbundle">
+                              <Button
                                 size="small"
-                                checked={data[toggleStatus] === true}
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                      </TableCell>
+                                variant="contained"
+                                onClick={() => onCardClick(data)}
+                              >
+                                Card
+                              </Button>
+                            </Tooltip>
+                          )}
+                          {actions.includes("switch") && (
+                            <Tooltip title={toggleStatus}>
+                              <IconButton
+                                size="small"
+                                onClick={() => onToggleSwitch(data)}
+                              >
+                                <Switch
+                                  size="small"
+                                  checked={data[toggleStatus] === true}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                        </TableCell>
+                      ) : null}
                     </TableRow>
                   ))
               : null}

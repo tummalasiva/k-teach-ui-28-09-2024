@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
@@ -6,6 +6,10 @@ import { useFormik } from "formik";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
+import SettingContext from "../../context/SettingsContext";
+import { get, post } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { LoadingButton } from "@mui/lab";
 
 const Gender_Options = [
   {
@@ -18,15 +22,77 @@ const Gender_Options = [
   },
 ];
 
+const STATUS_OPTIONS = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
 export default function QuickAdmit() {
-  const [data, setDate] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [classData, setClassData] = useState([]);
+  const [sectionData, setSectionData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setAcademicYear(
+        data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreate = async (values) => {
+    try {
+      const payload = {
+        basicInfo: {
+          name: values.name,
+          admissionDate: values.admissionDate,
+          dob: values.dob,
+          gender: values.gender,
+          caste: values.caste,
+        },
+        motherInfo: {
+          name: values.motherName,
+          contactNumber: values.motherPhone,
+        },
+        fatherInfo: {
+          name: values.fatherName,
+          contactNumber: values.fatherPhone,
+        },
+        academicInfo: {
+          class: values.class,
+          section: values.section,
+          rollNumber: values.rollNumber,
+        },
+        contactNumber: values.contactNumber,
+        academicYear: values.academicYear,
+        schoolId: selectedSetting._id,
+        active: values.active || true,
+      };
+      const formData = new FormData();
+      formData.append("body", JSON.stringify(payload));
+
+      setLoading(true);
+      const { data } = await post(PRIVATE_URLS.student.create, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      entryFormik.resetForm();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       name: "",
-      admissionDate: dayjs(new Date()),
-      dob: dayjs(new Date()),
-
+      admissionDate: null,
+      dob: null,
       gender: "",
       cast: "",
       contactNumber: "",
@@ -36,11 +102,47 @@ export default function QuickAdmit() {
       motherContactNumber: "",
       class: "",
       section: "",
-      rollNo: "",
-      status: "",
+      rollNumber: "",
+      active: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreate,
   });
+
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: entryFormik.values.class },
+        },
+      });
+      setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get data on page load
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+  }, []);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
   return (
     <>
       <PageHeader title="Quick Admit" />
@@ -70,7 +172,7 @@ export default function QuickAdmit() {
               name="academicYear"
               formik={entryFormik}
               label="Select Academic Year"
-              // options={""}
+              options={academicYear}
             />
           </Grid>
         </Grid>
@@ -194,7 +296,7 @@ export default function QuickAdmit() {
               name="class"
               formik={entryFormik}
               label="Select Class"
-              // options={""}
+              options={classData}
             />
           </Grid>
 
@@ -204,13 +306,13 @@ export default function QuickAdmit() {
               name="section"
               formik={entryFormik}
               label="Select Section"
-              // options={""}
+              options={sectionData}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
-              name="rollNo"
+              name="rollNumber"
               formik={entryFormik}
               label="Select Roll No"
             />
@@ -219,10 +321,10 @@ export default function QuickAdmit() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="status"
+              name="active"
               formik={entryFormik}
-              label="Select Status"
-              // options={""}
+              label="Select active status"
+              options={STATUS_OPTIONS}
             />
           </Grid>
         </Grid>
@@ -234,9 +336,14 @@ export default function QuickAdmit() {
           alignItems: "center",
         }}
       >
-        <Button size="small" variant="contained">
+        <LoadingButton
+          loading={loading}
+          onClick={entryFormik.handleSubmit}
+          size="small"
+          variant="contained"
+        >
           Submit
-        </Button>
+        </LoadingButton>
       </Box>
     </>
   );

@@ -222,12 +222,12 @@ export default function Overview() {
                               >
                                 <StudentCount
                                   title="Male"
-                                  count={overview.femaleCount}
+                                  count={overview.maleCount}
                                 />
                                 <Divider sx={{ background: "grey" }} />
                                 <StudentCount
                                   title="Female"
-                                  count={overview.maleCount}
+                                  count={overview.femaleCount}
                                 />
                                 <Divider sx={{ background: "grey" }} />
                                 <StudentCount

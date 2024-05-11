@@ -3,7 +3,7 @@ import React from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import themeData from "../data/themeData";
-export default function AddForm({ title, onAddClick = () => {} }) {
+export default function AddForm({ disabled, title, onAddClick = () => {} }) {
   return (
     <>
       <Box
@@ -19,6 +19,7 @@ export default function AddForm({ title, onAddClick = () => {} }) {
           <Fab
             variant="contained"
             onClick={onAddClick}
+            disabled={disabled}
             sx={{
               color: "#ffff",
               background: themeData.darkPalette.primary.main,

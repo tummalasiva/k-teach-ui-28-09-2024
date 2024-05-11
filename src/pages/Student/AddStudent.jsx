@@ -266,13 +266,13 @@ export default function AddStudent() {
       tcNo: dataToEdit?.prevSchInfo?.tcNo || "",
       prevClass: dataToEdit?.prevSchInfo?.prevClass || "",
 
-      email: dataToEdit?.otherInfo.email || "",
-      healthCondition: dataToEdit?.otherInfo.healthCondition || "",
-      transportMember: dataToEdit?.otherInfo.transportMember || "",
-      hostelMember: dataToEdit?.otherInfo.hostelMember || "",
-      libraryMember: dataToEdit?.otherInfo.libraryMember || "",
-      busStop: dataToEdit?.otherInfo.busStop || "",
-      extraInfo: dataToEdit?.otherInfo.extraInfo || "",
+      email: dataToEdit?.otherInfo?.email || "",
+      healthCondition: dataToEdit?.otherInfo?.healthCondition || "",
+      transportMember: dataToEdit?.otherInfo?.transportMember || "",
+      hostelMember: dataToEdit?.otherInfo?.hostelMember || "",
+      libraryMember: dataToEdit?.otherInfo?.libraryMember || "",
+      busStop: dataToEdit?.otherInfo?.busStop || "",
+      extraInfo: dataToEdit?.otherInfo?.extraInfo || "",
       active: dataToEdit?.active || true,
 
       fatherName: dataToEdit?.fatherInfo.name || "",
@@ -326,6 +326,7 @@ export default function AddStudent() {
       getSection();
     }
   }, [entryFormik.values.class, selectedSetting]);
+
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
     let fileList = [];

@@ -19,6 +19,7 @@ export const PRIVATE_URLS = {
     create: "/role/create",
     update: "/role/update",
     delete: "/role/delete",
+    getRoleKeys: "/role/getRoleKeys",
   },
   employee: {
     list: "/employee/list",
@@ -91,12 +92,7 @@ export const PRIVATE_URLS = {
     update: "/fileUpload/update",
     delete: "/fileUpload/delete",
   },
-  student: {
-    getAllStudents: "/student/getAllStudents",
-    create: "/student/create",
-    update: "/student/update",
-    delete: "/student/delete",
-  },
+
   teacherActivity: {
     list: "/teacherActivity/list",
     create: "/teacherActivity/create",
@@ -162,7 +158,7 @@ export const PRIVATE_URLS = {
     delete: "/student/delete",
     details: "/student/details",
     overView: "/student/overView",
-    resuffle: "/student/resuffle",
+    promote: "/student/promote",
   },
   studentActivity: {
     list: "/studentActivity/list",

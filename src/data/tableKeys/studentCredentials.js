@@ -5,11 +5,11 @@ export const studentCrendentialsTableKeys = [
   },
   {
     name: "User Name",
-    key: "userName",
+    key: "username",
   },
   {
     name: "Roll No",
-    key: "rollNo",
+    key: "rollNumber",
   },
   {
     name: "Father Name",
