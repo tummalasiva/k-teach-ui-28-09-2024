@@ -61,6 +61,7 @@ export default function Promotion() {
         data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
       );
       setActiveAcademicYear(data.result.find((a) => a.active));
+      entryFormik.setFieldValue("promoteAcademicYearId", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -111,6 +112,7 @@ export default function Promotion() {
       setSectionData(
         data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
       );
+      entryFormik.setFieldValue("currentSectionId", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -124,6 +126,7 @@ export default function Promotion() {
       setClassData(
         data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
       );
+      entryFormik.setFieldValue("currentClassId", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
