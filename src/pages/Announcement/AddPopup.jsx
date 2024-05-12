@@ -136,23 +136,24 @@ export default function AddPopup() {
     setSelectdocument(selectDocument.filter((doc) => doc.name != fileName));
   };
 
-  const handleChangeFiles = (e, index) => {
+  const handleChangeFiles = (e, type) => {
     const { files } = e.target;
     let fileList = [];
-    let documentList = [];
-
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         fileList.push(file);
-        documentList.push(file);
       }
-      setSelectImg(fileList);
-      setSelectdocument(documentList);
+      if (type === "image") {
+        setSelectImg(fileList);
+      } else {
+        setSelectdocument(fileList);
+      }
     } else {
       console.log("No files selected");
     }
   };
+
   return (
     <>
       <CustomTable
@@ -222,12 +223,14 @@ export default function AddPopup() {
           {entryFormik.values.contentType === "Image" && (
             <Grid xs={12} sm={6} md={6} item>
               <FileSelect
-                multi={false}
                 name="image"
-                onChange={(e) => handleChangeFiles(e)}
+                multi={false}
+                label="Select Photo"
+                onChange={(e) => handleChangeFiles(e, "image")}
                 customOnChange={true}
                 selectedFiles={selectImg}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/jpeg, image/png"
               />
             </Grid>
           )}
@@ -237,10 +240,12 @@ export default function AddPopup() {
               <FileSelect
                 multi={false}
                 name="document"
-                onChange={(e) => handleChangeFiles(e)}
+                label="Select File"
+                onChange={(e) => handleChangeFiles(e, "document")}
                 customOnChange={true}
                 selectedFiles={selectDocument}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/*,.pdf"
               />
             </Grid>
           )}
