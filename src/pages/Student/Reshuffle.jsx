@@ -30,7 +30,7 @@ export default function Reshuffle() {
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
-  const [changedSectionData, setChangedSectionData] = useState([]);
+
   const [studentReshuffle, setStudentReshuffle] = useState([]);
   const [checkBox, setCheckBox] = useState([]);
   const [reshuffle, setReshuffle] = useState(false);
@@ -71,6 +71,7 @@ export default function Reshuffle() {
       setAcademicYear(
         data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
       );
+      entryFormik.setFieldValue("academicYear", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -121,9 +122,7 @@ export default function Reshuffle() {
       });
 
       setSectionData(data.result.map((s) => ({ label: s.name, value: s._id })));
-      setChangedSectionData(
-        data.result.map((s) => ({ label: s.name, value: s._id }))
-      );
+      entryFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -135,6 +134,7 @@ export default function Reshuffle() {
         params: { schoolId: selectedSetting._id },
       });
       setClassData(data.result.map((s) => ({ label: s.name, value: s._id })));
+      entryFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -213,7 +213,7 @@ export default function Reshuffle() {
                 name="newSection"
                 formik={entryFormik}
                 label="Change To"
-                options={changedSectionData.filter(
+                options={sectionData.filter(
                   (section) => section.value !== entryFormik.values.section
                 )}
               />
@@ -250,7 +250,7 @@ export default function Reshuffle() {
             }}
           >
             <TableRow>
-              <TableCell align="center">#SL</TableCell>
+              <TableCell align="center">S.No</TableCell>
               <TableCell align="center">Name</TableCell>
               <TableCell align="center">Roll No</TableCell>
               <TableCell align="center">Father Name</TableCell>
