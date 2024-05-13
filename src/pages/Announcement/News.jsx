@@ -211,7 +211,14 @@ export default function News() {
               required={true}
             />
           </Grid>
-          <Grid xs={12} sm={12} md={12} item>
+          <Grid
+            xs={12}
+            sm={12}
+            md={12}
+            item
+            display="flex"
+            justifyContent="center"
+          >
             {dataToEdit && dataToEdit.image && (
               <>
                 <img

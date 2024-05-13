@@ -52,7 +52,14 @@ const SpalshNewsPopup = ({
     window.open(link, "_blank");
   };
 
-  if (!open || window.location.pathname.startsWith("/sch")) return null;
+  if (
+    !open ||
+    window.location.pathname.startsWith("/sch") ||
+    window.location.pathname.startsWith("/login") ||
+    window.location.pathname.startsWith("/forgot-password")
+  ) {
+    return null;
+  }
   return (
     <>
       {sharedData?.contentType === "Link" && (
