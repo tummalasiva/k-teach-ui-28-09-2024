@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { holidayTableKeys } from "../../data/tableKeys/holidayData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
-import { Grid } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
@@ -18,14 +18,19 @@ const Is_Public = [
   { label: "No", value: false },
 ];
 
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
 export default function Holiday() {
   const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [sections, setSections] = useState([]);
+  const [classes, setClasses] = useState([]);
 
+  // get holiday
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.holiday.list, {
@@ -38,18 +43,55 @@ export default function Holiday() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getData();
+    getClasses();
   }, []);
 
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    getData();
   };
+
+  // open holiday model
   const AddHoliday = () => {
     setOpen(true);
   };
 
+  // get class
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get sections
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // create/update holiday
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
@@ -62,10 +104,8 @@ export default function Holiday() {
           PRIVATE_URLS.holiday.update + "/" + dataToEdit._id,
           payload
         );
-        getData();
       } else {
         const data = await post(PRIVATE_URLS.holiday.create, payload);
-        getData();
       }
       handleClose();
     } catch (error) {
@@ -81,6 +121,8 @@ export default function Holiday() {
       toDate: dataToEdit?.toDate || null,
       note: dataToEdit?.note || "",
       isPublic: dataToEdit?.isPublic || "",
+      class: dataToEdit?.class || "",
+      section: dataToEdit?.section || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -100,6 +142,17 @@ export default function Holiday() {
       console.error(error);
     }
   };
+
+  const handelCheckedBox = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSections();
+    }
+  }, [entryFormik.values.class]);
+
   return (
     <>
       <PageHeader title="Holiday" />
@@ -149,7 +202,6 @@ export default function Holiday() {
               label="To Date"
             />
           </Grid>
-
           <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               name="isPublic"
@@ -162,6 +214,36 @@ export default function Holiday() {
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
+          <Grid xs={12} sm={12} md={12} item mt={1}>
+            <FormControlLabel
+              control={
+                <Checkbox checked={checked} onChange={handelCheckedBox} />
+              }
+              label="Update All student attendance as holiday"
+            />
+          </Grid>
+          {checked && (
+            <>
+              <Grid xs={12} md={6} lg={6} item>
+                <FormSelect
+                  required={true}
+                  name="class"
+                  formik={entryFormik}
+                  label="Select Class"
+                  options={classes}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={6} item>
+                <FormSelect
+                  required={true}
+                  name="section"
+                  formik={entryFormik}
+                  label="Select Section"
+                  options={sections}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </FormModal>
     </>
