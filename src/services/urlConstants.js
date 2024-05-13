@@ -167,4 +167,10 @@ export const PRIVATE_URLS = {
     update: "/studentActivity/update",
     delete: "/studentActivity/delete",
   },
+  course: {
+    list: "/course/list",
+    create: "/course/create",
+    update: "/course/update",
+    delete: "/course/delete",
+  },
 };

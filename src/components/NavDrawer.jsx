@@ -158,6 +158,7 @@ import { PRIVATE_URLS } from "../services/urlConstants";
 import { get } from "../services/apiMethods";
 import SettingContext from "../context/SettingsContext";
 import AddStudent from "../pages/Student/AddStudent";
+import AddCourse from "../pages/LMS/AddCourse";
 
 const drawerWidth = 270;
 
@@ -749,6 +750,7 @@ export default function NavDrawer() {
 
           <Route path="lms/storage" element={<Storage />} />
           <Route path="lms/courses" element={<Courses />} />
+          <Route path="lms/add-courses" element={<AddCourse />} />
           <Route path="lms/course-content" element={<CourseContent />} />
           <Route path="lms/live" element={<Live />} />
 
