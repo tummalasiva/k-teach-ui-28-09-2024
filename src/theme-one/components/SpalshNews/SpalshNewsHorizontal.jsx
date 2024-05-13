@@ -18,9 +18,9 @@ const SplashNewsHorizontal = ({ horizontalData = [] }) => {
   const location = useLocation();
 
   if (
-    window.location.pathname.startsWith("/sch") ||
-    window.location.pathname.startsWith("/login") ||
-    window.location.pathname.startsWith("/forgot-password")
+    location.pathname.startsWith("/sch") ||
+    location.pathname.startsWith("/login") ||
+    location.pathname.startsWith("/forgot-password")
   ) {
     return null;
   }
