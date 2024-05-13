@@ -10,6 +10,9 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Tooltip,
+  IconButton,
+  TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
@@ -21,13 +24,17 @@ import FormInput from "../../forms/FormInput";
 import AddIcon from "@mui/icons-material/Add";
 import StickyBar from "../../components/StickyBar";
 import { LoadingButton } from "@mui/lab";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const FormBox = styled(Box)(({ theme }) => ({
-  border: "1px solid",
-  borderColor: "lightgray",
-  marginBottom: "20px",
-  borderRadius: theme.shape.borderRadius,
-  overflow: "hidden",
+  padding: "20px 8px",
+  borderRadius: "10px",
+  margin: "10px 0px",
+  borderRight: "10px",
+  border: "1px solid lightGrey",
+  backgroundColor: "whitesmoke",
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -49,11 +56,13 @@ export default function AddCourse() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [inputlistOverview, setInputListOverview] = useState(
-    dataToEdit?.courseDetails.overview || [{ point: "" }]
+  const navigate = useNavigate();
+
+  const [inputlist, setInputList] = useState(
+    dataToEdit?.benefits || [{ point: "" }]
   );
-  const [inputlistBenefits, setInputListBenefits] = useState(
-    dataToEdit?.courseDetails.benefits || [{ point: "" }]
+  const [inputlistBenifits, setInputListBenifits] = useState(
+    dataToEdit?.benefits || [{ point: "" }]
   );
 
   const getClass = async () => {
@@ -76,8 +85,8 @@ export default function AddCourse() {
         isTrending: values.isTrending,
 
         courseDetails: {
-          overview: inputlistOverview,
-          benefits: inputlistBenefits,
+          overview: inputlist,
+          benefits: inputlistBenifits,
         },
       };
       const formData = new FormData();
@@ -98,7 +107,7 @@ export default function AddCourse() {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
-        console.log(data, "mmmmmmmbbbbbbb");
+        navigate("/sch/lms/courses");
       }
     } catch (error) {
       console.log(error);
@@ -161,118 +170,232 @@ export default function AddCourse() {
     }
   }, [entryFormik.values.class, selectedSetting]);
 
+  const handleAddClick = () => {
+    setInputList([...inputlist, { point: "" }]);
+  };
+
+  const handleAddClickBenifites = () => {
+    setInputListBenifits([...inputlistBenifits, { point: "" }]);
+  };
+
+  const handleInputChange = (e, index) => {
+    const { value } = e.target;
+    const overviewList = [...inputlist];
+
+    let newList = overviewList.map((l, i) =>
+      i === index ? { ...l, point: value } : { ...l }
+    );
+    setInputList(newList);
+  };
+
+  const handleInputChangeBenifits = (e, index) => {
+    const { value } = e.target;
+    const benifitsList = [...inputlistBenifits];
+    let newList = benifitsList.map((l, i) =>
+      i === index ? { ...l, point: value } : { ...l }
+    );
+    setInputListBenifits(newList);
+  };
+
+  const handleRemoveClick = (i) => {
+    const list = [...inputlist];
+    list.splice(i, 1);
+    setInputList(list);
+  };
+
+  const handleRemoveClickBenifits = (i) => {
+    const list = [...inputlistBenifits];
+    list.splice(i, 1);
+    setInputListBenifits(list);
+  };
+
   return (
     <>
       <PageHeader title="Add Course" />
       <form onSubmit={entryFormik.handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid xs={12} md={6} lg={4} item>
-            <FormSelect
-              multiple={true}
-              required={true}
-              name="class"
-              formik={entryFormik}
-              label="Select Class"
-              options={classData}
-            />
-          </Grid>
-          {entryFormik.values.class.length <= 1 && (
+        <FormBox>
+          <Grid container spacing={2}>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
+                multiple={true}
                 required={true}
-                name="subject"
+                name="class"
                 formik={entryFormik}
-                label="Select Subject"
-                options={subject}
+                label="Select Class"
+                options={classData}
               />
             </Grid>
-          )}
-
-          <Grid xs={12} md={6} lg={4} item>
-            <FormInput
-              required={true}
-              name="title"
-              formik={entryFormik}
-              label="Enter Course Name"
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FileSelect
-              multi={false}
-              name="thumbnailImage"
-              label="Select Thumbnail Image"
-              onChange={(e) => handleChangeFiles(e)}
-              customOnChange={true}
-              selectedFiles={selectImg}
-              onRemove={(fileName) => handleRemoveFile(fileName)}
-            />
-          </Grid>
-          <Grid xs={12} md={12} lg={12} item>
-            <FormInput
-              required={true}
-              name="description"
-              formik={entryFormik}
-              label="Enter  Description"
-            />
-          </Grid>
-          <Grid xs={12} md={12} lg={12} item>
-            {inputlistOverview.map((item, index) => (
-              <Box key={index}>
-                <FormInput
+            {entryFormik.values.class.length <= 1 && (
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
                   required={true}
-                  name={`overview`}
+                  name="subject"
                   formik={entryFormik}
-                  label={`Enter Overview ${index + 1}`}
+                  label="Select Subject"
+                  options={subject}
                 />
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              size="small"
-              sx={{ mt: 1 }}
-              onClick={() => {
-                setInputListOverview([...inputlistOverview, { point: "" }]);
-              }}
-            >
-              <AddIcon />
-            </Button>
-          </Grid>
+              </Grid>
+            )}
 
-          <Grid xs={12} md={12} lg={12} item>
-            {inputlistBenefits.map((item, index) => (
-              <Box key={index}>
-                <FormInput
-                  required={true}
-                  name={`benefits`}
-                  formik={entryFormik}
-                  label={`Enter Benefits ${index + 1}`}
-                />
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              size="small"
-              sx={{ mt: 1 }}
-              onClick={() => {
-                setInputListBenefits([...inputlistBenefits, { point: "" }]);
-              }}
-            >
-              <AddIcon />
-            </Button>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={12}>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={entryFormik.values.isTrending} />}
-                name="isTrending"
-                onChange={(e) => {
-                  entryFormik.setFieldValue("isTrending", e.target.checked);
-                }}
-                label="This course is Trending?"
+            <Grid xs={12} md={6} lg={4} item>
+              <FormInput
+                required={true}
+                name="title"
+                formik={entryFormik}
+                label="Enter Course Name"
               />
-            </FormGroup>
+            </Grid>
+
+            <Grid xs={12} md={6} lg={3} item>
+              <FileSelect
+                multi={false}
+                name="thumbnailImage"
+                label="Select Thumbnail Image"
+                onChange={(e) => handleChangeFiles(e)}
+                customOnChange={true}
+                selectedFiles={selectImg}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
+              />
+            </Grid>
           </Grid>
+        </FormBox>
+        <FormBox>
+          <Grid container spacing={2}>
+            <Grid xs={12} md={12} lg={12} item>
+              <FormInput
+                required={true}
+                name="description"
+                formik={entryFormik}
+                label="Enter  Description"
+              />
+            </Grid>
+          </Grid>
+        </FormBox>
+        <FormBox>
+          <Grid container spacing={2}>
+            <Grid xs={12} md={12} lg={12} item>
+              {inputlist.map((data, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+
+                    gap: "5px",
+                  }}
+                >
+                  <KeyboardDoubleArrowRightIcon
+                    fontSize="small"
+                    sx={{ color: "#1b3779", mt: 1 }}
+                  />
+
+                  <TextField
+                    size="small"
+                    placeholder="Enter Overview"
+                    label="Enter Overview"
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                      mb: "5px",
+                      mt: 1,
+                    }}
+                    value={data.point || ""}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    name="overview"
+                    inputProps={{
+                      maxLength: 200,
+                    }}
+                    onChange={(e) => handleInputChange(e, i)}
+                  />
+                  <Tooltip title="Delete">
+                    <DeleteIcon
+                      fontSize="small"
+                      onClick={() => handleRemoveClick(i)}
+                      color="error"
+                    />
+                  </Tooltip>
+                </Box>
+              ))}
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 1 }}
+                onClick={handleAddClick}
+              >
+                <AddIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </FormBox>
+        <FormBox>
+          <Grid container spacing={2}>
+            <Grid xs={12} md={12} lg={12} item>
+              {inputlistBenifits.map((data, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <KeyboardDoubleArrowRightIcon
+                    fontSize="small"
+                    sx={{ color: "#1b3779", mt: 1 }}
+                  />
+                  <TextField
+                    size="small"
+                    placeholder="Enter What You Will Learn"
+                    label="Enter What You Will Learn"
+                    variant="outlined"
+                    sx={{ mb: "5px", mt: 1 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    name="benefits"
+                    value={data.point || ""}
+                    inputProps={{
+                      maxLength: 200,
+                    }}
+                    onChange={(e) => handleInputChangeBenifits(e, i)}
+                  />
+                  <Tooltip title="Delete">
+                    <DeleteIcon
+                      fontSize="small"
+                      color="error"
+                      onClick={() => handleRemoveClickBenifits(i)}
+                    />
+                  </Tooltip>
+                </Box>
+              ))}
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 1 }}
+                onClick={handleAddClickBenifites}
+              >
+                <AddIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </FormBox>
+
+        <Grid item xs={12} sm={12} md={12} sx={{ marginBottom: "60px" }}>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={entryFormik.values.isTrending} />}
+              name="isTrending"
+              onChange={(e) => {
+                entryFormik.setFieldValue("isTrending", e.target.checked);
+              }}
+              label="This course is trending?"
+            />
+          </FormGroup>
         </Grid>
 
         <StickyBar
@@ -288,7 +411,12 @@ export default function AddCourse() {
                 gap: "5px",
               }}
             >
-              <Button variant="contained" color="error" size="small">
+              <Button
+                variant="contained"
+                onClick={() => navigate(-1)}
+                color="error"
+                size="small"
+              >
                 Cancel
               </Button>
               <Button
