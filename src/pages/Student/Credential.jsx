@@ -101,7 +101,7 @@ export default function Credential() {
     setLoader(false);
   };
 
-  console.log(data, "datata==========");
+  // console.log(data, "datata==========");
 
   const entryFormik = useFormik({
     initialValues: {
