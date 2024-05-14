@@ -175,4 +175,10 @@ export const PRIVATE_URLS = {
     uploadCourseMaterial: "/course/uploadCourseMaterial",
     deleteMaterial: "/course/deleteCourseMaterial",
   },
+  meeting: {
+    list: "/meeting/list",
+    create: "/meeting/create",
+    update: "/meeting/update",
+    delete: "/meeting/delete",
+  },
 };
