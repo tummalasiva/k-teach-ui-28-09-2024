@@ -125,7 +125,6 @@ export default function Live() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            academicYear: entryFormik.values.academicYear,
             "academicInfo.class": entryFormik.values.class,
             "academicInfo.section": entryFormik.values.section,
           },
@@ -208,7 +207,7 @@ export default function Live() {
   const entryFormik = useFormik({
     initialValues: {
       roomId: dataToEdit?.roomId || "",
-      classId: dataToEdit?.classId || "",
+      classId: dataToEdit?.classId || [],
       expiryDate: dataToEdit?.expiryDate || "",
       expiryTime: dataToEdit?.expiryTime || "",
       startDate: dataToEdit?.startDate || "",
@@ -280,14 +279,19 @@ export default function Live() {
             />
           </Grid>
 
-          <Grid xs={12} sm={6} md={6} item>
-            <FormSelect
-              formik={entryFormik}
-              name="userTypes"
-              label="User Type"
-              options={User_Type}
-            />
-          </Grid>
+          {(entryFormik.values.participantType === "Single" ||
+            entryFormik.values.participantType === "Selected") && (
+            <>
+              <Grid xs={12} sm={6} md={6} item>
+                <FormSelect
+                  formik={entryFormik}
+                  name="userTypes"
+                  label="User Type"
+                  options={User_Type}
+                />
+              </Grid>
+            </>
+          )}
 
           {entryFormik.values.userTypes === "student" && (
             <>
@@ -312,7 +316,12 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
-                  name="student"
+                  name="participants"
+                  multiple={
+                    entryFormik.values.participantType !== "Single"
+                      ? true
+                      : false
+                  }
                   label="Select Studennt"
                   options={students}
                 />
@@ -343,12 +352,21 @@ export default function Live() {
           )}
 
           {entryFormik.values.participantType === "Class Students" && (
-            <FormSelect
-              formik={entryFormik}
-              name="class"
-              label="Select Class"
-              options={selectClasses}
-            />
+            <>
+              <Grid xs={12} sm={6} md={6} item>
+                <FormSelect
+                  formik={entryFormik}
+                  name="classId"
+                  multiple={
+                    entryFormik.values.participantType === "Class Students"
+                      ? true
+                      : false
+                  }
+                  label="Select Class"
+                  options={selectClasses}
+                />
+              </Grid>
+            </>
           )}
 
           <Grid xs={12} md={6} item>
