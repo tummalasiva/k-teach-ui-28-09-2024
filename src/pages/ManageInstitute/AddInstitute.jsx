@@ -97,8 +97,8 @@ const Attendence_Type = [
     value: "classWise",
   },
   {
-    label: "Section wise",
-    value: "sectionWise",
+    label: "Subject wise",
+    value: "subjectWise",
   },
   {
     label: "Session wise",

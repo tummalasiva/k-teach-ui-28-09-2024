@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import PageHeader from "../../components/PageHeader";
-import { Box, Button, Divider, Grid, styled } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import Select from "react-select";
+import { Box, Button, Divider, Grid, styled } from "@mui/material";
+import PageHeader from "../../components/PageHeader";
+// icons
+import AddIcon from "@mui/icons-material/Add";
+import FormSelect from "../../forms/FormSelect";
+import { useFormik } from "formik";
+import ShowCourseContent from "./ShowCourseContent";
 
 const Label = styled("label")(() => ({
   fontWeight: 650,
@@ -18,10 +22,20 @@ const OuterGrid = styled(Grid)(() => ({
 }));
 
 export default function CourseContent() {
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState([]);
   const handleChange = (e) => {
     setSelectedCourse(e.target.value);
+
+    console.log(selectedCourse, "hhhahh");
   };
+
+  const entryFormik = useFormik({
+    initialValues: {
+      courseId: "",
+    },
+    onSubmit: console.log("k"),
+  });
+
   return (
     <>
       <PageHeader title="Course Content" />
@@ -37,16 +51,14 @@ export default function CourseContent() {
           display="flex"
           alignItems="center"
         >
-          <Box sx={{ overflow: "hidden" }}>
-            <Label htmlFor="">Select Course To Add Content</Label>
-
-            <Select
+          <Box sx={{ width: 260 }}>
+            {/* <Select
               name="title"
               type="text"
-              options={""}
+              options={[]}
               menuPortalTarget={document.body}
               value={selectedCourse}
-              onChange={handleChange}
+              // onChange={handleChange}
               styles={{
                 container: (provided, state) => ({
                   ...provided,
@@ -62,23 +74,31 @@ export default function CourseContent() {
                   borderRadius: "5px",
                 }),
               }}
+            /> */}
+            <FormSelect
+              required={true}
+              name="courseId"
+              formik={entryFormik}
+              label="Select Course To Add Content"
+              // options={[]}
             />
           </Box>
 
-          <Box mt={3}>
-            <Button
-              variant="contained"
-              size="medium"
-              disabled={!selectedCourse}
-              startIcon={<AddIcon />}
-            >
-              Chapter
-            </Button>
-          </Box>
+          <Button
+            variant="contained"
+            size="medium"
+            disabled={!selectedCourse}
+            startIcon={<AddIcon />}
+            sx={{ mt: 1 }}
+          >
+            Chapter
+          </Button>
         </Grid>
       </OuterGrid>
 
       <Divider />
+
+      <ShowCourseContent />
     </>
   );
 }
