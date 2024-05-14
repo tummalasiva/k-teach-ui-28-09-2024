@@ -1,28 +1,29 @@
 export const coursesDataTableKeys = [
   {
     name: "Class",
-    key: "class",
+    key: "name",
+    path: "class",
   },
   {
     name: "Course Name",
-    key: "name",
+    key: "title",
   },
   {
     name: "Subject",
-    key: "subject",
+    // key: "subject",
   },
 
   {
     name: "Duration",
-    key: "duration",
+    key: "courseHours",
   },
   {
     name: "Content",
-    key: "content",
+    // key: "content",
   },
 
   {
     name: "Material",
-    key: "material",
+    // key: "material",
   },
 ];
