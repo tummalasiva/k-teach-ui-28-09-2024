@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FormSelect from "../../forms/FormSelect";
 import { useFormik } from "formik";
+import CourseContentTable from "./CourseContentTable";
 
 export default function ShowCourseContent() {
   const entryFormik = useFormik({
@@ -85,12 +86,7 @@ export default function ShowCourseContent() {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
-            {/* <UploadCourseTable
-              updateList={updateList}
-              courseId={course.courseId}
-              chapter={chapter}
-              courseName={courseName}
-            /> */}
+            <CourseContentTable />
           </Grid>
         </Grid>
       </Box>
