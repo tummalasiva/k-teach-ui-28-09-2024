@@ -172,5 +172,7 @@ export const PRIVATE_URLS = {
     create: "/course/create",
     update: "/course/update",
     delete: "/course/delete",
+    uploadCourseMaterial: "/course/uploadCourseMaterial",
+    deleteMaterial: "/course/deleteCourseMaterial",
   },
 };
