@@ -25,6 +25,7 @@ import {
   styled,
   useMediaQuery,
   useTheme,
+  Modal,
 } from "@mui/material";
 import CustomSelect from "../../forms/CustomSelect";
 import SettingContext from "../../context/SettingsContext";
@@ -38,10 +39,24 @@ import DialogContentText from "@mui/material/DialogContentText";
 import ClearIcon from "@mui/icons-material/Clear";
 import Download from "@mui/icons-material/Download";
 import FileSelect from "../../forms/FileSelect";
+import image from "../../assets/images/deleteicon.png";
 
 const Data = styled(TableCell)(() => ({
   textAlign: "center",
 }));
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 350,
+  bgcolor: "background.paper",
+  borderRadius: "10px",
+
+  boxShadow: 24,
+  p: 2,
+};
 
 const Heading = styled(TableCell)(() => ({
   fontWeight: "bold",
@@ -69,6 +84,8 @@ export default function Courses() {
   const [courseId, setCourseId] = useState("");
   const [materialURL, setMaterialURL] = useState();
   const [open, setOpen] = React.useState(false);
+  const [deleteModal, setDeleteModal] = React.useState(false);
+
   const [material, setMaterial] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadLoad, setUploadLoad] = useState(false);
@@ -181,7 +198,7 @@ export default function Courses() {
   const handleDeleteMaterial = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await del(
+      const res = await del(
         PRIVATE_URLS.course.deleteMaterial + "/" + courseId
       );
       getCourse();
@@ -228,6 +245,23 @@ export default function Courses() {
     setFile(selectedFile);
   };
 
+  const handleCloseDeleteModal = () => {
+    setDeleteModal(false);
+  };
+
+  const handleOpenDeleteModal = (id) => {
+    setDeleteModal(true);
+    setCourseId(id);
+  };
+  const handleDeleteCourse = async () => {
+    try {
+      const res = await del(PRIVATE_URLS.course.delete + "/" + courseId);
+      getCourse();
+      handleCloseDeleteModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <PageHeader title="Courses" />
@@ -310,7 +344,11 @@ export default function Courses() {
                       </Button>
                     </Tooltip>
                     <Tooltip title="Delete">
-                      <IconButton color="error" size="small">
+                      <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleOpenDeleteModal(course._id)}
+                      >
                         <Delete color="error" fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -405,6 +443,50 @@ export default function Courses() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
+
+      <Modal open={deleteModal} onClose={handleCloseDeleteModal}>
+        <Box sx={style}>
+          <Box sx={{ textAlign: "center", margin: "10px auto" }}>
+            <img src={image} width={50} height={50} />
+          </Box>
+
+          <Typography
+            textAlign="center"
+            sx={{ fontSize: "18px", fontWeight: 700 }}
+          >
+            Delete Confirmation
+          </Typography>
+          <Typography sx={{ mt: 2, textAlign: "center" }}>
+            Are you sure want to delete this item?
+          </Typography>
+          <Box
+            my={3}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "15px",
+            }}
+          >
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={handleCloseDeleteModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              size="small"
+              variant="contained"
+              onClick={handleDeleteCourse}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
 
       <AddForm onAddClick={handleSubmit} />
     </>

@@ -120,7 +120,7 @@ export default function UpdateCourse() {
 
   const entryFormik = useFormik({
     initialValues: {
-      class: course ? course.class : [],
+      class: course ? course.class?.map((s) => s._id) : [],
       subject: "",
       title: course ? course.title : "",
       description: course ? course.description : "",
