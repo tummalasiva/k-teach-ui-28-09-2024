@@ -7,13 +7,13 @@ import Footer from "../theme-two/layout/Footer";
 // ===== code splitting ===================================
 const HomePage = React.lazy(() => import("../theme-two/page/HomePage"));
 const Overview = React.lazy(() =>
-  import("../theme-two/components/About-us/Overview")
+  import("../theme-two/components/about-us/Overview")
 );
 const Founder = React.lazy(() =>
-  import("../theme-two/components/About-us/Founder")
+  import("../theme-two/components/about-us/Founder")
 );
 const VisionAndMission = React.lazy(() =>
-  import("../theme-two/components/About-us/VisionAndMission")
+  import("../theme-two/components/about-us/VisionAndMission")
 );
 const Food = React.lazy(() =>
   import("../theme-two/components/facilities/Food")
