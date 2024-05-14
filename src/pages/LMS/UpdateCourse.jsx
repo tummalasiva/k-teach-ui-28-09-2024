@@ -26,8 +26,7 @@ import StickyBar from "../../components/StickyBar";
 import { LoadingButton } from "@mui/lab";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate, useParams } from "react-router-dom";
-import ThemeModeContext from "../../context/ThemeModeContext";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: "20px 8px",
@@ -35,38 +34,27 @@ const FormBox = styled(Box)(({ theme }) => ({
   margin: "10px 0px",
   borderRight: "10px",
   border: "1px solid lightGrey",
-
-  backgroundColor: theme.palette.mode === "dark" ? "" : "whitesmoke",
+  backgroundColor: "whitesmoke",
 }));
 
-const Title = styled(Typography)(({ theme }) => ({
-  textAlign: "start",
-  fontSize: "14px",
-  padding: "5px 10px",
-  borderBottom: "1px solid",
-  borderBottomColor: "lightgray",
-  fontWeight: "bold",
-  color: "white",
-  background: theme.palette.secondary.main,
-}));
-
-export default function AddCourse() {
+export default function UpdateCourse() {
   const { selectedSetting } = useContext(SettingContext);
-  const { id } = useParams();
   const [classData, setClassData] = useState([]);
   const [selectImg, setSelectImg] = useState([]);
   const [subject, setSubject] = useState([]);
-  const [dataToEdit, setDataToEdit] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const { isDarkMode } = useContext(ThemeModeContext);
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const course = (location.state && location.state.courseData) || null;
+
+  console.log(course, "mmmmmmmmm==============");
+
   const [inputlist, setInputList] = useState(
-    dataToEdit?.benefits || [{ point: "" }]
+    course?.courseDetails?.overview || [{ point: "" }]
   );
   const [inputlistBenifits, setInputListBenifits] = useState(
-    dataToEdit?.benefits || [{ point: "" }]
+    course?.courseDetails?.benefits || [{ point: "" }]
   );
 
   const getClass = async () => {
@@ -98,21 +86,15 @@ export default function AddCourse() {
       formData.append("schoolId", selectedSetting._id);
       selectImg.forEach((file) => formData.append("thumbnailImage", file));
 
-      if (dataToEdit) {
-        const { data } = await put(
-          PRIVATE_URLS.course.update + "/" + dataToEdit._id,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-      } else {
-        const { data } = await post(PRIVATE_URLS.course.create, formData, {
+      const { data } = await put(
+        PRIVATE_URLS.course.update + "/" + course._id,
+        formData,
+        {
           headers: { "Content-Type": "multipart/form-data" },
-        });
+        }
+      );
 
-        navigate("/sch/lms/courses");
-      }
+      navigate("/sch/lms/courses");
     } catch (error) {
       console.log(error);
     }
@@ -138,13 +120,13 @@ export default function AddCourse() {
 
   const entryFormik = useFormik({
     initialValues: {
-      class: [],
+      class: course ? course.class?.map((s) => s._id) : [],
       subject: "",
-      title: "",
-      description: "",
-      isTrending: false,
-      overview: [],
-      benefits: [],
+      title: course ? course.title : "",
+      description: course ? course.description : "",
+      isTrending: course?.isTrending || false,
+      overview: course?.courseDetails.overview || [],
+      benefits: course?.courseDetails.benefits || [],
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
