@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +27,6 @@ import {
   styled,
   useMediaQuery,
   useTheme,
-  Modal,
 } from "@mui/material";
 import CustomSelect from "../../forms/CustomSelect";
 import SettingContext from "../../context/SettingsContext";
@@ -38,31 +39,16 @@ import { LoadingButton } from "@mui/lab";
 import DialogContentText from "@mui/material/DialogContentText";
 import ClearIcon from "@mui/icons-material/Clear";
 import Download from "@mui/icons-material/Download";
-import FileSelect from "../../forms/FileSelect";
-import image from "../../assets/images/deleteicon.png";
+import DeleteModal from "../../forms/DeleteModal";
 
 const Data = styled(TableCell)(() => ({
   textAlign: "center",
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 350,
-  bgcolor: "background.paper",
-  borderRadius: "10px",
-
-  boxShadow: 24,
-  p: 2,
-};
-
 const Heading = styled(TableCell)(() => ({
   fontWeight: "bold",
   textAlign: "center",
   color: "#ffff",
-  backgroundColor: "#1b3779",
 }));
 const DownloadBox = styled(Box)(() => ({
   background: `rgb(133 140 223 / 19%)`,
@@ -143,12 +129,6 @@ export default function Courses() {
     }
   }, [selectedClass, selectedSetting]);
 
-  // useEffect(() => {
-  //   if (classData.length > 0) {
-  //     setSelectedClass([classData[0]?.value]);
-  //   }
-  // }, [classData, selectedSetting]);
-
   const handleSubmit = () => {
     navigate("/sch/lms/add-courses");
   };
@@ -177,7 +157,6 @@ export default function Courses() {
   };
 
   const handleClickOpen = (id, material) => {
-    console.log(material, "materiaAAAl");
     setOpen(true);
     setCourseId(id);
     if (material) {
@@ -245,23 +224,15 @@ export default function Courses() {
     setFile(selectedFile);
   };
 
-  const handleCloseDeleteModal = () => {
-    setDeleteModal(false);
-  };
-
-  const handleOpenDeleteModal = (id) => {
-    setDeleteModal(true);
-    setCourseId(id);
-  };
-  const handleDeleteCourse = async () => {
+  const handleDelete = async (id) => {
     try {
-      const res = await del(PRIVATE_URLS.course.delete + "/" + courseId);
+      const res = await del(PRIVATE_URLS.course.delete + "/" + id);
       getCourse();
-      handleCloseDeleteModal();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+
   return (
     <>
       <PageHeader title="Courses" />
@@ -272,8 +243,7 @@ export default function Courses() {
           spacing={2}
           display="flex"
           justifyContent="flex-end"
-          alignItems="center"
-        >
+          alignItems="center">
           <Grid item xs={12} md={6} lg={3}>
             <CustomSelect
               required={true}
@@ -290,7 +260,13 @@ export default function Courses() {
 
       <TableContainer component={Paper}>
         <Table size="small">
-          <TableHead>
+          <TableHead
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light,
+            }}>
             <TableRow>
               <Heading>S.No</Heading>
               <Heading>Class</Heading>
@@ -327,31 +303,33 @@ export default function Courses() {
                       <Button
                         onClick={() =>
                           handleClickOpen(course._id, course.material)
-                        }
-                      >
+                        }>
                         <FileUploadIcon />
                       </Button>
                     </Tooltip>
                   </Data>
 
                   <Data>
-                    <Tooltip title="Update course">
-                      <Button
-                        onClick={() => handeleClickEdit(course)}
-                        sx={{ color: "#1b3779" }}
-                      >
-                        <EditIcon fontSize="small" />
+                    <Tooltip title="Edit">
+                      <Button onClick={() => handeleClickEdit(course)}>
+                        <EditIcon color="primary" fontSize="small" />
                       </Button>
                     </Tooltip>
                     <Tooltip title="Delete">
                       <IconButton
                         color="error"
                         size="small"
-                        onClick={() => handleOpenDeleteModal(course._id)}
-                      >
+                        onClick={() => setDeleteModal(course._id)}>
                         <Delete color="error" fontSize="small" />
                       </IconButton>
                     </Tooltip>
+
+                    <DeleteModal
+                      deleteModal={deleteModal}
+                      handleDelete={handleDelete}
+                      id={course._id}
+                      setDeleteModal={setDeleteModal}
+                    />
                   </Data>
                 </TableRow>
               ))}
@@ -360,8 +338,7 @@ export default function Courses() {
         {!data.length && (
           <Typography
             variant="h6"
-            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}
-          >
+            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
             No data found
           </Typography>
         )}
@@ -386,12 +363,10 @@ export default function Courses() {
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
+        aria-labelledby="responsive-dialog-title">
         <DialogTitle
           id="responsive-dialog-title"
-          sx={{ fontSize: "20px", fontWeight: "bold" }}
-        >
+          sx={{ fontSize: "20px", fontWeight: "bold" }}>
           {"Upload Your Material"} {data.material}
         </DialogTitle>
         <DialogContent>
@@ -413,8 +388,7 @@ export default function Courses() {
                 <Button
                   size="small"
                   onClick={handleDeleteMaterial}
-                  color="error"
-                >
+                  color="error">
                   <ClearIcon fontSize="small" />
                 </Button>
               </Stack>
@@ -428,8 +402,7 @@ export default function Courses() {
             variant="contained"
             color="error"
             size="small"
-            onClick={handleClose}
-          >
+            onClick={handleClose}>
             Cancel
           </Button>
           <LoadingButton
@@ -437,56 +410,11 @@ export default function Courses() {
             variant="contained"
             loading={uploadLoad}
             onClick={handleUpload}
-            autoFocus
-          >
+            autoFocus>
             Upload
           </LoadingButton>
         </DialogActions>
       </Dialog>
-
-      <Modal open={deleteModal} onClose={handleCloseDeleteModal}>
-        <Box sx={style}>
-          <Box sx={{ textAlign: "center", margin: "10px auto" }}>
-            <img src={image} width={50} height={50} />
-          </Box>
-
-          <Typography
-            textAlign="center"
-            sx={{ fontSize: "18px", fontWeight: 700 }}
-          >
-            Delete Confirmation
-          </Typography>
-          <Typography sx={{ mt: 2, textAlign: "center" }}>
-            Are you sure want to delete this item?
-          </Typography>
-          <Box
-            my={3}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "15px",
-            }}
-          >
-            <Button
-              size="small"
-              color="error"
-              variant="contained"
-              onClick={handleCloseDeleteModal}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              size="small"
-              variant="contained"
-              onClick={handleDeleteCourse}
-            >
-              Delete
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
 
       <AddForm onAddClick={handleSubmit} />
     </>

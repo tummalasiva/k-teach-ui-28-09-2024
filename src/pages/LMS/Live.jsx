@@ -1,19 +1,28 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import FilterListIcon from "@mui/icons-material/FilterList";
-
-import CustomTable from "../../components/Tables/CustomTable";
-import { liveDataTableKeys } from "../../data/tableKeys/liveData";
 import {
   Box,
+  Button,
   FormControl,
   Grid,
+  IconButton,
   MenuItem,
+  Paper,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
   styled,
 } from "@mui/material";
 import AddForm from "../../forms/AddForm";
-
 import FormSelect from "../../forms/FormSelect";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
@@ -21,10 +30,23 @@ import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
 import moment from "moment";
-
 import FormDatePicker from "../../forms/FormDatePicker";
 import FormInput from "../../forms/FormInput";
+import { Delete, Search } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
+import DeleteModal from "../../forms/DeleteModal";
 
+const TableData = styled(TableCell)(() => ({
+  textAlign: "center",
+  color: "#ffff",
+  fontWeight: 600,
+}));
+
+const TableBodydata = styled(TableCell)(() => ({
+  textAlign: "center",
+}));
 const Label = styled("label")(() => ({
   fontWeight: 650,
   fontSize: "15px",
@@ -111,19 +133,33 @@ const Meeting_Type = [
 export default function Live() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
+  const [filterMeeting, setFilterMeeting] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState("All");
   const [dataToEdit, setDataToEdit] = useState(null);
   const [classes, setClasses] = useState([]);
   const [selectClasses, setSelectClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
   const [roles, setRoles] = useState([]);
-
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState([]);
-  const handleFilter = (e) => {
-    setSelectedCourse(e.target.value);
+  const [deleteModal, setDeleteModal] = React.useState(false);
+  const [selectedPartcipatType, setSelectedParticipatType] = useState("All");
+  const [liveData, setLiveData] = useState({});
+
+  const getData = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.meeting.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setData(data.result);
+      setFilterMeeting(data.result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const AddMeeting = () => {
@@ -132,6 +168,7 @@ export default function Live() {
 
   const handleClose = () => {
     setOpen(false);
+    setDataToEdit(null);
   };
 
   const getClasses = async () => {
@@ -158,7 +195,7 @@ export default function Live() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            class: entryFormik.values.class,
+            class: entryFormik.values.classId,
           },
         },
       });
@@ -177,7 +214,7 @@ export default function Live() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            "academicInfo.class": entryFormik.values.class,
+            "academicInfo.class": entryFormik.values.classId,
             "academicInfo.section": entryFormik.values.section,
           },
         },
@@ -199,13 +236,20 @@ export default function Live() {
       const { data } = await get(PRIVATE_URLS.employee.list, {
         params: {
           schoolId: selectedSetting._id,
+          search: {
+            role: { $in: entryFormik.values.roles },
+          },
         },
       });
 
       console.log(data, "jjjjjjjjjjjjj");
 
       setEmployee(
-        data.result.map((s) => ({ label: s.basicInfo.name, value: s._id }))
+        data.result.map((s) => ({
+          ...s,
+          label: s.basicInfo.name,
+          value: s._id,
+        }))
       );
     } catch (error) {
       console.log(error);
@@ -216,7 +260,7 @@ export default function Live() {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
 
-      setRoles(data.result.map((s) => ({ label: s.name, value: s._id })));
+      setRoles(data.result.map((s) => ({ ...s, label: s.name, value: s._id })));
     } catch (error) {
       console.log(error);
     }
@@ -224,18 +268,20 @@ export default function Live() {
 
   useEffect(() => {
     getClasses();
-    getSections();
-    getStudents();
-    getEmployee();
     getRoles();
   }, [selectedSetting]);
 
   useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    getData();
     getDateWithTime();
   }, []);
 
   // create || update actions
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
@@ -244,18 +290,35 @@ export default function Live() {
           entryFormik.values.participantType === "Single"
             ? [entryFormik.values.participants]
             : entryFormik.values.participants,
+
+        employeeParticipants: employee.filter(
+          (e) =>
+            entryFormik.values.roles.includes(e.role) &&
+            entryFormik.values.employeeParticipants.includes(e._id)
+        ),
+        studentParticipants: students.filter(
+          (s) =>
+            entryFormik.values.classId.includes(s?.academicInfo?.class?._id) &&
+            entryFormik.values.section.includes(
+              s?.academicInfo?.section?._id
+            ) &&
+            entryFormik.values.studentParticipants.includes(s?._id)
+        ),
       };
 
-      console.log(payload, "mmmmbbbbb");
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.meeting.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.meeting.create, payload);
       }
+
+      console.log(data, "couuuuuuua");
+      getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -275,10 +338,127 @@ export default function Live() {
       participantType: dataToEdit?.participantType || "",
       userTypes: dataToEdit?.userTypes || [],
       participants: [],
+      roles: [],
+      section: [],
+      employeeParticipants: [],
+      studentParticipants: [],
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    if (entryFormik.values.roles) {
+      getEmployee();
+    }
+  }, [entryFormik.values.roles, selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.classId) {
+      getSections();
+    }
+  }, [entryFormik.values.classId, selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.classId && entryFormik.values.section) {
+      getStudents();
+    }
+  }, [entryFormik.values.classId, entryFormik.values.section, selectedSetting]);
+
+  const handleUpdateModelOpen = (id) => {
+    setDataToEdit(id);
+    let meetingData = data.filter((m) => m._id == id)[0];
+
+    // console.log(data, "data=====datat");
+
+    if (meetingData.userTypes.includes("employee")) {
+      let roles = [];
+      for (let emp of meetingData.employeeParticipants) {
+        if (roles.filter((r) => r == emp.role).length < 1) {
+          roles.push(emp.role);
+        }
+      }
+
+      entryFormik.setFieldValue("roles", roles);
+      entryFormik.setFieldValue(
+        "employeeParticipants",
+        meetingData.employeeParticipants.map((p) => p._id)
+      );
+    }
+
+    if (meetingData.userTypes.includes("student")) {
+      let classes = [];
+      let sections = [];
+      for (let stupar of meetingData.studentParticipants) {
+        if (sections.filter((s) => s == stupar.academicInfo.class).length < 1) {
+          sections.push(stupar.academicInfo.section);
+        }
+        if (classes.filter((c) => c == stupar.academicInfo.class).length < 1) {
+          classes.push(stupar.academicInfo.class);
+        }
+      }
+
+      entryFormik.setFieldValue("classId", classes);
+      entryFormik.setFieldValue("section", sections);
+
+      entryFormik.setFieldValue(
+        "studentParticipants",
+        meetingData.studentParticipants.map((p) => p._id)
+      );
+    }
+
+    if (meetingData.participantType === "Class Students") {
+      entryFormik.setFieldValue(
+        "classId",
+        meetingData.classId.map((c) => c._id)
+      );
+    }
+
+    entryFormik.setFieldValue("meetingType", meetingData.meetingType);
+
+    entryFormik.setFieldValue("expiryDate", meetingData.expiryDate);
+    entryFormik.setFieldValue("startTime", meetingData.startTime);
+    entryFormik.setFieldValue("expiryTime", meetingData.expiryTime);
+    entryFormik.setFieldValue("participantType", meetingData.participantType);
+    entryFormik.setFieldValue("userTypes", meetingData.userTypes);
+
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    if (selectedPartcipatType) {
+      if (selectedPartcipatType === "All") {
+        setFilterMeeting(data);
+      } else {
+        setFilterMeeting(
+          data.filter((c) => c.meetingType === selectedPartcipatType)
+        );
+      }
+    }
+  }, [selectedPartcipatType]);
+  const handleFilter = (e) => {
+    setSelectedParticipatType(e.target.value);
+  };
+
+  const handleJoinClick = (id) => {
+    const getMeetingId = data.find((item) => item._id === id);
+    console.log(getMeetingId);
+    if (getMeetingId) {
+      const meetingType = getMeetingId.meetingType;
+      navigate(`/sch/lms/room/${getMeetingId.roomId}`, {
+        state: { meetingType: meetingType },
+      });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.meeting.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -293,9 +473,8 @@ export default function Live() {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             placeholder="Select Course"
-            value={selectedCourse}
-            onChange={handleFilter}
-          >
+            value={selectedPartcipatType}
+            onChange={handleFilter}>
             <MenuItem value="All"> All </MenuItem>
             <MenuItem value="OneONoneCall">One-On-One Call </MenuItem>
             <MenuItem value="GroupCall">Group Call </MenuItem>
@@ -304,20 +483,125 @@ export default function Live() {
         </FormControl>
       </FilterBox>
 
-      <CustomTable
-        actions={["edit"]}
-        tableKeys={liveDataTableKeys}
-        bodyDataModal="live"
-        bodyData={data}
-      />
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light,
+            }}>
+            <TableRow>
+              <TableData>S.No</TableData>
+              <TableData>Meeting Date</TableData>
+              <TableData>Meeting Type</TableData>
+              <TableData>Status</TableData>
+              <TableData>Start Meeting</TableData>
+              <TableData>Action</TableData>
+            </TableRow>
+          </TableHead>{" "}
+          <TableBody>
+            {(filterMeeting ? filterMeeting : data).map((listData, i) => (
+              <TableRow>
+                <TableBodydata>{i + 1}</TableBodydata>
+
+                <TableBodydata>
+                  {dayjs(listData.startDate).format("DD-MM-YYYY")}, Time:{" "}
+                  {listData.startTime}
+                </TableBodydata>
+                <TableBodydata>{listData.meetingType}</TableBodydata>
+                <TableBodydata>
+                  <Box
+                    sx={{
+                      py: 1,
+                      objectFit: "contain",
+                      borderRadius: "5px",
+                      background:
+                        getStatus(
+                          listData.startDate,
+                          listData.startTime,
+                          listData.expiryDate,
+                          listData.expiryTime
+                        ) === "Expired"
+                          ? "#85848430"
+                          : "#8281e74d",
+                    }}>
+                    {getStatus(
+                      listData.startDate,
+                      listData.startTime,
+                      listData.expiryDate,
+                      listData.expiryTime
+                    )}
+                  </Box>
+                </TableBodydata>
+                <TableBodydata>
+                  <Button
+                    disabled={
+                      getStatus(
+                        listData.startDate,
+                        listData.startTime,
+                        listData.expiryDate,
+                        listData.expiryTime
+                      ) === "Expired"
+                    }
+                    onClick={() => handleJoinClick(listData._id)}
+                    variant="contained"
+                    size="small">
+                    Join
+                  </Button>
+                </TableBodydata>
+
+                <TableBodydata>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleUpdateModelOpen(listData._id)}>
+                      <EditIcon color="primary" fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete">
+                    <IconButton
+                      size="small"
+                      onClick={() => setDeleteModal(listData._id)}>
+                      <Delete fontSize="small" color="error" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <DeleteModal
+                    deleteModal={deleteModal}
+                    handleDelete={handleDelete}
+                    id={listData._id}
+                    setDeleteModal={setDeleteModal}
+                  />
+                </TableBodydata>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {!data.length && (
+          <Box align="center" colSpan={12} py={2}>
+            <Typography variant="h6" align="center">
+              Live sessions Not found!
+            </Typography>
+          </Box>
+        )}
+        {!filterMeeting.length === 0 && (
+          <Box align="center" colSpan={12} py={2}>
+            <Typography variant="h6" align="center">
+              Live sessions Not found!
+            </Typography>
+          </Box>
+        )}
+      </TableContainer>
       <FormModal
         open={open}
         formik={entryFormik}
         formTitle={dataToEdit ? "Update Class" : "Add Class"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
@@ -375,7 +659,7 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
-                  name="participants"
+                  name="studentParticipants"
                   multiple={
                     entryFormik.values.participantType !== "Single"
                       ? true
@@ -393,7 +677,7 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
-                  name="role"
+                  name="roles"
                   label="Select Role"
                   options={roles}
                 />
@@ -402,7 +686,7 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
-                  name="employee"
+                  name="employeeParticipants"
                   label="Select Employee"
                   options={employee}
                 />
@@ -431,25 +715,25 @@ export default function Live() {
           <Grid xs={12} md={6} item>
             <FormDatePicker
               formik={entryFormik}
-              label="startDate"
-              name="Enter Start Date"
+              label="Enter Start  Date"
+              name="startDate"
               required={true}
             />
           </Grid>
           <Grid xs={12} md={6} item>
             <FormInput
               formik={entryFormik}
-              label="startTime"
+              label="Enter Start Time"
               type="time"
-              name="Enter Start Time"
+              name="startTime"
               required={true}
             />
           </Grid>
           <Grid xs={12} md={6} item>
             <FormDatePicker
               formik={entryFormik}
-              label="expiryDate"
-              name="Enter Expiry Date"
+              label="Enter Expiry Date"
+              name="expiryDate"
               required={true}
             />
           </Grid>
@@ -457,9 +741,9 @@ export default function Live() {
           <Grid xs={12} md={6} item>
             <FormInput
               formik={entryFormik}
-              label="expiryTime"
+              label="Enter Expiry Time"
               type="time"
-              name="Enter Expiry Time"
+              name="expiryTime"
               required={true}
             />
           </Grid>
