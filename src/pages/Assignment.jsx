@@ -25,7 +25,8 @@ export default function Assignment() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const Section_Options = [{ label: "All", value: "all" }, ...sections];
-  // get section
+  
+  // get assignment
   const getData = async (values) => {
     try {
       if (values?.section === "all") {

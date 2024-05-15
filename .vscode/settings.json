@@ -1,0 +1,5 @@
+{
+    "prettier.bracketSameLine": true,
+    "prettier.insertPragma": true,
+    "application.experimental.rendererProfiling": true
+}
