@@ -13,6 +13,7 @@ import FormInput from "../../forms/FormInput";
 import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import FormDatePicker from "../../forms/FormDatePicker";
 
 const Reason_To_Meet = [
   { label: "Vendor", value: "vendor" },
@@ -187,6 +188,9 @@ export default function VisitorInfo() {
       toMeetUser: dataToEdit?.toMeetUser || "",
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
+      // checkIn: dataToEdit?.checkIn.toLocaleString() || "",
+      checkIn: dataToEdit?.checkIn.toLocaleString() || "",
+      checkOut: dataToEdit?.checkOut || "",
 
       class: dataToEdit?.class._id || "",
       section: dataToEdit?.section._id || "",
@@ -255,7 +259,7 @@ export default function VisitorInfo() {
       </Grid>
 
       <CustomTable
-        actions={["edit"]}
+        actions={["view", "edit"]}
         tableKeys={visitorInfoTableKeys}
         bodyDataModal="visitor info"
         bodyData={data}
@@ -278,6 +282,7 @@ export default function VisitorInfo() {
               name="name"
               label="Name"
               required={true}
+              disabled={dataToEdit != null}
             />
           </Grid>
           <Grid xs={12} md={6} lg={6} item>
@@ -286,6 +291,7 @@ export default function VisitorInfo() {
               name="phone"
               label="Phone"
               required={true}
+              disabled={dataToEdit != null}
             />
           </Grid>
 
@@ -295,6 +301,7 @@ export default function VisitorInfo() {
               name="comingForm"
               label="Coming Form"
               required={true}
+              disabled={dataToEdit != null}
             />
           </Grid>
           <Grid xs={12} md={6} lg={6} item>
@@ -304,6 +311,7 @@ export default function VisitorInfo() {
               formik={entryFormik}
               label="Select To Meet User Type"
               options={roles}
+              disabled={dataToEdit != null}
             />
           </Grid>
 
@@ -315,6 +323,7 @@ export default function VisitorInfo() {
                   formik={entryFormik}
                   label="Select Class"
                   options={classes}
+                  disabled={dataToEdit != null}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={6} item>
@@ -323,6 +332,7 @@ export default function VisitorInfo() {
                   formik={entryFormik}
                   label="Select Section"
                   options={sections}
+                  disabled={dataToEdit != null}
                 />
               </Grid>
             </>
@@ -337,17 +347,42 @@ export default function VisitorInfo() {
               options={
                 entryFormik.values.roleName === "STUDENT" ? students : employees
               }
+              disabled={dataToEdit != null}
             />
           </Grid>
-
           <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               name="reasonToMeet"
               formik={entryFormik}
               label="Select Reason To Meet"
               options={Reason_To_Meet}
+              disabled={dataToEdit != null}
             />
           </Grid>
+          {dataToEdit != null && (
+            <>
+              <Grid xs={12} md={6} lg={6} item>
+                <FormInput
+                  formik={entryFormik}
+                  label="Check In"
+                  name="checkIn"
+                  disabled={dataToEdit != null}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={6} item>
+                <FormDatePicker
+                  formik={entryFormik}
+                  label="Check Out"
+                  name="checkOut"
+                  type="datetime-local"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+            </>
+          )}
+
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
