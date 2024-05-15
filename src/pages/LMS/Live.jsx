@@ -215,7 +215,7 @@ export default function Live() {
       createdBy: dataToEdit?.createdBy || "",
       meetingType: dataToEdit?.meetingType || "",
       participantType: dataToEdit?.participantType || "",
-      userTypes: dataToEdit?.userTypes || "",
+      userTypes: dataToEdit?.userTypes || [],
       participants: [],
     },
     onSubmit: handleCreateOrUpdate,
@@ -284,6 +284,7 @@ export default function Live() {
             <>
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
+                  multiple={true}
                   formik={entryFormik}
                   name="userTypes"
                   label="User Type"
@@ -293,7 +294,7 @@ export default function Live() {
             </>
           )}
 
-          {entryFormik.values.userTypes === "student" && (
+          {entryFormik.values.userTypes.includes("student") && (
             <>
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
@@ -329,7 +330,7 @@ export default function Live() {
             </>
           )}
 
-          {entryFormik.values.userTypes === "employee" && (
+          {entryFormik.values.userTypes.includes("employee") && (
             <>
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
