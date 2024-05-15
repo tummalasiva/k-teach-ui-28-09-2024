@@ -7,12 +7,12 @@ import SettingContext from "../../../context/SettingsContext";
 import FormInput from "../../../forms/FormInput";
 import FormModal from "../../../forms/FormModal";
 
-export default function VideoDialog({ open , setOpenVideo}) {
+export default function VideoDialog({ open , setOpenVideo,Formik}) {
   const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log(open,"ooopen");
+  console.log(Formik,"ooopen");
 
   const entryFormik = useFormik({
     initialValues: {

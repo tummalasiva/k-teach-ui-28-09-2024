@@ -187,4 +187,10 @@ export const PRIVATE_URLS = {
     update: "/guardianFeedback/update",
     delete: "/guardianFeedback/delete",
   },
+  visitorInfo: {
+    list: "/visitorInfo/list",
+    create: "/visitorInfo/create",
+    update: "/visitorInfo/update",
+    delete: "/visitorInfo/delete",
+  },
 };

@@ -22,7 +22,7 @@ export default function ShowCourseContent() {
       id: 1,
       label: "Video",
       value: "video",
-      onClick: handleOpenVideo,
+      // onClick: handleOpenVideo,
     },
     {
       id: 2,
@@ -135,7 +135,7 @@ export default function ShowCourseContent() {
           </Grid>
         </Grid>
       </Box>
-      {/* <VideoDialog open={entryFormik.values.contents==="video"} setOpenVideo={setOpenVideo}/> */}
+      <VideoDialog open={entryFormik.values.contents==="video"} Formik={entryFormik} setOpenVideo={setOpenVideo}/>
     </>
   );
 }
