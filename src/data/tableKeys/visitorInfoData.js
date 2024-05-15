@@ -11,7 +11,7 @@ export const visitorInfoTableKeys = [
   },
   {
     name: "To Meet",
-    key: "toMeetUser",
+    key: "toMeetUserName",
   },
   {
     name: "ReasonToMeet",

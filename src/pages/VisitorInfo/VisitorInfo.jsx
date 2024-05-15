@@ -50,7 +50,7 @@ export default function VisitorInfo() {
       setData(
         data.result.map((r) => ({
           ...r,
-          toMeetUser: r.toMeetUser.basicInfo.name,
+          toMeetUserName: r.toMeetUser.basicInfo.name,
           checkIn: new Date(r.checkIn).toLocaleString(),
           checkOut: r.checkOut ? new Date(r.checkOut).toLocaleString() : "",
         }))
@@ -185,15 +185,15 @@ export default function VisitorInfo() {
       phone: dataToEdit?.phone || "",
       comingForm: dataToEdit?.comingForm || "",
       toMeetUserType: dataToEdit?.toMeetUserType._id || "",
-      toMeetUser: dataToEdit?.toMeetUser || "",
+      toMeetUser: dataToEdit?.toMeetUser?._id || "",
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
       // checkIn: dataToEdit?.checkIn.toLocaleString() || "",
       checkIn: dataToEdit?.checkIn.toLocaleString() || "",
       checkOut: dataToEdit?.checkOut || "",
 
-      class: dataToEdit?.class._id || "",
-      section: dataToEdit?.section._id || "",
+      class: dataToEdit?.class?._id || "",
+      section: dataToEdit?.section?._id || "",
       roleName: dataToEdit?.roleName || "",
     },
     onSubmit: handleCreateOrUpdate,

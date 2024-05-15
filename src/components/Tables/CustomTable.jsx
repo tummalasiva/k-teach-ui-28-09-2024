@@ -68,6 +68,8 @@ export default function CustomTable({
   toggleStatus = false,
   isDataReady = true,
   module = "",
+  CustomAction = () => {},
+  onUpdate = () => {},
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -161,7 +163,14 @@ export default function CustomTable({
                         )
                       )}
                       {actions.length ? (
-                        <TableCell align="center">
+                        <TableCell
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                        >
                           {actions.includes("edit") && (
                             <Tooltip title="Edit">
                               <IconButton onClick={() => onEditClick(data)}>
@@ -212,6 +221,9 @@ export default function CustomTable({
                                 />
                               </IconButton>
                             </Tooltip>
+                          )}
+                          {actions.includes("custom") && (
+                            <CustomAction data={data} onUpdate={onUpdate} />
                           )}
                         </TableCell>
                       ) : null}
