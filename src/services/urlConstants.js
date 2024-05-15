@@ -181,4 +181,11 @@ export const PRIVATE_URLS = {
     update: "/meeting/update",
     delete: "/meeting/delete",
   },
+  guardianFeedback: {
+    list: "/guardianFeedback/list",
+    listPublic: "/guardianFeedback/listPublic",
+    create: "/guardianFeedback/create",
+    update: "/guardianFeedback/update",
+    delete: "/guardianFeedback/delete",
+  },
 };

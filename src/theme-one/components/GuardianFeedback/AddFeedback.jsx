@@ -8,7 +8,7 @@ import {
   Dialog,
   styled,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "slick-carousel/slick/slick.css";
@@ -19,6 +19,9 @@ import { useMediaQuery } from "@mui/material";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useTheme } from "@mui/material/styles";
 import themeData from "../../../data/themeData";
+import { post } from "../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
+import SettingContext from "../../../context/SettingsContext";
 
 const MuiBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -61,17 +64,20 @@ const style = {
 };
 
 export default function AddFeedback() {
+  const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = React.useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  console.log(selectedSetting, "selectedSetting");
 
   const [formData, setFormData] = useState({
     parentName: "",
     studentName: "",
     className: "",
     feedback: "",
-    approved: false,
   });
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -82,6 +88,28 @@ export default function AddFeedback() {
       ...prv,
       [name]: value,
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setSubmitting(true);
+      const { data } = await post(PRIVATE_URLS.guardianFeedback.create, {
+        ...formData,
+        schoolId: selectedSetting._id,
+      });
+      setSubmitting(false);
+      setOpen(false);
+      setFormData({
+        parentName: "",
+        studentName: "",
+        className: "",
+        feedback: "",
+      });
+    } catch (error) {
+      console.log(error);
+      setSubmitting(false);
+    }
   };
   return (
     <>
@@ -202,7 +230,7 @@ export default function AddFeedback() {
                 >
                   Cancel
                 </Button>
-                <Button size="small" variant="contained" type="submit">
+                <Button size="small" variant="contained" onClick={handleSubmit}>
                   Submit
                 </Button>
               </Box>
@@ -310,7 +338,7 @@ export default function AddFeedback() {
                 >
                   Cancel
                 </Button>
-                <Button size="small" variant="contained" type="submit">
+                <Button size="small" variant="contained" onClick={handleSubmit}>
                   Submit
                 </Button>
               </Box>
