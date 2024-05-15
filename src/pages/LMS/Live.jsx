@@ -146,7 +146,6 @@ export default function Live() {
   const [employee, setEmployee] = useState([]);
   const [deleteModal, setDeleteModal] = React.useState(false);
   const [selectedPartcipatType, setSelectedParticipatType] = useState("All");
-  const [liveData, setLiveData] = useState({});
 
   const getData = async (values) => {
     try {
@@ -317,7 +316,6 @@ export default function Live() {
         const { data } = await post(PRIVATE_URLS.meeting.create, payload);
       }
 
-      console.log(data, "couuuuuuua");
       getData();
       handleClose();
     } catch (error) {
@@ -368,9 +366,6 @@ export default function Live() {
   const handleUpdateModelOpen = (id) => {
     setDataToEdit(id);
     let meetingData = data.filter((m) => m._id == id)[0];
-
-    // console.log(data, "data=====datat");
-
     if (meetingData.userTypes.includes("employee")) {
       let roles = [];
       for (let emp of meetingData.employeeParticipants) {
@@ -400,7 +395,6 @@ export default function Live() {
 
       entryFormik.setFieldValue("classId", classes);
       entryFormik.setFieldValue("section", sections);
-
       entryFormik.setFieldValue(
         "studentParticipants",
         meetingData.studentParticipants.map((p) => p._id)
@@ -415,7 +409,6 @@ export default function Live() {
     }
 
     entryFormik.setFieldValue("meetingType", meetingData.meetingType);
-
     entryFormik.setFieldValue("expiryDate", meetingData.expiryDate);
     entryFormik.setFieldValue("startTime", meetingData.startTime);
     entryFormik.setFieldValue("expiryTime", meetingData.expiryTime);
