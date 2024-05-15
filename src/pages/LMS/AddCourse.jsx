@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
@@ -96,7 +98,7 @@ export default function AddCourse() {
       const formData = new FormData();
       formData.append("bodyData", JSON.stringify(payload));
       formData.append("schoolId", selectedSetting._id);
-      selectImg.forEach((file) => formData.append("thumbnailImage", file));
+      selectImg.forEach((file) => formData.append("file", file));
 
       if (dataToEdit) {
         const { data } = await put(
@@ -287,8 +289,7 @@ export default function AddCourse() {
                     alignItems: "center",
 
                     gap: "5px",
-                  }}
-                >
+                  }}>
                   <KeyboardDoubleArrowRightIcon
                     fontSize="small"
                     sx={{ color: "#1b3779", mt: 1 }}
@@ -327,8 +328,7 @@ export default function AddCourse() {
                 variant="contained"
                 size="small"
                 sx={{ mt: 1 }}
-                onClick={handleAddClick}
-              >
+                onClick={handleAddClick}>
                 <AddIcon />
               </Button>
             </Grid>
@@ -345,8 +345,7 @@ export default function AddCourse() {
                     justifyContent: "space-between",
                     alignItems: "center",
                     gap: "5px",
-                  }}
-                >
+                  }}>
                   <KeyboardDoubleArrowRightIcon
                     fontSize="small"
                     sx={{ color: "#1b3779", mt: 1 }}
@@ -381,8 +380,7 @@ export default function AddCourse() {
                 variant="contained"
                 size="small"
                 sx={{ mt: 1 }}
-                onClick={handleAddClickBenifites}
-              >
+                onClick={handleAddClickBenifites}>
                 <AddIcon />
               </Button>
             </Grid>
@@ -413,21 +411,18 @@ export default function AddCourse() {
                 display: "flex",
                 justifyContent: "flex-end",
                 gap: "5px",
-              }}
-            >
+              }}>
               <Button
                 variant="contained"
                 onClick={() => navigate(-1)}
                 color="error"
-                size="small"
-              >
+                size="small">
                 Cancel
               </Button>
               <Button
                 variant="contained"
                 size="small"
-                onClick={entryFormik.handleSubmit}
-              >
+                onClick={entryFormik.handleSubmit}>
                 Submit
               </Button>
             </Grid>
