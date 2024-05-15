@@ -1,3 +1,5 @@
+/** @format */
+
 export const PUBLIC_URLS = {
   account: {
     login: "/account/login",
@@ -180,6 +182,19 @@ export const PRIVATE_URLS = {
     create: "/meeting/create",
     update: "/meeting/update",
     delete: "/meeting/delete",
+    join: "/meeting/join",
+  },
+  guardianFeedback: {
+    list: "/guardianFeedback/list",
+    create: "/guardianFeedback/create",
+    update: "/guardianFeedback/update",
+    delete: "/guardianFeedback/delete",
+  },
+  visitorInfo: {
+    list: "/visitorInfo/list",
+    create: "/visitorInfo/create",
+    update: "/visitorInfo/update",
+    delete: "/visitorInfo/delete",
   },
   guardianFeedback: {
     list: "/guardianFeedback/list",

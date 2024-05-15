@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -160,6 +162,7 @@ import SettingContext from "../context/SettingsContext";
 import AddStudent from "../pages/Student/AddStudent";
 import AddCourse from "../pages/LMS/AddCourse";
 import UpdateCourse from "../pages/LMS/UpdateCourse";
+import Room from "../pages/LMS/Room";
 
 const drawerWidth = 270;
 
@@ -341,8 +344,7 @@ export default function NavDrawer() {
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
-            }}
-          >
+            }}>
             <MenuIcon />
           </IconButton>
 
@@ -352,8 +354,7 @@ export default function NavDrawer() {
             color="white"
             textAlign="center"
             fontSize="18px"
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
+            sx={{ display: { xs: "none", md: "block" } }}>
             {selectedSetting.name} [{activeYear ? activeYear.from : "-"} -{" "}
             {activeYear ? activeYear.to : "-"}]
           </Typography>
@@ -364,8 +365,7 @@ export default function NavDrawer() {
               flex: 1,
               justifyContent: "flex-end",
               alignItems: "center",
-            }}
-          >
+            }}>
             <Stack
               sx={{
                 display: "flex",
@@ -373,8 +373,7 @@ export default function NavDrawer() {
                 justifyContent: "center",
               }}
               spacing={2}
-              direction="row"
-            >
+              direction="row">
               <Tooltip title="Notification">
                 <Link to="/sch/notifications">
                   <IconButton>
@@ -392,8 +391,7 @@ export default function NavDrawer() {
                   // sx={{ ml: 2 }}
                   aria-controls={openProfile ? "account-menu" : undefined}
                   aria-haspopup="true"
-                  aria-expanded={openProfile ? "true" : undefined}
-                >
+                  aria-expanded={openProfile ? "true" : undefined}>
                   <Avatar sx={{ width: 30, height: 30 }} />
                 </IconButton>
               </Tooltip>
@@ -457,13 +455,11 @@ export default function NavDrawer() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         <MenuItem onClick={handleClose}>
           <Link
             to="/sch/profile"
-            style={{ display: "flex", textDecoration: "none" }}
-          >
+            style={{ display: "flex", textDecoration: "none" }}>
             <ListItemIcon>
               <PersonIcon fontSize="small" />
             </ListItemIcon>
@@ -473,8 +469,7 @@ export default function NavDrawer() {
         <MenuItem onClick={handleClose}>
           <Link
             to="/sch/administrator/reset-password"
-            style={{ display: "flex", textDecoration: "none" }}
-          >
+            style={{ display: "flex", textDecoration: "none" }}>
             <ListItemIcon>
               <LockResetIcon fontSize="small" />
             </ListItemIcon>
@@ -508,15 +503,17 @@ export default function NavDrawer() {
                 <ListItem disablePadding>
                   <Link
                     to={m.path}
-                    style={{ textDecoration: "none", display: "flex", flex: 1 }}
-                  >
+                    style={{
+                      textDecoration: "none",
+                      display: "flex",
+                      flex: 1,
+                    }}>
                     <ListItemButton
                       onClick={() => setSelectedMenu(index)}
                       selected={
                         selectedMenu === index ||
                         window.location.pathname === m.path
-                      }
-                    >
+                      }>
                       <ListItemIcon>{m.icon}</ListItemIcon>
                       <ListItemText primary={m.name} />
                     </ListItemButton>
@@ -532,8 +529,7 @@ export default function NavDrawer() {
                       selectedMenu === index ||
                       window.location.pathname === m.path
                     }
-                    onClick={() => handleToggleMenuOpen(index)}
-                  >
+                    onClick={() => handleToggleMenuOpen(index)}>
                     <ListItemIcon>{m.icon}</ListItemIcon>
                     <ListItemText primary={m.name} />
 
@@ -544,8 +540,7 @@ export default function NavDrawer() {
                   timeout="auto"
                   unmountOnExit
                   in={selectedMenu === index}
-                  sx={{ width: "100%" }}
-                >
+                  sx={{ width: "100%" }}>
                   <List>
                     {m.subMenus.map((sub) => (
                       <ListItem sx={{ width: "100%" }} key={sub.name}>
@@ -555,15 +550,13 @@ export default function NavDrawer() {
                             textDecoration: "none",
                             display: "flex",
                             flex: 1,
-                          }}
-                        >
+                          }}>
                           <ListItemButton
                             onClick={() => setSelectedSubMenu(sub.path)}
                             selected={
                               selecteSubMenu === sub.path ||
                               window.location.pathname === sub.path
-                            }
-                          >
+                            }>
                             <ListItemIcon>{sub.icon}</ListItemIcon>
                             <ListItemText primary={sub.name} />
                           </ListItemButton>
@@ -594,8 +587,7 @@ export default function NavDrawer() {
             <ListItem disablePadding>
               <Link
                 to={"/settings"}
-                style={{ textDecoration: "none", display: "flex", flex: 1 }}
-              >
+                style={{ textDecoration: "none", display: "flex", flex: 1 }}>
                 <ListItemButton>
                   <ListItemIcon>
                     <SettingsIcon fontSize="small" color="primary" />
@@ -623,8 +615,7 @@ export default function NavDrawer() {
 
           overflowX: "hidden",
           overflowY: "auto",
-        }}
-      >
+        }}>
         <DrawerHeader />
 
         <Routes>
@@ -755,6 +746,7 @@ export default function NavDrawer() {
           <Route path="lms/edit-courses/:id" element={<UpdateCourse />} />
           <Route path="lms/course-content" element={<CourseContent />} />
           <Route path="lms/live" element={<Live />} />
+          <Route path="lms/room/:roomID" element={<Room />} />
 
           <Route path="library/books" element={<Books />} />
           <Route path="library/periodical" element={<Periodical />} />

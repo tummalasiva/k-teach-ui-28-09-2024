@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect } from "react";
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import TopNav from "../theme-one/components/Navbar/TopNav";

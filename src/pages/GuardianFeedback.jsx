@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, ButtonGroup, Stack, styled } from "@mui/material";
 import { guardianFeedbackTableKeys } from "../data/tableKeys/guardianFeedbackData";
@@ -41,8 +43,7 @@ const CustomActionComponent = ({ onUpdate = () => {}, data = {} }) => {
             disableElevation
             size="small"
             color="error"
-            variant="contained"
-          >
+            variant="contained">
             Reject
           </LoadingButton>
         )}
@@ -53,8 +54,7 @@ const CustomActionComponent = ({ onUpdate = () => {}, data = {} }) => {
             disableElevation
             size="small"
             color="success"
-            variant="contained"
-          >
+            variant="contained">
             Approve
           </LoadingButton>
         )}
@@ -110,22 +110,19 @@ export default function GuardianFeedback() {
             variant="outlined"
             onClick={() => {
               setSelectedStatus("pending");
-            }}
-          >
+            }}>
             Pending:{data.filter((f) => f.status === "pending").length}
           </Button>
           <Button
             onClick={() => {
               setSelectedStatus("approved");
-            }}
-          >
+            }}>
             Approved: {data.filter((f) => f.status === "approved").length}
           </Button>
           <Button
             onClick={() => {
               setSelectedStatus("rejected");
-            }}
-          >
+            }}>
             Rejected:{data.filter((f) => f.status === "rejected").length}
           </Button>
         </ButtonGroup>

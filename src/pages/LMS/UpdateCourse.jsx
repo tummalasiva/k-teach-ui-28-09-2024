@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
@@ -243,6 +245,12 @@ export default function UpdateCourse() {
                 onRemove={(fileName) => handleRemoveFile(fileName)}
               />
             </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <img
+                src={course?.thumbnailImage}
+                style={{ maxHeight: "100px" }}
+              />
+            </Grid>
           </Grid>
         </FormBox>
         <FormBox>
@@ -269,8 +277,7 @@ export default function UpdateCourse() {
                     alignItems: "center",
 
                     gap: "5px",
-                  }}
-                >
+                  }}>
                   <KeyboardDoubleArrowRightIcon
                     fontSize="small"
                     sx={{ color: "#1b3779", mt: 1 }}
@@ -309,8 +316,7 @@ export default function UpdateCourse() {
                 variant="contained"
                 size="small"
                 sx={{ mt: 1 }}
-                onClick={handleAddClick}
-              >
+                onClick={handleAddClick}>
                 <AddIcon />
               </Button>
             </Grid>
@@ -327,8 +333,7 @@ export default function UpdateCourse() {
                     justifyContent: "space-between",
                     alignItems: "center",
                     gap: "5px",
-                  }}
-                >
+                  }}>
                   <KeyboardDoubleArrowRightIcon
                     fontSize="small"
                     sx={{ color: "#1b3779", mt: 1 }}
@@ -363,8 +368,7 @@ export default function UpdateCourse() {
                 variant="contained"
                 size="small"
                 sx={{ mt: 1 }}
-                onClick={handleAddClickBenifites}
-              >
+                onClick={handleAddClickBenifites}>
                 <AddIcon />
               </Button>
             </Grid>
@@ -395,21 +399,18 @@ export default function UpdateCourse() {
                 display: "flex",
                 justifyContent: "flex-end",
                 gap: "5px",
-              }}
-            >
+              }}>
               <Button
                 variant="contained"
                 onClick={() => navigate(-1)}
                 color="error"
-                size="small"
-              >
+                size="small">
                 Cancel
               </Button>
               <Button
                 variant="contained"
                 size="small"
-                onClick={entryFormik.handleSubmit}
-              >
+                onClick={entryFormik.handleSubmit}>
                 Submit
               </Button>
             </Grid>
