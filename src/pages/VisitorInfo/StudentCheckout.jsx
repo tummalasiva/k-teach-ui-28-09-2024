@@ -35,19 +35,6 @@ export default function StudentCheckout() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
 
-  // const getData = async (values) => {
-  //   try {
-  //     const { data } = await get(PRIVATE_URLS.studentCheckout.list, {
-  //       params: {
-  //         schoolId: selectedSetting._id,
-  //       },
-  //     });
-  //     setData(data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const AddStudentCheckoutHandel = () => {
     setOpen(true);
   };
@@ -353,6 +340,10 @@ export default function StudentCheckout() {
             <Button size="small" variant="contained" sx={{ color: "#fff" }}>
               Send OTP
             </Button>
+          </Grid>
+
+          <Grid xs={12} md={6} item>
+            <FormInput name="otp" formik={entryFormik} label="Enter Otp" />
           </Grid>
         </Grid>
       </FormModal>

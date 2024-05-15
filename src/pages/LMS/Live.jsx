@@ -658,7 +658,7 @@ export default function Live() {
                       ? true
                       : false
                   }
-                  label="Select Studennt"
+                  label="Select Student"
                   options={students}
                 />
               </Grid>
