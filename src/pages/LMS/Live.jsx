@@ -20,6 +20,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
+import moment from "moment";
 
 import FormDatePicker from "../../forms/FormDatePicker";
 import FormInput from "../../forms/FormInput";
@@ -38,6 +39,57 @@ const FilterBox = styled(Box)(() => ({
   gap: "10px",
   marginBottom: 1,
 }));
+const getDateWithTime = (dateTimeString = "27/09/2024 14:30") => {
+  const dateTimeComponents = dateTimeString.split(" ");
+
+  // Extract date components
+  const dateComponents = dateTimeComponents[0].split("/");
+  const yearExtracted = parseInt(dateComponents[2], 10);
+  const monthExtracted = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
+  const dayExtracted = parseInt(dateComponents[0], 10);
+
+  // Extract time components
+  const timeComponents = dateTimeComponents[1].split(":");
+  const hoursExtracted = parseInt(timeComponents[0], 10);
+  const minutesExtracted = parseInt(timeComponents[1], 10);
+
+  // Create a new Date object using the extracted components
+  return new Date(
+    yearExtracted,
+    monthExtracted,
+    dayExtracted,
+    hoursExtracted,
+    minutesExtracted
+  );
+};
+
+const getStatus = (startDate, startTime, expiryDate, expiryTime) => {
+  let currentDate = Date.now();
+  let startDataTimestring = `${moment(startDate).format(
+    "DD/MM/YYYY"
+  )} ${startTime}}`;
+  let expiryDateTimeString = `${moment(expiryDate).format(
+    "DD/MM/YYYY"
+  )} ${expiryTime}`;
+  let currentDateTimeString = `${moment(currentDate).format(
+    "DD/MM/YYYY"
+  )} ${moment(currentDate).format("LT")}`;
+
+  let meetingDate = getDateWithTime(startDataTimestring);
+  let meetingExpiryDate = getDateWithTime(expiryDateTimeString);
+  let currentDateAndTime = getDateWithTime(currentDateTimeString);
+
+  if (meetingDate > currentDateAndTime) {
+    return "Upcoming";
+  } else if (
+    meetingDate < currentDateAndTime &&
+    meetingExpiryDate > currentDateAndTime
+  ) {
+    return "Available";
+  } else {
+    return "Expired";
+  }
+};
 
 const User_Type = [
   { label: "Student", value: "student" },
@@ -177,6 +229,11 @@ export default function Live() {
     getEmployee();
     getRoles();
   }, [selectedSetting]);
+
+  useEffect(() => {
+    getDateWithTime();
+  }, []);
+
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -188,6 +245,8 @@ export default function Live() {
             ? [entryFormik.values.participants]
             : entryFormik.values.participants,
       };
+
+      console.log(payload, "mmmmbbbbb");
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -206,7 +265,6 @@ export default function Live() {
 
   const entryFormik = useFormik({
     initialValues: {
-      roomId: dataToEdit?.roomId || "",
       classId: dataToEdit?.classId || [],
       expiryDate: dataToEdit?.expiryDate || "",
       expiryTime: dataToEdit?.expiryTime || "",
@@ -299,7 +357,7 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
-                  name="class"
+                  name="classId"
                   label="Select Class"
                   options={classes}
                 />
