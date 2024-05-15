@@ -246,7 +246,10 @@ export default function UpdateCourse() {
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
-              <img src={course?.ithumbnailImage} />
+              <img
+                src={course?.thumbnailImage}
+                style={{ maxHeight: "100px" }}
+              />
             </Grid>
           </Grid>
         </FormBox>
