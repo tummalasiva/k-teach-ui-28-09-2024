@@ -1,3 +1,5 @@
+/** @format */
+
 export const visitorInfoTableKeys = [
   {
     name: "Name",
@@ -9,7 +11,7 @@ export const visitorInfoTableKeys = [
   },
   {
     name: "To Meet",
-    key: "toMeet",
+    key: "toMeetUser",
   },
   {
     name: "ReasonToMeet",

@@ -14,6 +14,17 @@ import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 
+const Reason_To_Meet = [
+  { label: "Vendor", value: "vendor" },
+  { label: "Relative", value: "relative" },
+  { label: "Friend", value: "friend" },
+  { label: "Guardian", value: "guardian" },
+  { label: "Family", value: "family" },
+  { label: "Interview", value: "interview" },
+  { label: "Meeting", value: "meeting" },
+  { label: "Other", value: "other" },
+];
+
 export default function VisitorInfo() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
@@ -25,9 +36,27 @@ export default function VisitorInfo() {
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
   const [employees, setEmployee] = useState([]);
-  
+
   const onAddClick = () => {
     setOpen(true);
+  };
+
+  // get Roles
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.visitorInfo.list);
+      console.log(data, "hhaha");
+      setData(
+        data.result.map((r) => ({
+          ...r,
+          toMeetUser: r.toMeetUser.basicInfo.name,
+          checkIn: new Date(r.checkIn).toLocaleString(),
+          checkOut: r.checkOut ? new Date(r.checkOut).toLocaleString() : "",
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // get Roles
@@ -37,12 +66,11 @@ export default function VisitorInfo() {
 
       setRoles(
         data.result.map((r) => ({
+          ...r,
           label: r.name,
-          // value: r.name,
           value: r._id,
         }))
       );
-      entryFormik.setFieldValue("roleName",)
     } catch (error) {
       console.error(error);
     }
@@ -109,13 +137,12 @@ export default function VisitorInfo() {
       const { data } = await get(PRIVATE_URLS.employee.list, {
         params: {
           schoolId: selectedSetting._id,
-          search:{
-            role: entryFormik.values.toMeetUserType
-          }
+          search: {
+            role: entryFormik.values.toMeetUserType,
+          },
         },
       });
 
-      console.log(data.result, "employyeee");
       setEmployee(
         data.result.map((emp) => ({
           ...emp,
@@ -156,27 +183,31 @@ export default function VisitorInfo() {
       name: dataToEdit?.name || "",
       phone: dataToEdit?.phone || "",
       comingForm: dataToEdit?.comingForm || "",
-      toMeetUserType: dataToEdit?.toMeetUserType || "",
+      toMeetUserType: dataToEdit?.toMeetUserType._id || "",
       toMeetUser: dataToEdit?.toMeetUser || "",
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
 
-      class: dataToEdit?.class || "",
-      section: dataToEdit?.section || "",
+      class: dataToEdit?.class._id || "",
+      section: dataToEdit?.section._id || "",
       roleName: dataToEdit?.roleName || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
 
+  console.log(dataToEdit, "dataToEdit");
+
   const handleClose = () => {
     setDataToEdit(null);
     setOpen(false);
+    getData();
   };
 
   useEffect(() => {
     getRoles();
     getClasses();
+    getData();
   }, []);
 
   useEffect(() => {
@@ -186,19 +217,21 @@ export default function VisitorInfo() {
   }, [entryFormik.values.class]);
 
   useEffect(() => {
-    if (entryFormik.values.class && entryFormik.values.section) {
-      getStudents();
-    }
-  }, [entryFormik.values.class, entryFormik.values.section]);
-
-  useEffect(() => {
     if (entryFormik.values.toMeetUserType) {
+      let roleName = roles.find(
+        (r) => r._id === entryFormik.values.toMeetUserType
+      )?.name;
+      entryFormik.setFieldValue("roleName", roleName);
       getEmployees();
+      getStudents();
     }
   }, [entryFormik.values.toMeetUserType]);
 
-
-  console.log(entryFormik.values.roleName, "roleName");
+  const handleEditClick = (data) => {
+    // console.log(data, "fff");
+    setDataToEdit(data);
+    setOpen(true);
+  };
 
   return (
     <>
@@ -226,6 +259,7 @@ export default function VisitorInfo() {
         tableKeys={visitorInfoTableKeys}
         bodyDataModal="visitor info"
         bodyData={data}
+        onEditClick={handleEditClick}
       />
 
       <AddForm title="Add visitor info" onAddClick={onAddClick} />
@@ -273,7 +307,7 @@ export default function VisitorInfo() {
             />
           </Grid>
 
-          {entryFormik.values.toMeetUserType === "STUDENT" && (
+          {entryFormik.values.roleName === "STUDENT" && (
             <>
               <Grid xs={12} md={6} lg={6} item>
                 <FormSelect
@@ -300,7 +334,9 @@ export default function VisitorInfo() {
               name="toMeetUser"
               formik={entryFormik}
               label="Select To Meet User"
-              options={entryFormik.values.toMeetUserType==="STUDENT"? students:employees}
+              options={
+                entryFormik.values.roleName === "STUDENT" ? students : employees
+              }
             />
           </Grid>
 
@@ -309,7 +345,7 @@ export default function VisitorInfo() {
               name="reasonToMeet"
               formik={entryFormik}
               label="Select Reason To Meet"
-              // options={Is_Public}
+              options={Reason_To_Meet}
             />
           </Grid>
           <Grid xs={12} sm={12} md={12} item>

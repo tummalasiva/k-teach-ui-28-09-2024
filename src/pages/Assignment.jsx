@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -25,7 +27,7 @@ export default function Assignment() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const Section_Options = [{ label: "All", value: "all" }, ...sections];
-  
+
   // get assignment
   const getData = async (values) => {
     try {
@@ -60,7 +62,6 @@ export default function Assignment() {
             },
           },
         });
-        console.log(data, "kikikiiiii");
 
         if (data.responseCode === "OK") {
           setData(
@@ -196,8 +197,7 @@ export default function Assignment() {
             columnSpacing={2}
             container
             component="form"
-            onSubmit={entryFormik.handleSubmit}
-          >
+            onSubmit={entryFormik.handleSubmit}>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
@@ -221,8 +221,7 @@ export default function Assignment() {
                 size="small"
                 type="submit"
                 variant="contained"
-                sx={{ ml: 2 }}
-              >
+                sx={{ ml: 2 }}>
                 Search
               </Button>
             </Grid>
