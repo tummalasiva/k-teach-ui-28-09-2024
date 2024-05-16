@@ -23,6 +23,8 @@ import { useTheme } from "@mui/material/styles";
 import themeData from "../../../data/themeData";
 import { post } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
+import { useContext } from "react";
+import SettingContext from "../../../context/SettingsContext";
 
 const MuiBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -65,6 +67,7 @@ const style = {
 };
 
 export default function AddFeedback() {
+  const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = React.useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -100,6 +103,7 @@ export default function AddFeedback() {
         className: formData.className,
         feedback: formData.feedback,
         status: formData.status,
+        schoolId: selectedSetting._id,
       });
       handleClose();
       setFormData({});
