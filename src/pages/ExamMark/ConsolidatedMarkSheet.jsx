@@ -1,13 +1,52 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
 import { consolidateMarksTableKeys } from "../../data/tableKeys/consolidateMarksCardData";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
 import CustomTable from "../../components/Tables/CustomTable";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 export default function ConsolidatedMarkSheet() {
   const [data, setData] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
+  const [classes, setClasses] = useState([]);
+  const [section, setSection] = useState([]);
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSection(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       class: "",
@@ -15,6 +54,16 @@ export default function ConsolidatedMarkSheet() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getClass();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
   return (
     <>
       <PageHeader title="Consolidate Marks Sheet" />
@@ -27,7 +76,7 @@ export default function ConsolidatedMarkSheet() {
               name="class"
               formik={entryFormik}
               label="Select Class"
-              // options={""}
+              options={classes}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -36,7 +85,7 @@ export default function ConsolidatedMarkSheet() {
               name="section"
               formik={entryFormik}
               label="Select Section"
-              // options={""}
+              options={section}
             />
           </Grid>
 
