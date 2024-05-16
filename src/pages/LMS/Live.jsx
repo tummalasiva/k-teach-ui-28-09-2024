@@ -125,9 +125,9 @@ const Participant_Type = [
 ];
 
 const Meeting_Type = [
-  { label: "OneONoneCall", value: "OneONoneCall" },
-  { label: "GroupCall", value: "GroupCall" },
-  { label: "LiveStreaming", value: "LiveStreaming" },
+  { label: "One-On-One Call", value: "OneONoneCall" },
+  { label: "Group Call", value: "GroupCall" },
+  { label: "Live Streaming", value: "LiveStreaming" },
 ];
 
 export default function Live() {
@@ -471,7 +471,7 @@ export default function Live() {
             <MenuItem value="All"> All </MenuItem>
             <MenuItem value="OneONoneCall">One-On-One Call </MenuItem>
             <MenuItem value="GroupCall">Group Call </MenuItem>
-            <MenuItem value="LiveStreaming">Live Stream </MenuItem>
+            <MenuItem value="LiveStreaming">Live Streaming</MenuItem>
           </Select>
         </FormControl>
       </FilterBox>
@@ -591,7 +591,7 @@ export default function Live() {
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? "Update Class" : "Add Class"}
+        formTitle={dataToEdit ? "Update Meeting" : "Add Meeting"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
         adding={loading}>
