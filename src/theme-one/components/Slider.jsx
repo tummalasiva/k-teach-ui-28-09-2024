@@ -1,9 +1,11 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import image1 from "../../theme-one/assets/Images/school1.avif";
 import image2 from "../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../theme-one/assets/Images/school1.avif";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MovingText from "react-moving-text";
 
@@ -145,11 +147,20 @@ const Slider = ({}) => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [renderText, setRenderText] = useState(true);
   const [animationName, setAnimationName] = useState("");
-  const [bannerImages, setBannerImages] = useState(backgroundImages);
+
+  const [bannerImages, setBannerImages] = useState(
+    selectedSetting.bannerImages.length
+      ? selectedSetting.bannerImages
+      : backgroundImages
+  );
 
   useEffect(() => {
-    setBannerImages(backgroundImages);
-  }, []);
+    setBannerImages(
+      selectedSetting.bannerImages.length
+        ? selectedSetting.bannerImages
+        : backgroundImages
+    );
+  }, [selectedSetting]);
 
   const goToNextSlide = () => {
     setActiveIndex(
@@ -217,9 +228,12 @@ const Slider = ({}) => {
               direction="normal"
               timing="ease"
               iteration="1"
-              fillMode="none"
-            >
-              The Goal of Education Is The Advancement of Knowledge
+              fillMode="none">
+              <Typography
+                sx={{ padding: "10px", color: "#fff", fontWeight: "bold" }}>
+                {" "}
+                The Goal of Education Is The Advancement of Knowledge
+              </Typography>
             </FirstMovingText>
             <SecondMovingText
               key={`text-2-${activeIndex}`}
@@ -229,8 +243,7 @@ const Slider = ({}) => {
               direction="normal"
               timing="ease-in"
               iteration="1"
-              fillMode="none"
-            >
+              fillMode="none">
               Take The First Step
             </SecondMovingText>
             <ThirdMovingText
@@ -241,8 +254,7 @@ const Slider = ({}) => {
               direction="normal"
               timing="ease-in"
               iteration="1"
-              fillMode="none"
-            >
+              fillMode="none">
               To Knowledge with us
             </ThirdMovingText>
           </>
