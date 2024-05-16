@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Feedbacks from "./FeedBacks";
 import { config } from "react-spring";
 import {
@@ -15,44 +15,9 @@ import { useCallback } from "react";
 import Carousel from "react-spring-3d-carousel";
 import Header from "../Header";
 import themeData from "../../../data/themeData";
-
-const data = [
-  {
-    studentName: "Raju",
-    feedback: "10",
-    parentName: "hjbbhhA ghvchvg",
-  },
-  {
-    studentName: "Monika",
-    feedback: "10",
-    parentName: "Chgchtft  ghcvhgv",
-  },
-  {
-    studentName: "Alia",
-    feedback: "8hjvbkn ftghjk",
-    parentName: "Acfggcj ghvhgvj",
-  },
-  {
-    studentName: "Raina",
-    feedback: "9ersdfhgjkn rdtfygkhjk",
-    parentName: "Dersdfgh",
-  },
-  {
-    studentName: "Rainagvhhgvhgvhgv",
-    feedback: "9ersdfhgjkn rdtfygkhjk",
-    parentName: "Dersdfgh",
-  },
-  {
-    studentName: "Rainafgcfgh",
-    feedback: "9ersdfhgjkn rdtfygkhjk",
-    parentName: "Dersdfgh",
-  },
-  {
-    studentName: "Rainafgcfgfgcghcghvhgvh",
-    feedback: "9ersdfhgjkn rdtfygkhjk",
-    parentName: "Dersdfgh",
-  },
-];
+import { get } from "../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
+import SettingContext from "../../../context/SettingsContext";
 
 const DotsContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -69,6 +34,9 @@ const Dot = styled(Paper)(({ theme, active }) => ({
 }));
 
 export default function FeedBackSlider() {
+  const { selectedSetting } = useContext(SettingContext);
+
+  const [data, setData] = useState([]);
   const theme = createTheme();
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -79,21 +47,34 @@ export default function FeedBackSlider() {
     setCurrentSlide(newSlide);
   }, []);
 
+  useEffect(() => {
+    let interval = setInterval(() => {
+      if (data.length) {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % data.length);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [data]);
+
   const getData = async () => {
     try {
-      const { data } = await get();
+      const { data } = await get(PRIVATE_URLS.guardianFeedback.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      const feedbacks = data.result
+        .filter((f) => f.status === "approved")
+        .slice(-6);
+      setData(feedbacks.reverse());
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % data.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
+    getData();
+  }, [selectedSetting]);
 
   return (
     <>
@@ -109,14 +90,17 @@ export default function FeedBackSlider() {
             }}>
             <Carousel
               slides={data.map((data, i) => ({
-                key: i + data.studentName + data.feedback,
-                content: (
-                  <Feedbacks
-                    studentName={data.studentName}
-                    feedback={data.feedback}
-                    parentName={data.parentName}
-                  />
-                ),
+                key: data._id,
+                content:
+                  data.status === "approved" ? (
+                    <Feedbacks
+                      studentName={data.studentName}
+                      feedback={data.feedback}
+                      parentName={data.parentName}
+                    />
+                  ) : (
+                    ""
+                  ),
               }))}
               showNavigation={false}
               autoPlay={true}
@@ -126,18 +110,21 @@ export default function FeedBackSlider() {
               offsetRadius={1}
             />
             <DotsContainer style={{ textAlign: "center" }}>
-              {data.map((slide, index) => (
-                <Dot
-                  key={slide.feedback + slide.parentName + index}
-                  onClick={() => onChangeSlide(index)}
-                  sx={{
-                    backgroundColor:
-                      index === currentSlide
-                        ? themeData.darkPalette.secondary.main
-                        : "rgba(0, 0, 0, 0.2)",
-                  }}
-                />
-              ))}
+              {data.map(
+                (slide, index) =>
+                  slide.status === "approved" && (
+                    <Dot
+                      key={slide.key}
+                      onClick={() => onChangeSlide(index)}
+                      sx={{
+                        backgroundColor:
+                          index === currentSlide
+                            ? themeData.darkPalette.secondary.main
+                            : "rgba(0, 0, 0, 0.2)",
+                      }}
+                    />
+                  )
+              )}
             </DotsContainer>
           </Box>
         )}

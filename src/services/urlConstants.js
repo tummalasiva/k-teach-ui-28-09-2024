@@ -184,12 +184,7 @@ export const PRIVATE_URLS = {
     delete: "/meeting/delete",
     join: "/meeting/join",
   },
-  guardianFeedback: {
-    list: "/guardianFeedback/list",
-    create: "/guardianFeedback/create",
-    update: "/guardianFeedback/update",
-    delete: "/guardianFeedback/delete",
-  },
+
   visitorInfo: {
     list: "/visitorInfo/list",
     create: "/visitorInfo/create",
