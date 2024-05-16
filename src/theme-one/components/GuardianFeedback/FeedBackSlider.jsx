@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import Feedbacks from "./FeedBacks";
 import { config } from "react-spring";
@@ -77,6 +79,14 @@ export default function FeedBackSlider() {
     setCurrentSlide(newSlide);
   }, []);
 
+  const getData = async () => {
+    try {
+      const { data } = await get();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % data.length);
@@ -96,8 +106,7 @@ export default function FeedBackSlider() {
               height: "40vh",
               width: "80%",
               margin: "auto",
-            }}
-          >
+            }}>
             <Carousel
               slides={data.map((data, i) => ({
                 key: i + data.studentName + data.feedback,
