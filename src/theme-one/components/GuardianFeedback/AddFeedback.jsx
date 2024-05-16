@@ -10,7 +10,7 @@ import {
   Dialog,
   styled,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "slick-carousel/slick/slick.css";
@@ -23,7 +23,6 @@ import { useTheme } from "@mui/material/styles";
 import themeData from "../../../data/themeData";
 import { post } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
-import SettingContext from "../../../context/SettingsContext";
 
 const MuiBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -66,20 +65,17 @@ const style = {
 };
 
 export default function AddFeedback() {
-  const { selectedSetting } = useContext(SettingContext);
   const [open, setOpen] = React.useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  console.log(selectedSetting, "selectedSetting");
 
   const [formData, setFormData] = useState({
     parentName: "",
     studentName: "",
     className: "",
     feedback: "",
+    status: "approved",
   });
 
   const theme = useTheme();
@@ -94,27 +90,25 @@ export default function AddFeedback() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmite = async (e) => {
     e.preventDefault();
+
     try {
-      setSubmitting(true);
-      const { data } = await post(PRIVATE_URLS.guardianFeedback.create, {
-        ...formData,
-        schoolId: selectedSetting._id,
+      const { data } = await post(`${PRIVATE_URLS.guardianFeedback.create}`, {
+        parentName: formData.parentName,
+        studentName: formData.studentName,
+        className: formData.className,
+        feedback: formData.feedback,
+        status: formData.status,
       });
-      setSubmitting(false);
-      setOpen(false);
-      setFormData({
-        parentName: "",
-        studentName: "",
-        className: "",
-        feedback: "",
-      });
+      handleClose();
+      setFormData({});
+      // getlist();
     } catch (error) {
       console.log(error);
-      setSubmitting(false);
     }
   };
+
   return (
     <>
       <MuiBox
@@ -139,39 +133,98 @@ export default function AddFeedback() {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description">
-          <Box sx={style}>
-            <form>
-              <Grid container sx={{ display: "flex", flexDirection: "column" }}>
-                <Grid item xs={12} sm={12} lg={12}>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                    sx={{ textAlign: "center", mb: 2, fontWeight: "bold" }}>
-                    Add Feedback
-                  </Typography>
-                </Grid>
+          <Box sx={style} component="form" onSubmit={handleSubmite}>
+            <Grid container sx={{ display: "flex", flexDirection: "column" }}>
+              <Grid item xs={12} sm={12} lg={12}>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  sx={{ textAlign: "center", mb: 2, fontWeight: "bold" }}>
+                  Add Feedback
+                </Typography>
               </Grid>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  mt: 3,
-                  columnGap: 2,
-                }}>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={() => setOpen(false)}
-                  color="error">
-                  Cancel
-                </Button>
-                <Button size="small" variant="contained" onClick={handleSubmit}>
-                  Submit
-                </Button>
-              </Box>
-            </form>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter your name"
+                    size="small"
+                    required
+                    value={formData.parentName}
+                    onChange={handleOnchange}
+                    sx={{ mb: 2 }}
+                    name="parentName"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter student name"
+                    size="small"
+                    required
+                    sx={{ mb: 2 }}
+                    value={formData.studentName}
+                    onChange={handleOnchange}
+                    name="studentName"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter Class"
+                    size="small"
+                    required
+                    sx={{ mb: 2 }}
+                    value={formData.className}
+                    onChange={handleOnchange}
+                    name="className"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextareaAutosize
+                    aria-label="maximum height"
+                    placeholder="Type Feedback..."
+                    required
+                    maxRows={4}
+                    value={formData.feedback}
+                    onChange={handleOnchange}
+                    maxLength={300}
+                    name="feedback"
+                    style={{
+                      // maxHeight: 80,
+                      padding: 10,
+                      // overflow: "auto",
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 3,
+                columnGap: 2,
+              }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => setOpen(false)}
+                color="error">
+                Cancel
+              </Button>
+              <Button size="small" variant="contained" type="submit">
+                Submit
+              </Button>
+            </Box>
           </Box>
         </Modal>
       ) : (
@@ -181,39 +234,97 @@ export default function AddFeedback() {
           fullWidth
           maxWidth="sm"
           fullScreen={fullScreen}>
-          <Box sx={{ padding: 2 }}>
-            <form>
-              <Grid container sx={{ display: "flex", flexDirection: "column" }}>
-                <Grid item xs={12} sm={12} lg={12}>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                    sx={{ textAlign: "center", mb: 2, fontWeight: "bold" }}>
-                    Add Feedback
-                  </Typography>
-                </Grid>
+          <Box sx={{ padding: 2 }} component="form" onSubmit={handleSubmite}>
+            <Grid container sx={{ display: "flex", flexDirection: "column" }}>
+              <Grid item xs={12} sm={12} lg={12}>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  sx={{ textAlign: "center", mb: 2, fontWeight: "bold" }}>
+                  Add Feedback
+                </Typography>
               </Grid>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  mt: 3,
-                  columnGap: 2,
-                }}>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={() => setOpen(false)}
-                  color="error">
-                  Cancel
-                </Button>
-                <Button size="small" variant="contained" onClick={handleSubmit}>
-                  Submit
-                </Button>
-              </Box>
-            </form>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter your name"
+                    size="small"
+                    required
+                    value={formData.parentName}
+                    onChange={handleOnchange}
+                    sx={{ mb: 2 }}
+                    name="parentName"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter student name"
+                    size="small"
+                    required
+                    sx={{ mb: 2 }}
+                    value={formData.studentName}
+                    onChange={handleOnchange}
+                    name="studentName"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextField
+                    variant="outlined"
+                    label="Enter Class"
+                    size="small"
+                    required
+                    sx={{ mb: 2 }}
+                    value={formData.className}
+                    onChange={handleOnchange}
+                    name="className"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={12} lg={12}>
+                <FormControl required fullWidth>
+                  <TextareaAutosize
+                    aria-label="maximum height"
+                    placeholder="Type Feedback..."
+                    required
+                    maxRows={4}
+                    value={formData.feedback}
+                    onChange={handleOnchange}
+                    maxLength={300}
+                    name="feedback"
+                    fullWidth
+                    style={{
+                      padding: 10,
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 3,
+                columnGap: 2,
+              }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => setOpen(false)}
+                color="error">
+                Cancel
+              </Button>
+              <Button size="small" variant="contained" type="submit">
+                Submit
+              </Button>
+            </Box>
           </Box>
         </Dialog>
       )}
