@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -14,6 +16,9 @@ import {
 import FormSelect from "../../forms/FormSelect";
 
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 export default function StudentYearlyAttendance() {
   const [data, setData] = useState([
@@ -24,6 +29,90 @@ export default function StudentYearlyAttendance() {
       absentDays: "5",
     },
   ]);
+
+  const { selectedSetting } = useContext(SettingContext);
+  const [classes, setClasses] = useState([]);
+  const [section, setSection] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  const [academicYear, setAcademicYear] = useState([]);
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSection(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get students
+  const getStudents = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            academicYear: entryFormik.values.academicYear,
+            "academicInfo.class": entryFormik.values.class,
+            "academicInfo.section": entryFormik.values.section,
+          },
+        },
+      });
+      setStudents(
+        data.result.map((d) => ({
+          ...d,
+          label: d.basicInfo.name,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("student", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -34,6 +123,32 @@ export default function StudentYearlyAttendance() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getAcademicYear();
+    getClass();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
+
+  useEffect(() => {
+    if (
+      entryFormik.values.academicYear &&
+      entryFormik.values.class &&
+      entryFormik.values.section
+    ) {
+      getStudents();
+    }
+  }, [
+    entryFormik.values.academicYear,
+    entryFormik.values.class,
+    entryFormik.values.section,
+    selectedSetting,
+  ]);
 
   const numbers = [];
   for (let i = 1; i <= 31; i++) {
@@ -54,6 +169,7 @@ export default function StudentYearlyAttendance() {
               name="academicYear"
               formik={entryFormik}
               label="Select Academic Year"
+              options={academicYear}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -62,7 +178,7 @@ export default function StudentYearlyAttendance() {
               name="class"
               formik={entryFormik}
               label="Select Class"
-              // options={""}
+              options={classes}
             />
           </Grid>
 
@@ -72,7 +188,7 @@ export default function StudentYearlyAttendance() {
               name="section"
               formik={entryFormik}
               label="Select Section"
-              // options={""}
+              options={section}
             />
           </Grid>
 
@@ -82,7 +198,7 @@ export default function StudentYearlyAttendance() {
               name="student"
               formik={entryFormik}
               label="Select Student"
-              // options={""}
+              options={students}
             />
           </Grid>
           <Grid
@@ -91,8 +207,7 @@ export default function StudentYearlyAttendance() {
             lg={12}
             item
             display="flex"
-            justifyContent="flex-end"
-          >
+            justifyContent="flex-end">
             <Button size="small" variant="contained">
               Find
             </Button>
@@ -107,8 +222,7 @@ export default function StudentYearlyAttendance() {
               theme.palette.mode === "dark"
                 ? theme.palette.primary.dark
                 : theme.palette.primary.light,
-          }}
-        >
+          }}>
           <TableRow>
             <TableCell align="center">Student Name</TableCell>
 

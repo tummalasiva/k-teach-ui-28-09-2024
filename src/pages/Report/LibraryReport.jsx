@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import CustomTable from "../../components/Tables/CustomTable";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
@@ -10,6 +12,9 @@ import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import dayjs from "dayjs";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
 
@@ -54,6 +59,32 @@ const DataContainer = styled(Box)(() => ({
 export default function LibraryReport() {
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [academicYearGraph, setAcademicYearGraph] = useState([]);
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+      setAcademicYearGraph(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -74,6 +105,10 @@ export default function LibraryReport() {
     onSubmit: console.log("nnnn"),
   });
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+
+  useEffect(() => {
+    getAcademicYear();
+  }, [selectedSetting]);
   return (
     <>
       <PageHeader title="Library Report" />
@@ -91,7 +126,7 @@ export default function LibraryReport() {
                 name="academicYear"
                 formik={entryFormik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYear}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -126,8 +161,7 @@ export default function LibraryReport() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}
-              item
-            >
+              item>
               <Button size="small" variant="contained">
                 Find
               </Button>
@@ -152,7 +186,7 @@ export default function LibraryReport() {
                 name="academicYear"
                 formik={formik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYearGraph}
               />
             </Grid>
 
@@ -173,8 +207,7 @@ export default function LibraryReport() {
               display="flex"
               alignSelf="center"
               gap={1}
-              item
-            >
+              item>
               <Button size="small" variant="contained">
                 Find
               </Button>
@@ -227,8 +260,7 @@ export default function LibraryReport() {
               isAnimationActive={false}
               data={graphData}
               outerRadius={150}
-              label
-            >
+              label>
               {graphData.map((entry, index) => (
                 <Cell key={index} fill={colors[index % colors.length]} />
               ))}

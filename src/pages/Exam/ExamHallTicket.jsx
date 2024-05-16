@@ -1,10 +1,49 @@
-import React from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 export default function ExamHallTicket() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [classes, setClasses] = useState([]);
+  const [section, setSection] = useState([]);
+  const getClass = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSection = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSection(
+        data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
+      );
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       exam: "",
@@ -13,6 +52,16 @@ export default function ExamHallTicket() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getClass();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSection();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
 
   return (
     <>
@@ -35,7 +84,7 @@ export default function ExamHallTicket() {
               name="class"
               formik={entryFormik}
               label="Select Class"
-              // options={""}
+              options={classes}
             />
           </Grid>
           <Grid xs={12} md={6} lg={4} item>
@@ -44,7 +93,7 @@ export default function ExamHallTicket() {
               name="section"
               formik={entryFormik}
               label="Select Section"
-              // options={""}
+              options={section}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
