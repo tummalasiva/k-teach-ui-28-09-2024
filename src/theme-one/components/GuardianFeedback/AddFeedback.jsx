@@ -78,7 +78,7 @@ export default function AddFeedback() {
     studentName: "",
     className: "",
     feedback: "",
-    status: "approved",
+    status: "",
   });
 
   const theme = useTheme();
@@ -98,12 +98,11 @@ export default function AddFeedback() {
 
     try {
       const { data } = await post(`${PRIVATE_URLS.guardianFeedback.create}`, {
+        schoolId: selectedSetting._id,
         parentName: formData.parentName,
         studentName: formData.studentName,
         className: formData.className,
         feedback: formData.feedback,
-        status: formData.status,
-        schoolId: selectedSetting._id,
       });
       handleClose();
       setFormData({});
