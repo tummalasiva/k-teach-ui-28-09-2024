@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { visitorInfoTableKeys } from "../../data/tableKeys/visitorInfoData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -14,6 +14,7 @@ import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import FormDatePicker from "../../forms/FormDatePicker";
+import VisitorInfoViewModel from "./VisitorInfoViewModel";
 
 const Reason_To_Meet = [
   { label: "Vendor", value: "vendor" },
@@ -37,6 +38,11 @@ export default function VisitorInfo() {
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
   const [employees, setEmployee] = useState([]);
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: "",
+    action: () => {},
+  });
 
   const onAddClick = () => {
     setOpen(true);
@@ -179,6 +185,7 @@ export default function VisitorInfo() {
     setLoading(false);
   };
 
+  // Formik
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
@@ -188,8 +195,6 @@ export default function VisitorInfo() {
       toMeetUser: dataToEdit?.toMeetUser?._id || "",
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
-      // checkIn: dataToEdit?.checkIn.toLocaleString() || "",
-      checkIn: dataToEdit?.checkIn.toLocaleString() || "",
       checkOut: dataToEdit?.checkOut || "",
 
       class: dataToEdit?.class?._id || "",
@@ -199,8 +204,6 @@ export default function VisitorInfo() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
-
-  console.log(dataToEdit, "dataToEdit");
 
   const handleClose = () => {
     setDataToEdit(null);
@@ -237,6 +240,25 @@ export default function VisitorInfo() {
     setOpen(true);
   };
 
+  const handleClickOpenView = (data) => {
+    // console.log(data.school.name, "vvvvvb");
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data,
+    });
+  };
+
+  const onCloseViewModel = (e) => {
+    setModalData({ ...modalData, open: false });
+  };
+
+  console.log(
+    data.find((c) => c.checkIn != 0),
+    "nah="
+  );
+  console.log(data.checkOut, "oi");
+
   return (
     <>
       <PageHeader title="Visitor Info" />
@@ -264,10 +286,21 @@ export default function VisitorInfo() {
         bodyDataModal="visitor info"
         bodyData={data}
         onEditClick={handleEditClick}
+        onViewClick={handleClickOpenView}
       />
 
+      {/* view visitor info ============= */}
+      <VisitorInfoViewModel
+        title="Visitor Information"
+        open={modalData?.open}
+        tableData={modalData?.tableData}
+        onClose={onCloseViewModel}
+      />
+
+      {/* Add visitor info ============== */}
       <AddForm title="Add visitor info" onAddClick={onAddClick} />
 
+      {/* Add/update model ============== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -362,15 +395,28 @@ export default function VisitorInfo() {
           {dataToEdit != null && (
             <>
               <Grid xs={12} md={6} lg={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <TextField
+                  value={dataToEdit?.checkIn.toLocaleString()}
+                  fullWidth
                   label="Check In"
                   name="checkIn"
                   disabled={dataToEdit != null}
+                  sx={{
+                    mt: 2,
+                    borderWidth: 1,
+                    borderRadius: (theme) => theme.shape.borderRadius,
+                  }}
+                  InputProps={{
+                    style: {
+                      borderWidth: 1,
+                      height: "42px",
+                      borderRadius: (theme) => theme.shape.borderRadius,
+                    },
+                  }}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={6} item>
-                <FormDatePicker
+                <FormInput
                   formik={entryFormik}
                   label="Check Out"
                   name="checkOut"
