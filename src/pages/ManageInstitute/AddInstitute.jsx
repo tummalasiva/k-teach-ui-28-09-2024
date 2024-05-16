@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
@@ -6,6 +8,7 @@ import {
   Button,
   Container,
   Grid,
+  IconButton,
   Paper,
   Stack,
   Typography,
@@ -26,6 +29,7 @@ import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
+import CloseIcon from "@mui/icons-material/Close";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -185,6 +189,8 @@ export default function AddInstitute({ initialValue = null }) {
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
+
+        console.log(data.result, "updateschool");
       } else {
         const { data } = await post(PRIVATE_URLS.school.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -240,6 +246,20 @@ export default function AddInstitute({ initialValue = null }) {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleRemoveImg = async (img) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.school.removeFile + "/" + dataToEdit._id,
+        {
+          file: img,
+        }
+      );
+      getSchoolDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -551,31 +571,86 @@ export default function AddInstitute({ initialValue = null }) {
             <Title id="modal-modal-title" variant="h6" component="h2">
               Banner Image
             </Title>
-            <Box sx={{ padding: "10px" }}>
-              <Grid container spacing={2}>
-                <Grid
-                  container
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  justifyContent="flex-end"
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <AddOrUpdateFiles
-                      accept="image/jpeg, image/png"
-                      title="Upload Image"
-                    />
-                  </Box>
-                </Grid>
+
+            <Grid container spacing={2}>
+              <Grid
+                container
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                justifyContent="flex-end">
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    marginRight: "10px",
+                  }}>
+                  <AddOrUpdateFiles
+                    dataToEdit={dataToEdit}
+                    title={"Upload Banner"}
+                    onUpdate={getSchoolDetails}
+                  />
+                </Box>
               </Grid>
-            </Box>
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={12}
+                m={2}
+                gap={2}
+                sx={{
+                  display: "flex",
+                  overflowX: "auto",
+                }}>
+                {dataToEdit?.bannerImages?.map((image, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      justifyContent: "center",
+
+                      backgroundSize: "cover",
+                      "&:hover": {
+                        position: "relative",
+                        display: "inline-block",
+                      },
+                    }}>
+                    <img
+                      src={image}
+                      alt={"image"}
+                      style={{
+                        width: "150px",
+                        height: "100px",
+
+                        borderRadius: "5px",
+                        boxShadow: "0px 0px 2px 0px gray",
+                      }}
+                    />
+
+                    <IconButton
+                      color="error"
+                      aria-label="delete"
+                      onClick={() => handleRemoveImg(image)}
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        borderRadius: "50px",
+                        padding: "2px",
+                        cursor: "pointer",
+                        background: "#DEE0E2",
+                      }}>
+                      <CloseIcon color="error" />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Grid>
+            </Grid>
           </FormBox>
         ) : null}
         <Grid container>
@@ -586,16 +661,14 @@ export default function AddInstitute({ initialValue = null }) {
                   size="small"
                   color="error"
                   variant="contained"
-                  onClick={() => navigate(-1)}
-                >
+                  onClick={() => navigate(-1)}>
                   Cancel
                 </Button>
                 <LoadingButton
                   loading={loading}
                   type="submit"
                   size="small"
-                  variant="contained"
-                >
+                  variant="contained">
                   {dataToEdit ? "Update" : "Submit"}
                 </LoadingButton>
               </Stack>
