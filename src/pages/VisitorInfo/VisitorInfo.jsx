@@ -52,7 +52,7 @@ export default function VisitorInfo() {
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.visitorInfo.list);
-      console.log(data, "hhaha");
+      // console.log(data, "hhaha");
       setData(
         data.result.map((r) => ({
           ...r,
@@ -252,12 +252,6 @@ export default function VisitorInfo() {
   const onCloseViewModel = (e) => {
     setModalData({ ...modalData, open: false });
   };
-
-  console.log(
-    data.find((c) => c.checkIn != 0),
-    "nah="
-  );
-  console.log(data.checkOut, "oi");
 
   return (
     <>
