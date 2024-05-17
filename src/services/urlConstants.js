@@ -198,4 +198,14 @@ export const PRIVATE_URLS = {
     update: "/guardianFeedback/update",
     delete: "/guardianFeedback/delete",
   },
+  courseContent: {
+    list: "/courseContent/list",
+    create: "/courseContent/create",
+    update: "/courseContent/updateChapterDetails",
+    delete: "/courseContent/deleteChapter",
+    // create content
+    addContentToChapter: "/courseContent/addContentToChapter",
+    updateContent: "/courseContent/updateContent",
+    deleteContent: "/courseContent/deleteContent",
+  },
 };

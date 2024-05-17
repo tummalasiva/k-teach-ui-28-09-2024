@@ -7,12 +7,45 @@ import SettingContext from "../../../context/SettingsContext";
 import FormInput from "../../../forms/FormInput";
 import FormModal from "../../../forms/FormModal";
 
-export default function VideoDialog({ open , setOpenVideo,Formik}) {
+export default function VideoDialog({ open, setOpenVideo, title }) {
   const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log(Formik,"ooopen");
+  // create || update actions
+  // const handleCreateOrUpdate = async (values) => {
+  //   const formData = new FormData();
+
+  //   const body = { title: values.title };
+  //   formData.append("body", JSON.stringify(body));
+  //   selectFile.forEach((file) => formData.append("file", file));
+  //   formData.append("schoolId", selectedSetting._id);
+  //   // formData.append("courseId", courseId);
+
+  //   try {
+  //     setLoading(true);
+  //     if (dataToEdit) {
+  //       const { data } = await put(
+  //         PRIVATE_URLS.courseContent.updateChapterDetails + "/" + dataToEdit.id,
+  //         formData,
+  //         { headerd: { "Content-Type": "multipart/form-data" } }
+  //       );
+  //     } else {
+  //       const { data } = await post(
+  //         PRIVATE_URLS.courseContent.addContentToChapter + "/" + courseId,
+  //         formData,
+  //         {
+  //           headers: { "Content-type": "multipart/form-data" },
+  //         }
+  //       );
+  //     }
+  //     // entryFormik.handleSubmit();
+  //     handleClose();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setLoading(false);
+  // };
 
   const entryFormik = useFormik({
     initialValues: {
@@ -33,7 +66,7 @@ export default function VideoDialog({ open , setOpenVideo,Formik}) {
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? "Update Notice" : "Add Notice"}
+        formTitle={dataToEdit ? `Update ${title}` : `Add ${title}`}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
         adding={loading}>
