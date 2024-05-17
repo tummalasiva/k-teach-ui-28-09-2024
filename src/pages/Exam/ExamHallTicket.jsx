@@ -13,6 +13,23 @@ export default function ExamHallTicket() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
+  const [examtitle, setExamTitle] = useState([]);
+
+  const getExamTerm = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setExamTitle(
+        data.result.map((d) => ({ ...d, label: d.title, value: d._id }))
+      );
+      entryFormik.setFieldValue("exam", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getClass = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.class.list, {
@@ -55,6 +72,7 @@ export default function ExamHallTicket() {
 
   useEffect(() => {
     getClass();
+    getExamTerm();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -75,7 +93,7 @@ export default function ExamHallTicket() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={examtitle}
             />
           </Grid>
           <Grid xs={12} md={6} lg={4} item>

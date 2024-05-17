@@ -200,4 +200,17 @@ export const PRIVATE_URLS = {
     update: "/guardianFeedback/update",
     delete: "/guardianFeedback/delete",
   },
+
+  examGrade: {
+    list: "/examGrade/list",
+    create: "/examGrade/create",
+    update: "/examGrade/update",
+    delete: "/examGrade/delete",
+  },
+  examTerm: {
+    list: "/examTerm/list",
+    create: "/examTerm/create",
+    update: "/examTerm/update",
+    delete: "/examTerm/delete",
+  },
 };

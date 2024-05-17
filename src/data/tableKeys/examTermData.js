@@ -1,3 +1,5 @@
+/** @format */
+
 export const examTermTableKeys = [
   {
     name: "Exam Title",
@@ -5,6 +7,6 @@ export const examTermTableKeys = [
   },
   {
     name: "Type",
-    key: "type",
+    key: "examType",
   },
 ];

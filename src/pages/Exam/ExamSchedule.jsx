@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid, Paper } from "@mui/material";
 import { examListTableKeys } from "../../data/tableKeys/examListData";
@@ -8,10 +10,26 @@ import CustomTable from "../../components/Tables/CustomTable";
 import TabPanel from "../../components/Tabs/TabPanel";
 import TabList from "../../components/Tabs/Tablist";
 import FormSelect from "../../forms/FormSelect";
+import SettingContext from "../../context/SettingsContext";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
 
 export default function ExamSchedule() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setSelectValue] = useState(0);
+  const [examtitle, setExamTitle] = useState([]);
+  const getExamTerm = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setExamTitle(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
@@ -24,6 +42,10 @@ export default function ExamSchedule() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getExamTerm();
+  }, [selectedSetting]);
 
   return (
     <>
@@ -50,7 +72,7 @@ export default function ExamSchedule() {
         <CustomTable
           actions={[]}
           bodyDataModal="exam list"
-          bodyData={data}
+          bodyData={examtitle}
           tableKeys={examListTableKeys}
         />
       </TabPanel>

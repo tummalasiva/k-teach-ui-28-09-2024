@@ -1,3 +1,5 @@
+/** @format */
+
 export const examGradeTableKeys = [
   {
     name: "Exam Grade",
@@ -9,15 +11,15 @@ export const examGradeTableKeys = [
   },
   {
     name: "Grade Point",
-    key: "gradepoint",
+    key: "gradePoint",
   },
   {
     name: "Percentage From",
-    key: "percentageFrom",
+    key: "markFrom",
   },
   {
     name: "Percentage To",
-    key: "percentageTo",
+    key: "markTo",
   },
   { name: "Note", key: "note" },
 ];
