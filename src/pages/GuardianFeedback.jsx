@@ -136,7 +136,7 @@ export default function GuardianFeedback() {
           {["pending", "approved", "rejected"].map((status) => (
             <Button
               key={status}
-              sx={(theme) => ({
+              sx={{
                 background:
                   selectedStatus === status
                     ? themeData.darkPalette.primary.main
@@ -148,7 +148,7 @@ export default function GuardianFeedback() {
                       : "",
                 },
                 color: selectedStatus === status ? "#fff" : "#000",
-              })}
+              }}
               onClick={() => {
                 setSelectedStatus(status);
               }}>
