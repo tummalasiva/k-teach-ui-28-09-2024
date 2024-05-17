@@ -1,4 +1,6 @@
-import React from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -11,6 +13,9 @@ import {
 } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 const Header = styled(Typography)(({ theme }) => ({
   fontSize: "25px",
@@ -102,6 +107,46 @@ const Title = styled(Typography)(({ theme }) => ({
   },
 }));
 export default function TransferCertificate() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  //get academic year
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStudents = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setStudents(
+        data.result.map((d) => ({
+          ...d,
+          label: d.basicInfo.name,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("student", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -109,6 +154,10 @@ export default function TransferCertificate() {
     },
     onSubmit: console.log("nnnn"),
   });
+  useEffect(() => {
+    getAcademicYear();
+    getStudents();
+  }, [selectedSetting._id]);
   return (
     <>
       <PageHeader title="Study Certificate" />
@@ -120,7 +169,7 @@ export default function TransferCertificate() {
               name="academicYear"
               formik={entryFormik}
               label="Select Academic Year"
-              // options={""}
+              options={academicYear}
             />
           </Grid>
 
@@ -130,7 +179,7 @@ export default function TransferCertificate() {
               name="student"
               formik={entryFormik}
               label="Select Student"
-              // options={""}
+              options={students}
             />
           </Grid>
           <Grid
@@ -141,8 +190,7 @@ export default function TransferCertificate() {
             alignSelf="center"
             justifyContent="flex-end"
             gap={1}
-            item
-          >
+            item>
             <Button size="small" variant="contained">
               Issue
             </Button>
@@ -162,8 +210,7 @@ export default function TransferCertificate() {
             sx={{
               fontSize: { xs: "25px", sm: "25px", md: "30px", lg: "30px" },
               fontWeight: "bold",
-            }}
-          >
+            }}>
             Kayaka school
           </Typography>
         </Grid>
@@ -173,8 +220,7 @@ export default function TransferCertificate() {
           sm={12}
           md={12}
           lg={12}
-          style={{ textAlign: "center" }}
-        >
+          style={{ textAlign: "center" }}>
           <Title>ENGLISH MEDIUM PRIMARY AND HIGH SCHOOL</Title>
           <Title>Kayaka school</Title>
         </Grid>
@@ -191,8 +237,7 @@ export default function TransferCertificate() {
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
-          width={"100%"}
-        >
+          width={"100%"}>
           <Container>
             <Grid container spacing={2}>
               <DataContainer item xs={12} sm={12} md={12} lg={12}>
@@ -472,8 +517,7 @@ export default function TransferCertificate() {
                 sm={12}
                 md={12}
                 lg={12}
-                sx={{ display: "flex", justifyContent: "space-between" }}
-              >
+                sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Signature>Prepared By</Signature>
                 <Signature>Checked By</Signature>
                 <Signature>Head Master</Signature>
