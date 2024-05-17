@@ -1,7 +1,14 @@
 /** @format */
 
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Button, ButtonGroup, Stack, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Stack,
+  Typography,
+  styled,
+} from "@mui/material";
 import { guardianFeedbackTableKeys } from "../data/tableKeys/guardianFeedbackData";
 import PageHeader from "../components/PageHeader";
 import CustomTable from "../components/Tables/CustomTable";
@@ -9,6 +16,7 @@ import { get, put } from "../services/apiMethods";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import SettingContext from "../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import ViewModel from "../forms/ViewModel";
 
 const MuiBox = styled(Box)({
   display: "flex",
@@ -67,8 +75,13 @@ export default function GuardianFeedback() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-
   const [selectedStatus, setSelectedStatus] = useState("pending");
+
+  const [modalData, setModalData] = useState({
+    open: false,
+    contents: "",
+    action: () => {},
+  });
 
   const getFeebacks = async () => {
     try {
@@ -99,6 +112,19 @@ export default function GuardianFeedback() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleClickOpenView = (data) => {
+    // console.log(data, "vvvvvb");
+    setModalData({
+      ...modalData,
+      open: true,
+      contents: data,
+    });
+  };
+
+  const onCloseViewModel = (e) => {
+    setModalData({ ...modalData, open: false });
   };
 
   return (
@@ -135,7 +161,21 @@ export default function GuardianFeedback() {
         onDeleteClick={handleDelete}
         CustomAction={CustomActionComponent}
         onUpdate={getFeebacks}
+        onViewClick={handleClickOpenView}
       />
+      <ViewModel
+        title="Guardian Feedback"
+        open={modalData?.open}
+        tableData={modalData?.contents}
+        onClose={onCloseViewModel}>
+        <Box sx={{ minWidth: 300 }}>
+          <Typography
+            id="modal-modal-description"
+            sx={{ wordBreak: "break-word" }}>
+            {modalData?.contents?.feedback}
+          </Typography>
+        </Box>
+      </ViewModel>
     </>
   );
 }
