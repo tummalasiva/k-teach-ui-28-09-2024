@@ -1,22 +1,26 @@
+/** @format */
+
 export const scheduleListTableKeys = [
   {
     name: "Subject",
-    key: "subject",
+    key: "name",
+    path: "subject",
   },
   {
     name: "Date",
-    key: "date",
+    key: "examDate",
+    isDate: true,
   },
   {
     name: "Time",
-    key: "time",
+    key: "startTime",
   },
   {
     name: "Max Marks",
-    key: "maxMarks",
+    key: "maximumMarks",
   },
   {
     name: "Min Marks",
-    key: "minMarks",
+    key: "minimumMarks",
   },
 ];

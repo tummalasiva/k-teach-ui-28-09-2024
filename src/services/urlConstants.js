@@ -216,4 +216,10 @@ export const PRIVATE_URLS = {
     update: "/examTerm/update",
     delete: "/examTerm/delete",
   },
+  examSchedule: {
+    list: "/examSchedule/list",
+    create: "/examSchedule/create",
+    update: "/examSchedule/update",
+    delete: "/examSchedule/delete",
+  },
 };
