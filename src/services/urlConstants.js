@@ -207,5 +207,6 @@ export const PRIVATE_URLS = {
     addContentToChapter: "/courseContent/addContentToChapter",
     updateContent: "/courseContent/updateContent",
     deleteContent: "/courseContent/deleteContent",
+    getDetailsTeachers: "courseContent/getDetailsTeachers",
   },
 };

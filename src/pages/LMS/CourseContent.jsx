@@ -28,15 +28,13 @@ const OuterGrid = styled(Grid)(() => ({
 
 export default function CourseContent() {
   const { selectedSetting } = useContext(SettingContext);
-  const [selectedCourseId, setSelectedCourseId] = useState([]);
-
-  // const Select_Options = [
-  //   { label: "Select Course", value: "" },
-  //   ...selectedCourseId,
-  // ];
-
+  const [courses, setCourses] = useState([]);
   const [openChapter, setOpenChaper] = useState(false);
+  const [courseDetails, setCourseDetails] = useState({ chapters: [] });
 
+  console.log(courses, "courses");
+  // console.log(courseDetails, "courseDetails");
+  // get course list
   const getCourse = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.course.list, {
@@ -44,34 +42,51 @@ export default function CourseContent() {
           schoolId: selectedSetting._id,
         },
       });
-
-      setSelectedCourseId(
+      setCourses(
         data.result.map((c) => ({ ...c, label: c.title, value: c._id }))
       );
-      // entryFormik.setFieldValue("courseId", data.result[0]._id);
-      // console.log(data.result, "mmmmmmbbbbbbnnnnnn");
+      entryFormik.setFieldValue("courseId", data?.result[0]?._id);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleChange = (e) => {
-    setSelectedCourseId(e.target.value);
+  // get content details
+  const getDetails = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.courseContent.getDetailsTeachers + "/" + values.courseId,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+          },
+        }
+      );
+      setCourseDetails(data.result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const entryFormik = useFormik({
     initialValues: {
-      courseId: selectedCourseId || "",
+      courseId: "",
     },
-    onSubmit: console.log("k"),
+    onSubmit: getDetails,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
     getCourse();
   }, []);
 
-  console.log(entryFormik.values.courseId, "uuuid", selectedCourseId);
+  useEffect(() => {
+    if (courses.length) {
+      entryFormik.handleSubmit();
+    }
+  }, [courses, entryFormik.values.courseId]);
 
+  console.log(entryFormik.values.courseId, "id");
   return (
     <>
       <PageHeader title="Course Content" />
@@ -92,16 +107,17 @@ export default function CourseContent() {
               name="courseId"
               formik={entryFormik}
               label="Select Course To Add Content"
-              options={selectedCourseId}
+              options={courses}
             />
           </Box>
 
           <Button
             variant="contained"
             size="medium"
-            disabled={!selectedCourseId}
+            disabled={!courses.length}
             startIcon={<AddIcon />}
             sx={{ mt: 1 }}
+            multi={false}
             onClick={() => setOpenChaper(true)}>
             Chapter
           </Button>
@@ -110,7 +126,15 @@ export default function CourseContent() {
       <Divider />
 
       {/* show all models components == */}
-      <ShowCourseContent />
+      {courseDetails.chapters?.map((chapter, i) => (
+        <ShowCourseContent
+          key={i}
+          chapter={chapter}
+          courseId={entryFormik.values.courseId}
+          course={courseDetails}
+          getDetails={getDetails}
+        />
+      ))}
 
       {/* open chapter model ========== */}
       <AddChapterDialog

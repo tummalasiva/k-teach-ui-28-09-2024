@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,6 +13,9 @@ import QuizDialog from "./CourseDialogs/QuizDialog";
 import FlashcardDialog from "./CourseDialogs/FlashcardDialog";
 import MaterialsDialog from "./CourseDialogs/MaterialsDialog";
 import CodePracticeDialog from "./CourseDialogs/CodePracticeDialog";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
 
 const Contents = [
   {
@@ -42,12 +45,15 @@ const Contents = [
   },
 ];
 
-export default function ShowCourseContent() {
+export default function ShowCourseContent({ chapter, course, courseId }) {
+  const { selectedSetting } = useContext(SettingContext);
   const [openVideo, setOpenVideo] = useState(false);
   const [openQuiz, setOpenQuiz] = useState(false);
   const [openFlashcard, setOpenFlashcard] = useState(false);
   const [openMaterial, setOpenMaterial] = useState(false);
   const [openCodepractice, setOpenCodepractice] = useState(false);
+
+  console.log(course, courseId, "cour");
 
   const entryFormik = useFormik({
     initialValues: {
@@ -69,8 +75,6 @@ export default function ShowCourseContent() {
       setOpenCodepractice(entryFormik.values.contents === "codepractice");
     }
   }, [entryFormik.values.contents]);
-
-  console.log(entryFormik.values.contents, "entryFormik");
 
   return (
     <>
@@ -125,7 +129,7 @@ export default function ShowCourseContent() {
                   <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-              Chapter: hell
+              Chapter: {chapter?.title}
             </Typography>
           </Grid>
           <Grid item xs={6} sm={6} md={2}>
@@ -138,7 +142,7 @@ export default function ShowCourseContent() {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
-            <CourseContentTable />
+            <CourseContentTable chapter={chapter} courseId={course.courseId} />
           </Grid>
         </Grid>
       </Box>
@@ -146,16 +150,20 @@ export default function ShowCourseContent() {
       <VideoDialog
         title="Video for Course"
         open={openVideo}
+        courseId={courseId}
         Formik={entryFormik}
         setOpenVideo={setOpenVideo}
+        chapter={chapter}
       />
 
       {/* open quiz model ============== */}
       <QuizDialog
         title="Quiz"
         open={openQuiz}
+        courseId={courseId}
         Formik={entryFormik}
         setOpenQuiz={setOpenQuiz}
+        chapter={chapter}
       />
 
       {/* open flashcard model ========== */}
