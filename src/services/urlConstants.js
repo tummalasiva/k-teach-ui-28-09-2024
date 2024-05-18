@@ -110,6 +110,7 @@ export const PRIVATE_URLS = {
     delete: "/gallery/delete",
     addFiles: "/gallery/addFiles",
     removeFile: "/gallery/removeFile",
+    listPublic: "/gallery/listPublic",
   },
   assignment: {
     list: "/assignment/list",
@@ -147,6 +148,7 @@ export const PRIVATE_URLS = {
     create: "/awards/create",
     update: "/awards/update",
     delete: "/awards/delete",
+    listPublic: "/awards/listPublic",
   },
   splashNews: {
     list: "/splashNews/list",

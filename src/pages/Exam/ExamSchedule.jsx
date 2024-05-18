@@ -11,7 +11,7 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import TabList from "../../components/Tabs/Tablist";
 import FormSelect from "../../forms/FormSelect";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import AddForm from "../../forms/AddForm";
 import FormInput from "../../forms/FormInput";
@@ -98,6 +98,28 @@ export default function ExamSchedule() {
     onSubmit: console.log("nnnn"),
   });
 
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.examShedule.update + "/" + dataToEdit._id,
+          payload
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.examShedule.create, payload);
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const formik = useFormik({
     initialValues: {
       class: "",
@@ -117,7 +139,7 @@ export default function ExamSchedule() {
       showInExamResults: "",
       orderSequence: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
 
@@ -189,7 +211,7 @@ export default function ExamSchedule() {
 
         <FormModal
           open={open}
-          formik={entryFormik}
+          formik={formik}
           formTitle={dataToEdit ? "Update Exam Schedule" : "Add Exam Schedule"}
           onClose={handleClose}
           submitButtonTitle={dataToEdit ? "Update" : "Submit"}
