@@ -130,6 +130,7 @@ export const PRIVATE_URLS = {
     create: "/news/create",
     update: "/news/update",
     delete: "/news/delete",
+    listPublic: "/news/listPublic",
   },
   event: {
     list: "/event/list",

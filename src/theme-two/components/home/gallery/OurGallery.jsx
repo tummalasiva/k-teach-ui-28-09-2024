@@ -1,4 +1,6 @@
-import React, { useRef } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import {
   Container,
@@ -22,6 +24,9 @@ import { settings } from "../../../data/Carousal";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Close } from "@mui/icons-material";
 import Dots from "../../../data/Dots";
+import { get } from "../../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../../services/urlConstants";
+import SettingContext from "../../../../context/SettingsContext";
 
 const TextBox = styled(Box)(({ theme }) => ({
   textAlign: "center",
@@ -80,33 +85,6 @@ const ImagBox = styled(Box)(({ theme }) => ({
   p: 4,
 }));
 
-const galleryData = [
-  {
-    title: "Learning Management System",
-    content:
-      " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-];
-
 export default function OurGallery() {
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
@@ -119,12 +97,30 @@ export default function OurGallery() {
   );
 
   const reorderedImages = [
-    modalOpen.singleImg,
     ...modalOpen.img.slice(0, selectedIndex),
     ...modalOpen.img.slice(selectedIndex + 1),
   ];
 
   let sliderRef = useRef(null);
+  const { selectedSetting } = useContext(SettingContext);
+  const [data, setData] = useState([]);
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+
+      console.log(data.result, "ggggfgffgffff");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
 
   return (
     <>
@@ -138,7 +134,7 @@ export default function OurGallery() {
         <Container style={{ padding: "10px" }}>
           <Gallery
             ref={sliderRef}
-            galleryData={galleryData}
+            galleryData={data}
             setModalOpen={setModalOpen}
           />
         </Container>
@@ -153,8 +149,7 @@ export default function OurGallery() {
             backdrop: {
               timeout: 500,
             },
-          }}
-        >
+          }}>
           <ImagBox>
             <IconButton
               aria-label="close"
@@ -166,8 +161,7 @@ export default function OurGallery() {
                 right: 8,
                 top: 8,
                 zIndex: 9,
-              }}
-            >
+              }}>
               <Close />
             </IconButton>
             <Slider {...settings}>
@@ -175,7 +169,7 @@ export default function OurGallery() {
                 <CardMedia
                   key={index}
                   component="img"
-                  image={image?.link}
+                  image={image}
                   alt="loading..."
                   sx={{
                     borderRadius: "5px",

@@ -42,37 +42,6 @@ const ImagBox = styled(Box)(({ theme }) => ({
   p: 4,
 }));
 
-const galleryData = [
-  {
-    id: 1,
-    title: "Learning Management System",
-    content:
-      " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 2,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 3,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 4,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-];
-
 const OurGallery = () => {
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
