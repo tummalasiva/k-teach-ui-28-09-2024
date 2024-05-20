@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -121,8 +123,7 @@ export default function EventCards({
           maxWidth: 365,
           alignSelf: "center",
           margin: { xs: "5px", sm: "10px", md: "20px" },
-        }}
-      >
+        }}>
         <CardImageWrapper>
           {!hideContent && (
             <MuiBox>
@@ -138,20 +139,15 @@ export default function EventCards({
           <ImageScale>
             <CardMedia
               component="img"
-              image="https://images.unsplash.com/photo-1615412704911-55d589229864?q=80&w=1882&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              image={elem?.image}
               alt="loading..."
               height="297"
             />
           </ImageScale>
         </CardImageWrapper>
         <CardContent>
-          <Title onClick={handleReadMoreClick}>
-            {elem.eventTitle}Dommy Data
-          </Title>
-          <Content>
-            hello hello hhsjhsj hello hello hhsjhsj hello hello hhsjhsj hello
-            hello hello hhsjhsj hello hello hhsjhsj
-          </Content>
+          <Title onClick={handleReadMoreClick}>{elem.eventTitle}</Title>
+          <Content>{elem.note}</Content>
           {/* <Content>{showFull ? elem.shortEvent : elem.shortEvent}hhsjhsj</Content> */}
         </CardContent>
 
@@ -164,8 +160,7 @@ export default function EventCards({
                 color: themeData.darkPalette.primary.main,
               },
             }}
-            onClick={handleReadMoreClick}
-          >
+            onClick={handleReadMoreClick}>
             {!showFull ? `${view} Less` : `${view} More`}
           </AnchorBox>
         </CardActions>

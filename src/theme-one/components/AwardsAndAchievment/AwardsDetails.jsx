@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import SubHeader from "../SubHeader";
@@ -26,6 +28,8 @@ const AwardsDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  console.log(newAwards, "kkkkkkkkkkkkkkk");
+
   return (
     <>
       <SubHeader
@@ -42,8 +46,7 @@ const AwardsDetails = () => {
               variant="subtitle1"
               sx={{
                 marginBottom: "50px",
-              }}
-            >
+              }}>
               {newAwards.note}
             </Typography>
             <Box>

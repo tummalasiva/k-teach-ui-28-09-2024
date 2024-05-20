@@ -1,4 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Container, Typography, Box, styled } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
 import Slider from "react-slick";
@@ -10,51 +12,8 @@ import EventCards from "./EventCards";
 import themeData from "../../../data/themeData";
 import { AppSlider } from "../../data/AppSlider";
 import Dots from "../../data/Dots";
-
-export const arrData = [
-  {
-    id: "1",
-    title: "Football – 3rd Place in ZPs",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.gettyimages.com/id/1148232010/photo/teachers-applauding-for-student-at-awards-ceremony.jpg?s=612x612&w=gi&k=20&c=0reS9Y-niWuUvxz2koW-7eRKETMYcH2EqlZgznHiCEM=",
-  },
-  {
-    id: "2",
-    title: "State Championship ",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.istockphoto.com/id/1200123163/photo/man-receiving-award-from-businesswoman.jpg?s=1024x1024&w=is&k=20&c=fXvUsoofSCYAZpViRgWHCUHujHtxHpYrKXWjdQ1lNqI=",
-  },
-  {
-    id: "3",
-    title: "District Champion",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.istockphoto.com/id/166193377/photo/school-boy-receiving-a-trophy-in-classroom.webp?s=612x612&w=is&k=20&c=oN-NSvxSxpWWi5du3GlRrG0Hf2xmCEdJZXxGPTTmNzo=",
-  },
-  {
-    id: "4",
-    title: "Languages",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.gettyimages.com/id/1148232010/photo/teachers-applauding-for-student-at-awards-ceremony.jpg?s=612x612&w=gi&k=20&c=0reS9Y-niWuUvxz2koW-7eRKETMYcH2EqlZgznHiCEM=",
-  },
-  {
-    id: "5",
-    title: "Business",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.istockphoto.com/id/1200123163/photo/man-receiving-award-from-businesswoman.jpg?s=1024x1024&w=is&k=20&c=fXvUsoofSCYAZpViRgWHCUHujHtxHpYrKXWjdQ1lNqI=",
-  },
-  {
-    id: "6",
-    title: "Business",
-    text: "Sports are a crucial part of a student’s growth and help in the development of mental health and physical fitness of the body.",
-    image:
-      "https://media.istockphoto.com/id/166193377/photo/school-boy-receiving-a-trophy-in-classroom.webp?s=612x612&w=is&k=20&c=oN-NSvxSxpWWi5du3GlRrG0Hf2xmCEdJZXxGPTTmNzo=",
-  },
-];
+import { get } from "../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
 
 const TypographyMain = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -88,6 +47,24 @@ export default function AwardAndAchivement() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.awards.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+
+      console.log(data.result, "mmmmmmmmmmmmmmmmmm");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
   const handleNextClick = () => {
     sliderRef.slickNext();
   };
@@ -108,12 +85,10 @@ export default function AwardAndAchivement() {
             display: "flex",
             justifyContent: "center",
             flexDirection: "column",
-          }}
-        >
-          {arrData.length > 3 && (
+          }}>
+          {data?.length > 3 && (
             <Random1
-              style={{ borderColor: themeData.darkPalette.primary.main }}
-            >
+              style={{ borderColor: themeData.darkPalette.primary.main }}>
               <ChevronLeftIcon
                 onClick={handlePrevClick}
                 sx={{ color: themeData.darkPalette.primary.main }}
@@ -126,12 +101,11 @@ export default function AwardAndAchivement() {
           )}
 
           <AppSlider
-            {...calculateSlidersSetting(arrData.length)}
+            {...calculateSlidersSetting(data.length)}
             ref={(slider) => {
               sliderRef = slider;
-            }}
-          >
-            {arrData.map((elem, i) => (
+            }}>
+            {data?.map((elem, i) => (
               <EventCards key={i} elem={elem} hideContent={true} view="Read" />
             ))}
           </AppSlider>

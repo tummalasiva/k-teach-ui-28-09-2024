@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import Slider from "../components/Slider";
 import Features from "../components/Features/FeatureMain";

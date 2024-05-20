@@ -11,12 +11,27 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import TabList from "../../components/Tabs/Tablist";
 import FormSelect from "../../forms/FormSelect";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import AddForm from "../../forms/AddForm";
 import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import FormDatePicker from "../../forms/FormDatePicker";
+
+const ShowIn_HallTick = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const ShowIn_Exam_Results = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const Pratical_Marks = [
+  { label: "Active", value: "active" },
+  { label: "In active", value: "inactive" },
+];
 
 export default function ExamSchedule() {
   const { selectedSetting } = useContext(SettingContext);
@@ -28,8 +43,28 @@ export default function ExamSchedule() {
   const [loading, setLoading] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
 
+  const [classeData, setClasseData] = useState([]);
+
   const [classes, setClasses] = useState([]);
   const [subject, setSubject] = useState([]);
+
+  const getData = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examSchedule.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: values.class,
+            examTerm: values.examTerm,
+          },
+        },
+      });
+      setData(data.result.map((s) => ({ ...s, subject: s.subject })));
+      console.log(data.result, "resullttttt");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handelExamSchedule = () => {
     setOpen(true);
@@ -45,8 +80,11 @@ export default function ExamSchedule() {
         params: { schoolId: selectedSetting._id },
       });
 
-      setExamTitle(data.result);
-      setExam(data.result.map((c) => ({ ...c, label: c.title, value: c._id })));
+      setExamTitle(
+        data.result.map((c) => ({ ...c, label: c.title, value: c._id }))
+      );
+      formik.setFieldValue("examTerm", data.result[0]?._id);
+      entryFormik.setFieldValue("examTerm", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +101,9 @@ export default function ExamSchedule() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      formik.setFieldValue("class", data.result[0]._id);
+
+      formik.setFieldValue("class", data.result[0]?._id);
+      entryFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -93,31 +133,63 @@ export default function ExamSchedule() {
   const entryFormik = useFormik({
     initialValues: {
       class: "",
-      exam: "",
+      examTerm: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getData,
+    enableReinitialize: true,
   });
+
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+
+      console.log(payload, "qqqqqq");
+
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.examSchedule.update + "/" + dataToEdit._id,
+          payload
+        );
+        // getData();
+      } else {
+        const { data } = await post(PRIVATE_URLS.examSchedule.create, payload);
+        // getData();
+        console.log(data, "vvvvvv");
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
 
   const formik = useFormik({
     initialValues: {
-      class: "",
-      exam: "",
-      subject: "",
-      examDate: "",
-      startTime: "",
-      endTime: "",
-      marksFreezDate: "",
+      examTerm: dataToEdit?.examTerm._id || "",
+      class: dataToEdit?.class._id || "",
+      subject: dataToEdit?.subject._id || "",
+      examDate: dataToEdit?.examDate || "",
+      startTime: dataToEdit?.startTime || "",
+      endTime: dataToEdit?.endTime || "",
+      marksFreezDate: dataToEdit?.marksFreezDate || "",
+      maximumMarks: dataToEdit?.maximumMarks || "",
 
-      maxMarks: "",
-      written: "",
-      pratical: "",
-      minMarks: "",
-      praticalMarks: "",
-      showInHallTick: "",
-      showInExamResults: "",
-      orderSequence: "",
+      pratical: dataToEdit?.pratical || "",
+      minimumMarks: dataToEdit?.minimumMarks || "",
+      praticalMarks: dataToEdit?.praticalMarks || "",
+      showInHallTick: dataToEdit?.showInHallTick || "",
+      showInExamResults: dataToEdit?.showInExamResults || "",
+      orderSequence: dataToEdit?.orderSequence || "",
+      praticalMarks: dataToEdit?.praticalMarks || "",
+      showInHallTick: dataToEdit?.showInHallTick || true,
+      showInExamResults: dataToEdit?.showInExamResults || true,
+      obtainedMarks: dataToEdit?.obtainedMarks || 0,
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
 
@@ -131,6 +203,26 @@ export default function ExamSchedule() {
       getSubject();
     }
   }, [selectedSetting, formik.values.class]);
+
+  useEffect(() => {
+    if (entryFormik.values.class && entryFormik.values.examTerm) {
+      entryFormik.handleSubmit();
+    }
+  }, [entryFormik.values.class, entryFormik.values.examTerm, selectedSetting]);
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.examSchedule.delete + "/" + id);
+      entryFormik.handleSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -166,20 +258,18 @@ export default function ExamSchedule() {
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
-                required={true}
                 name="class"
                 formik={entryFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
-                required={true}
-                name="exam"
+                name="examTerm"
                 formik={entryFormik}
                 label="Select Exam"
-                // options={""}
+                options={examtitle}
               />
             </Grid>
           </Grid>
@@ -189,7 +279,7 @@ export default function ExamSchedule() {
 
         <FormModal
           open={open}
-          formik={entryFormik}
+          formik={formik}
           formTitle={dataToEdit ? "Update Exam Schedule" : "Add Exam Schedule"}
           onClose={handleClose}
           submitButtonTitle={dataToEdit ? "Update" : "Submit"}
@@ -198,10 +288,10 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormSelect
                 formik={formik}
-                name="exam"
+                name="examTerm"
                 label="Exam"
                 required={true}
-                options={exam}
+                options={examtitle}
               />
             </Grid>
 
@@ -227,7 +317,7 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormDatePicker
                 required={true}
-                name="Exam Date"
+                name="examDate"
                 formik={formik}
                 label="examDate"
               />
@@ -236,9 +326,9 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 required={true}
-                name="Start Time"
+                name="startTime"
                 type="time"
-                formik={entryFormik}
+                formik={formik}
                 label="Start Time"
               />
             </Grid>
@@ -246,9 +336,9 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 required={true}
-                name="End Time"
+                name="endTime"
                 type="time"
-                formik={entryFormik}
+                formik={formik}
                 label="End Time"
               />
             </Grid>
@@ -256,25 +346,17 @@ export default function ExamSchedule() {
             <Grid xs={12} md={6} lg={6} item>
               <FormDatePicker
                 required={true}
-                name="Marks Freez Date"
+                label="Marks Freez Date"
                 formik={formik}
-                label="marksFreezDate"
+                name="marksFreezDate"
               />
             </Grid>
 
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 required={true}
-                name="written"
-                formik={entryFormik}
-                label="Written"
-              />
-            </Grid>
-            <Grid xs={12} sm={6} md={6} item>
-              <FormInput
-                required={true}
                 name="pratical"
-                formik={entryFormik}
+                formik={formik}
                 label="Pratical"
               />
             </Grid>
@@ -282,19 +364,51 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 required={true}
-                name="minMarks"
-                formik={entryFormik}
+                name="maximumMarks"
+                formik={formik}
+                label="Maximum Marks"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="minimumMarks"
+                formik={formik}
                 label="MinMarks"
               />
             </Grid>
 
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
-                disabled={dataToEdit ? false : true}
-                formik={entryFormik}
+                formik={formik}
                 name="orderSequence"
                 label="Order Sequence"
                 required={true}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="showInHallTick"
+                label="ShowIn HallTick"
+                options={ShowIn_HallTick}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="showInExamResults"
+                label="Show In Exam Results"
+                options={ShowIn_Exam_Results}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="praticalMarks"
+                label="Pratical Marks"
+                options={Pratical_Marks}
               />
             </Grid>
           </Grid>
@@ -305,6 +419,8 @@ export default function ExamSchedule() {
           bodyDataModal="schedule list"
           bodyData={data}
           tableKeys={scheduleListTableKeys}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
     </>

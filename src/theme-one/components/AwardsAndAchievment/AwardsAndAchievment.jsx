@@ -1,9 +1,12 @@
-import React, { useRef } from "react";
-import { Container, styled } from "@mui/material";
+/** @format */
 
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Container, styled } from "@mui/material";
+import { get } from "../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
+import SettingContext from "../../../context/SettingsContext";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import { calculateSlidersData } from "../data/carousal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -67,13 +70,34 @@ const awards = [
 const AwardsAndAchievment = () => {
   let sliderRef = useRef(null);
 
+  const { selectedSetting } = useContext(SettingContext);
+
+  const [data, setData] = useState([]);
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.awards.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+
+      console.log(data.result, "mmmmmmmmmmmmmmmmmm");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
   return (
     <>
       <MainContainer>
         <Header title1="Awards &" title2="Achievements" />
 
-        <AppSlider ref={sliderRef} {...calculateSlidersData(awards.length)}>
-          {awards.map((d, i) => (
+        <AppSlider ref={sliderRef} {...calculateSlidersData(data.length)}>
+          {data.map((d, i) => (
             <Awards key={i} awardsDetails={d} />
           ))}
         </AppSlider>

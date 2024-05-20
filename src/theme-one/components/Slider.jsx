@@ -148,15 +148,11 @@ const Slider = ({}) => {
   const [renderText, setRenderText] = useState(true);
   const [animationName, setAnimationName] = useState("");
 
-  const [bannerImages, setBannerImages] = useState(
-    selectedSetting.bannerImages.length
-      ? selectedSetting.bannerImages
-      : backgroundImages
-  );
+  const [bannerImages, setBannerImages] = useState([]);
 
   useEffect(() => {
     setBannerImages(
-      selectedSetting.bannerImages.length
+      selectedSetting?.bannerImages?.length
         ? selectedSetting.bannerImages
         : backgroundImages
     );

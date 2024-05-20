@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Box,
   Button,
@@ -45,12 +47,12 @@ const Awards = ({ awardsDetails }) => {
     <>
       <Card
         sx={{
-          maxWidth: 345,
+          maxWidth: 360,
+          minWidth: 345,
           marginBottom: "50px",
           boxShadow: (theme) => theme.shadows[2],
         }}
-        onClick={handleNavigate}
-      >
+        onClick={handleNavigate}>
         <CardActionArea>
           <CardMedia
             component="img"
@@ -71,8 +73,7 @@ const Awards = ({ awardsDetails }) => {
           <Button
             onClick={handleNavigate}
             sx={{ color: themeData.darkPalette.secondary.main }}
-            size="small"
-          >
+            size="small">
             View Details
           </Button>
         </CardActions>
