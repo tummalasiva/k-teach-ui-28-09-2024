@@ -203,17 +203,6 @@ export const PRIVATE_URLS = {
     update: "/guardianFeedback/update",
     delete: "/guardianFeedback/delete",
   },
-  courseContent: {
-    list: "/courseContent/list",
-    create: "/courseContent/create",
-    update: "/courseContent/updateChapterDetails",
-    delete: "/courseContent/deleteChapter",
-    // create content
-    addContentToChapter: "/courseContent/addContentToChapter",
-    updateContent: "/courseContent/updateContent",
-    deleteContent: "/courseContent/deleteContent",
-    getDetailsTeachers: "courseContent/getDetailsTeachers",
-  },
   examGrade: {
     list: "/examGrade/list",
     create: "/examGrade/create",
@@ -231,5 +220,16 @@ export const PRIVATE_URLS = {
     create: "/examSchedule/create",
     update: "/examSchedule/update",
     delete: "/examSchedule/delete",
+  },
+  courseContent: {
+    list: "/courseContent/list",
+    create: "/courseContent/create",
+    update: "/courseContent/updateChapterDetails",
+    delete: "/courseContent/deleteChapter",
+    // create content
+    addContentToChapter: "/courseContent/addContentToChapter",
+    updateContent: "/courseContent/updateContent",
+    deleteContent: "/courseContent/deleteContent",
+    getDetailsTeachers: "courseContent/getDetailsTeachers",
   },
 };
