@@ -1,13 +1,12 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-
+import { useFormik } from "formik";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { manageHostelRoomTableKeys } from "../../data/tableKeys/manageHostelRoom";
 import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { useFormik } from "formik";
 
 export default function ManageRoomType() {
   const [data, setData] = useState([]);
