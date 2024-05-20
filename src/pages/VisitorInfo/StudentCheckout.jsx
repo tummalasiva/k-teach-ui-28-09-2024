@@ -14,6 +14,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
+import { LoadingButton } from "@mui/lab";
 
 const Relation_With_Student = [
   { label: "Father", value: "Father" },
@@ -30,6 +31,8 @@ export default function StudentCheckout() {
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  const [loadingExcel, setLoadingExce] = useState(false);
   const [academicYearList, setAcademicYearList] = useState([]);
   const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -218,6 +221,40 @@ export default function StudentCheckout() {
     enableReinitialize: true,
   });
 
+  const handleGetPrintPdf = async () => {
+    try {
+      setLoadingPdf(true);
+      const { data } = await get(PRIVATE_URLS.studentCheckout.downloadPdf, {
+        params: { schoolId: selectedSetting._id },
+        responseType: "blob",
+      });
+      const uri = URL.createObjectURL(data.data);
+      window.open(uri, "__blank");
+      setLoadingPdf(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingPdf(false);
+    }
+  };
+
+  const handleGetDownloadExcel = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.studentCheckout.donwloadExcel, {
+        params: { schoolId: selectedSetting._id },
+        responseType: "blob",
+      });
+      const uri = URL.createObjectURL(data.data);
+      const link = document.createElement("a");
+      console.log(uri);
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Student Checkout" />
@@ -274,8 +311,19 @@ export default function StudentCheckout() {
               <Button size="small" variant="contained" type="submit">
                 Find
               </Button>
-              <Button size="small" variant="contained">
+              <LoadingButton
+                size="small"
+                loading={loadingPdf}
+                onClick={handleGetPrintPdf}
+                variant="contained">
                 Print
+              </LoadingButton>
+
+              <Button
+                size="small"
+                onClick={handleGetDownloadExcel}
+                variant="contained">
+                Excel
               </Button>
             </Grid>
           </Grid>

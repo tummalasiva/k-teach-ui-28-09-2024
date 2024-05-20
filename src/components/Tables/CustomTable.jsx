@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Avatar,
   Box,
@@ -58,17 +60,19 @@ export default function CustomTable({
   bodyData = [],
   bodyDataModal = "",
   tableKeys = [],
-  actions = ["edit", "delete", "view", "view", "card", "switch"],
+  actions = ["edit", "delete", "view", "card", "switch"],
   onEditClick = () => {},
   onDeleteClick = () => {},
   onViewClick = () => {},
   onCardClick = () => {},
-  onUnBundleClick = () => {},
+  onNavigate = () => {},
+
   onToggleSwitch = () => {},
   toggleStatus = false,
   isDataReady = true,
   module = "",
   CustomAction = () => {},
+
   onUpdate = () => {},
 }) {
   const [page, setPage] = React.useState(0);
@@ -110,16 +114,14 @@ export default function CustomTable({
                 theme.palette.mode === "dark"
                   ? theme.palette.primary.dark
                   : theme.palette.primary.light,
-            }}
-          >
+            }}>
             <TableRow>
               <TableCell align="center">S.No</TableCell>
               {tableKeys.map((r, i) => (
                 <TableCell
                   sx={{ fontWeight: "bold" }}
                   key={i + r.name}
-                  align="center"
-                >
+                  align="center">
                   {r.name}
                 </TableCell>
               ))}
@@ -145,8 +147,7 @@ export default function CustomTable({
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                              }}
-                            >
+                              }}>
                               <Avatar
                                 sx={{
                                   alignSelf: "center",
@@ -169,8 +170,7 @@ export default function CustomTable({
                             justifyContent: "center",
                             alignItems: "center",
                             columnGap: "5px",
-                          }}
-                        >
+                          }}>
                           {actions.includes("edit") && (
                             <Tooltip title="Edit">
                               <IconButton onClick={() => onEditClick(data)}>
@@ -178,11 +178,11 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )}
+
                           {actions.includes("delete") && (
                             <Tooltip title="Delete">
                               <IconButton
-                                onClick={() => handleDeleteClick(data)}
-                              >
+                                onClick={() => handleDeleteClick(data)}>
                                 <DeleteIcon fontSize="small" color="error" />
                               </IconButton>
                             </Tooltip>
@@ -203,8 +203,7 @@ export default function CustomTable({
                               <Button
                                 size="small"
                                 variant="contained"
-                                onClick={() => onCardClick(data)}
-                              >
+                                onClick={() => onCardClick(data)}>
                                 Card
                               </Button>
                             </Tooltip>
@@ -213,8 +212,7 @@ export default function CustomTable({
                             <Tooltip title={toggleStatus}>
                               <IconButton
                                 size="small"
-                                onClick={() => onToggleSwitch(data)}
-                              >
+                                onClick={() => onToggleSwitch(data)}>
                                 <Switch
                                   size="small"
                                   checked={data[toggleStatus] === true}
@@ -222,8 +220,14 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )}
+
                           {actions.includes("custom") && (
-                            <CustomAction data={data} onUpdate={onUpdate} />
+                            <CustomAction
+                              onEditClick={onEditClick}
+                              data={data}
+                              onUpdate={onUpdate}
+                              onNavigate={onNavigate}
+                            />
                           )}
                         </TableCell>
                       ) : null}
@@ -240,8 +244,7 @@ export default function CustomTable({
               justifyContent: "center",
               alignItems: "center",
               paddingTop: "20px",
-            }}
-          >
+            }}>
             <PuffLoader size={30} color="dodgerblue" />
           </Box>
         ) : null}
@@ -268,8 +271,7 @@ export default function CustomTable({
 
           <Typography
             textAlign="center"
-            sx={{ fontSize: "18px", fontWeight: 700 }}
-          >
+            sx={{ fontSize: "18px", fontWeight: 700 }}>
             Delete Confirmation
           </Typography>
           <Typography sx={{ mt: 2, textAlign: "center" }}>
@@ -282,22 +284,19 @@ export default function CustomTable({
               justifyContent: "center",
               alignItems: "center",
               gap: "15px",
-            }}
-          >
+            }}>
             <Button
               size="small"
               color="error"
               variant="contained"
-              onClick={handleClose}
-            >
+              onClick={handleClose}>
               Cancel
             </Button>
             <Button
               color="primary"
               size="small"
               variant="contained"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               Delete
             </Button>
           </Box>

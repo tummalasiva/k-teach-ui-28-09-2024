@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import {
@@ -376,16 +378,14 @@ export default function AddStudent() {
                 component="span"
                 color="red"
                 fontWeight="bold"
-                sx={{ display: "inline" }}
-              >
+                sx={{ display: "inline" }}>
                 Note:{" "}
               </Typography>
               <Typography
                 variant="h6"
                 component="span"
                 fontWeight="bold"
-                sx={{ display: "inline" }}
-              >
+                sx={{ display: "inline" }}>
                 Student will be admited to session
               </Typography>
             </Grid>
@@ -779,8 +779,7 @@ export default function AddStudent() {
         <FormBox
           sx={{
             marginBottom: "60px",
-          }}
-        >
+          }}>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Other Information
           </Title>
@@ -879,16 +878,14 @@ export default function AddStudent() {
                   size="small"
                   color="error"
                   variant="contained"
-                  onClick={() => navigate(-1)}
-                >
+                  onClick={() => navigate(-1)}>
                   Cancel
                 </Button>
                 <LoadingButton
                   loading={loading}
                   type="submit"
                   size="small"
-                  variant="contained"
-                >
+                  variant="contained">
                   Submit
                 </LoadingButton>
               </Stack>

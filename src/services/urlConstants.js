@@ -201,6 +201,8 @@ export const PRIVATE_URLS = {
     list: "/studentCheckout/list",
     update: "/studentCheckout/update",
     delete: "/studentCheckout/delete",
+    downloadPdf: "/studentCheckout/downloadPdf",
+    donwloadExcel: "/studentCheckout/donwloadExcel",
   },
   guardianFeedback: {
     list: "/guardianFeedback/list",
@@ -227,6 +229,12 @@ export const PRIVATE_URLS = {
     create: "/examSchedule/create",
     update: "/examSchedule/update",
     delete: "/examSchedule/delete",
+  },
+  receiptTitle: {
+    list: "/receiptTitle/list",
+    create: "/receiptTitle/create",
+    update: "/receiptTitle/update",
+    toggleActiveStatus: "/receiptTitle/toggleActiveStatus",
   },
   courseContent: {
     list: "/courseContent/list",
