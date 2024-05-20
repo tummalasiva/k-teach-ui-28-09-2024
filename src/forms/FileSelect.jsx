@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import {
   Box,
@@ -42,41 +44,41 @@ export default function FileSelect({
   return (
     <>
       <Wrapper mt={1}>
-        <Box
-          component="div"
-          onClick={() => setOpen(true)}
-          sx={{
-            borderRadius: "5px",
-            padding: "5px",
-            backgroundColor: "white",
-            border: "1px solid lightgray",
-            height: "30px",
-            cursor: "pointer",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            overflow: "hidden",
-          }}
-        >
-          <Typography
+        {multi && (
+          <Box
             component="div"
             onClick={() => setOpen(true)}
             sx={{
-              fontWeight: "bold",
               borderRadius: "5px",
               padding: "5px",
               backgroundColor: "white",
-              color: "black",
+              border: "1px solid lightgray",
               height: "30px",
-              width: "30px",
-              textAlign: "center",
-            }}
-          >
-            {selectedFiles.length}
-          </Typography>
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+            }}>
+            <Typography
+              component="div"
+              onClick={() => setOpen(true)}
+              sx={{
+                fontWeight: "bold",
+                borderRadius: "5px",
+                padding: "5px",
+                backgroundColor: "white",
+                color: "black",
+                height: "30px",
+                width: "30px",
+                textAlign: "center",
+              }}>
+              {selectedFiles.length}
+            </Typography>
 
-          <RemoveRedEyeRoundedIcon fontSize="small" />
-        </Box>
+            <RemoveRedEyeRoundedIcon fontSize="small" />
+          </Box>
+        )}
 
         <Button fullWidth component="label" size="small" variant="outlined">
           <input
