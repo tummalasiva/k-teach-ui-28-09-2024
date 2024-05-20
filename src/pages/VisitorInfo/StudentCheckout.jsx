@@ -35,6 +35,17 @@ export default function StudentCheckout() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.studentCheckout.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const AddStudentCheckoutHandel = () => {
     setOpen(true);
   };
@@ -118,6 +129,7 @@ export default function StudentCheckout() {
           value: d._id,
         }))
       );
+
       formik.setFieldValue("student", data.result[0]?._id);
     } catch (error) {
       console.log(error);
@@ -167,14 +179,9 @@ export default function StudentCheckout() {
     }
   }, [formik.values.class]);
 
-  const handleEditClick = (data) => {
-    setDataToEdit(data);
-    setOpen(true);
-  };
-
   useEffect(() => {
     if (formik.values.academicYear) {
-      // getData();
+      getData();
     }
   }, [formik.values.academicYear]);
 
@@ -183,20 +190,13 @@ export default function StudentCheckout() {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        student: formik.values.student,
       };
 
       setLoading(true);
-      if (dataToEdit) {
-        const { data } = await put(
-          PRIVATE_URLS.studentCheckout.update + "/" + dataToEdit._id,
-          payload
-        );
-      } else {
-        const { data } = await post(
-          PRIVATE_URLS.studentCheckout.create,
-          payload
-        );
-      }
+
+      const { data } = await put(PRIVATE_URLS.studentCheckout.update, payload);
+      getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -206,14 +206,18 @@ export default function StudentCheckout() {
 
   const entryFormik = useFormik({
     initialValues: {
-      student: formik.values.student || "",
-      relationship: dataToEdit?.relationship || "",
-      visitorName: dataToEdit?.visitorName || "",
-      visitorPhone: dataToEdit?.visitorPhone || "",
+      student:
+        students.find((student) => student._id === formik.values.student)
+          ?.basicInfo.name || "",
+      relationship: "",
+      reason: "",
+      visitorName: "",
+      visitorContactNumber: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
   return (
     <>
       <PageHeader title="Student Checkout" />
@@ -312,6 +316,14 @@ export default function StudentCheckout() {
 
           <Grid xs={12} md={6} item>
             <FormInput
+              name="reason"
+              formik={entryFormik}
+              label="Enter Reason"
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} item>
+            <FormInput
               name="visitorName"
               formik={entryFormik}
               label="Enter Visitor Name"
@@ -319,7 +331,7 @@ export default function StudentCheckout() {
           </Grid>
           <Grid xs={12} md={6} item>
             <FormInput
-              name="visitorPhone"
+              name="visitorContactNumber"
               formik={entryFormik}
               label="Enter Visitor Phone"
             />
@@ -348,7 +360,7 @@ export default function StudentCheckout() {
         </Grid>
       </FormModal>
       <CustomTable
-        actions={["edit"]}
+        actions={["view"]}
         tableKeys={studentCheckOutTableKeys}
         bodyDataModal="student checkout"
         bodyData={data}

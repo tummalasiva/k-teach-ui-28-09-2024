@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import {
@@ -49,31 +51,13 @@ export default function Overview() {
   const [totalMaleStudents, setTotalMaleStudents] = useState(0);
   const [totalFemaleStudents, setTotalFemaleStudents] = useState(0);
 
-  const [data, setData] = useState([
-    {
-      className: "4",
-      maleStudents: "7",
-      femaleStudents: "9",
-      totalStudents: "78",
-
-      overviewData: [
-        {
-          section: "A",
-          maleCount: "89",
-          femaleCount: "78",
-          total: "70",
-        },
-      ],
-    },
-  ]);
-
   const getAcademicYear = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
       setAcademicYear(
         data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
       );
-      setSelectAcademicYear(data.result[0]?._id, "llllll");
+      setSelectAcademicYear(data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -107,8 +91,6 @@ export default function Overview() {
 
     academicYearChanged();
   }, [selectAcademicYear, selectedSetting]);
-
-  console.log(overviewDetails, "bbbbbb");
 
   return (
     <>
@@ -145,8 +127,7 @@ export default function Overview() {
                 theme.palette.mode === "dark"
                   ? theme.palette.primary.dark
                   : theme.palette.primary.light,
-            }}
-          >
+            }}>
             <TableRow>
               <TableHeader align="center">Class</TableHeader>
 
@@ -160,15 +141,13 @@ export default function Overview() {
               <TableRow key={overview.className}>
                 <TableCell
                   sx={{ borderRight: "1px solid grey" }}
-                  align="center"
-                >
+                  align="center">
                   {overview.name}
                 </TableCell>
 
                 <TableCell
                   sx={{ borderRight: "1px solid grey", padding: 0 }}
-                  align="center"
-                >
+                  align="center">
                   <DataContiner>
                     <StudentCount
                       showTitle={true}
@@ -199,8 +178,7 @@ export default function Overview() {
                             theme.palette.mode === "dark"
                               ? theme.palette.primary.dark
                               : theme.palette.primary.light,
-                        }}
-                      >
+                        }}>
                         <TableRow>
                           {overview.sections.map((overview, index) => (
                             <TableCell align="left">
@@ -218,8 +196,7 @@ export default function Overview() {
                                   display: "flex",
                                   rowGap: "2px",
                                   flexDirection: "column",
-                                }}
-                              >
+                                }}>
                                 <StudentCount
                                   title="Male"
                                   count={overview.maleCount}

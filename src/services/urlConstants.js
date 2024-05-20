@@ -196,6 +196,12 @@ export const PRIVATE_URLS = {
     update: "/visitorInfo/update",
     delete: "/visitorInfo/delete",
   },
+
+  studentCheckout: {
+    list: "/studentCheckout/list",
+    update: "/studentCheckout/update",
+    delete: "/studentCheckout/delete",
+  },
   guardianFeedback: {
     list: "/guardianFeedback/list",
     listPublic: "/guardianFeedback/listPublic",
