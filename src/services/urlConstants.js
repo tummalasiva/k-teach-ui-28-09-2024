@@ -257,6 +257,8 @@ export const PRIVATE_URLS = {
     create: "/room/create",
     update: "/room/update",
     delete: "/room/delete",
+    updateBed: "/room/updateBed",
+    deleteBed: "/room/deleteBed",
   },
   hostel: {
     list: "/hostel/list",
