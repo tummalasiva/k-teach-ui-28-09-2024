@@ -50,6 +50,7 @@ const Heading = styled(TableCell)(() => ({
   textAlign: "center",
   color: "#ffff",
 }));
+
 const DownloadBox = styled(Box)(() => ({
   background: `rgb(133 140 223 / 19%)`,
   width: "100%",
@@ -117,7 +118,7 @@ export default function Courses() {
 
       setData(data.result);
 
-      console.log(data.result, "mmmmmmbbbbbbnnnnnn");
+      // console.log(data.result, "mmmmmmbbbbbbnnnnnn");
     } catch (error) {
       console.error(error);
     }
