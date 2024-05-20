@@ -221,6 +221,7 @@ export const PRIVATE_URLS = {
     create: "/examSchedule/create",
     update: "/examSchedule/update",
     delete: "/examSchedule/delete",
+  },
   courseContent: {
     list: "/courseContent/list",
     create: "/courseContent/create",
