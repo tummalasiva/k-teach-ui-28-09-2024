@@ -1,3 +1,5 @@
+/** @format */
+
 export const receiptBookTableKeys = [
   {
     name: "Receipt Name",

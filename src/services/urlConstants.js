@@ -196,6 +196,14 @@ export const PRIVATE_URLS = {
     update: "/visitorInfo/update",
     delete: "/visitorInfo/delete",
   },
+
+  studentCheckout: {
+    list: "/studentCheckout/list",
+    update: "/studentCheckout/update",
+    delete: "/studentCheckout/delete",
+    downloadPdf: "/studentCheckout/downloadPdf",
+    donwloadExcel: "/studentCheckout/donwloadExcel",
+  },
   guardianFeedback: {
     list: "/guardianFeedback/list",
     listPublic: "/guardianFeedback/listPublic",
@@ -221,6 +229,12 @@ export const PRIVATE_URLS = {
     update: "/examSchedule/update",
     delete: "/examSchedule/delete",
   },
+  receiptTitle: {
+    list: "/receiptTitle/list",
+    create: "/receiptTitle/create",
+    update: "/receiptTitle/update",
+    toggleActiveStatus: "/receiptTitle/toggleActiveStatus",
+  },
   courseContent: {
     list: "/courseContent/list",
     create: "/courseContent/create",
@@ -231,5 +245,23 @@ export const PRIVATE_URLS = {
     updateContent: "/courseContent/updateContent",
     deleteContent: "/courseContent/deleteContent",
     getDetailsTeachers: "courseContent/getDetailsTeachers",
+  },
+  roomType: {
+    list: "/roomType/list",
+    create: "/roomType/create",
+    update: "/roomType/update",
+    delete: "/roomType/delete",
+  },
+  room: {
+    list: "/room/list",
+    create: "/room/create",
+    update: "/room/update",
+    delete: "/room/delete",
+  },
+  hostel: {
+    list: "/hostel/list",
+    create: "/hostel/create",
+    update: "/hostel/update",
+    delete: "/hostel/delete",
   },
 };
