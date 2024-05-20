@@ -86,7 +86,13 @@ export default function CourseContent() {
     }
   }, [courses, entryFormik.values.courseId]);
 
-  console.log(entryFormik.values.courseId, "id");
+  // const handleEditClick = (data) => {
+  //   console.log(data, "upd");
+  //   let type = Contents.find((c) => c.label === data?.type);
+  //   console.log(type, "oooo");
+  //   entryFormik.setFieldValue("contents", type?.value);
+  // };
+
   return (
     <>
       <PageHeader title="Course Content" />
@@ -132,7 +138,9 @@ export default function CourseContent() {
           chapter={chapter}
           courseId={entryFormik.values.courseId}
           course={courseDetails}
-          getDetails={getDetails}
+          getDetails={() => entryFormik.handleSubmit()}
+          // setDataToEdit={setDataToEdit}
+          // dataToEdit={dataToEdit}
         />
       ))}
 

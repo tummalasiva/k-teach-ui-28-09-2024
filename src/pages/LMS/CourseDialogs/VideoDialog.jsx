@@ -13,24 +13,25 @@ import FileSelect from "../../../forms/FileSelect";
 
 export default function VideoDialog({
   open,
-  setOpenVideo = () => {},
   title,
   courseId,
   chapter,
+  dataToEdit,
+  setDataToEdit = () => {},
+  setOpenVideo = () => {},
+  onUpdate = () => {},
+  Formik,
 }) {
   const { selectedSetting } = useContext(SettingContext);
-  const [dataToEdit, setDataToEdit] = useState(null);
+  // const [dataToEdit, setDataToEdit] = useState(null);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // console.log(selectFile, "selectFile");
   // // create || update actions
   const handleCreateOrUpdate = async (values) => {
-    console.log(values, "values");
-
     const formData = new FormData();
 
-    const payload = {
+    const material = {
       type: "Video",
       orderSequence: chapter.contents ? chapter.contents.length + 1 : 1,
       title: values.name,
@@ -39,7 +40,7 @@ export default function VideoDialog({
       contentHours: values.contentHours,
     };
 
-    formData.append("material", JSON.stringify(payload));
+    formData.append("material", JSON.stringify(material));
     selectFile.forEach((video) => formData.append("file", video));
     formData.append("schoolId", selectedSetting._id);
 
@@ -59,19 +60,21 @@ export default function VideoDialog({
             headers: { "Content-type": "multipart/form-data" },
           }
         );
-        console.log(data, "post");
+        // console.log(data, "video post");
       }
       handleClose();
+      onUpdate();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setLoading(false);
   };
 
   const entryFormik = useFormik({
     initialValues: {
-      name: dataToEdit ? dataToEdit.name : "",
-      contentHours: dataToEdit ? dataToEdit.contentHours : "",
+      title: dataToEdit?.title || "",
+      contentHours: dataToEdit?.contentHours || "",
+      video: dataToEdit?.video || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -96,6 +99,7 @@ export default function VideoDialog({
   const handleClose = () => {
     setOpenVideo(false);
     setDataToEdit(null);
+    Formik.setFieldValue("contents", "");
   };
 
   return (
@@ -111,7 +115,7 @@ export default function VideoDialog({
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="name"
+              name="title"
               label="Video Name 0/80*"
               required={true}
               inputProps={{ maxLength: 80 }}

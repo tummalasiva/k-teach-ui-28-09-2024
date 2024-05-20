@@ -30,7 +30,7 @@ const Contents = [
   },
   {
     id: 3,
-    label: "Flashcard",
+    label: "FlashCard",
     value: "flashcard",
   },
   {
@@ -38,22 +38,28 @@ const Contents = [
     label: "Material",
     value: "material",
   },
-  {
-    id: 5,
-    label: "Code Practice",
-    value: "codepractice",
-  },
+  // {
+  //   id: 5,
+  //   label: "Code Practice",
+  //   value: "codepractice",
+  // },
 ];
 
-export default function ShowCourseContent({ chapter, course, courseId }) {
+export default function ShowCourseContent({
+  chapter,
+  course,
+  courseId,
+  getDetails,
+}) {
   const { selectedSetting } = useContext(SettingContext);
+  const [dataToEdit, setDataToEdit] = useState(null);
   const [openVideo, setOpenVideo] = useState(false);
   const [openQuiz, setOpenQuiz] = useState(false);
   const [openFlashcard, setOpenFlashcard] = useState(false);
   const [openMaterial, setOpenMaterial] = useState(false);
   const [openCodepractice, setOpenCodepractice] = useState(false);
 
-  console.log(course, courseId, "cour");
+  // console.log(course, courseId, "cour");
 
   const entryFormik = useFormik({
     initialValues: {
@@ -75,6 +81,14 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
       setOpenCodepractice(entryFormik.values.contents === "codepractice");
     }
   }, [entryFormik.values.contents]);
+
+  const handleEditClick = (data) => {
+    console.log(data, "upd");
+    let type = Contents.find((c) => c.label === data?.type);
+    console.log(type, "oooo");
+    entryFormik.setFieldValue("contents", type?.value);
+    setDataToEdit(data);
+  };
 
   return (
     <>
@@ -126,7 +140,7 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
                   color: "#1b3779",
                 }}>
                 <IconButton size="small">
-                  <EditIcon fontSize="small" />
+                  <EditIcon fontSize="small" onClick={handleEditClick} />
                 </IconButton>
               </Tooltip>
               Chapter: {chapter?.title}
@@ -142,7 +156,11 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
-            <CourseContentTable chapter={chapter} courseId={course.courseId} />
+            <CourseContentTable
+              chapter={chapter}
+              courseId={courseId}
+              onEditClick={handleEditClick}
+            />
           </Grid>
         </Grid>
       </Box>
@@ -154,6 +172,9 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
         Formik={entryFormik}
         setOpenVideo={setOpenVideo}
         chapter={chapter}
+        onUpdate={getDetails}
+        setDataToEdit={setDataToEdit}
+        dataToEdit={dataToEdit}
       />
 
       {/* open quiz model ============== */}
@@ -164,14 +185,20 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
         Formik={entryFormik}
         setOpenQuiz={setOpenQuiz}
         chapter={chapter}
+        onUpdate={getDetails}
       />
 
       {/* open flashcard model ========== */}
       <FlashcardDialog
         title="Flashcard"
         open={openFlashcard}
+        chapter={chapter}
+        courseId={courseId}
         Formik={entryFormik}
         setOpenFlashcard={setOpenFlashcard}
+        onUpdate={getDetails}
+        setDataToEdit={setDataToEdit}
+        dataToEdit={dataToEdit}
       />
 
       {/* open material model =========== */}
@@ -179,16 +206,23 @@ export default function ShowCourseContent({ chapter, course, courseId }) {
         title="Material"
         open={openMaterial}
         Formik={entryFormik}
+        chapter={chapter}
+        courseId={courseId}
         setOpenMaterial={setOpenMaterial}
+        onUpdate={getDetails}
+        setDataToEdit={setDataToEdit}
+        dataToEdit={dataToEdit}
       />
 
       {/* open CodePractice model =========== */}
-      <CodePracticeDialog
+      {/* <CodePracticeDialog
         title="Code Practice"
         open={openCodepractice}
         Formik={entryFormik}
+        chapter={chapter}
+        courseId={courseId}
         setOpenCodepractice={setOpenCodepractice}
-      />
+      /> */}
     </>
   );
 }

@@ -22,6 +22,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import ViewAgendaIcon from "@mui/icons-material/ViewAgenda";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import EditIcon from "@mui/icons-material/Edit";
+import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 
 const MuiTableCell = styled(TableCell)(() => ({
   width: "150px",
@@ -30,7 +31,11 @@ const MuiTableCell = styled(TableCell)(() => ({
   color: "black",
 }));
 
-export default function CourseContentTable({ chapter, courseId }) {
+export default function CourseContentTable({
+  chapter,
+  courseId,
+  onEditClick = () => {},
+}) {
   console.log(chapter, "gau");
   return (
     <>
@@ -48,90 +53,81 @@ export default function CourseContentTable({ chapter, courseId }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {chapter.contents?.map(
-              (item, index) => (
-                console.log(item, "item"),
-                (
-                  <TableRow>
-                    <TableCell align="center">
-                      <Typography sx={{ pr: "10px" }}>1</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          columnGap: "5px",
-                        }}>
-                        {item.type === "Video" ? (
-                          <YouTubeIcon fontSize="small" color="error" />
-                        ) : null}
-                        {item.type === "Quiz" ? (
-                          <QuizIcon fontSize="small" color="success" />
-                        ) : null}
-                        {item.type === "FlashCard" ? (
-                          <ViewAgendaIcon fontSize="small" color="warning" />
-                        ) : null}
-                        {item.type === "Material" ? (
-                          <InsertDriveFileIcon fontSize="small" color="info" />
-                        ) : null}
-                        {item.type === "CodePractice" ? (
-                          <QuestionAnswerIcon
-                            fontSize="small"
-                            sx={{ color: "#1b3779" }}
-                          />
-                        ) : null}
-                      </Box>
-                    </TableCell>
+            {chapter.contents?.map((item, index) => (
+              <TableRow>
+                <TableCell align="center">
+                  <Typography sx={{ pr: "10px" }}>1</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      columnGap: "5px",
+                    }}>
+                    {item.type === "Video" ? (
+                      <YouTubeIcon fontSize="small" color="error" />
+                    ) : null}
+                    {item.type === "Quiz" ? (
+                      <QuizIcon fontSize="small" color="success" />
+                    ) : null}
+                    {item.type === "FlashCard" ? (
+                      <ViewAgendaIcon fontSize="small" color="warning" />
+                    ) : null}
+                    {item.type === "Material" ? (
+                      <InsertDriveFileIcon fontSize="small" color="info" />
+                    ) : null}
+                    {item.type === "CodePractice" ? (
+                      <QuestionAnswerIcon
+                        fontSize="small"
+                        sx={{ color: "#1b3779" }}
+                      />
+                    ) : null}
+                  </Box>
+                </TableCell>
 
-                    <TableCell align="center">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}>
-                        <Typography variant="inherit">
-                          {item.title?.substring(0, 80)}
-                        </Typography>
-                      </Box>
-                    </TableCell>
+                <TableCell align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}>
+                    <Typography variant="inherit">
+                      {item.title?.substring(0, 80)}
+                    </Typography>
+                  </Box>
+                </TableCell>
 
-                    <TableCell align="center">
-                      <IconButton>
-                        {/* <IconButton onClick={() => handleEditIconClick(item)}> */}
-                        <EditIcon
-                          fontSize="small"
-                          // style={{
-                          //   color: `${theme.palette.primary.main}`,
-                          // }}
-                        />
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        // onClick={() => handleOpenDeleteModal(item)}
-                      >
-                        <DeleteIcon color="error" fontSize="small" />
-                      </IconButton>
-                    </TableCell>
+                <TableCell align="center">
+                  <IconButton onClick={() => onEditClick(item)}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    // onClick={() => handleOpenDeleteModal(item)}
+                  >
+                    <DeleteIcon color="error" fontSize="small" />
+                  </IconButton>
+                </TableCell>
 
-                    {/* <TableCell align="center">
+                <TableCell align="center">
                   {index === chapter.contents.length - 1 ? null : (
-                    <IconButton onClick={() => sortContent(item._id, "down")}>
-                      <ArrowDownwardIcon />
+                    <IconButton>
+                      {/*<IconButton onClick={() => sortContent(item._id, "down")}> */}
+                      <ArrowDownward />
                     </IconButton>
                   )}
                   {index === 0 ? null : (
-                    <IconButton onClick={() => sortContent(item._id, "up")}>
-                      <ArrowUpwardIcon />
+                    <IconButton>
+                      {/* <IconButton onClick={() => sortContent(item._id, "up")}> */}
+                      <ArrowUpward />
                     </IconButton>
                   )}
-                </TableCell> */}
-                  </TableRow>
-                )
-              )
-            )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
