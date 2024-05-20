@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import HomeComponents from "../components/home/HomeComponents";
 import LearningInfo from "../components/home/LearningInfo";

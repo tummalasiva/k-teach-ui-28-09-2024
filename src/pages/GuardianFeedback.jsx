@@ -17,6 +17,7 @@ import { PRIVATE_URLS } from "../services/urlConstants";
 import SettingContext from "../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import ViewModel from "../forms/ViewModel";
+import themeData from "../data/themeData";
 
 const MuiBox = styled(Box)({
   display: "flex",
@@ -132,25 +133,28 @@ export default function GuardianFeedback() {
       <PageHeader title="Guardian Feedback" />
       <MuiBox>
         <ButtonGroup variant="outlined" aria-label="outlined button group">
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setSelectedStatus("pending");
-            }}>
-            Pending:{data.filter((f) => f.status === "pending").length}
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedStatus("approved");
-            }}>
-            Approved: {data.filter((f) => f.status === "approved").length}
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedStatus("rejected");
-            }}>
-            Rejected:{data.filter((f) => f.status === "rejected").length}
-          </Button>
+          {["pending", "approved", "rejected"].map((status) => (
+            <Button
+              key={status}
+              sx={{
+                background:
+                  selectedStatus === status
+                    ? themeData.darkPalette.primary.main
+                    : "",
+                ":hover": {
+                  background:
+                    selectedStatus === status
+                      ? themeData.darkPalette.primary.main
+                      : "",
+                },
+                color: selectedStatus === status ? "#fff" : "#000",
+              }}
+              onClick={() => {
+                setSelectedStatus(status);
+              }}>
+              {status}:{data.filter((f) => f.status === status).length}
+            </Button>
+          ))}
         </ButtonGroup>
       </MuiBox>
       <CustomTable

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -64,12 +66,10 @@ export default function NewsDetails({ elem }) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            }}
-          >
+            }}>
             <img
               className="image"
-              src="../../../assets/images/school-white.avif"
-              //   src={elem?.image?.link}
+              src={elem?.image}
               style={{
                 height: "50px",
                 width: "50px",
@@ -98,8 +98,7 @@ export default function NewsDetails({ elem }) {
                   color: "orange",
                 }}
                 fontSize={14}
-                onClick={handleNavigate}
-              >
+                onClick={handleNavigate}>
                 Read More
               </Typography>
             </Box>

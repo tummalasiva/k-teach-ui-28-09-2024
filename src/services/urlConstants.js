@@ -69,6 +69,8 @@ export const PRIVATE_URLS = {
     toggleActiveStatus: "/school/toggleActiveStatus",
     update: "/school/update",
     details: "/school/details",
+    addFiles: "/school/addFiles",
+    removeFile: "/school/removeFile",
   },
   class: {
     list: "/class/list",
@@ -108,6 +110,7 @@ export const PRIVATE_URLS = {
     delete: "/gallery/delete",
     addFiles: "/gallery/addFiles",
     removeFile: "/gallery/removeFile",
+    listPublic: "/gallery/listPublic",
   },
   assignment: {
     list: "/assignment/list",
@@ -127,6 +130,7 @@ export const PRIVATE_URLS = {
     create: "/news/create",
     update: "/news/update",
     delete: "/news/delete",
+    listPublic: "/news/listPublic",
   },
   event: {
     list: "/event/list",
@@ -145,6 +149,7 @@ export const PRIVATE_URLS = {
     create: "/awards/create",
     update: "/awards/update",
     delete: "/awards/delete",
+    listPublic: "/awards/listPublic",
   },
   splashNews: {
     list: "/splashNews/list",
@@ -208,5 +213,23 @@ export const PRIVATE_URLS = {
     updateContent: "/courseContent/updateContent",
     deleteContent: "/courseContent/deleteContent",
     getDetailsTeachers: "courseContent/getDetailsTeachers",
+  },
+  examGrade: {
+    list: "/examGrade/list",
+    create: "/examGrade/create",
+    update: "/examGrade/update",
+    delete: "/examGrade/delete",
+  },
+  examTerm: {
+    list: "/examTerm/list",
+    create: "/examTerm/create",
+    update: "/examTerm/update",
+    delete: "/examTerm/delete",
+  },
+  examSchedule: {
+    list: "/examSchedule/list",
+    create: "/examSchedule/create",
+    update: "/examSchedule/update",
+    delete: "/examSchedule/delete",
   },
 };

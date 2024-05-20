@@ -1,10 +1,15 @@
-import React from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Box, Button, Grid, Paper, Typography, styled } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 const Heading = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -53,6 +58,46 @@ const TextOuterContent = styled(Box)(({ theme }) => ({
 }));
 
 export default function StudyCertificate() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  //get academic year
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStudents = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setStudents(
+        data.result.map((d) => ({
+          ...d,
+          label: d.basicInfo.name,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("student", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -63,6 +108,11 @@ export default function StudyCertificate() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getAcademicYear();
+    getStudents();
+  }, [selectedSetting._id]);
   return (
     <>
       <PageHeader title="Study Certificate" />
@@ -74,7 +124,7 @@ export default function StudyCertificate() {
               name="academicYear"
               formik={entryFormik}
               label="Select Academic Year"
-              // options={""}
+              options={academicYear}
             />
           </Grid>
 
@@ -98,7 +148,7 @@ export default function StudyCertificate() {
               name="student"
               formik={entryFormik}
               label="Select Student"
-              // options={""}
+              options={students}
             />
           </Grid>
           <Grid
@@ -108,8 +158,7 @@ export default function StudyCertificate() {
             display="flex"
             justifyContent="flex-end"
             gap={1}
-            item
-          >
+            item>
             <Button size="small" variant="contained">
               Bulk Issue
             </Button>
@@ -125,8 +174,7 @@ export default function StudyCertificate() {
           container
           spacing={2}
           display="flex"
-          justifyContent="space-between"
-        >
+          justifyContent="space-between">
           <Grid item xs={6} md={6} lg={3} textAlign="start">
             <img src="" alt="logo" height={110} width={100} />
           </Grid>
@@ -154,8 +202,7 @@ export default function StudyCertificate() {
             sx={{
               fontSize: "25px",
               fontFamily: " Georgia, sans-serif",
-            }}
-          >
+            }}>
             {" "}
             This is to certify Mister/Miss son/daughter of Sri{" "}
             <Content component={"span"}>abc</Content> a resident of{" "}

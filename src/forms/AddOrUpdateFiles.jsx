@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Box,
   Button,
@@ -7,26 +9,27 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  Stack,
   TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+
 import { LoadingButton } from "@mui/lab";
-import { Close, Delete } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
+import { put } from "../services/apiMethods";
+import { PRIVATE_URLS } from "../services/urlConstants";
 
 export default function AddOrUpdateFiles({
+  dataToEdit,
+  title,
+  onUpdate = () => {},
   styles = {},
-  title = "",
-  accept = "",
-  setFiles = () => {},
 }) {
   const [open, setOpen] = useState(false);
   const [updatingFiles, setUpdatingFiles] = useState(false);
-
-  const [image, setImage] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const theme = useTheme();
   let fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -35,22 +38,48 @@ export default function AddOrUpdateFiles({
 
   const handleSelectFile = (e) => {
     const selectedFiles = e.target.files;
+
     if (selectedFiles.length > 0) {
-      let imageList = [];
+      let fileList = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        const previewUrl = URL.createObjectURL(file);
-        imageList.push(previewUrl);
-      }
 
-      setImage([...imageList]);
+        fileList.push(file);
+      }
+      setSelectedFiles([...fileList]);
     } else {
       console.log("No files selected");
     }
   };
-
   const handleRemoveFile = (i) => {
-    setImage(image.filter((f, index) => index !== i));
+    setSelectedFiles(selectedFiles.filter((f, index) => index !== i));
+  };
+
+  const handleUpdateItem = async (e) => {
+    e.preventDefault();
+
+    try {
+      setUpdatingFiles(true);
+      const formData = new FormData();
+      selectedFiles.forEach((f) => formData.append("bannerImages", f));
+      console.log(selectedFiles, "imageeeee");
+      const { data } = await put(
+        PRIVATE_URLS.school.addFiles + "/" + dataToEdit._id,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      onUpdate(data.result);
+      handleClose();
+
+      setSelectedFiles([]);
+      setUpdatingFiles(false);
+    } catch (error) {
+      setUpdatingFiles(false);
+
+      console.log(error);
+    }
   };
 
   return (
@@ -60,8 +89,7 @@ export default function AddOrUpdateFiles({
         onClick={handleOpenDialog}
         size="small"
         variant="contained"
-        sx={{ mt: 2 }}
-      >
+        sx={{ mt: 2 }}>
         {title}
       </Button>
 
@@ -75,66 +103,64 @@ export default function AddOrUpdateFiles({
             maxWidth: 650,
             ...styles,
           },
-        }}
-      >
+        }}>
         <DialogTitle>Add/Update Banner images</DialogTitle>
         <Divider />
         <DialogContent
           sx={{
             padding: "10px",
-          }}
-        >
-          <Box sx={{ margin: "15px 0" }}>
-            <Typography sx={{ fontWeight: "bold" }}>Add Files</Typography>
-
-            <TextField
-              name="images"
-              label="Select files"
-              fullWidth
-              onChange={handleSelectFile}
+          }}>
+          <Box sx={{ margin: "20px 0" }}>
+            <Box
               sx={{
-                mt: 2,
-                borderWidth: 1,
-                borderRadius: theme.shape.borderRadius,
-                maxWidth: "300px",
-              }}
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                type: "file",
-                multiple: true,
-                accept: accept,
-              }}
-              InputProps={{
-                style: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              <Typography sx={{ fontWeight: "bold" }}>Add Files</Typography>
+              <TextField
+                name="images"
+                label="Select files"
+                fullWidth
+                onChange={handleSelectFile}
+                sx={{
                   borderWidth: 1,
-                  height: "40px",
                   borderRadius: theme.shape.borderRadius,
-                },
-              }}
-            />
+                  maxWidth: "300px",
+                }}
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{ type: "file", multiple: true }}
+                InputProps={{
+                  style: {
+                    borderWidth: 1,
+                    height: "40px",
+                    borderRadius: theme.shape.borderRadius,
+                  },
+                }}
+              />
+            </Box>
+            {selectedFiles.map((f, i) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "10px",
 
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-              {image.map((preview, index) => (
-                <Box key={index} sx={{ position: "relative" }}>
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => handleRemoveFile(index)}
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      zIndex: 1,
-                    }}
-                  >
-                    <Delete fontSize="small" color="error" />
-                  </IconButton>
-                  <img src={preview} width={120} height={100} />
-                </Box>
-              ))}
-            </Stack>
+                  background: "#5fa5f661",
+                  borderRadius: "5px",
+                  marginTop: "5px",
+                }}
+                key={f.name + i.toString()}>
+                <Typography>{f.name}</Typography>
+                <IconButton onClick={(e) => handleRemoveFile(i)}>
+                  <Close fontSize="small" />
+                </IconButton>
+              </Box>
+            ))}
           </Box>
         </DialogContent>
         <DialogActions>
@@ -142,17 +168,15 @@ export default function AddOrUpdateFiles({
             size="small"
             color="error"
             variant="contained"
-            onClick={handleClose}
-          >
+            onClick={handleClose}>
             Cancel
           </Button>
           <LoadingButton
-            disabled={!image.length}
+            disabled={!selectedFiles.length}
             size="small"
             loading={updatingFiles}
             variant="contained"
-            // onClick={onAddClick}
-          >
+            onClick={handleUpdateItem}>
             Add
           </LoadingButton>
         </DialogActions>

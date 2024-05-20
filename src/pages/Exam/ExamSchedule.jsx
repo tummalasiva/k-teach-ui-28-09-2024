@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid, Paper } from "@mui/material";
 import { examListTableKeys } from "../../data/tableKeys/examListData";
@@ -8,10 +10,121 @@ import CustomTable from "../../components/Tables/CustomTable";
 import TabPanel from "../../components/Tabs/TabPanel";
 import TabList from "../../components/Tabs/Tablist";
 import FormSelect from "../../forms/FormSelect";
+import SettingContext from "../../context/SettingsContext";
+import { del, get, post, put } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import AddForm from "../../forms/AddForm";
+import FormInput from "../../forms/FormInput";
+import FormModal from "../../forms/FormModal";
+import FormDatePicker from "../../forms/FormDatePicker";
+
+const ShowIn_HallTick = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const ShowIn_Exam_Results = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const Pratical_Marks = [
+  { label: "Active", value: "active" },
+  { label: "In active", value: "inactive" },
+];
 
 export default function ExamSchedule() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setSelectValue] = useState(0);
+  const [examtitle, setExamTitle] = useState([]);
+  const [exam, setExam] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState(null);
+
+  const [classeData, setClasseData] = useState([]);
+
+  const [classes, setClasses] = useState([]);
+  const [subject, setSubject] = useState([]);
+
+  const getData = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examSchedule.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: values.class,
+            examTerm: values.examTerm,
+          },
+        },
+      });
+      setData(data.result.map((s) => ({ ...s, subject: s.subject })));
+      console.log(data.result, "resullttttt");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handelExamSchedule = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getExamTerm = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setExamTitle(
+        data.result.map((c) => ({ ...c, label: c.title, value: c._id }))
+      );
+      formik.setFieldValue("examTerm", data.result[0]?._id);
+      entryFormik.setFieldValue("examTerm", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get class
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setClasses(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+
+      formik.setFieldValue("class", data.result[0]?._id);
+      entryFormik.setFieldValue("class", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSubject = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.subject.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: formik.values.class },
+        },
+      });
+      setSubject(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+      formik.setFieldValue("subject", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
@@ -20,10 +133,96 @@ export default function ExamSchedule() {
   const entryFormik = useFormik({
     initialValues: {
       class: "",
-      exam: "",
+      examTerm: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getData,
+    enableReinitialize: true,
   });
+
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+
+      console.log(payload, "qqqqqq");
+
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.examSchedule.update + "/" + dataToEdit._id,
+          payload
+        );
+        // getData();
+      } else {
+        const { data } = await post(PRIVATE_URLS.examSchedule.create, payload);
+        // getData();
+        console.log(data, "vvvvvv");
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      examTerm: dataToEdit?.examTerm._id || "",
+      class: dataToEdit?.class._id || "",
+      subject: dataToEdit?.subject._id || "",
+      examDate: dataToEdit?.examDate || "",
+      startTime: dataToEdit?.startTime || "",
+      endTime: dataToEdit?.endTime || "",
+      marksFreezDate: dataToEdit?.marksFreezDate || "",
+      maximumMarks: dataToEdit?.maximumMarks || "",
+
+      pratical: dataToEdit?.pratical || "",
+      minimumMarks: dataToEdit?.minimumMarks || "",
+      praticalMarks: dataToEdit?.praticalMarks || "",
+      showInHallTick: dataToEdit?.showInHallTick || "",
+      showInExamResults: dataToEdit?.showInExamResults || "",
+      orderSequence: dataToEdit?.orderSequence || "",
+      praticalMarks: dataToEdit?.praticalMarks || "",
+      showInHallTick: dataToEdit?.showInHallTick || true,
+      showInExamResults: dataToEdit?.showInExamResults || true,
+      obtainedMarks: dataToEdit?.obtainedMarks || 0,
+    },
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
+  });
+
+  useEffect(() => {
+    getExamTerm();
+    getClasses();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (formik.values.class) {
+      getSubject();
+    }
+  }, [selectedSetting, formik.values.class]);
+
+  useEffect(() => {
+    if (entryFormik.values.class && entryFormik.values.examTerm) {
+      entryFormik.handleSubmit();
+    }
+  }, [entryFormik.values.class, entryFormik.values.examTerm, selectedSetting]);
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.examSchedule.delete + "/" + id);
+      entryFormik.handleSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -50,7 +249,7 @@ export default function ExamSchedule() {
         <CustomTable
           actions={[]}
           bodyDataModal="exam list"
-          bodyData={data}
+          bodyData={examtitle}
           tableKeys={examListTableKeys}
         />
       </TabPanel>
@@ -59,29 +258,169 @@ export default function ExamSchedule() {
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
-                required={true}
                 name="class"
                 formik={entryFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
-                required={true}
-                name="exam"
+                name="examTerm"
                 formik={entryFormik}
                 label="Select Exam"
-                // options={""}
+                options={examtitle}
               />
             </Grid>
           </Grid>
         </Paper>
+
+        <AddForm title="Add Exam Schedule" onAddClick={handelExamSchedule} />
+
+        <FormModal
+          open={open}
+          formik={formik}
+          formTitle={dataToEdit ? "Update Exam Schedule" : "Add Exam Schedule"}
+          onClose={handleClose}
+          submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+          adding={loading}>
+          <Grid rowSpacing={0} columnSpacing={2} container>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="examTerm"
+                label="Exam"
+                required={true}
+                options={examtitle}
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="class"
+                label="Class"
+                required={true}
+                options={classes}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="subject"
+                label="Subject"
+                required={true}
+                options={subject}
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormDatePicker
+                required={true}
+                name="examDate"
+                formik={formik}
+                label="examDate"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="startTime"
+                type="time"
+                formik={formik}
+                label="Start Time"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="endTime"
+                type="time"
+                formik={formik}
+                label="End Time"
+              />
+            </Grid>
+
+            <Grid xs={12} md={6} lg={6} item>
+              <FormDatePicker
+                required={true}
+                label="Marks Freez Date"
+                formik={formik}
+                name="marksFreezDate"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="pratical"
+                formik={formik}
+                label="Pratical"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="maximumMarks"
+                formik={formik}
+                label="Maximum Marks"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                required={true}
+                name="minimumMarks"
+                formik={formik}
+                label="MinMarks"
+              />
+            </Grid>
+
+            <Grid xs={12} sm={6} md={6} item>
+              <FormInput
+                formik={formik}
+                name="orderSequence"
+                label="Order Sequence"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="showInHallTick"
+                label="ShowIn HallTick"
+                options={ShowIn_HallTick}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="showInExamResults"
+                label="Show In Exam Results"
+                options={ShowIn_Exam_Results}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="praticalMarks"
+                label="Pratical Marks"
+                options={Pratical_Marks}
+              />
+            </Grid>
+          </Grid>
+        </FormModal>
+
         <CustomTable
           actions={["edit", "delete"]}
           bodyDataModal="schedule list"
           bodyData={data}
           tableKeys={scheduleListTableKeys}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
     </>

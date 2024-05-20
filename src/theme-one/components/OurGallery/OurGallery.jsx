@@ -1,4 +1,6 @@
-import React, { useRef } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import {
   Container,
@@ -18,6 +20,9 @@ import image2 from "../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../theme-one/assets/Images/school1.avif";
 import Header from "../Header";
+import { get } from "../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
+import SettingContext from "../../../context/SettingsContext";
 
 const Main = styled(Box)(({ theme }) => ({
   marginTop: "4rem",
@@ -37,37 +42,6 @@ const ImagBox = styled(Box)(({ theme }) => ({
   p: 4,
 }));
 
-const galleryData = [
-  {
-    id: 1,
-    title: "Learning Management System",
-    content:
-      " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 2,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 3,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-  {
-    id: 4,
-    title: "Marketing and Management ",
-    content:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    images: [image, image1, image2, image3, image4],
-  },
-];
-
 const OurGallery = () => {
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
@@ -86,6 +60,27 @@ const OurGallery = () => {
 
   let sliderRef = useRef(null);
 
+  const { selectedSetting } = useContext(SettingContext);
+
+  const [data, setData] = useState([]);
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+
+      console.log(data.result, "ggggfgffgffff");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
   return (
     <>
       <Main>
@@ -94,7 +89,7 @@ const OurGallery = () => {
         <Container sx={{ padding: "10px" }}>
           <Gallery
             ref={sliderRef}
-            galleryData={galleryData}
+            galleryData={data}
             setModalOpen={setModalOpen}
           />
         </Container>
@@ -109,8 +104,7 @@ const OurGallery = () => {
             backdrop: {
               timeout: 500,
             },
-          }}
-        >
+          }}>
           <ImagBox>
             <IconButton
               aria-label="close"
@@ -122,8 +116,7 @@ const OurGallery = () => {
                 right: 8,
                 top: 8,
                 zIndex: 9,
-              }}
-            >
+              }}>
               <Close />
             </IconButton>
             <Slider {...settings}>

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import SubHeader from "../../../SubHeader";
 import GallerySubHome from "./GallerySubHome";
@@ -124,7 +126,6 @@ export default function Gallery({ show }) {
   );
 
   const cutailImages = [
-    modalOpen.viewSingleImg,
     ...modalOpen.imageData.slice(0, SelectedImageIndex),
     ...modalOpen.imageData.slice(SelectedImageIndex + 1),
   ];
@@ -169,8 +170,7 @@ export default function Gallery({ show }) {
           backdrop: {
             timeout: 500,
           },
-        }}
-      >
+        }}>
         <ModalBox>
           <IconButton
             aria-label="close"
@@ -182,8 +182,7 @@ export default function Gallery({ show }) {
               right: 8,
               top: 8,
               zIndex: 9,
-            }}
-          >
+            }}>
             <CloseIcon />
           </IconButton>
           <Carousel>
