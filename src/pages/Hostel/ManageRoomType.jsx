@@ -67,6 +67,10 @@ export default function ManageRoomType() {
     }
   };
 
+  const handleEdit = (data) => {
+    setDataToEdit(data);
+  };
+
   return (
     <>
       <PageHeader title="Hostel Room Type" />
@@ -77,6 +81,7 @@ export default function ManageRoomType() {
         bodyDataModal="room"
         bodyData={data}
         onDeleteClick={deleteRoomType}
+        onEditClick={handleEdit}
       />
     </>
   );

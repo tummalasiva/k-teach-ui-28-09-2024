@@ -118,6 +118,10 @@ export default function ManageRoomAndBed() {
     }
   };
 
+  const handleEdit = (data) => {
+    setDataToEdit(data);
+  };
+
   return (
     <>
       <PageHeader title="Hostel Room & Beds" />
@@ -128,6 +132,7 @@ export default function ManageRoomAndBed() {
         bodyDataModal="room"
         bodyData={data}
         onDeleteClick={deleteRoom}
+        onEditClick={handleEdit}
       />
     </>
   );
