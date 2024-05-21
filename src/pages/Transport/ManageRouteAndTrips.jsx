@@ -74,25 +74,33 @@ export default function ManageRouteAndTrips() {
       pickEnd: dataToEdit?.pickEnd || "",
       dropStart: dataToEdit?.dropStart || "",
       dropEnd: dataToEdit?.dropEnd || "",
-      stops: dataToEdit?.stops || [],
+      stops: dataToEdit?.stops || [
+        {
+          name: "",
+          stopKM: "",
+          pickTime: "",
+          pickEndTime: "",
+          dropTime: "",
+          dropEndTime: "",
+        },
+      ],
       note: dataToEdit?.note || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
   const addStop = () => {
-    const initialStopData = [...entryFormik.values.stops];
-    const newStopData = {
-      _id: initialStopData.length + 1,
-
-      name: "",
-      stopKM: "",
-      pickTime: "",
-      pickEndTime: "",
-      dropTime: "",
-      dropEndTime: "",
-    };
-    entryFormik.setFieldValue("stops", [...initialStopData, newStopData]);
+    entryFormik.setFieldValue("stops", [
+      ...entryFormik.values.stops,
+      {
+        name: "",
+        stopKM: "",
+        pickTime: "",
+        pickEndTime: "",
+        dropTime: "",
+        dropEndTime: "",
+      },
+    ]);
   };
 
   return (
