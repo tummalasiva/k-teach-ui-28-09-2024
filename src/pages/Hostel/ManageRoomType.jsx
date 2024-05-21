@@ -2,16 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
+import { Grid } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { manageHostelRoomTableKeys } from "../../data/tableKeys/manageHostelRoom";
-import { get, post, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import AddForm from "../../forms/AddForm";
+import FormInput from "../../forms/FormInput";
+import FormModal from "../../forms/FormModal";
 
 export default function ManageRoomType() {
   const [data, setData] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const getRoomTypes = async () => {
     try {
@@ -40,7 +45,6 @@ export default function ManageRoomType() {
         const { data } = await post(PRIVATE_URLS.roomType.create, values);
       }
       setLoading(false);
-
       getRoomTypes();
     } catch (error) {
       console.log(error);
@@ -48,7 +52,7 @@ export default function ManageRoomType() {
     }
   };
 
-  const formik = useFormik({
+  const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
       specification: dataToEdit?.specification || "",
@@ -59,7 +63,7 @@ export default function ManageRoomType() {
 
   const deleteRoomType = async (id) => {
     try {
-      const { data } = await put(PRIVATE_URLS.roomType.delete + "/" + id);
+      const { data } = await del(PRIVATE_URLS.roomType.delete + "/" + id);
       getRoomTypes();
     } catch (error) {
       console.log(error);
@@ -68,6 +72,15 @@ export default function ManageRoomType() {
 
   const handleEdit = (data) => {
     setDataToEdit(data);
+  };
+
+  const onAddClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDataToEdit(null);
   };
 
   return (
@@ -82,6 +95,38 @@ export default function ManageRoomType() {
         onDeleteClick={deleteRoomType}
         onEditClick={handleEdit}
       />
+
+      {/* feb model open ============== */}
+      <AddForm title="Add Room Type" onAddClick={onAddClick} />
+
+      {/* Add/update model ============== */}
+      <FormModal
+        open={open}
+        formik={entryFormik}
+        formTitle={dataToEdit ? "Update Room Type" : "Add Room Type"}
+        onClose={handleClose}
+        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        adding={loading}>
+        <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="name"
+              label="Name"
+              required={true}
+              disabled={dataToEdit != null}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="specification"
+              label="Specification"
+              required={true}
+            />
+          </Grid>
+        </Grid>
+      </FormModal>
     </>
   );
 }
