@@ -1,23 +1,81 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useState } from "react";
 import CustomTable from "../Tables/CustomTable";
 import { vehicleFuelTableKeys } from "../../data/tableKeys/vehicleFuelData";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
-import dayjs from "dayjs";
+import { post, put } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
+import FormInput from "../../forms/FormInput";
+import FormModal from "../../forms/FormModal";
+import { Add } from "@mui/icons-material";
 
 export default function Fuel() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const entryFormik = useFormik({
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDataToEdit(null);
+  };
+
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.fuel.update + "/" + dataToEdit._id,
+          payload
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.fuel.create, payload);
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+  const formik = useFormik({
     initialValues: {
       vehicle: "",
       firm: "",
-      fromDate: dayjs(new Date()),
-      toDate: dayjs(new Date()),
+      fromDate: "",
+      toDate: "",
     },
     onSubmit: console.log("nnnn"),
+  });
+
+  const entryFormik = useFormik({
+    initialValues: {
+      vehicleNumber: formik.values.vehicle || "",
+      firmName: dataToEdit?.firmName || "",
+      date: dataToEdit?.date || "",
+      billNo: dataToEdit?.billNo || "",
+      fuelQuantity: dataToEdit?.fuelQuantity || "",
+      rate: dataToEdit?.rate || "",
+      amount: dataToEdit?.amount || "",
+      kiloMeter: dataToEdit?.kiloMeter || "",
+      mileage: dataToEdit?.mileage || "",
+      note: dataToEdit?.note || "",
+    },
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
 
   return (
@@ -28,7 +86,7 @@ export default function Fuel() {
             <FormSelect
               required={true}
               name="vehicle"
-              formik={entryFormik}
+              formik={formik}
               label="Select Vehicle"
               // options={""}
             />
@@ -37,25 +95,17 @@ export default function Fuel() {
             <FormSelect
               required={true}
               name="firm"
-              formik={entryFormik}
+              formik={formik}
               label="Select Firm"
               // options={""}
             />
           </Grid>
 
           <Grid xs={12} md={6} lg={3} item>
-            <FormDatePicker
-              formik={entryFormik}
-              label="From Date"
-              name="fromDate"
-            />
+            <FormDatePicker formik={formik} label="From Date" name="fromDate" />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
-            <FormDatePicker
-              formik={entryFormik}
-              label="To Date"
-              name="toDate"
-            />
+            <FormDatePicker formik={formik} label="To Date" name="toDate" />
           </Grid>
           <Grid
             item
@@ -65,8 +115,7 @@ export default function Fuel() {
             display="flex"
             justifyContent="flex-end"
             alignSelf="center"
-            gap={1}
-          >
+            gap={1}>
             <Button size="small" variant="contained">
               Find
             </Button>
@@ -76,12 +125,111 @@ export default function Fuel() {
           </Grid>
         </Grid>
       </Paper>
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        startIcon={<Add />}
+        sx={{ mt: 1, mb: 2 }}>
+        Add
+      </Button>
       <CustomTable
         tableKeys={vehicleFuelTableKeys}
         bodyData={data}
         bodyDataModal="fuel"
         actions={["edit"]}
       />
+
+      <FormModal
+        open={open}
+        formik={entryFormik}
+        formTitle={dataToEdit ? "Update Fuel" : "Add Fuel"}
+        onClose={handleClose}
+        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        adding={loading}>
+        <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="vehicleNumber"
+              label="Vehicle Number"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="firmName"
+              label="Firm Name"
+              required={true}
+            />
+          </Grid>
+
+          <Grid xs={12} sm={6} md={6} item>
+            <FormDatePicker
+              formik={entryFormik}
+              name="date"
+              label="Date"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name=" billNo"
+              label="Bill No"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="fuelQuantity"
+              label="Fuel Quantity"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="rate"
+              label="Rate"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="amount"
+              label="Amount"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="kiloMeter"
+              label="Kilo Meter"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="mileage"
+              label="Mileage"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="note"
+              label="Note"
+              required={true}
+            />
+          </Grid>
+        </Grid>
+      </FormModal>
     </>
   );
 }

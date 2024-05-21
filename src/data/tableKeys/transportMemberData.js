@@ -1,11 +1,15 @@
+/** @format */
+
 export const transportMemberTableKeys = [
   {
     name: "Name",
     key: "name",
+    path: "basicInfo",
   },
   {
     name: "Roll No",
     key: "rollNo",
+    path: "academicInfo",
   },
   {
     name: "Stop Name",
