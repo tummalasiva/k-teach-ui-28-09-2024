@@ -15,6 +15,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import { LoadingButton } from "@mui/lab";
+import { downloadFile } from "../../utils";
 
 const Relation_With_Student = [
   { label: "Father", value: "Father" },
@@ -224,12 +225,20 @@ export default function StudentCheckout() {
   const handleGetPrintPdf = async () => {
     try {
       setLoadingPdf(true);
-      const { data } = await get(PRIVATE_URLS.studentCheckout.downloadPdf, {
-        params: { schoolId: selectedSetting._id },
-        responseType: "blob",
-      });
-      const uri = URL.createObjectURL(data.data);
-      window.open(uri, "__blank");
+      const getStudentCheckoutPdf = await get(
+        PRIVATE_URLS.studentCheckout.downloadPdf,
+        {
+          params: { schoolId: selectedSetting._id },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile(
+        "application/pdf",
+        getStudentCheckoutPdf.data,
+        "student_checkout.pdf"
+      );
+
       setLoadingPdf(false);
     } catch (error) {
       console.log(error);
@@ -239,17 +248,16 @@ export default function StudentCheckout() {
 
   const handleGetDownloadExcel = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.studentCheckout.donwloadExcel, {
+      const getExcel = await get(PRIVATE_URLS.studentCheckout.donwloadExcel, {
         params: { schoolId: selectedSetting._id },
         responseType: "blob",
       });
-      const uri = URL.createObjectURL(data.data);
-      const link = document.createElement("a");
-      console.log(uri);
-      link.href = uri;
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "student_checkout.xlsx"
+      );
     } catch (error) {
       console.log(error);
     }

@@ -201,7 +201,7 @@ export const PRIVATE_URLS = {
     update: "/studentCheckout/update",
     delete: "/studentCheckout/delete",
     downloadPdf: "/studentCheckout/downloadPdf",
-    donwloadExcel: "/studentCheckout/donwloadExcel",
+    donwloadExcel: "/studentCheckout/downloadExcel",
   },
   guardianFeedback: {
     list: "/guardianFeedback/list",

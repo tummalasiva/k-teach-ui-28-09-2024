@@ -192,7 +192,7 @@ export default function VehicleLog() {
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
+            <FormSelect
               formik={entryFormik}
               name="route"
               label="Route"
@@ -201,7 +201,7 @@ export default function VehicleLog() {
           </Grid>
 
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
+            <FormSelect
               formik={entryFormik}
               name="vehicle"
               label="Vehicle"
@@ -253,7 +253,6 @@ export default function VehicleLog() {
 
             <Grid xs={12} md={6} lg={6} item>
               <FileSelect
-                multi={false}
                 name="departureImage"
                 label="Select File"
                 onChange={(e) => handleChangePhoto(e, "departureImage")}
