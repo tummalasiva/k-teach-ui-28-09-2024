@@ -197,14 +197,6 @@ export default function ReceiptBook() {
                 required={true}
               />
             </Grid>
-            <Grid xs={12} md={12} item>
-              <FormSelect
-                name="active"
-                formik={entryFormik}
-                label="Status"
-                options={Active}
-              />
-            </Grid>
           </Grid>
         </FormModal>
       </TabPanel>

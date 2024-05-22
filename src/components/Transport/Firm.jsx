@@ -5,7 +5,6 @@ import { vehicleFirmTableKeys } from "../../data/tableKeys/vehcleFirmData";
 import CustomTable from "../Tables/CustomTable";
 import { Button, Grid } from "@mui/material";
 import FormInput from "../../forms/FormInput";
-import FormSelect from "../../forms/FormSelect";
 import { post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
