@@ -53,11 +53,11 @@ export default function Firm() {
 
   const entryFormik = useFormik({
     initialValues: {
-      firmName: dataToEdit?.firmName || "",
-      phoneNumber: dataToEdit?.phoneNumber || "",
+      name: dataToEdit?.name || "",
+      contactNumber: dataToEdit?.contactNumber || "",
       email: dataToEdit?.email || "",
       GSTNumber: dataToEdit?.GSTNumber || "",
-      vendorWebsite: dataToEdit?.vendorWebsite || "",
+      website: dataToEdit?.website || "",
       address: dataToEdit?.address || "",
       city: dataToEdit?.city || "",
       state: dataToEdit?.state || "",
@@ -93,74 +93,43 @@ export default function Firm() {
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="firmName"
-              label="Firm Name"
+              name="name"
+              label="Name"
               required={true}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
-              name="phoneNumber"
-              label="Phone Number"
+              name="contactNumber"
+              label="Contact Number"
               required={true}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="email"
-              label="Email"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="email" label="Email" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
               name="GSTNumber"
               label="GST Number"
-              required={true}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="vendorWebsite"
-              label="Vendor Website"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="website" label="Website" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="address"
-              label="Address"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="address" label="Address" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="city"
-              label="City"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="city" label="City" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="state"
-              label="State"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="state" label="State" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="zipCode"
-              label="Zipcode"
-              required={true}
-            />
+            <FormInput formik={entryFormik} name="zipCode" label="Zipcode" />
           </Grid>
         </Grid>
       </FormModal>
