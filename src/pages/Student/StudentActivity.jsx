@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -254,8 +256,7 @@ export default function StudentActivity() {
           columnSpacing={2}
           container
           component="div"
-          onSubmit={Formik.handleSubmit}
-        >
+          onSubmit={Formik.handleSubmit}>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -299,15 +300,13 @@ export default function StudentActivity() {
             md={12}
             lg={12}
             display="flex"
-            justifyContent="flex-end"
-          >
+            justifyContent="flex-end">
             <Button
               size="small"
               type="submit"
               variant="contained"
               disabled={!Formik.values.student}
-              onClick={Formik.handleSubmit}
-            >
+              onClick={Formik.handleSubmit}>
               Find
             </Button>
           </Grid>
@@ -339,8 +338,7 @@ export default function StudentActivity() {
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           {/* <Grid xs={12} sm={6} md={6} item>
             <FormSelect

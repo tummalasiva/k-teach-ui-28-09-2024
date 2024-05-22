@@ -1,19 +1,21 @@
+/** @format */
+
 export const vehicleTableKeys = [
   {
     name: "Vehicle Number",
-    key: "vehicle",
+    key: "number",
   },
   {
     name: "Driver",
-    key: "driver",
+    key: "driverName",
   },
   {
     name: "Contact",
-    key: "contactNumber",
+    key: "driverContactNumber",
   },
   {
     name: "Total Passengers",
-    key: "passengers",
+    key: "totalSeats",
   },
 
   {
@@ -22,15 +24,15 @@ export const vehicleTableKeys = [
   },
   {
     name: "Vehicle Model",
-    key: "vehicleModel",
+    key: "model",
   },
 
   {
     name: "Insurance Name",
     key: "insuranceName",
   },
-  {
-    name: "Renewal Date",
-    key: "renewalDate",
-  },
+  // {
+  //   name: "Renewal Date",
+  //   key: "renewalDate",
+  // },
 ];
