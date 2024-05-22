@@ -1,11 +1,15 @@
+/** @format */
+
 export const transportAddMemberTableKeys = [
   {
     name: "Photo",
-    key: "image",
+    key: "photo",
+    type: "image",
   },
   {
     name: "Name",
     key: "name",
+    path: "basicInfo",
   },
   {
     name: "Class",
@@ -18,9 +22,6 @@ export const transportAddMemberTableKeys = [
   {
     name: "Roll No",
     key: "rollNo",
-  },
-  {
-    name: "Select",
-    key: "",
+    path: "academicInfo",
   },
 ];

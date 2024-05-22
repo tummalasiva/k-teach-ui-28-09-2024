@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
@@ -8,7 +10,7 @@ export default function Routes() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="trips" />
+      <PageHeader title="Trips" />
 
       <CustomTable
         actions={["edit"]}
