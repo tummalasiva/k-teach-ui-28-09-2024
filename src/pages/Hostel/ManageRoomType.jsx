@@ -40,12 +40,13 @@ export default function ManageRoomType() {
           values
         );
 
-        setDataToEdit(null);
+        // setDataToEdit(null);
       } else {
         const { data } = await post(PRIVATE_URLS.roomType.create, values);
       }
       setLoading(false);
       getRoomTypes();
+      handleClose();
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -71,6 +72,8 @@ export default function ManageRoomType() {
   };
 
   const handleEdit = (data) => {
+    console.log(data, "iiii");
+    setOpen(true);
     setDataToEdit(data);
   };
 
@@ -88,7 +91,7 @@ export default function ManageRoomType() {
       <PageHeader title="Hostel Room Type" />
 
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={manageHostelRoomTableKeys}
         bodyDataModal="room"
         bodyData={data}
@@ -114,10 +117,9 @@ export default function ManageRoomType() {
               name="name"
               label="Name"
               required={true}
-              disabled={dataToEdit != null}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={6} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
               name="specification"

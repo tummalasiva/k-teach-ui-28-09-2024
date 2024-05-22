@@ -8,6 +8,14 @@ import { manageHostelRoomBedTableKeys } from "../../data/tableKeys/manageHostelR
 import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useFormik } from "formik";
+import FormModal from "../../forms/FormModal";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import FormInput from "../../forms/FormInput";
+import FormSelect from "../../forms/FormSelect";
+import AddForm from "../../forms/AddForm";
+// iocons
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 export default function ManageRoomAndBed() {
   const [data, setData] = useState([]);
@@ -15,6 +23,7 @@ export default function ManageRoomAndBed() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [updatingBed, setUpdatingBed] = useState(false);
   const [deletingBed, setDeletingBed] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const getRoomList = async () => {
     try {
@@ -66,7 +75,7 @@ export default function ManageRoomAndBed() {
     enableReinitialize: true,
   });
 
-  const addBed = () => {
+  const onAddBedsHandle = () => {
     let initialBedsData = [...formik.values.beds];
     let newBedData = {
       _id: initialBedsData.length + 1,
@@ -122,18 +131,148 @@ export default function ManageRoomAndBed() {
     setDataToEdit(data);
   };
 
+  const onAddClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <PageHeader title="Hostel Room & Beds" />
 
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete", "view"]}
         tableKeys={manageHostelRoomBedTableKeys}
         bodyDataModal="room"
         bodyData={data}
         onDeleteClick={deleteRoom}
         onEditClick={handleEdit}
       />
+
+      {/* feb model open ============== */}
+      <AddForm title="Add Room & Bed" onAddClick={onAddClick} />
+
+      {/* Add/update model ============== */}
+      <FormModal
+        open={open}
+        formik={formik}
+        formTitle={dataToEdit ? "Update Room & Bed" : "Add Room & Bed"}
+        onClose={handleClose}
+        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        adding={loading}>
+        <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={formik}
+              name="number"
+              label="Room No."
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={formik}
+              name="type"
+              label="Room Type"
+              required={true}
+              // options={}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={formik}
+              name="totalBeds"
+              label="Total Beds"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={formik}
+              name="hostel"
+              label="Hostel Name"
+              required={true}
+              // options={}
+            />
+          </Grid>
+          <Grid xs={12} sm={12} md={12} item>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px",
+                alignItems: "center",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}>
+              <Typography>Bed Name</Typography>
+              <Typography>Bed Position</Typography>
+              <Typography>Is Alloted</Typography>
+            </Box>
+            <Grid
+              container
+              gap={1}
+              sx={{
+                backgroundColor: "floralwhite",
+                borderRadius: "5px",
+                padding: "20px 15px 30px 15px",
+                border: "1px solid lightgrey",
+              }}>
+              <Grid xs={12} sm={4} md={4} item>
+                <FormInput
+                  formik={formik}
+                  name="beds"
+                  label="Bed Name"
+                  required={true}
+                />
+              </Grid>
+              <Grid xs={12} sm={4} md={4} item>
+                <FormInput
+                  formik={formik}
+                  name="position"
+                  label="Bed Position"
+                  required={true}
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                sm={3}
+                md={3}
+                item
+                sx={{
+                  fontSize: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}>
+                <Button onClick={onAddBedsHandle}>
+                  <AddIcon />
+                </Button>
+                <Button color="error">
+                  <RemoveIcon color="error" />
+                </Button>
+                {/* <Typography> */}
+                {/* <Typography color={allocated ? "green" : "red"}> */}
+                {/* Not Allotted */}
+                {/* {allocated ? "Allotted" : "Not Allotted"} */}
+                {/* </Typography> */}
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid xs={12} sm={12} md={12} item>
+            <FormInput
+              formik={formik}
+              name="note"
+              label="Note"
+              required={true}
+            />
+          </Grid>
+        </Grid>
+      </FormModal>
     </>
   );
 }
