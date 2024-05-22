@@ -18,11 +18,6 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 
-const Active = [
-  { label: "Active", value: true },
-  { label: "Inactive", value: false },
-];
-
 const CustomActionFee = ({
   onUpdate = () => {},
   data = {},
