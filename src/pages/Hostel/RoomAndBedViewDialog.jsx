@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -19,7 +20,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  width: "200px",
+  width: "300px",
   border: "1px solid gray",
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "blue",
@@ -30,13 +31,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function HostelViewDialog({
+export default function RoomAndBedViewDialog({
   title = "",
   onClose = () => {},
   open = true,
   tableData,
   schoolName,
 }) {
+  console.log(tableData, "tableData");
+
   return (
     <>
       <ViewModel title={title} onClose={onClose} open={open}>
@@ -53,28 +56,63 @@ export default function HostelViewDialog({
 
             <StyledTableRow>
               <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-                Hostel Name
+                Room No
               </StyledTableCell>
               <StyledTableCell align="left" width={100}>
-                {tableData?.name}
+                {tableData?.number}
               </StyledTableCell>
             </StyledTableRow>
 
             <StyledTableRow>
               <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-                Hostel Type{" "}
+                Seat Total
               </StyledTableCell>
               <StyledTableCell align="left" width={100}>
-                {tableData?.type}
+                {tableData?.totalBeds}
               </StyledTableCell>
             </StyledTableRow>
 
             <StyledTableRow>
               <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-                Address
+                Bed
               </StyledTableCell>
               <StyledTableCell align="left" width={100}>
-                {tableData?.address}
+                {tableData?.beds?.map((s) => (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      my: 1,
+                    }}>
+                    <StyledTableRow>
+                      <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+                        Bed Name
+                      </StyledTableCell>
+                      <StyledTableCell align="left" width={100}>
+                        {s?.name || "NA"}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                    <StyledTableRow>
+                      <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+                        Bed Position{" "}
+                      </StyledTableCell>
+                      <StyledTableCell align="left" width={100}>
+                        {s?.position || "NA"}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                    <StyledTableRow>
+                      <StyledTableCell
+                        align="left"
+                        sx={{ fontWeight: 600, width: "200px" }}>
+                        Bed Allocated
+                      </StyledTableCell>
+                      <StyledTableCell align="left" width={100}>
+                        {s?.allocated ? "Yes" : "No"}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  </Box>
+                ))}
               </StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>

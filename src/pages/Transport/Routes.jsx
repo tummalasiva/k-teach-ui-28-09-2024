@@ -31,11 +31,6 @@ export default function Routes() {
     }
   };
 
-  // Add K to each flight from L to R
-  //    for (int j = l - 1; j < r; j++) {
-  //     seq[j] += K;
-  // }
-
   useEffect(() => {
     if (data) {
       const totalSeat = data.map((s) => parseInt(s.totalSeats));
