@@ -40,7 +40,7 @@ export default function Assignment() {
             },
           },
         });
-        console.log(data.responseCode, "all");
+        // console.log(data.responseCode, "all");
 
         if (data.responseCode === "OK") {
           setData(

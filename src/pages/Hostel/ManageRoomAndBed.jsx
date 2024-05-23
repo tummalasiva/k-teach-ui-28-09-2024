@@ -16,19 +16,49 @@ import AddForm from "../../forms/AddForm";
 // iocons
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CustomInput from "../../forms/CustomInput";
 
 export default function ManageRoomAndBed() {
   const [data, setData] = useState([]);
+  const [roomType, setRoomType] = useState([]);
+  const [hostels, setHostels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [updatingBed, setUpdatingBed] = useState(false);
   const [deletingBed, setDeletingBed] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // get room type list
+  const getRoomTypeList = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.roomType.list);
+      setRoomType(data.result.map((r) => ({ label: r.name, value: r._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get hostel list
+  const getHostelList = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.hostel.list);
+      setHostels(data.result.map((h) => ({ label: h.name, value: h._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get rooms
   const getRoomList = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.room.list);
-      setData(data.result);
+      setData(
+        data.result.map((h) => ({
+          ...h,
+          hostelName: h?.hostel?.name,
+          roomType: h.type?.name,
+        }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -36,8 +66,11 @@ export default function ManageRoomAndBed() {
 
   useEffect(() => {
     getRoomList();
+    getRoomTypeList();
+    getHostelList();
   }, []);
 
+  // Add/Update event handle
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
@@ -47,13 +80,12 @@ export default function ManageRoomAndBed() {
           PRIVATE_URLS.room.update + "/" + dataToEdit._id,
           values
         );
-        setLoading(false);
-        setDataToEdit(null);
       } else {
-        const { data } = await post(PRIVATE_URLS.room.create, values);
-        setData(data.result);
-        setLoading(false);
+        let payload = { ...values, totalBeds: values.beds.length };
+
+        const { data } = await post(PRIVATE_URLS.room.create, payload);
       }
+      handleClose();
       getRoomList();
       setLoading(false);
     } catch (error) {
@@ -69,7 +101,14 @@ export default function ManageRoomAndBed() {
       totalBeds: dataToEdit?.totalBeds || 0,
       hostel: dataToEdit?.hostel?._id || "",
       note: dataToEdit?.note || "",
-      beds: dataToEdit?.beds || [],
+      beds: dataToEdit?.beds || [
+        {
+          id: 1,
+          name: "",
+          position: "",
+          allocated: false,
+        },
+      ],
     },
     onSubmit: handleSubmit,
     enableReinitialize: true,
@@ -78,7 +117,7 @@ export default function ManageRoomAndBed() {
   const onAddBedsHandle = () => {
     let initialBedsData = [...formik.values.beds];
     let newBedData = {
-      _id: initialBedsData.length + 1,
+      id: initialBedsData.length + 1,
       name: "",
       position: "",
       allocated: false,
@@ -128,6 +167,8 @@ export default function ManageRoomAndBed() {
   };
 
   const handleEdit = (data) => {
+    console.log(data, "eee");
+    setOpen(true);
     setDataToEdit(data);
   };
 
@@ -137,6 +178,17 @@ export default function ManageRoomAndBed() {
 
   const handleClose = () => {
     setOpen(false);
+    setDataToEdit(null);
+    formik.resetForm();
+  };
+
+  const handleCustomInputChange = (event, bed) => {
+    formik.setFieldValue(
+      "beds",
+      formik.values.beds.map((b) =>
+        b.id === bed.id ? { ...b, [event.target.name]: event.target.value } : b
+      )
+    );
   };
 
   return (
@@ -178,24 +230,25 @@ export default function ManageRoomAndBed() {
               name="type"
               label="Room Type"
               required={true}
-              // options={}
+              options={roomType}
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
+          {/* <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={formik}
               name="totalBeds"
               label="Total Beds"
               required={true}
+              disabled={true}
             />
-          </Grid>
+          </Grid> */}
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={formik}
               name="hostel"
               label="Hostel Name"
               required={true}
-              // options={}
+              options={hostels}
             />
           </Grid>
           <Grid xs={12} sm={12} md={12} item>
@@ -212,64 +265,67 @@ export default function ManageRoomAndBed() {
               <Typography>Bed Position</Typography>
               <Typography>Is Alloted</Typography>
             </Box>
-            <Grid
-              container
-              gap={1}
-              sx={{
-                backgroundColor: "floralwhite",
-                borderRadius: "5px",
-                padding: "20px 15px 30px 15px",
-                border: "1px solid lightgrey",
-              }}>
-              <Grid xs={12} sm={4} md={4} item>
-                <FormInput
-                  formik={formik}
-                  name="beds"
-                  label="Bed Name"
-                  required={true}
-                />
-              </Grid>
-              <Grid xs={12} sm={4} md={4} item>
-                <FormInput
-                  formik={formik}
-                  name="position"
-                  label="Bed Position"
-                  required={true}
-                />
-              </Grid>
+
+            {/* <AddBedsTable onAddBedsHandle={onAddBedsHandle} formik={formik} /> */}
+            {formik.values.beds.map((b, i) => (
               <Grid
-                xs={12}
-                sm={3}
-                md={3}
-                item
+                container
+                key={i}
+                gap={1}
                 sx={{
-                  fontSize: 16,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
+                  backgroundColor: "#F0F8FF",
+                  borderRadius: "5px",
+                  padding: "20px 15px 30px 15px",
+                  border: "1px solid lightgrey",
+                  my: 2,
                 }}>
-                <Button onClick={onAddBedsHandle}>
-                  <AddIcon />
-                </Button>
-                <Button color="error">
-                  <RemoveIcon color="error" />
-                </Button>
-                {/* <Typography> */}
-                {/* <Typography color={allocated ? "green" : "red"}> */}
-                {/* Not Allotted */}
-                {/* {allocated ? "Allotted" : "Not Allotted"} */}
-                {/* </Typography> */}
+                <Grid xs={12} sm={4} md={4} item>
+                  <CustomInput
+                    value={b?.name}
+                    name="name"
+                    label="Bed Name"
+                    required={true}
+                    onChange={(e) => handleCustomInputChange(e, b)}
+                  />
+                </Grid>
+                <Grid xs={12} sm={4} md={4} item>
+                  <CustomInput
+                    value={b?.position}
+                    name="position"
+                    label="Bed Position"
+                    required={true}
+                    onChange={(e) => handleCustomInputChange(e, b)}
+                  />
+                </Grid>
+                <Grid
+                  xs={12}
+                  sm={3}
+                  md={3}
+                  item
+                  sx={{
+                    fontSize: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                  }}>
+                  <Button onClick={() => onAddBedsHandle(b, i)}>
+                    <AddIcon />
+                  </Button>
+                  <Button color="error" onClick={() => removeBed(i)}>
+                    <RemoveIcon color="error" />
+                  </Button>
+                  {/* <Typography> */}
+                  {/* <Typography color={allocated ? "green" : "red"}> */}
+                  {/* Not Allotted */}
+                  {/* {allocated ? "Allotted" : "Not Allotted"} */}
+                  {/* </Typography> */}
+                </Grid>
               </Grid>
-            </Grid>
+            ))}
           </Grid>
 
           <Grid xs={12} sm={12} md={12} item>
-            <FormInput
-              formik={formik}
-              name="note"
-              label="Note"
-              required={true}
-            />
+            <FormInput formik={formik} name="note" label="Note" />
           </Grid>
         </Grid>
       </FormModal>

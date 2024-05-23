@@ -1,18 +1,20 @@
+/** @format */
+
 export const manageHostelRoomBedTableKeys = [
   {
     name: "Room no",
-    key: "roomNo",
+    key: "number",
   },
   {
     name: "Room Type",
-    key: "type",
+    key: "roomType",
   },
   {
     name: "Total Seat",
-    key: "seatt",
+    key: "totalBeds",
   },
   {
     name: "Hostel Name",
-    key: "name",
+    key: "hostelName",
   },
 ];

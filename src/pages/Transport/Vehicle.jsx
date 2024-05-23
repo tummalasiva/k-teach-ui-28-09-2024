@@ -11,10 +11,11 @@ import { Grid } from "@mui/material";
 import SettingContext from "../../context/SettingsContext";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
-import { get, post, put } from "../../services/apiMethods";
+import { get, post, put, del } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useFormik } from "formik";
 import FormDatePicker from "../../forms/FormDatePicker";
+import VehicleViewDialog from "./VehicleViewDialog";
 
 export default function Vehicle() {
   const { selectedSetting } = useContext(SettingContext);
@@ -23,6 +24,29 @@ export default function Vehicle() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: "",
+    schoolName: "",
+    action: () => {},
+  });
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicle.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(
+        data.result.map((v) => ({
+          ...v,
+          driverName: v?.driver?.basicInfo?.name,
+          id: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const AddVehicle = () => {
     setOpen(true);
@@ -31,6 +55,7 @@ export default function Vehicle() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    getData();
   };
 
   const getEmployees = async () => {
@@ -52,6 +77,7 @@ export default function Vehicle() {
 
   useEffect(() => {
     getEmployees();
+    getData();
   }, [selectedSetting]);
 
   const handleCreateOrUpdate = async (values) => {
@@ -79,8 +105,8 @@ export default function Vehicle() {
   const entryFormik = useFormik({
     initialValues: {
       number: dataToEdit?.number || "",
-      model: dataToEdit?.modal || "",
-      driver: dataToEdit?.driver?.map((c) => c._id) || "",
+      model: dataToEdit?.model || "",
+      driver: dataToEdit?.driver?._id || "",
       licenseNumber: dataToEdit?.licenseNumber || "",
       driverContactNumber: dataToEdit?.driverContactNumber || "",
       trackingId: dataToEdit?.trackingId || "",
@@ -93,18 +119,51 @@ export default function Vehicle() {
     enableReinitialize: true,
   });
 
+  const handleEditClick = (data) => {
+    setOpen(true);
+    setDataToEdit(data);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await del(PRIVATE_URLS.vehicle.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClickOpenView = (data) => {
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data,
+      schoolName: selectedSetting?.name,
+    });
+  };
+
+  const onClose = () => {
+    setModalData({ ...modalData, open: false });
+  };
+
   return (
     <>
       <PageHeader title="Vehicle" />
 
       <CustomTable
-        actions={["edit"]}
+        actions={["view", "edit", "delete"]}
         tableKeys={vehicleTableKeys}
         bodyDataModal="vehicle"
         bodyData={data}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
+        onViewClick={handleClickOpenView}
       />
+
+      {/* add icon vehicle ==== */}
       <AddForm title="Add Vehicle" onAddClick={AddVehicle} />
 
+      {/* Add/Update vehicle ==== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -127,9 +186,9 @@ export default function Vehicle() {
               name="driver"
               label="Driver"
               options={employees}
+              required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="model" label="Model" />
           </Grid>
@@ -140,7 +199,6 @@ export default function Vehicle() {
               label="License Number"
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -156,7 +214,6 @@ export default function Vehicle() {
               label="Tracking Id"
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -173,7 +230,6 @@ export default function Vehicle() {
               required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -182,12 +238,20 @@ export default function Vehicle() {
               required={true}
             />
           </Grid>
-
-          <Grid xs={12} sm={12} md={12} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
         </Grid>
       </FormModal>
+
+      {/* view vehicle ========== */}
+      <VehicleViewDialog
+        title="Vehicle Information"
+        open={modalData?.open}
+        tableData={modalData?.tableData}
+        schoolName={modalData?.schoolName}
+        onClose={onClose}
+      />
     </>
   );
 }

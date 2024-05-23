@@ -42,7 +42,6 @@ export default function VisitorInfoViewModel({
   tableData,
   onClose = () => {},
 }) {
-  console.log(tableData, "tableDatavieeww");
   return (
     <>
       <Dialog
