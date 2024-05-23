@@ -265,4 +265,10 @@ export const PRIVATE_URLS = {
     update: "/hostel/update",
     delete: "/hostel/delete",
   },
+  firm: {
+    list: "/firm/list",
+    create: "/firm/create",
+    update: "/firm/update",
+    delete: "/firm/delete",
+  },
 };
