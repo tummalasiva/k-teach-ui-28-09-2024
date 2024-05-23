@@ -47,6 +47,22 @@ export default function VehicleLog() {
 
   const [route, setRoute] = useState([]);
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicleLog.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getVehicle();
+    getData();
+  }, []);
+
   const getVehicle = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.vehicle.list, {
@@ -55,7 +71,7 @@ export default function VehicleLog() {
       setVehicle(
         data.result.map((v) => ({
           ...v,
-          label: v?.driver?.basicInfo?.name,
+          label: v.number,
           value: v._id,
         }))
       );
@@ -74,14 +90,14 @@ export default function VehicleLog() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            vehicle: formik.values.vehicle,
+            vehicle: formik.values.vehicle || entryFormik.values.vehicle,
           },
         },
       });
       setRoute(
         data.result.map((v) => ({
           ...v,
-          label: v.name,
+          label: v.title,
           value: v._id,
         }))
       );
@@ -113,6 +129,9 @@ export default function VehicleLog() {
       formData.append("departureTime", values.departureTime);
       formData.append("readingAtDeparture", values.readingAtDeparture);
       departure.forEach((file) => formData.append("departureImage", file));
+
+      console.log(formData, "nnnnnnnnbbbbbbbbb");
+
       formData.append("arrivalTime", values.arrivalTime);
       formData.append("readingAtArrival", values.readingAtArrival);
       formData.append("distance", values.distance);
@@ -127,10 +146,12 @@ export default function VehicleLog() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.vehicleLog.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        getData();
       }
       handleClose();
     } catch (error) {
@@ -141,8 +162,8 @@ export default function VehicleLog() {
 
   const entryFormik = useFormik({
     initialValues: {
-      route: dataToEdit?.route || "",
-      vehicle: dataToEdit?.vehicle || "",
+      route: dataToEdit?.route._id || "",
+      vehicle: dataToEdit?.vehicle._id || "",
       date: dataToEdit?.date || null,
       departureTime: dataToEdit?.departureTime || "",
       readingAtDeparture: dataToEdit?.readingAtDeparture || "",
@@ -192,10 +213,24 @@ export default function VehicleLog() {
   };
 
   useEffect(() => {
-    if (formik.values.vehicle) {
+    if (formik.values.vehicle || entryFormik.values.vehicle) {
       getRoute();
     }
-  }, [formik.values.vehicle, selectedSetting]);
+  }, [formik.values.vehicle, entryFormik.values.vehicle, selectedSetting]);
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.vehicleLog.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Vehicle Log" />
@@ -216,7 +251,7 @@ export default function VehicleLog() {
               name="route"
               formik={formik}
               label="Select Route"
-              // options={""}
+              options={route}
             />
           </Grid>
 
@@ -259,6 +294,7 @@ export default function VehicleLog() {
               name="route"
               label="Route"
               required={true}
+              options={route}
             />
           </Grid>
 
@@ -369,10 +405,12 @@ export default function VehicleLog() {
         ) : null}
       </FormModal>
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={vehicleLogTableKeys}
         bodyDataModal="vehicle log"
         bodyData={data}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
     </>
   );
