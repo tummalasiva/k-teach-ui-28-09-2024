@@ -1,7 +1,9 @@
+/** @format */
+
 export const manageRouteTableKeys = [
   {
     name: "Route Title",
-    key: "routeTitle",
+    key: "title",
   },
   {
     name: "Route Start",

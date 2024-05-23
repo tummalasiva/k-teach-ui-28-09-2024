@@ -37,10 +37,26 @@ export default function ManageRouteAndTrips() {
   const [loading, setLoading] = useState(false);
 
   // get vehicle
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.route.list);
+      console.log(data, "herere");
+      setData(
+        data.result.map((v) => ({
+          ...v,
+          stopName: v.stops?.map((s) => s.name),
+          vehicleForRoute: v.vehicle?.number,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get vehicle
   const getVehicles = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.vehicle.list);
-      console.log(data, "herere");
       setVehicles(
         data.result.map((v) => ({
           ...v,
@@ -128,6 +144,7 @@ export default function ManageRouteAndTrips() {
 
   useEffect(() => {
     getVehicles();
+    getData();
   }, []);
 
   const handleCustomInputChange = (event, stop) => {
