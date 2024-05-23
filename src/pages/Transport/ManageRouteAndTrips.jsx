@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
 
 import FormSelect from "../../forms/FormSelect";
+import CustomInput from "../../forms/CustomInput";
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: "20px 8px",
@@ -30,9 +31,27 @@ const FormBox = styled(Box)(({ theme }) => ({
 export default function ManageRouteAndTrips() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // get vehicle
+  const getVehicles = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicle.list);
+      console.log(data, "herere");
+      setVehicles(
+        data.result.map((v) => ({
+          ...v,
+          label: v.number,
+          value: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const AddRouteTrips = () => {
     setOpen(true);
@@ -49,6 +68,7 @@ export default function ManageRouteAndTrips() {
         ...values,
         schoolId: selectedSetting._id,
       };
+      console.log(payload, "payload");
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -76,6 +96,7 @@ export default function ManageRouteAndTrips() {
       dropEnd: dataToEdit?.dropEnd || "",
       stops: dataToEdit?.stops || [
         {
+          id: 1,
           name: "",
           stopKM: "",
           pickTime: "",
@@ -90,9 +111,11 @@ export default function ManageRouteAndTrips() {
     enableReinitialize: true,
   });
   const addStop = () => {
+    let initialStopsData = [...entryFormik.values.stops];
     entryFormik.setFieldValue("stops", [
       ...entryFormik.values.stops,
       {
+        id: initialStopsData.length + 1,
         name: "",
         stopKM: "",
         pickTime: "",
@@ -101,6 +124,19 @@ export default function ManageRouteAndTrips() {
         dropEndTime: "",
       },
     ]);
+  };
+
+  useEffect(() => {
+    getVehicles();
+  }, []);
+
+  const handleCustomInputChange = (event, stop) => {
+    entryFormik.setFieldValue(
+      "stops",
+      entryFormik.values.stops.map((b) =>
+        b.id === stop.id ? { ...b, [event.target.name]: event.target.value } : b
+      )
+    );
   };
 
   return (
@@ -132,6 +168,7 @@ export default function ManageRouteAndTrips() {
               name="vehicle"
               label="Vehicle"
               required={true}
+              options={vehicles}
             />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
@@ -156,6 +193,7 @@ export default function ManageRouteAndTrips() {
               formik={entryFormik}
               type="time"
               name="pickStart"
+              required={true}
               label="Pick Start"
             />
           </Grid>
@@ -165,6 +203,7 @@ export default function ManageRouteAndTrips() {
               formik={entryFormik}
               type="time"
               name="pickEnd"
+              required={true}
               label="Pick End"
             />
           </Grid>
@@ -174,6 +213,7 @@ export default function ManageRouteAndTrips() {
               formik={entryFormik}
               type="time"
               name="dropStart"
+              required={true}
               label="Drop Start"
             />
           </Grid>
@@ -183,6 +223,7 @@ export default function ManageRouteAndTrips() {
               formik={entryFormik}
               type="time"
               name="dropEnd"
+              required={true}
               label="Drop End"
             />
           </Grid>
@@ -196,51 +237,65 @@ export default function ManageRouteAndTrips() {
             </IconButton>
             <Grid container spacing={2}>
               <Grid xs={12} sm={12} md={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <CustomInput
+                  value={stop?.name}
                   name="name"
                   label="Name"
+                  required={true}
+                  onChange={(e) => handleCustomInputChange(e, stop)}
+                />
+              </Grid>
+
+              <Grid xs={12} sm={12} md={6} item>
+                <CustomInput
+                  value={stop?.stopKM}
+                  name="stopKM"
+                  label="Stop KM"
+                  onChange={(e) => handleCustomInputChange(e, stop)}
+                />
+              </Grid>
+
+              <Grid xs={12} sm={12} md={6} item>
+                <CustomInput
+                  value={stop?.pickTime}
+                  name="pickTime"
+                  type="time"
+                  label="Pick Time"
+                  onChange={(e) => handleCustomInputChange(e, stop)}
                   required={true}
                 />
               </Grid>
 
               <Grid xs={12} sm={12} md={6} item>
-                <FormInput formik={entryFormik} name="stopKM" label="Stop KM" />
-              </Grid>
-
-              <Grid xs={12} sm={12} md={6} item>
-                <FormInput
-                  formik={entryFormik}
-                  type="time"
-                  name="pickTime"
-                  label="Pick Time"
-                />
-              </Grid>
-
-              <Grid xs={12} sm={12} md={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <CustomInput
+                  value={stop?.pickEndTime}
                   type="time"
                   name="pickEndTime"
                   label="Pick End Time"
+                  onChange={(e) => handleCustomInputChange(e, stop)}
+                  required={true}
                 />
               </Grid>
 
               <Grid xs={12} sm={12} md={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <CustomInput
+                  value={stop?.dropTime}
                   type="time"
                   name="dropTime"
                   label="Drop Time"
+                  onChange={(e) => handleCustomInputChange(e, stop)}
+                  required={true}
                 />
               </Grid>
 
               <Grid xs={12} sm={12} md={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <CustomInput
+                  value={stop?.dropEndTime}
                   type="time"
                   name="dropEndTime"
                   label="Drop End Time"
+                  onChange={(e) => handleCustomInputChange(e, stop)}
+                  required={true}
                 />
               </Grid>
             </Grid>
