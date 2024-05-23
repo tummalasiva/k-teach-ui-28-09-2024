@@ -277,4 +277,10 @@ export const PRIVATE_URLS = {
     update: "/vehicle/update",
     delete: "/vehicle/delete",
   },
+  route: {
+    list: "/route/list",
+    create: "/route/create",
+    update: "/route/update",
+    delete: "/route/delete",
+  },
 };
