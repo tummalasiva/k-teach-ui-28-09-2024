@@ -276,5 +276,8 @@ export const PRIVATE_URLS = {
     create: "/route/create",
     update: "/route/update",
     delete: "/route/delete",
+    addStop: "/route/addStop",
+    removeStop: "/route/removeStop",
+    updateStop: "/route/updateStop",
   },
 };
