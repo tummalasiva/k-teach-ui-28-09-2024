@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -42,6 +42,53 @@ export default function VehicleLog() {
 
   const [departure, setDeparture] = useState([]);
   const [arrival, setArrival] = useState([]);
+
+  const [vehicle, setVehicle] = useState([]);
+
+  const [route, setRoute] = useState([]);
+
+  const getVehicle = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicle.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setVehicle(
+        data.result.map((v) => ({
+          ...v,
+          label: v?.driver?.basicInfo?.name,
+          value: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getVehicle();
+  }, []);
+
+  const getRoute = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.route.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            vehicle: formik.values.vehicle,
+          },
+        },
+      });
+      setRoute(
+        data.result.map((v) => ({
+          ...v,
+          label: v.name,
+          value: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const AddDepartmentHandel = () => {
     setOpen(true);
@@ -143,6 +190,12 @@ export default function VehicleLog() {
     setDeparture(departure.filter((img) => img.name != fileName));
     setArrival(arrival.filter((img) => img.name != fileName));
   };
+
+  useEffect(() => {
+    if (formik.values.vehicle) {
+      getRoute();
+    }
+  }, [formik.values.vehicle, selectedSetting]);
   return (
     <>
       <PageHeader title="Vehicle Log" />
@@ -154,7 +207,7 @@ export default function VehicleLog() {
               name="vehicle"
               formik={formik}
               label="Select Vehicle"
-              // options={""}
+              options={vehicle}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -194,20 +247,21 @@ export default function VehicleLog() {
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
+              name="vehicle"
+              label="Vehicle"
+              required={true}
+              options={vehicle}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={entryFormik}
               name="route"
               label="Route"
               required={true}
             />
           </Grid>
 
-          <Grid xs={12} sm={6} md={6} item>
-            <FormSelect
-              formik={entryFormik}
-              name="vehicle"
-              label="Vehicle"
-              required={true}
-            />
-          </Grid>
           <Grid xs={12} sm={6} md={6} item>
             <FormDatePicker formik={entryFormik} name="date" label="Date" />
           </Grid>
