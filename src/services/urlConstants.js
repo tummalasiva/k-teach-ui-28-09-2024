@@ -329,4 +329,10 @@ export const PRIVATE_URLS = {
     update: "/feeMapCategory/update",
     delete: "/feeMapCategory/delete",
   },
+  salaryGrade: {
+    list: "/salaryGrade/list",
+    create: "/salaryGrade/create",
+    update: "/salaryGrade/update",
+    delete: "/salaryGrade/delete",
+  },
 };

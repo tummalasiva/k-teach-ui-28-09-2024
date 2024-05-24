@@ -1,7 +1,9 @@
+/** @format */
+
 export const salaryGradeTableKeys = [
   {
     name: "Grade Id",
-    key: "gradeId",
+    key: "gradeCode",
   },
   {
     name: "Grade",
@@ -17,6 +19,6 @@ export const salaryGradeTableKeys = [
   },
   {
     name: "Status",
-    key: "status",
+    key: "active",
   },
 ];

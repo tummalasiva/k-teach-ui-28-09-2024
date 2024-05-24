@@ -66,6 +66,8 @@ export default function VehicleLog() {
           readingAtArrival: s?.readingAtArrival,
         }))
       );
+
+      console.log(data.result, "kkkkkkk");
     } catch (error) {
       console.log(error);
     }
@@ -280,6 +282,21 @@ export default function VehicleLog() {
     }
   };
 
+  const handleDownloadDeparture = () => {
+    const downloadUrl = dataToEdit?.readingAtDeparture?.image;
+
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
+  const handleDownloadArrival = async () => {
+    const downloadUrl = dataToEdit?.readingAtArrival?.image;
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
   return (
     <>
       <PageHeader title="Vehicle Log" />
@@ -419,6 +436,17 @@ export default function VehicleLog() {
                 accept="image/*,.pdf"
               />
             </Grid>
+            {dataToEdit?.readingAtDeparture &&
+            dataToEdit.readingAtDeparture?.image ? (
+              <Grid xs={12} md={6} lg={6} item>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleDownloadDeparture}>
+                  Download File
+                </Button>
+              </Grid>
+            ) : null}
           </Grid>
         </FormBox>
         {dataToEdit ? (
@@ -465,6 +493,17 @@ export default function VehicleLog() {
                     accept="image/*,.pdf"
                   />
                 </Grid>
+                {dataToEdit?.readingAtDeparture &&
+                dataToEdit.readingAtDeparture?.image ? (
+                  <Grid xs={12} md={6} lg={6} item>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={handleDownloadArrival}>
+                      Download File
+                    </Button>
+                  </Grid>
+                ) : null}
               </Grid>
             </FormBox>
           </>

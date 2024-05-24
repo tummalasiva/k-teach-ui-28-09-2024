@@ -199,6 +199,13 @@ export default function Fuel() {
     }
   }, [formik.values.vehicle, formik.values.firm, selectedSetting]);
 
+  const handleDownload = () => {
+    const downloadUrl = dataToEdit?.receipt;
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
   return (
     <>
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
@@ -347,12 +354,21 @@ export default function Fuel() {
           <Grid xs={12} md={6} lg={6} item>
             <FileSelect
               name="receipt"
+              label="Select File"
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectReceipt}
               onRemove={(fileName) => handleRemoveFile(fileName)}
             />
           </Grid>
+
+          {dataToEdit && dataToEdit?.receipt ? (
+            <Grid xs={12} md={6} lg={6} item>
+              <Button size="small" variant="contained" onClick={handleDownload}>
+                Download File
+              </Button>
+            </Grid>
+          ) : null}
         </Grid>
       </FormModal>
     </>
