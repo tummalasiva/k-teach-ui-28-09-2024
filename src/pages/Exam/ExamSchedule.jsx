@@ -154,10 +154,10 @@ export default function ExamSchedule() {
           PRIVATE_URLS.examSchedule.update + "/" + dataToEdit._id,
           payload
         );
-        // getData();
+        entryFormik.handleSubmit();
       } else {
         const { data } = await post(PRIVATE_URLS.examSchedule.create, payload);
-        // getData();
+        entryFormik.handleSubmit();
         console.log(data, "vvvvvv");
       }
       handleClose();

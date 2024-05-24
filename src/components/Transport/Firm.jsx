@@ -1,11 +1,11 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { vehicleFirmTableKeys } from "../../data/tableKeys/vehcleFirmData";
 import CustomTable from "../Tables/CustomTable";
 import { Button, Grid } from "@mui/material";
 import FormInput from "../../forms/FormInput";
-import { post, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
 import { PRIVATE_URLS } from "../../services/urlConstants";
@@ -18,6 +18,21 @@ export default function Firm() {
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.firm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,8 +55,10 @@ export default function Firm() {
           PRIVATE_URLS.firm.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.firm.create, payload);
+        getData();
       }
       handleClose();
     } catch (error) {
@@ -65,6 +82,20 @@ export default function Firm() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.firm.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Button
@@ -78,7 +109,9 @@ export default function Firm() {
         tableKeys={vehicleFirmTableKeys}
         bodyData={data}
         bodyDataModal="firm"
-        actions={["edit"]}
+        actions={["edit", "delete"]}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       <FormModal
