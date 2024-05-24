@@ -293,4 +293,11 @@ export const PRIVATE_URLS = {
     update: "/vehicleLog/update",
     delete: "/vehicleLog/delete",
   },
+
+  feeMapCategory: {
+    list: "/feeMapCategory/list",
+    create: "/feeMapCategory/create",
+    update: "/feeMapCategory/update",
+    delete: "/feeMapCategory/delete",
+  },
 };
