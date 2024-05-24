@@ -33,6 +33,7 @@ export default function ManageHostel() {
     tableData: "",
     action: () => {},
   });
+
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.hostel.list);
