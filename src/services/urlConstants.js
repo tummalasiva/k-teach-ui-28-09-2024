@@ -322,4 +322,11 @@ export const PRIVATE_URLS = {
     update: "/maintenance/updateGreecing",
     delete: "/maintenance/deleteGreecing",
   },
+
+  feeMapCategory: {
+    list: "/feeMapCategory/list",
+    create: "/feeMapCategory/create",
+    update: "/feeMapCategory/update",
+    delete: "/feeMapCategory/delete",
+  },
 };
