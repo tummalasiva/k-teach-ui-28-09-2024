@@ -38,7 +38,9 @@ export default function Fuel() {
           },
         },
       });
-      setData(data.result.map((s) => ({ ...s, firm: s?.firm })));
+
+      console.log(data.result, "firm");
+      setData(data.result.map((s) => ({ ...s, firmName: s.firm })));
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +118,7 @@ export default function Fuel() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("firm", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -133,6 +136,7 @@ export default function Fuel() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("vehicle", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +149,7 @@ export default function Fuel() {
 
   const entryFormik = useFormik({
     initialValues: {
-      vehicle: formik.values.vehicle || "",
+      vehicle: dataToEdit?.vehicle._id || "",
       firm: dataToEdit?.firm._id || "",
       date: dataToEdit?.date || "",
       billNo: dataToEdit?.billNo || "",
@@ -193,7 +197,7 @@ export default function Fuel() {
     if (formik.values.vehicle && formik.values.firm) {
       formik.handleSubmit();
     }
-  }, [formik.values.vehicle && formik.values.firm, selectedSetting]);
+  }, [formik.values.vehicle, formik.values.firm, selectedSetting]);
 
   return (
     <>

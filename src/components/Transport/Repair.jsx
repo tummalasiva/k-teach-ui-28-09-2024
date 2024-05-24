@@ -94,6 +94,7 @@ export default function Repair() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("firm", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -111,6 +112,7 @@ export default function Repair() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("vehicle", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -133,9 +135,9 @@ export default function Repair() {
 
   const entryFormik = useFormik({
     initialValues: {
-      vehicle: formik.values.vehicle || "",
-      firm: dataToEdit?.firm || "",
-
+      vehicle: dataToEdit?.vehicle._id || "",
+      firm: dataToEdit?.firm._id || "",
+      date: dataToEdit?.date || "",
       particulars: dataToEdit?.particulars,
       amount: dataToEdit?.amount,
     },
@@ -160,7 +162,7 @@ export default function Repair() {
     if (formik.values.vehicle && formik.values.firm) {
       formik.handleSubmit();
     }
-  }, [formik.values.vehicle && formik.values.firm, selectedSetting]);
+  }, [formik.values.vehicle, formik.values.firm, selectedSetting]);
   return (
     <>
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
@@ -255,6 +257,14 @@ export default function Repair() {
               formik={entryFormik}
               label="Select Firm"
               options={firm}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormDatePicker
+              formik={entryFormik}
+              name="date"
+              label="Date"
+              required={true}
             />
           </Grid>
 

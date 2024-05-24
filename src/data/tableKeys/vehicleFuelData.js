@@ -4,11 +4,12 @@ export const vehicleFuelTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Firm",
     key: "name",
-    pah: "firm",
+    path: "firmName",
   },
   {
     name: "Bill No",

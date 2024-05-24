@@ -36,6 +36,8 @@ export default function Greecing() {
         },
       });
       setData(data.result);
+
+      console.log(data.result, "kkkkkkk");
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +64,7 @@ export default function Greecing() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("vehicle", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -106,7 +109,8 @@ export default function Greecing() {
 
   const entryFormik = useFormik({
     initialValues: {
-      vehicle: formik.values.vehicle || "",
+      vehicle: dataToEdit?.vehicle._id || "",
+      date: dataToEdit?.date || null,
 
       amount: dataToEdit?.amount,
     },
@@ -206,6 +210,15 @@ export default function Greecing() {
               label="Vehicle"
               required={true}
               options={vehicle}
+            />
+          </Grid>
+
+          <Grid xs={12} sm={6} md={6} item>
+            <FormDatePicker
+              formik={entryFormik}
+              name="date"
+              label="Date"
+              required={true}
             />
           </Grid>
 

@@ -1,7 +1,10 @@
+/** @format */
+
 export const vehicleGreecingTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
 
   {

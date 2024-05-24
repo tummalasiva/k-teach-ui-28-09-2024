@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
@@ -22,7 +24,7 @@ export default function VehicleMaintenance() {
           "Firm",
           "Vehicle Fuel",
           "Repair Maintenance",
-          "New Tire/Resole",
+          "New Tyre/Resole",
           "Greecing",
         ]}
       />

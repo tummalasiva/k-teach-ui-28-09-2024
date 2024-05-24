@@ -157,6 +157,7 @@ export default function VehicleLog() {
       formDataDeparture.append("schoolId", selectedSetting._id);
       formDataDeparture.append("route", values.route);
       formDataDeparture.append("vehicle", values.vehicle);
+      formDataDeparture.append("date", values.date);
 
       formDataDeparture.append("departureTime", values.departureTime);
       formDataDeparture.append("readingAtDeparture", values.readingAtDeparture);
@@ -211,7 +212,7 @@ export default function VehicleLog() {
       arrivalTime: dataToEdit?.arrivalTime || "",
       readingAtArrival: dataToEdit?.readingAtArrival?.reading || "",
       distance: dataToEdit?.spareUse?.distance || "",
-
+      date: dataToEdit?.date || "",
       reason: dataToEdit?.spareUse?.reason || "",
       totalDistanceTravelled: dataToEdit?.totalDistanceTravelled || 0,
 
@@ -264,7 +265,7 @@ export default function VehicleLog() {
     if (formik.values.vehicle && formik.values.route) {
       formik.handleSubmit();
     }
-  }, [formik.values.vehicle && formik.values.route, selectedSetting]);
+  }, [formik.values.vehicle, formik.values.route, selectedSetting]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
@@ -316,11 +317,14 @@ export default function VehicleLog() {
               <FormDatePicker formik={formik} label="To Date" name="toDate" />
             </Grid>
             <Grid
+              item
               xs={12}
-              md={6}
-              lg={3}
-              style={{ alignSelf: "center", display: "flex", gap: 1 }}
-              item>
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end"
+              alignSelf="center"
+              gap={1}>
               <Button size="small" type="submit" variant="contained">
                 Find
               </Button>
@@ -329,7 +333,7 @@ export default function VehicleLog() {
                 size="small"
                 onClick={handleGetPrintPdf}
                 variant="contained">
-                Pdf
+                Print
               </Button>
             </Grid>
           </Grid>

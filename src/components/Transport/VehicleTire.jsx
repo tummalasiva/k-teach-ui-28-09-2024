@@ -37,7 +37,7 @@ export default function VehicleTire() {
           },
         },
       });
-      setData(data.result);
+      setData(data.result.map((s) => ({ ...s, firmName: s.firm })));
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +65,7 @@ export default function VehicleTire() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("firm", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -82,6 +83,7 @@ export default function VehicleTire() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("vehicle", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -130,11 +132,12 @@ export default function VehicleTire() {
 
   const entryFormik = useFormik({
     initialValues: {
-      vehicle: formik.values.vehicle || "",
-      firm: dataToEdit?.firm || "",
+      vehicle: dataToEdit?.vehicle._id || "",
+      firm: dataToEdit?.firm._id || "",
       kmReading: dataToEdit?.kmReading || "",
       kmRun: dataToEdit?.kmRun || "",
       tyre: dataToEdit?.tyre || "",
+      date: dataToEdit?.date || "",
       amount: dataToEdit?.amount || "",
       rate: dataToEdit?.rate || "",
       tyreNo: dataToEdit?.tyreNo || "",
@@ -160,7 +163,7 @@ export default function VehicleTire() {
     if (formik.values.vehicle && formik.values.firm) {
       formik.handleSubmit();
     }
-  }, [formik.values.vehicle && formik.values.firm, selectedSetting]);
+  }, [formik.values.vehicle, formik.values.firm, selectedSetting]);
   return (
     <>
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
@@ -226,7 +229,7 @@ export default function VehicleTire() {
         actions={["edit", "delete"]}
         tableKeys={vehicleTireTableKeys}
         bodyData={data}
-        bodyDataModal="tire/resole"
+        bodyDataModal="tyre/resole"
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
@@ -235,7 +238,7 @@ export default function VehicleTire() {
         open={open}
         formik={entryFormik}
         formTitle={
-          dataToEdit ? "Update Vehicle Tire/Resole" : "Add  Vehicle Tire/Resole"
+          dataToEdit ? "Update Vehicle Tyre/Resole" : "Add  Vehicle Tyre/Resole"
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
@@ -257,6 +260,14 @@ export default function VehicleTire() {
               formik={entryFormik}
               label="Select Firm"
               options={firm}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormDatePicker
+              formik={entryFormik}
+              name="date"
+              label="Date"
+              required={true}
             />
           </Grid>
 
