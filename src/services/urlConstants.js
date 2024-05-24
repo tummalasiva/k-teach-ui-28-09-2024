@@ -201,7 +201,7 @@ export const PRIVATE_URLS = {
     update: "/studentCheckout/update",
     delete: "/studentCheckout/delete",
     downloadPdf: "/studentCheckout/downloadPdf",
-    donwloadExcel: "/studentCheckout/donwloadExcel",
+    donwloadExcel: "/studentCheckout/downloadExcel",
   },
   guardianFeedback: {
     list: "/guardianFeedback/list",
@@ -264,5 +264,30 @@ export const PRIVATE_URLS = {
     create: "/hostel/create",
     update: "/hostel/update",
     delete: "/hostel/delete",
+  },
+  firm: {
+    list: "/firm/list",
+    create: "/firm/create",
+    update: "/firm/update",
+    delete: "/firm/delete",
+  },
+  vehicle: {
+    list: "/vehicle/list",
+    create: "/vehicle/create",
+    update: "/vehicle/update",
+    delete: "/vehicle/delete",
+  },
+  route: {
+    list: "/route/list",
+    create: "/route/create",
+    update: "/route/update",
+    delete: "/route/delete",
+  },
+
+  vehicleLog: {
+    list: "/vehicleLog/list",
+    create: "/vehicleLog/create",
+    update: "/vehicleLog/update",
+    delete: "/vehicleLog/delete",
   },
 };

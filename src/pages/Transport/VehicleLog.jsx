@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -43,6 +43,69 @@ export default function VehicleLog() {
   const [departure, setDeparture] = useState([]);
   const [arrival, setArrival] = useState([]);
 
+  const [vehicle, setVehicle] = useState([]);
+
+  const [route, setRoute] = useState([]);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicleLog.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getVehicle();
+    getData();
+  }, []);
+
+  const getVehicle = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vehicle.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setVehicle(
+        data.result.map((v) => ({
+          ...v,
+          label: v.number,
+          value: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getVehicle();
+  }, []);
+
+  const getRoute = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.route.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            vehicle: formik.values.vehicle || entryFormik.values.vehicle,
+          },
+        },
+      });
+      setRoute(
+        data.result.map((v) => ({
+          ...v,
+          label: v.title,
+          value: v._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const AddDepartmentHandel = () => {
     setOpen(true);
   };
@@ -66,6 +129,9 @@ export default function VehicleLog() {
       formData.append("departureTime", values.departureTime);
       formData.append("readingAtDeparture", values.readingAtDeparture);
       departure.forEach((file) => formData.append("departureImage", file));
+
+      console.log(formData, "nnnnnnnnbbbbbbbbb");
+
       formData.append("arrivalTime", values.arrivalTime);
       formData.append("readingAtArrival", values.readingAtArrival);
       formData.append("distance", values.distance);
@@ -80,10 +146,12 @@ export default function VehicleLog() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.vehicleLog.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        getData();
       }
       handleClose();
     } catch (error) {
@@ -94,8 +162,8 @@ export default function VehicleLog() {
 
   const entryFormik = useFormik({
     initialValues: {
-      route: dataToEdit?.route || "",
-      vehicle: dataToEdit?.vehicle || "",
+      route: dataToEdit?.route._id || "",
+      vehicle: dataToEdit?.vehicle._id || "",
       date: dataToEdit?.date || null,
       departureTime: dataToEdit?.departureTime || "",
       readingAtDeparture: dataToEdit?.readingAtDeparture || "",
@@ -143,6 +211,26 @@ export default function VehicleLog() {
     setDeparture(departure.filter((img) => img.name != fileName));
     setArrival(arrival.filter((img) => img.name != fileName));
   };
+
+  useEffect(() => {
+    if (formik.values.vehicle || entryFormik.values.vehicle) {
+      getRoute();
+    }
+  }, [formik.values.vehicle, entryFormik.values.vehicle, selectedSetting]);
+
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.vehicleLog.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Vehicle Log" />
@@ -154,7 +242,7 @@ export default function VehicleLog() {
               name="vehicle"
               formik={formik}
               label="Select Vehicle"
-              // options={""}
+              options={vehicle}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -163,7 +251,7 @@ export default function VehicleLog() {
               name="route"
               formik={formik}
               label="Select Route"
-              // options={""}
+              options={route}
             />
           </Grid>
 
@@ -192,22 +280,24 @@ export default function VehicleLog() {
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="route"
-              label="Route"
-              required={true}
-            />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput
+            <FormSelect
               formik={entryFormik}
               name="vehicle"
               label="Vehicle"
               required={true}
+              options={vehicle}
             />
           </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={entryFormik}
+              name="route"
+              label="Route"
+              required={true}
+              options={route}
+            />
+          </Grid>
+
           <Grid xs={12} sm={6} md={6} item>
             <FormDatePicker formik={entryFormik} name="date" label="Date" />
           </Grid>
@@ -253,7 +343,6 @@ export default function VehicleLog() {
 
             <Grid xs={12} md={6} lg={6} item>
               <FileSelect
-                multi={false}
                 name="departureImage"
                 label="Select File"
                 onChange={(e) => handleChangePhoto(e, "departureImage")}
@@ -316,10 +405,12 @@ export default function VehicleLog() {
         ) : null}
       </FormModal>
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={vehicleLogTableKeys}
         bodyDataModal="vehicle log"
         bodyData={data}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
     </>
   );

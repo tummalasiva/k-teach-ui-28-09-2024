@@ -18,11 +18,6 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 
-const Active = [
-  { label: "Active", value: true },
-  { label: "Inactive", value: false },
-];
-
 const CustomActionFee = ({
   onUpdate = () => {},
   data = {},
@@ -195,14 +190,6 @@ export default function ReceiptBook() {
                 name="name"
                 label="Receipt Name"
                 required={true}
-              />
-            </Grid>
-            <Grid xs={12} md={12} item>
-              <FormSelect
-                name="active"
-                formik={entryFormik}
-                label="Status"
-                options={Active}
               />
             </Grid>
           </Grid>
