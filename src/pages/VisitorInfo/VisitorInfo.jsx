@@ -235,7 +235,6 @@ export default function VisitorInfo() {
   }, [entryFormik.values.toMeetUserType]);
 
   const handleEditClick = (data) => {
-    // console.log(data, "fff");
     setDataToEdit(data);
     setOpen(true);
   };

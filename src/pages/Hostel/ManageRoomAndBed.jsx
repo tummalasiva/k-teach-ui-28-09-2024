@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -17,8 +17,11 @@ import AddForm from "../../forms/AddForm";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CustomInput from "../../forms/CustomInput";
+import RoomAndBedViewDialog from "./RoomAndBedViewDialog";
+import SettingContext from "../../context/SettingsContext";
 
 export default function ManageRoomAndBed() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [roomType, setRoomType] = useState([]);
   const [hostels, setHostels] = useState([]);
@@ -27,6 +30,27 @@ export default function ManageRoomAndBed() {
   const [updatingBed, setUpdatingBed] = useState(false);
   const [deletingBed, setDeletingBed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: "",
+    action: () => {},
+  });
+
+  // get rooms
+  const getRoomList = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.room.list);
+      setData(
+        data.result.map((h) => ({
+          ...h,
+          hostelName: h?.hostel?.name,
+          roomType: h.type?.name,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // get room type list
   const getRoomTypeList = async () => {
@@ -43,22 +67,6 @@ export default function ManageRoomAndBed() {
     try {
       const { data } = await get(PRIVATE_URLS.hostel.list);
       setHostels(data.result.map((h) => ({ label: h.name, value: h._id })));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // get rooms
-  const getRoomList = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.room.list);
-      setData(
-        data.result.map((h) => ({
-          ...h,
-          hostelName: h?.hostel?.name,
-          roomType: h.type?.name,
-        }))
-      );
     } catch (error) {
       console.log(error);
     }
@@ -167,7 +175,7 @@ export default function ManageRoomAndBed() {
   };
 
   const handleEdit = (data) => {
-    console.log(data, "eee");
+    // console.log(data, "eee");
     setOpen(true);
     setDataToEdit(data);
   };
@@ -191,6 +199,20 @@ export default function ManageRoomAndBed() {
     );
   };
 
+  const handleClickOpenView = (data) => {
+    // console.log(data, "vvvvvb");
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data,
+      schoolName: selectedSetting.name,
+    });
+    getRoomList();
+  };
+
+  const onCloseModal = () => {
+    setModalData({ ...modalData, open: false });
+  };
   return (
     <>
       <PageHeader title="Hostel Room & Beds" />
@@ -202,6 +224,7 @@ export default function ManageRoomAndBed() {
         bodyData={data}
         onDeleteClick={deleteRoom}
         onEditClick={handleEdit}
+        onViewClick={handleClickOpenView}
       />
 
       {/* feb model open ============== */}
@@ -329,6 +352,15 @@ export default function ManageRoomAndBed() {
           </Grid>
         </Grid>
       </FormModal>
+
+      {/* Add/update model ============== */}
+      <RoomAndBedViewDialog
+        title="Room Information"
+        open={modalData.open}
+        tableData={modalData.tableData}
+        schoolName={modalData.schoolName}
+        onClose={onCloseModal}
+      />
     </>
   );
 }
