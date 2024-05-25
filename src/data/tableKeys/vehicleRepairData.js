@@ -1,7 +1,10 @@
+/** @format */
+
 export const vehicleRepairTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Particulars",

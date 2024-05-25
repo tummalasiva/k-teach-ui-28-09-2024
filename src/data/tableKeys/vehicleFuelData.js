@@ -1,11 +1,15 @@
+/** @format */
+
 export const vehicleFuelTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Firm",
-    key: "firm",
+    key: "name",
+    path: "firmName",
   },
   {
     name: "Bill No",
@@ -18,6 +22,6 @@ export const vehicleFuelTableKeys = [
   },
   {
     name: "Km",
-    key: "km",
+    key: "kiloMeter",
   },
 ];

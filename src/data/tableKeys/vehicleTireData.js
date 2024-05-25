@@ -1,15 +1,19 @@
+/** @format */
+
 export const vehicleTireTableKeys = [
   {
     name: "Date",
     key: "date",
+    isDate: true,
   },
   {
     name: "Firm",
-    key: "firm",
+    key: "name",
+    path: "firmName",
   },
   {
     name: "Km Reading",
-    key: "km",
+    key: "kmReading",
   },
   {
     name: "Km Run",

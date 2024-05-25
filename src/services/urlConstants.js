@@ -292,6 +292,35 @@ export const PRIVATE_URLS = {
     create: "/vehicleLog/create",
     update: "/vehicleLog/update",
     delete: "/vehicleLog/delete",
+    downloadPdf: "/vehicleLog/downloadPdf",
+  },
+
+  maintenanceFuel: {
+    list: "/maintenance/listFuel",
+    create: "/maintenance/createFuel",
+    update: "/maintenance/updateFuel",
+    delete: "/maintenance/deleteFuel",
+  },
+
+  maintenanceRepair: {
+    list: "/maintenance/listRepair",
+    create: "/maintenance/createRepair",
+    update: "/maintenance/updateRepair",
+    delete: "/maintenance/deleteRepair",
+  },
+
+  maintenanceTyre: {
+    list: "/maintenance/listTyre",
+    create: "/maintenance/createTyre",
+    update: "/maintenance/updateTyre",
+    delete: "/maintenance/deleteTyre",
+  },
+
+  maintenanceGreecing: {
+    list: "/maintenance/listGreecing",
+    create: "/maintenance/createGreecing",
+    update: "/maintenance/updateGreecing",
+    delete: "/maintenance/deleteGreecing",
   },
 
   feeMapCategory: {

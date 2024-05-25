@@ -17,6 +17,7 @@ import SettingContext from "../../context/SettingsContext";
 import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import FileSelect from "../../forms/FileSelect";
+import { downloadFile } from "../../utils";
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: "20px 8px",
@@ -39,29 +40,36 @@ export default function VehicleLog() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [departure, setDeparture] = useState([]);
   const [arrival, setArrival] = useState([]);
-
   const [vehicle, setVehicle] = useState([]);
-
   const [route, setRoute] = useState([]);
 
-  const getData = async () => {
+  const getData = async (values) => {
     try {
       const { data } = await get(PRIVATE_URLS.vehicleLog.list, {
-        params: { schoolId: selectedSetting._id },
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            vehicle: values.vehicle,
+            route: values.route,
+            fromDate: values.fromDate,
+            toDate: values.toDate,
+          },
+        },
       });
-      setData(data.result);
+
+      setData(
+        data.result.map((s) => ({
+          ...s,
+          readingAtDepartureReading: s?.readingAtDeparture,
+          readingAtArrival: s?.readingAtArrival,
+        }))
+      );
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getVehicle();
-    getData();
-  }, []);
 
   const getVehicle = async () => {
     try {
@@ -75,6 +83,7 @@ export default function VehicleLog() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("vehicle", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +92,27 @@ export default function VehicleLog() {
   useEffect(() => {
     getVehicle();
   }, []);
+
+  const handleGetPrintPdf = async () => {
+    try {
+      const getLogPdf = await get(PRIVATE_URLS.vehicleLog.downloadPdf, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            vehicle: formik.values.vehicle,
+            route: formik.values.route,
+
+            fromDate: formik.values.fromDate,
+            toDate: formik.values.toDate,
+          },
+        },
+      });
+
+      downloadFile("application/pdf", getLogPdf.data, "vehiclelog.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getRoute = async () => {
     try {
@@ -101,6 +131,7 @@ export default function VehicleLog() {
           value: v._id,
         }))
       );
+      formik.setFieldValue("route", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -120,38 +151,49 @@ export default function VehicleLog() {
     try {
       setLoading(true);
 
-      const formData = new FormData();
+      const formDataDeparture = new FormData();
+      const formDataArrival = new FormData();
 
-      formData.append("schoolId", selectedSetting._id);
-      formData.append("route", values.route);
-      formData.append("vehicle", values.vehicle);
-      formData.append("date", values.date);
-      formData.append("departureTime", values.departureTime);
-      formData.append("readingAtDeparture", values.readingAtDeparture);
-      departure.forEach((file) => formData.append("departureImage", file));
+      formDataDeparture.append("schoolId", selectedSetting._id);
+      formDataDeparture.append("route", values.route);
+      formDataDeparture.append("vehicle", values.vehicle);
+      formDataDeparture.append("date", values.date);
 
-      console.log(formData, "nnnnnnnnbbbbbbbbb");
+      formDataDeparture.append("departureTime", values.departureTime);
+      formDataDeparture.append("readingAtDeparture", values.readingAtDeparture);
+      formDataDeparture.append(
+        "totalDistanceTravelled",
+        values.totalDistanceTravelled
+      );
 
-      formData.append("arrivalTime", values.arrivalTime);
-      formData.append("readingAtArrival", values.readingAtArrival);
-      formData.append("distance", values.distance);
-      formData.append("reason", values.reason);
-      arrival.forEach((file) => formData.append("arrivalImage", file));
+      departure.forEach((file) =>
+        formDataDeparture.append("departureImage", file)
+      );
+
+      formDataArrival.append("arrivalTime", values.arrivalTime);
+      formDataArrival.append("readingAtArrival", values.readingAtArrival);
+      formDataArrival.append(
+        "spareUse",
+        JSON.stringify({ distance: values.distance, reason: values.reason })
+      );
+      arrival.forEach((file) => formDataArrival.append("arrivalImage", file));
 
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.vehicleLog.update + "/" + dataToEdit._id,
-          formData,
+          formDataArrival,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        getData();
       } else {
-        const { data } = await post(PRIVATE_URLS.vehicleLog.create, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        getData();
+        const { data } = await post(
+          PRIVATE_URLS.vehicleLog.create,
+          formDataDeparture,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
       }
       handleClose();
     } catch (error) {
@@ -164,15 +206,16 @@ export default function VehicleLog() {
     initialValues: {
       route: dataToEdit?.route._id || "",
       vehicle: dataToEdit?.vehicle._id || "",
-      date: dataToEdit?.date || null,
+
       departureTime: dataToEdit?.departureTime || "",
-      readingAtDeparture: dataToEdit?.readingAtDeparture || "",
+      readingAtDeparture: dataToEdit?.readingAtDeparture?.reading || "",
       arrivalTime: dataToEdit?.arrivalTime || "",
-      readingAtArrival: dataToEdit?.readingAtArrival || "",
-      distance: dataToEdit?.distance || "",
-      reason: dataToEdit?.reason || "",
+      readingAtArrival: dataToEdit?.readingAtArrival?.reading || "",
+      distance: dataToEdit?.spareUse?.distance || "",
+      date: dataToEdit?.date || "",
+      reason: dataToEdit?.spareUse?.reason || "",
       totalDistanceTravelled: dataToEdit?.totalDistanceTravelled || 0,
-      spareUse: dataToEdit?.spareUse || "",
+
       tripCompleted: dataToEdit?.tripCompleted || false,
     },
     onSubmit: handleCreateOrUpdate,
@@ -186,7 +229,7 @@ export default function VehicleLog() {
       fromDate: null,
       toDate: null,
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getData,
   });
 
   const handleChangePhoto = (e, type) => {
@@ -218,6 +261,12 @@ export default function VehicleLog() {
     }
   }, [formik.values.vehicle, entryFormik.values.vehicle, selectedSetting]);
 
+  useEffect(() => {
+    if (formik.values.vehicle && formik.values.route) {
+      formik.handleSubmit();
+    }
+  }, [formik.values.vehicle, formik.values.route, selectedSetting]);
+
   const handleEditClick = (data) => {
     setDataToEdit(data);
     setOpen(true);
@@ -225,7 +274,7 @@ export default function VehicleLog() {
   const handleDelete = async (id) => {
     try {
       const res = await del(PRIVATE_URLS.vehicleLog.delete + "/" + id);
-      getData();
+      formik.handleSubmit();
     } catch (error) {
       console.error(error);
     }
@@ -235,38 +284,60 @@ export default function VehicleLog() {
     <>
       <PageHeader title="Vehicle Log" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="vehicle"
-              formik={formik}
-              label="Select Vehicle"
-              options={vehicle}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="route"
-              formik={formik}
-              label="Select Route"
-              options={route}
-            />
-          </Grid>
+        <form onSubmit={formik.handleSubmit}>
+          {" "}
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="vehicle"
+                formik={formik}
+                label="Select Vehicle"
+                options={vehicle}
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="route"
+                formik={formik}
+                label="Select Route"
+                options={route}
+              />
+            </Grid>
 
-          <Grid xs={12} sm={6} md={6} lg={3} item>
-            <FormDatePicker formik={formik} label="From Date" name="fromDate" />
+            <Grid xs={12} sm={6} md={6} lg={3} item>
+              <FormDatePicker
+                formik={formik}
+                label="From Date"
+                name="fromDate"
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} lg={3} item>
+              <FormDatePicker formik={formik} label="To Date" name="toDate" />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end"
+              alignSelf="center"
+              gap={1}>
+              <Button size="small" type="submit" variant="contained">
+                Find
+              </Button>
+
+              <Button
+                size="small"
+                onClick={handleGetPrintPdf}
+                variant="contained">
+                Print
+              </Button>
+            </Grid>
           </Grid>
-          <Grid xs={12} sm={6} md={6} lg={3} item>
-            <FormDatePicker formik={formik} label="To Date" name="toDate" />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-          </Grid>
-        </Grid>
+        </form>
       </Paper>
 
       <AddForm title="Add Vehicle Log" onAddClick={AddDepartmentHandel} />
@@ -316,10 +387,6 @@ export default function VehicleLog() {
               name="totalDistanceTravelled"
               label="Total Distance Travelled"
             />
-          </Grid>
-
-          <Grid xs={12} sm={12} md={6} item>
-            <FormInput formik={entryFormik} name="spareUse" label="Spare Use" />
           </Grid>
 
           <Grid xs={12} sm={12} md={6} item>
@@ -389,7 +456,6 @@ export default function VehicleLog() {
 
                 <Grid xs={12} md={6} lg={6} item>
                   <FileSelect
-                    multi={false}
                     name="arrivalImage"
                     label="Select File"
                     onChange={(e) => handleChangePhoto(e, "arrivalImage")}

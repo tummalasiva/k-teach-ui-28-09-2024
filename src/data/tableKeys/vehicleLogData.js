@@ -10,18 +10,20 @@ export const vehicleLogTableKeys = [
     name: "Departure Time",
     key: "departureTime",
   },
-  // {
-  //   name: "Reading At Departure",
-  //   key: "readingAtDeparture",
-  // },
-  // {
-  //   name: "Arrival Time",
-  //   key: "arrivalTime",
-  // },
-  // {
-  //   name: "Reading At Arrival",
-  //   key: "readingAtArrival",
-  // },
+  {
+    name: "Reading At Departure",
+    key: "reading",
+    path: "readingAtDepartureReading",
+  },
+  {
+    name: "Arrival Time",
+    key: "arrivalTime",
+  },
+  {
+    name: "Reading At Arrival",
+    key: "reading",
+    path: "readingAtArrival",
+  },
   {
     name: "Total KM Run",
     key: "totalDistanceTravelled",
