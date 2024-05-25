@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -6,6 +8,8 @@ import FormSelect from "../../forms/FormSelect";
 
 export default function CollectFees() {
   const [data, setData] = useState([]);
+
+  //
 
   const entryFormik = useFormik({
     initialValues: {
@@ -73,8 +77,7 @@ export default function CollectFees() {
             md={6}
             lg={3}
             style={{ alignSelf: "center", marginTop: "10px" }}
-            item
-          >
+            item>
             <Button size="small" variant="contained">
               Find
             </Button>
