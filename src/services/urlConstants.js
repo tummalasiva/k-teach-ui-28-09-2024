@@ -300,4 +300,11 @@ export const PRIVATE_URLS = {
     update: "/feeMapCategory/update",
     delete: "/feeMapCategory/delete",
   },
+
+  feeMap: {
+    list: "/feeMap/list",
+    create: "/feeMap/create",
+    update: "/feeMap/update",
+    delete: "/feeMap/delete",
+  },
 };

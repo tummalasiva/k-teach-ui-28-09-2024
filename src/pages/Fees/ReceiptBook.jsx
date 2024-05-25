@@ -17,6 +17,7 @@ import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
 const CustomActionFee = ({
   onUpdate = () => {},
@@ -71,8 +72,9 @@ export default function ReceiptBook() {
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-
+  const [receipts, setReceips] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openFeeMap, setOpenFeeMap] = useState(false);
 
   const getData = async () => {
     try {
@@ -85,8 +87,22 @@ export default function ReceiptBook() {
     }
   };
 
+  // get Receipt list
+  const getReceipts = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setReceips(data.result.map((r) => ({ label: r.name, value: r._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getData();
+    getReceipts();
   }, [selectedSetting]);
 
   const handleTabChange = (e, newValue) => {
@@ -130,7 +146,6 @@ export default function ReceiptBook() {
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
-
       active: dataToEdit?.active || true,
     },
     onSubmit: handleCreateOrUpdate,
@@ -145,8 +160,13 @@ export default function ReceiptBook() {
   const handleNavigateFeeMap = (data) => {
     setSelectValue(1);
 
-    console.log(data, "data");
+    // console.log(data, "data");
   };
+
+  const handleCloseFeeMap = () => {
+    setOpenFeeMap(false);
+  };
+
   return (
     <>
       <PageHeader title="Receipt Book" />
@@ -176,6 +196,7 @@ export default function ReceiptBook() {
           CustomAction={CustomActionFee}
           onUpdate={getData}
         />
+        {/* Add/Update Receipt book ========= */}
         <FormModal
           open={open}
           formik={entryFormik}
@@ -207,11 +228,14 @@ export default function ReceiptBook() {
               name="receipt"
               formik={entryFormik}
               label="Select Receipt"
-              // options={""}
+              options={receipts}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
-            <Button variant="contained" startIcon={<Add />}>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => setOpenFeeMap(true)}>
               Add Fee Map
             </Button>
           </Grid>
@@ -223,6 +247,15 @@ export default function ReceiptBook() {
           bodyData={data}
           tableKeys={feeMapTableKeys}
           feeMapTableKeys
+        />
+
+        {/* Add/Update Fee Map ========= */}
+        <AddUpdateFeeMap
+          open={openFeeMap}
+          entryFormik={entryFormik}
+          dataToEdit={dataToEdit}
+          handleClose={handleCloseFeeMap}
+          loading={loading}
         />
       </TabPanel>
     </>
