@@ -329,6 +329,32 @@ export const PRIVATE_URLS = {
     update: "/feeMapCategory/update",
     delete: "/feeMapCategory/delete",
   },
+  feeMap: {
+    list: "/feeMap/list",
+    create: "/feeMap/create",
+    update: "/feeMap/update",
+    delete: "/feeMap/delete",
+  },
+  receipt: {
+    getFeeDetails: "/receipt/getFeeDetails",
+    collectFees: "/receipt/collectFees",
+    previewReceipt: "/receipt/previewReceipt",
+    getReceiptsPaidWithCheque: "/receipt/getReceiptsPaidWithCheque",
+    updateSingleReceiptReconciliationStatusStatus:
+      "/receipt/updateSingleReceiptReconciliationStatus",
+    updateMultipleReceiptReconciliationStatus:
+      "/receipt/updateMultipleReceiptReconciliationStatus",
+    getAmountCollectedWithDifferentModes:
+      "/receipt/getAmountCollectedWithDifferentModes",
+    getBalanceFeeReport: "/receipt/getBalanceFeeReport",
+    downloadBalanceFeeReport: "/receipt/downloadBalanceFeeReport",
+    getAllReceipts: "/receipt/getAllReceipts",
+    downloadReceipt: "/receipt/downloadReceipt",
+    downloadReceiptStaff: "/receipt/downloadReceiptStaff",
+    downloadFeeOverView: "/receipt/downloadFeeOverView",
+    getAllPastDues: "/receipt/getAllPastDues",
+    getMyReceipts: "/receipt/getMyReceipts",
+  },
   salaryGrade: {
     list: "/salaryGrade/list",
     create: "/salaryGrade/create",
