@@ -2,41 +2,31 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
+import dayjs from "dayjs";
 import {
   Box,
+  Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
+  Divider,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import FormModal from "../../forms/FormModal";
-import FormInput from "../../forms/FormInput";
-import FormSelect from "../../forms/FormSelect";
 import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
-import FormDatePicker from "../../forms/FormDatePicker";
-import dayjs from "dayjs";
-
-// const DEPENDENCIES = [
-//   { label: "Class - (Academic department)", value: "class" },
-//   { label: "Route - (Transport department)", value: "route" },
-//   { label: "Room - (Hostel department)", value: "room" },
-//   { label: "Academic Year - (Student academic year)", value: "academicYear" },
-//   { label: "Hostel - (Hostel department)", value: "hostel" },
-//   { label: "Stop - (Transport department)", value: "stop" },
-//   { label: "Added Before - (Student admission date)", value: "addedBefore" },
-//   { label: "Added After - (Student admission date)", value: "addedAfter" },
-//   { label: "Pick-Type - (Transport department)", value: "pickType" },
-//   { label: "Room Type - (Hostel department)", value: "roomType" },
-//   {
-//     label: "Library Member - (Human Resource department)",
-//     value: "libraryMember",
-//   },
-// ];
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LoadingButton } from "@mui/lab";
 
 const LABEL = {
   class: "Class - (Academic department)",
@@ -52,23 +42,29 @@ const LABEL = {
   libraryMember: "Library Member - (Human Resource department)",
 };
 
-const Installments = [
-  { label: "Monthly", value: 1 },
-  { label: "Quaterly", value: 2 },
-  { label: "Half-Yearly", value: 3 },
-  { label: "Yearly", value: 4 },
-  { label: "Others", value: 5 },
+const installmentsType = [
+  { label: "Monthly", id: 1 },
+  { label: "Quaterly", id: 2 },
+  { label: "Half-Yearly", id: 3 },
+  { label: "Yearly", id: 4 },
+  { label: "Others", id: 5 },
 ];
 
-const PickTypeSelect = [
-  { label: "Both", value: "Both" },
-  { label: "Pick", value: "Pick" },
-  { label: "Drop", value: "Drop" },
-];
+function removeElementFromArray(array, elementToRemove) {
+  const index = array.indexOf(elementToRemove);
+  if (index !== -1) {
+    array.splice(index, 1);
+  }
+  return array;
+}
 
-export default function AddUpdateFeeMap({ open = true }) {
+export default function AddUpdateFeeMap({
+  selectedReceipt,
+  open = true,
+  setOpen = () => {},
+}) {
   const { selectedSetting } = useContext(SettingContext);
-  const [dataToEdit, setDataToEdit] = useState(null);
+  const [dataToEdit, setDataToEdit] = useState("");
   const [classes, setClasses] = useState([]);
   const [academicYears, setAcademicYears] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -78,7 +74,11 @@ export default function AddUpdateFeeMap({ open = true }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dependencies, setDependencies] = useState([]);
-  const [nstallments, setInstallments] = useState([]);
+  const [addForm, setAddForm] = useState({});
+  const [installments, setInstallments] = useState([]);
+  const [addedAfter, setAddedAfter] = useState(null);
+  const [addedBefore, setAddedBefore] = useState(null);
+
   // get academic year
   const getAcademicYears = async () => {
     try {
@@ -186,14 +186,7 @@ export default function AddUpdateFeeMap({ open = true }) {
         params: { schoolId: selectedSetting._id },
       });
 
-      setRooms(
-        data.result.map((h) => ({
-          ...h,
-          label: `${h?.hostel?.name} - ${h?.type.name} (${h?.totalBeds} - Beds)`,
-          value: h?._id,
-        }))
-      );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
+      setRooms(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -208,354 +201,631 @@ export default function AddUpdateFeeMap({ open = true }) {
     getRoom();
   }, []);
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleAddSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+
+    if (!addForm.pickType) {
+      removeElementFromArray(dependencies, "pickType");
+    }
+    console.log(addForm, "addForm");
+
     try {
-      const payload = {
-        ...values,
+      let payload = {
+        receiptTitleId: selectedReceipt,
+        collectedFrom: "student",
+        dependencies: dependencies,
+        class: addForm.class,
+        route: addForm.route,
+        pickType: addForm.pickType,
+        room: addForm.room,
+        roomType: addForm.roomType,
+        hostel: addForm.hostel,
+        addedAfter: new Date(addedAfter),
+        addedBefore: new Date(addedBefore),
+        stop: addForm.stop,
+        academicYear: addForm.academicYear,
+        fee: addForm.fee,
+        installments: installments,
         schoolId: selectedSetting._id,
       };
-      setLoading(true);
+      console.log(payload, "payload");
+
       if (dataToEdit) {
         const { data } = await put(
-          PRIVATE_URLS.feeMap.update + "/" + dataToEdit._id,
+          PRIVATE_URLS.feeMap.update + "/" + dataToEdit?._id,
           payload
         );
+
+        // // setSearch({});
+        // if (data > 199 && data < 299) {
+        //   await getFeeMaps();
+        //   resetForm();
+        //   // handleCloseAddDialog();
+        // }
       } else {
         const { data } = await post(PRIVATE_URLS.feeMap.create, payload);
+        console.log(data, "ippp");
+        // setSearch({});
+        // if (status > 199 && status < 299) {
+        //   await getFeeMaps();
+        //   resetForm();
+        //   handleCloseAddDialog();
+        // }
       }
-      handleClose();
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      console.error(error);
     }
     setLoading(false);
   };
 
   const handleClose = () => {
     setDataToEdit(null);
+    setOpen(false);
   };
 
-  const entryFormik = useFormik({
-    initialValues: {
-      dependencies: dataToEdit?.dependencies || "",
-      academicYear: dataToEdit?.academicYear || "",
-      class: dataToEdit?.class || "",
-      route: dataToEdit?.route || "",
-      stop: dataToEdit?.stop || "",
-      pickType: dataToEdit?.pickType || "",
-      hostel: dataToEdit?.hostel || "",
-      roomType: dataToEdit?.roomType || "",
-      room: dataToEdit?.room || "",
-      addedAfter: dataToEdit?.addedAfter || "",
-      addedBefore: dataToEdit?.addedBefore || "",
-      fee: dataToEdit?.fee || "",
-      installments: dataToEdit?.installments || "",
-      others: dataToEdit?.others || "",
-      amount: dataToEdit?.amount || "",
-      dueDate: dataToEdit?.dueDate || "",
-    },
-    onSubmit: handleCreateOrUpdate,
-    enableReinitialize: true,
-  });
+  const resetForm = () => {
+    setAddForm({});
+    setDataToEdit(null);
+    setInstallments([]);
+    setDependencies([]);
+  };
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-
-    console.log(value, "value=========");
     setDependencies(typeof value === "string" ? value.split(",") : value);
   };
 
-  const handleAddInstallments = () => {
-    if (!entryFormik.values.installments || !entryFormik.values.fee) return;
-    let installmentsCal = [];
+  const handleAddForm = (e) => {
+    const { name, value } = e.target;
+    if (name == "fee") {
+      setAddForm((prev) => ({
+        ...prev,
+        [name]: parseInt(value),
+      }));
+    } else if (name == "others") {
+      setAddForm((prev) => ({
+        ...prev,
+        [name]: Math.ceil(value),
+      }));
+    } else {
+      setAddForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
 
-    if (entryFormik.values.installments === "Monthly") {
-      const monthlyAmount = Math.floor(entryFormik.values.fee / 12);
-      const missing = entryFormik.values.fee - monthlyAmount * 12;
+  const handleDelete = (chipToDelete) => {
+    setDependencies((chips) => chips.filter((chip) => chip !== chipToDelete));
+    if (chipToDelete == "class") {
+      setAddForm((prev) => ({ ...prev, class: "" }));
+    }
+    if (chipToDelete === "hostel") {
+      setAddForm((prev) => ({ ...prev, hostel: "", room: "" }));
+    }
+    if (chipToDelete === "route") {
+      setAddForm((prev) => ({ ...prev, stop: "", route: "" }));
+    }
+    if (chipToDelete === "room") {
+      setAddForm((prev) => ({ ...prev, room: "" }));
+    }
+    if (chipToDelete === "pickType") {
+      setAddForm((prev) => ({ ...prev, pickType: "" }));
+    }
+    if (chipToDelete === "roomType") {
+      setAddForm((prev) => ({ ...prev, roomType: "" }));
+    }
+    if (chipToDelete === "academicYear") {
+      setAddForm((prev) => ({ ...prev, academicYearId: "" }));
+    }
+    if (chipToDelete === "addedAfter") {
+      setAddedAfter(null);
+    }
+    if (chipToDelete === "addedBefore") {
+      setAddedBefore(null);
+    }
+    if (chipToDelete === "stop") {
+      setAddForm((prev) => ({ ...prev, stop: "" }));
+    }
+  };
+
+  // useEffect(() => {
+  //   if (filteredFeeMaps.length) {
+  //     let deps = [];
+  //     for (let feeMap of filteredFeeMaps) {
+  //       deps = [...deps, ...feeMap.extendedDependencies];
+  //     }
+
+  //     let uniqueDeps = new Set(deps);
+  //     setAllDependencies([...uniqueDeps]);
+  //   }
+  // }, [filteredFeeMaps]);
+
+  const handleAddInstallments = () => {
+    if (!addForm.installmentsType || !addForm.fee) return;
+    let installmentsData = [];
+
+    if (addForm.installmentsType === "Monthly") {
+      const monthlyAmount = Math.floor(addForm.fee / 12);
+      const missing = addForm.fee - monthlyAmount * 12;
 
       // console.log(missing, "missing");
-      installmentsCal = Array.from({ length: 12 }).map((v, i) => ({
+      installmentsData = Array.from({ length: 12 }).map((v, i) => ({
         id: i + 1,
         amount: monthlyAmount,
         missing: missing,
         dueDate: dayjs(),
       }));
-      if (installmentsCal.length > 0) {
-        installmentsCal[0].amount += missing;
+      if (installmentsData.length > 0) {
+        installmentsData[0].amount += missing;
       }
-    } else if (entryFormik.values.installments === "Quaterly") {
-      const quarterlyAmount = Math.floor(entryFormik.values.fee / 4);
-      const missing = entryFormik.values.fee - quarterlyAmount * 4;
+    } else if (addForm.installmentsType === "Quaterly") {
+      const quarterlyAmount = Math.floor(addForm.fee / 4);
+      const missing = addForm.fee - quarterlyAmount * 4;
 
-      installmentsCal = Array.from({ length: 4 }).map((v, i) => ({
+      installmentsData = Array.from({ length: 4 }).map((v, i) => ({
         id: i + 1,
         amount: quarterlyAmount,
         dueDate: dayjs(),
       }));
-      if (installmentsCal.length > 0) {
-        installmentsCal[0].amount += missing;
+      if (installmentsData.length > 0) {
+        installmentsData[0].amount += missing;
       }
-    } else if (entryFormik.values.installments === "Half-Yearly") {
-      const halfYearlyAmount = Math.floor(entryFormik.values.fee / 2);
-      const missing = entryFormik.values.fee - halfYearlyAmount * 2;
+    } else if (addForm.installmentsType === "Half-Yearly") {
+      const halfYearlyAmount = Math.floor(addForm.fee / 2);
+      const missing = addForm.fee - halfYearlyAmount * 2;
 
-      installmentsCal = Array.from({ length: 2 }).map((v, i) => ({
+      installmentsData = Array.from({ length: 2 }).map((v, i) => ({
         id: i + 1,
         amount: halfYearlyAmount,
         dueDate: dayjs(),
       }));
-      if (installmentsCal.length > 0) {
-        installmentsCal[0].amount += missing;
+      if (installmentsData.length > 0) {
+        installmentsData[0].amount += missing;
       }
-    } else if (entryFormik.values.installments === "Yearly") {
-      installmentsCal = Array.from({ length: 1 }).map((v, i) => ({
+    } else if (addForm.installmentsType === "Yearly") {
+      installmentsData = Array.from({ length: 1 }).map((v, i) => ({
         id: i,
-        amount: entryFormik.values.fee,
+        amount: addForm.fee,
         dueDate: dayjs(),
       }));
-    } else if (entryFormik.values.installments === "Others") {
-      const othersAmount = Math.floor(
-        entryFormik.values.fee / entryFormik.values.others
-      );
-      const missing =
-        entryFormik.values.fee - othersAmount * entryFormik.values.others;
+    } else if (addForm.installmentsType === "Others") {
+      const othersAmount = Math.floor(addForm.fee / addForm.others);
+      const missing = addForm.fee - othersAmount * addForm.others;
 
-      installmentsCal = Array.from({ length: entryFormik.values.others }).map(
-        (v, i) => ({
-          id: i + 1,
-          amount: othersAmount,
-          dueDate: dayjs(),
-        })
-      );
-      if (installmentsCal.length > 0) {
-        installmentsCal[0].amount += missing;
+      installmentsData = Array.from({ length: addForm.others }).map((v, i) => ({
+        id: i + 1,
+        amount: othersAmount,
+        dueDate: dayjs(),
+      }));
+      if (installmentsData.length > 0) {
+        installmentsData[0].amount += missing;
       }
     } else {
       setInstallments([]);
       return;
     }
-    setInstallments(installmentsCal);
+    setInstallments(installmentsData);
   };
 
   useEffect(() => {
     handleAddInstallments();
-  }, [
-    entryFormik.values.installments,
-    entryFormik.values.others,
-    entryFormik.values.fee,
-  ]);
+  }, [addForm.installmentsType, addForm.others, addForm.fee]);
 
-  console.log(entryFormik.values, "ddddd");
+  const handleInstallmentChange = (val, key, changeIndex) => {
+    setInstallments((prev) =>
+      prev.map((installment, index) => {
+        if (index === changeIndex) {
+          return key === "amount"
+            ? { ...installment, [key]: parseInt(val) }
+            : key === "dueDate"
+            ? { ...installment, [key]: val }
+            : installment;
+        } else if (index > changeIndex) {
+          let diffInMonths = index - changeIndex;
+          if (addForm.installmentsType === "Quaterly") {
+            diffInMonths = diffInMonths * 3;
+          } else if (addForm.installmentsType === "Half-Yearly") {
+            diffInMonths = diffInMonths * 6;
+          } else if (addForm.installmentsType === "Others") {
+            diffInMonths = diffInMonths * 1;
+          }
+          const updatedDueDate = dayjs(val)
+            .add(diffInMonths, "month")
+            .format("YYYY-MM-DD");
+          return { ...installment, dueDate: updatedDueDate };
+        } else {
+          return installment;
+        }
+      })
+    );
+  };
 
   return (
     <>
-      <FormModal
+      <Dialog
         open={open}
-        formik={entryFormik}
-        formTitle={dataToEdit ? "Update Fee Map" : "Add Fee Map"}
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}>
-        <Grid rowSpacing={0} columnSpacing={2} container>
-          <Grid xs={12} sm={12} md={12} item>
-            <Typography variant="body">
-              Choose the dependencies that will serve as the basis for the fee
-              calculation.
-            </Typography>
-            <Grid xs={12} sm={6} md={8} item>
-              <FormControl size="small" sx={{ mt: 2, width: 400 }}>
-                <InputLabel id="demo-multiple-chip-label">
-                  Choose the dependencies
-                </InputLabel>
+        onSubmit={handleAddSubmit}
+        component="form">
+        <DialogTitle sx={{ fontWeight: 600 }}>
+          {dataToEdit ? "Update Fee Map" : "Add Fee Map"}
+        </DialogTitle>
+        <Divider />
+        <DialogContent
+          sx={{
+            padding: "10px",
+          }}>
+          <Grid rowSpacing={0} columnSpacing={2} container>
+            <Grid xs={12} sm={12} md={12} item>
+              <Typography variant="body">
+                Choose the dependencies that will serve as the basis for the fee
+                calculation.
+              </Typography>
+              <Grid xs={12} sm={6} md={8} item>
+                <FormControl size="small" sx={{ mt: 2, width: 400 }}>
+                  <InputLabel id="demo-multiple-chip-label">
+                    Choose the dependencies
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-chip-label"
+                    id="demo-multiple-chip"
+                    size="small"
+                    multiple
+                    label="Choose the dependencies"
+                    value={dependencies}
+                    onChange={handleChange}>
+                    {Object.keys(LABEL).map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {LABEL[name]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              {dependencies && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 0.5,
+                    marginLeft: "20px",
+                  }}>
+                  {dependencies.map((value, i) => (
+                    <Chip
+                      sx={{ mt: 2 }}
+                      key={value}
+                      label={LABEL[value]}
+                      onDelete={() => handleDelete(value)}
+                    />
+                  ))}
+                </Box>
+              )}
+            </Grid>
+
+            {dependencies.includes("academicYear") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Academic Year</InputLabel>
+                  <Select
+                    size="small"
+                    name="academicYear"
+                    required
+                    value={addForm.academicYear || ""}
+                    onChange={handleAddForm}
+                    label="Select Academic Year">
+                    {academicYears.map((a) => (
+                      <MenuItem key={a._id} value={a._id}>
+                        {a.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+
+            {dependencies.includes("class") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Class</InputLabel>
+                  <Select
+                    size="small"
+                    name="class"
+                    required
+                    value={addForm.class || ""}
+                    onChange={handleAddForm}
+                    label="Select Class">
+                    {classes.map((c) => (
+                      <MenuItem key={c._id} value={c._id}>
+                        {c.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("route") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Route</InputLabel>
+                  <Select
+                    size="small"
+                    name="route"
+                    required
+                    value={addForm.route || ""}
+                    onChange={handleAddForm}
+                    label="Select Route">
+                    {routes.map((route) => (
+                      <MenuItem key={route._id} value={route._id}>
+                        {route?.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("stop") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Stop</InputLabel>
+                  <Select
+                    size="small"
+                    name="stop"
+                    required
+                    value={addForm.stop || ""}
+                    onChange={handleAddForm}
+                    label="Select stop">
+                    {stops
+                      ?.filter((s) =>
+                        addForm.route ? s.route._id == addForm.route : s._id
+                      )
+                      .map((stop) => (
+                        <MenuItem key={stop._id} value={stop._id}>
+                          {stop?.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+
+            {(dependencies.includes("route") ||
+              dependencies.includes("pickType")) && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Pick Type</InputLabel>
+                  <Select
+                    size="small"
+                    name="pickType"
+                    value={addForm.pickType || ""}
+                    onChange={handleAddForm}
+                    label="Pick Type">
+                    {["Drop", "Pick", "Both"].map((picktype) => (
+                      <MenuItem key={picktype} value={picktype}>
+                        {picktype}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("hostel") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Hostel</InputLabel>
+                  <Select
+                    size="small"
+                    name="hostel"
+                    required
+                    value={addForm.hostel || ""}
+                    onChange={handleAddForm}
+                    label="Select Hostel">
+                    {hostels.map((hostel) => (
+                      <MenuItem key={hostel._id} value={hostel._id}>
+                        {hostel?.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("roomType") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Room Type</InputLabel>
+                  <Select
+                    size="small"
+                    name="roomType"
+                    required
+                    value={addForm.roomType || ""}
+                    onChange={handleAddForm}
+                    label="Select Room Type">
+                    {roomTypes.map((roomType) => (
+                      <MenuItem key={roomType._id} value={roomType._id}>
+                        {roomType?.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("room") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Select Room</InputLabel>
+                  <Select
+                    size="small"
+                    name="room"
+                    required
+                    value={addForm.room || ""}
+                    onChange={handleAddForm}
+                    label="Select Room">
+                    {rooms
+                      .filter((r) => {
+                        if (addForm.hostel && addForm.roomType) {
+                          return (
+                            r.hostel._id == addForm.hostel &&
+                            r.type._id == addForm.roomType
+                          );
+                        } else if (addForm.hostel && !addForm.roomType) {
+                          return r.hostel._id == addForm.hostel;
+                        } else if (!addForm.hostel && addForm.roomType) {
+                          return r.type._id == addForm.roomType;
+                        } else {
+                          return r._id;
+                        }
+                      })
+                      .map(
+                        (room) => (
+                          console.log(room, "gggg"),
+                          (
+                            <MenuItem key={room._id} value={room._id}>
+                              {room.hostel.name} - {room.type.name}{" "}
+                              {`(${room.totalBeds}-Beds)`}
+                            </MenuItem>
+                          )
+                        )
+                      )}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+            {dependencies.includes("addedAfter") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Added After"
+                    inputFormat="DD-MM-YYYY"
+                    value={addedAfter}
+                    onChange={(newValue) => setAddedAfter(newValue)}
+                    renderInput={(params) => (
+                      <TextField {...params} size="small" fullWidth />
+                    )}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            )}
+            {dependencies.includes("addedBefore") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Added Before"
+                    inputFormat="DD-MM-YYYY"
+                    value={addedBefore}
+                    onChange={(newValue) => setAddedBefore(newValue)}
+                    renderInput={(params) => (
+                      <TextField {...params} size="small" fullWidth />
+                    )}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            )}
+            <Grid xs={12} sm={6} md={6} item mt={2}>
+              <TextField
+                fullWidth
+                size="small"
+                label="Fee"
+                type="number"
+                required
+                name="fee"
+                value={addForm.fee || ""}
+                onChange={handleAddForm}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={6} item mt={2}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Installment Type</InputLabel>
                 <Select
-                  labelId="demo-multiple-chip-label"
-                  id="demo-multiple-chip"
                   size="small"
-                  multiple
-                  label="Choose the dependencies"
-                  value={dependencies}
-                  onChange={handleChange}>
-                  {Object.keys(LABEL).map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {LABEL[name]}
+                  name="installmentsType"
+                  value={addForm.installmentsType || ""}
+                  onChange={handleAddForm}
+                  label="Select Installment Type">
+                  {installmentsType.map((installments) => (
+                    <MenuItem key={installments.id} value={installments.label}>
+                      {installments.label}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Grid>
-            {dependencies && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 0.5,
-                  marginLeft: "20px",
-                }}>
-                {dependencies.map((value, i) => (
-                  <Chip
-                    sx={{ mt: 2 }}
-                    key={value}
-                    label={LABEL[value]}
-                    //   onDelete={() => handleDelete(value)}
-                    onDelete={true}
-                  />
-                ))}
-              </Box>
+            {addForm.installmentsType == "Others" && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <TextField
+                  // sx={{ marginTop: 1 }}
+                  fullWidth
+                  label="Number of installments"
+                  size="small"
+                  name="others"
+                  type="number"
+                  value={addForm.others || ""}
+                  onChange={handleAddForm}
+                />
+              </Grid>
             )}
-          </Grid>
 
-          {dependencies.includes("academicYear") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="academicYear"
-                label="Select Academic Year"
-                options={academicYears}
-              />
-            </Grid>
-          )}
-
-          {dependencies.includes("class") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="class"
-                label="Select class"
-                required={true}
-                options={classes}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("route") ||
-            (dependencies.includes("stop") && (
-              <>
-                <Grid xs={12} sm={6} md={6} item>
-                  <FormSelect
-                    formik={entryFormik}
-                    name="route"
-                    label="Select Route"
-                    required={true}
-                    options={routes}
+            {installments.map((installment, index) => (
+              <React.Fragment key={index}>
+                <Grid item xs={12} sm={6} md={6} mt={2}>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    label={`installment ${index + 1}`}
+                    value={installment.amount}
+                    size="small"
+                    // enabled={dataToEdit}
+                    onChange={(e) =>
+                      handleInstallmentChange(e.target.value, "amount", index)
+                    }
                   />
                 </Grid>
-                <Grid xs={12} sm={6} md={6} item>
-                  <FormSelect
-                    formik={entryFormik}
-                    name="stop"
-                    label="Select Stop"
-                    options={stops}
-                    required={true}
-                  />
+                <Grid item xs={12} sm={6} md={6} mt={2}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      inputFormat="DD-MM-YYYY"
+                      enabled={dataToEdit}
+                      label="Due Date"
+                      form
+                      value={installment.dueDate}
+                      onChange={(newValue) =>
+                        handleInstallmentChange(newValue, "dueDate", index)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          fullWidth
+                          enabled={dataToEdit}
+                          {...params}
+                          size="small"
+                        />
+                      )}
+                    />
+                  </LocalizationProvider>
                 </Grid>
-              </>
+              </React.Fragment>
             ))}
-          {dependencies.includes("pickType") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="pickType"
-                label="Select Pick Type"
-                options={PickTypeSelect}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("hostel") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="hostel"
-                label="Select Hostel"
-                required={true}
-                options={hostels}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("roomType") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="roomType"
-                label="Select Room Type"
-                required={true}
-                options={roomTypes}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("room") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={entryFormik}
-                name="room"
-                label="Select Room"
-                required={true}
-                options={rooms}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("addedAfter") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormDatePicker
-                formik={entryFormik}
-                name="addedAfter"
-                label="Added After"
-                required={true}
-              />
-            </Grid>
-          )}
-          {dependencies.includes("addedBefore") && (
-            <Grid xs={12} sm={6} md={6} item>
-              <FormDatePicker
-                formik={entryFormik}
-                name="addedBefore"
-                label="Added Before"
-                required={true}
-              />
-            </Grid>
-          )}
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="fee"
-              label="Fee"
-              type="number"
-              required={true}
-            />
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormSelect
-              formik={entryFormik}
-              name="installments"
-              label="Select Installment Type"
-              required={true}
-              options={Installments}
-            />
-          </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="others"
-              label="Number of installments"
-            />
-          </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormInput
-              formik={entryFormik}
-              name="amount"
-              label="Installments (1)"
-              required={true}
-            />
-          </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormDatePicker
-              formik={entryFormik}
-              name="dueDate"
-              label="Due Date"
-              required={true}
-            />
-          </Grid>
-        </Grid>
-      </FormModal>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            size="small"
+            color="error"
+            variant="contained"
+            onClick={handleClose}>
+            Close
+          </Button>
+          <LoadingButton
+            size="small"
+            loading={loading}
+            variant="contained"
+            type="submit">
+            {dataToEdit ? "Update" : "Submit"}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

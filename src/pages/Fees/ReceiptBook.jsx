@@ -4,7 +4,15 @@ import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { receiptBookTableKeys } from "../../data/tableKeys/receiptBookData";
-import { Button, Grid, Stack } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import { useFormik } from "formik";
@@ -23,9 +31,11 @@ const CustomActionFee = ({
   onUpdate = () => {},
   data = {},
   onEditClick = () => {},
-  onNavigate = () => {},
+  onNavigateFeeMap = () => {},
 }) => {
   const [loading, setLoading] = useState(false);
+  console.log(data, "kuahsa");
+
   const updateStatus = async () => {
     try {
       setLoading(true);
@@ -50,7 +60,7 @@ const CustomActionFee = ({
         <Button
           size="small"
           variant="contained"
-          onClick={() => onNavigate(data)}>
+          onClick={() => onNavigateFeeMap(data._id)}>
           Fee Map
         </Button>
         <LoadingButton
@@ -72,9 +82,12 @@ export default function ReceiptBook() {
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-  const [receipts, setReceips] = useState([]);
+  const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openFeeMap, setOpenFeeMap] = useState(false);
+  const [selectedReceiptId, setSelectedReceiptId] = useState("");
+  const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
+  console.log(selectReceipt, "dyan");
 
   const getData = async () => {
     try {
@@ -90,11 +103,18 @@ export default function ReceiptBook() {
   // get Receipt list
   const getReceipts = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
+      const { data, status } = await get(PRIVATE_URLS.receiptTitle.list, {
         params: { schoolId: selectedSetting._id },
       });
+      // console.log(data, status, "usha");
+      // setReceipts(data.result.map((r) => ({ label: r.name, value: r._id })));
 
-      setReceips(data.result.map((r) => ({ label: r.name, value: r._id })));
+      if (status > 199 && status < 299) {
+        setReceipts(data.result);
+        if (data.result.length > 0) {
+          setSelectReceipt(selectReceipt ? selectReceipt : data.result[0]._id);
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -157,15 +177,26 @@ export default function ReceiptBook() {
     setOpen(true);
   };
 
-  const handleNavigateFeeMap = (data) => {
+  const handleFeeMapEdit = (id, data) => {
+    console.log(data, "hgafs");
+    setDataToEdit({ ...data });
+    // setAddForm({
+    //   ...data,
+    //   schoolClass: data.class?._id,
+    //   route: data.route?._id,
+    //   room: data.room?._id,
+    //   others: data.installments.length,
+    //   installmentType: calculateInstallmentType(data.installments.length),
+    // });
+  };
+
+  const handleFeeMap = (id) => {
+    setSelectedReceiptId(id);
     setSelectValue(1);
-
-    // console.log(data, "data");
   };
 
-  const handleCloseFeeMap = () => {
-    setOpenFeeMap(false);
-  };
+  console.log(entryFormik.values.receipt, "bababa");
+  console.log(selectedReceiptId, "selectedReceiptId");
 
   return (
     <>
@@ -192,7 +223,7 @@ export default function ReceiptBook() {
           tableKeys={receiptBookTableKeys}
           feeMapTableKeys
           onEditClick={handleEditClick}
-          onNavigate={handleNavigateFeeMap}
+          onNavigateFeeMap={handleFeeMap}
           CustomAction={CustomActionFee}
           onUpdate={getData}
         />
@@ -223,13 +254,21 @@ export default function ReceiptBook() {
           container
           sx={{ display: "flex", alignItems: "center", mb: 1 }}>
           <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="receipt"
-              formik={entryFormik}
-              label="Select Receipt"
-              options={receipts}
-            />
+            <FormControl fullWidth size="small">
+              <InputLabel>Select Receipt</InputLabel>
+              <Select
+                required={true}
+                fullWidth
+                value={selectReceipt || ""}
+                onChange={(e) => setSelectReceipt(e.target.value)}
+                label="Select Receipt">
+                {receipts.map((receipt) => (
+                  <MenuItem value={receipt._id} key={receipt._id || ""}>
+                    {receipt.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <Button
@@ -246,7 +285,7 @@ export default function ReceiptBook() {
           bodyDataModal="Fee Map"
           bodyData={data}
           tableKeys={feeMapTableKeys}
-          feeMapTableKeys
+          onEditClick={handleFeeMapEdit}
         />
 
         {/* Add/Update Fee Map ========= */}
@@ -254,8 +293,9 @@ export default function ReceiptBook() {
           open={openFeeMap}
           entryFormik={entryFormik}
           dataToEdit={dataToEdit}
-          handleClose={handleCloseFeeMap}
+          setOpen={setOpenFeeMap}
           loading={loading}
+          selectedReceipt={selectReceipt}
         />
       </TabPanel>
     </>
