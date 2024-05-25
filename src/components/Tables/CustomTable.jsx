@@ -25,6 +25,7 @@ import NoTableData from "./NoTableData";
 import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import { PuffLoader } from "react-spinners";
 import image from "../../assets/images/deleteicon.png";
+import { Download } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -74,6 +75,7 @@ export default function CustomTable({
   CustomAction = () => {},
 
   onUpdate = () => {},
+  onDownloadClick = () => {},
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -228,6 +230,13 @@ export default function CustomTable({
                               onUpdate={onUpdate}
                               onNavigate={onNavigate}
                             />
+                          )}
+                          {actions.includes("download") && (
+                            <IconButton
+                              size="small"
+                              onClick={() => onDownloadClick(data)}>
+                              <Download fontSize="small" />
+                            </IconButton>
                           )}
                         </TableCell>
                       ) : null}

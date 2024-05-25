@@ -1,3 +1,5 @@
+/** @format */
+
 export const paymentHistoryTableKeys = [
   {
     name: "Month",
@@ -6,9 +8,5 @@ export const paymentHistoryTableKeys = [
   {
     name: "Year",
     key: "year",
-  },
-  {
-    name: "Download",
-    key: "",
   },
 ];

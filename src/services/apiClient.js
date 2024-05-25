@@ -8,11 +8,11 @@ export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
   baseURL:
-    "https://ba9f-2404-ca40-fa02-3f00-4d1f-3d42-6da4-688e.ngrok-free.app/ecamps/v1",
+    "https://c100-2401-4900-4bc9-104b-84cd-964d-439-7176.ngrok-free.app/ecamps/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin":
-      "https://ba9f-2404-ca40-fa02-3f00-4d1f-3d42-6da4-688e.ngrok-free.app",
+      "https://c100-2401-4900-4bc9-104b-84cd-964d-439-7176.ngrok-free.app",
   },
 });
 
@@ -63,7 +63,10 @@ client.interceptors.response.use(
       toast.error(response.data.message);
     } else {
       console.log(error);
-      toast.error("An error occurred.");
+      toast.error(
+        (response && response.data && response.data.message) ||
+          "An error occurred."
+      );
     }
     return Promise.reject(error);
   }

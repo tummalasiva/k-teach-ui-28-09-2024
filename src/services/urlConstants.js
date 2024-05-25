@@ -335,4 +335,9 @@ export const PRIVATE_URLS = {
     update: "/salaryGrade/update",
     delete: "/salaryGrade/delete",
   },
+  paymentHistory: {
+    downloadPdf: "/paymentHistory/downloadPdf",
+    list: "/paymentHistory/list",
+    downloadDeductionPdf: "/paymentHistory/downloadDeductionPdf",
+  },
 };

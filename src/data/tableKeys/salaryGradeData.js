@@ -18,7 +18,7 @@ export const salaryGradeTableKeys = [
     key: "to",
   },
   {
-    name: "Status",
+    name: "Active",
     key: "active",
   },
 ];
