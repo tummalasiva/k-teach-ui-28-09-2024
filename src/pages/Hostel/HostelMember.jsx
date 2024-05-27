@@ -46,7 +46,7 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
         data.result.map((s) => ({
           ...s,
           label: String(s.number),
-          value: String(s._id),
+          value: s._id,
         }))
       );
 
