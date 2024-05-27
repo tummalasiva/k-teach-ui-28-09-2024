@@ -167,6 +167,11 @@ export const PRIVATE_URLS = {
     overView: "/student/overView",
     promote: "/student/promote",
     resuffle: "/student/resuffle",
+    updateTransportMember: "/student/updateTransportMember",
+    removeTransportMember: "/student/removeTransportMember",
+
+    updateHostelMember: "/student/updateHostelMember",
+    removeHostelMember: "/student/removeHostelMember",
   },
   studentActivity: {
     list: "/studentActivity/list",

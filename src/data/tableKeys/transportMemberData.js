@@ -8,24 +8,28 @@ export const transportMemberTableKeys = [
   },
   {
     name: "Roll No",
-    key: "rollNo",
-    path: "academicInfo",
+    key: "rollNumber",
+    path: "rollNo",
   },
   {
     name: "Stop Name",
-    key: "stopName",
+    key: "name",
+    path: "stopName",
   },
   {
     name: "Pick Type",
     key: "pickType",
+    path: "pickType",
   },
 
   {
     name: "Route Start",
     key: "routeStart",
+    path: "routeStart",
   },
   {
     name: "Route End",
     key: "routeEnd",
+    path: "routeEnd",
   },
 ];

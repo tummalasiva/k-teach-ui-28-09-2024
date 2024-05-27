@@ -1,10 +1,14 @@
+/** @format */
+
 export const hostelNNonMemberTableKeys = [
   {
     name: "Name",
     key: "name",
+    path: "studentName",
   },
   {
     name: "Admisson No",
-    key: "number",
+    key: "admissionNumber",
+    path: "admission",
   },
 ];
