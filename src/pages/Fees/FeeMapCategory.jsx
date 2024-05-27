@@ -17,6 +17,7 @@ export default function FeeMapCategory() {
   const [data, setData] = useState([]);
   const [receipts, setReceips] = useState([]);
 
+  // get Receipt list
   const getReceipts = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.receiptTitle.list, {

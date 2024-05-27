@@ -340,4 +340,11 @@ export const PRIVATE_URLS = {
     list: "/paymentHistory/list",
     downloadDeductionPdf: "/paymentHistory/downloadDeductionPdf",
   },
+
+  feeMap: {
+    list: "/feeMap/list",
+    create: "/feeMap/create",
+    update: "/feeMap/update",
+    delete: "/feeMap/delete",
+  },
 };
