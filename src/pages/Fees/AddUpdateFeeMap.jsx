@@ -59,7 +59,7 @@ function removeElementFromArray(array, elementToRemove) {
 }
 
 export default function AddUpdateFeeMap({
-  selectedReceipt,
+  selectedReceipt = "",
   open = true,
   setOpen = () => {},
 }) {
@@ -78,7 +78,6 @@ export default function AddUpdateFeeMap({
   const [installments, setInstallments] = useState([]);
   const [addedAfter, setAddedAfter] = useState(null);
   const [addedBefore, setAddedBefore] = useState(null);
-
   // get academic year
   const getAcademicYears = async () => {
     try {
@@ -92,7 +91,6 @@ export default function AddUpdateFeeMap({
           value: academicData._id,
         }))
       );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -107,7 +105,6 @@ export default function AddUpdateFeeMap({
       setClasses(
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +131,6 @@ export default function AddUpdateFeeMap({
           value: route.stops[0]?._id,
         }))
       );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -146,7 +142,6 @@ export default function AddUpdateFeeMap({
       const { data } = await get(PRIVATE_URLS.hostel.list, {
         params: { schoolId: selectedSetting._id },
       });
-      //   console.log(data.result, "hhhh");
       setHostels(
         data.result.map((h) => ({
           ...h,
@@ -154,7 +149,6 @@ export default function AddUpdateFeeMap({
           value: h?._id,
         }))
       );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -173,7 +167,6 @@ export default function AddUpdateFeeMap({
           value: h?._id,
         }))
       );
-      //   entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -208,28 +201,28 @@ export default function AddUpdateFeeMap({
     if (!addForm.pickType) {
       removeElementFromArray(dependencies, "pickType");
     }
-    console.log(addForm, "addForm");
 
     try {
       let payload = {
         receiptTitleId: selectedReceipt,
         collectedFrom: "student",
         dependencies: dependencies,
-        class: addForm.class,
-        route: addForm.route,
+        classId: addForm.class,
+        routeId: addForm.route,
         pickType: addForm.pickType,
-        room: addForm.room,
-        roomType: addForm.roomType,
-        hostel: addForm.hostel,
+        roomId: addForm.room,
+        roomTypeId: addForm.roomType,
+        hostelId: addForm.hostel,
         addedAfter: new Date(addedAfter),
         addedBefore: new Date(addedBefore),
-        stop: addForm.stop,
-        academicYear: addForm.academicYear,
+        stopId: addForm.stop,
+        academicYearId: addForm.academicYear,
         fee: addForm.fee,
         installments: installments,
         schoolId: selectedSetting._id,
+        libraryMember: "",
       };
-      console.log(payload, "payload");
+      // console.log(payload, "payload");
 
       if (dataToEdit) {
         const { data } = await put(
@@ -245,7 +238,7 @@ export default function AddUpdateFeeMap({
         // }
       } else {
         const { data } = await post(PRIVATE_URLS.feeMap.create, payload);
-        console.log(data, "ippp");
+        // console.log(data, "ippp");
         // setSearch({});
         // if (status > 199 && status < 299) {
         //   await getFeeMaps();
@@ -445,6 +438,8 @@ export default function AddUpdateFeeMap({
     );
   };
 
+  // console.log(addForm);
+
   return (
     <>
       <Dialog
@@ -581,7 +576,7 @@ export default function AddUpdateFeeMap({
                     label="Select stop">
                     {stops
                       ?.filter((s) =>
-                        addForm.route ? s.route._id == addForm.route : s._id
+                        addForm.route ? s.route?._id == addForm.route : s._id
                       )
                       .map((stop) => (
                         <MenuItem key={stop._id} value={stop._id}>
@@ -668,28 +663,23 @@ export default function AddUpdateFeeMap({
                       .filter((r) => {
                         if (addForm.hostel && addForm.roomType) {
                           return (
-                            r.hostel._id == addForm.hostel &&
-                            r.type._id == addForm.roomType
+                            r.hostel?._id == addForm.hostel &&
+                            r.type?._id == addForm.roomType
                           );
                         } else if (addForm.hostel && !addForm.roomType) {
-                          return r.hostel._id == addForm.hostel;
+                          return r.hostel?._id == addForm.hostel;
                         } else if (!addForm.hostel && addForm.roomType) {
-                          return r.type._id == addForm.roomType;
+                          return r.type?._id == addForm.roomType;
                         } else {
                           return r._id;
                         }
                       })
-                      .map(
-                        (room) => (
-                          console.log(room, "gggg"),
-                          (
-                            <MenuItem key={room._id} value={room._id}>
-                              {room.hostel.name} - {room.type.name}{" "}
-                              {`(${room.totalBeds}-Beds)`}
-                            </MenuItem>
-                          )
-                        )
-                      )}
+                      .map((room) => (
+                        <MenuItem key={room._id} value={room._id}>
+                          {room.hostel?.name} - {room.type?.name}{" "}
+                          {`(${room.totalBeds}-Beds)`}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Grid>

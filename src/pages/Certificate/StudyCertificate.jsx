@@ -10,6 +10,7 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 const Heading = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -61,7 +62,10 @@ export default function StudyCertificate() {
   const { selectedSetting } = useContext(SettingContext);
   const [academicYear, setAcademicYear] = useState([]);
   const [students, setStudents] = useState([]);
+  const [bulkIssue, setBulkIssue] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  console.log(selectedSetting, "sselectedSetting");
   //get academic year
   const getAcademicYear = async () => {
     try {
@@ -86,6 +90,7 @@ export default function StudyCertificate() {
           schoolId: selectedSetting._id,
         },
       });
+      console.log(data, "data");
       setStudents(
         data.result.map((d) => ({
           ...d,
@@ -102,17 +107,56 @@ export default function StudyCertificate() {
     initialValues: {
       academicYear: "",
       student: "",
-
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: console.log("not sub"),
   });
 
   useEffect(() => {
     getAcademicYear();
     getStudents();
   }, [selectedSetting._id]);
+
+  const handleSubmitCertificate = async (values) => {
+    console.log(values, "values");
+    setLoading(true);
+    try {
+      // setFormData({
+      //   ...formData,
+      //   fatherName:
+      //     studentSelect.fatherInfo && studentSelect.fatherInfo.fatherName,
+      //   academicYearFrom:
+      //     studentSelect.academicYear.academicYearFrom &&
+      //     studentSelect.academicYear.academicYearFrom,
+      //   academicYearTo:
+      //     studentSelect.academicYear.academicYearFrom &&
+      //     studentSelect.academicYear.academicYearTo,
+      //   studentName: studentSelect.basicInfo && studentSelect.basicInfo.name,
+      //   currentClass:
+      //     studentSelect.academicInfo &&
+      //     studentSelect.academicInfo.class.className,
+      //   dob: studentSelect.basicInfo && studentSelect.basicInfo.dob,
+      //   grNo: studentSelect.basicInfo && studentSelect.basicInfo.grNo,
+      //   studentPhoto: studentSelect.studentPhoto?.link,
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  };
+
+  console.log(entryFormik.values.student, "jjjh");
+
+  const handleClose = () => {
+    setBulkIssue(false);
+  };
+
+  const handleClickIssue = () => {
+    setBulkIssue(true);
+  };
+
   return (
     <>
       <PageHeader title="Study Certificate" />
@@ -162,9 +206,14 @@ export default function StudyCertificate() {
             <Button size="small" variant="contained">
               Bulk Issue
             </Button>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              size="small"
+              variant="contained"
+              type="submit"
+              onClick={handleSubmitCertificate}
+              loading={loading}>
               Issue
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
