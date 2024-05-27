@@ -8,6 +8,7 @@ import FormSelect from "../../forms/FormSelect";
 import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import { LoadingButton } from "@mui/lab";
 
 const showInfo = (data) => {
   let result = [];
@@ -47,6 +48,40 @@ export default function CollectFees() {
   const [selectedPastDueIds, setSelectedPastDueIds] = useState([]);
   const [downloadingReceipt, setDownloadingReceipt] = useState(false);
   const [itemDetails, setItemDetails] = useState([]);
+  const [fetchingStudents, setFetchingStudents] = useState(false);
+
+  // get student fee Details
+  const handleSubmitFind = async (values) => {
+    setFetchingStudents(true);
+
+    try {
+      const { data: feeReceipt, status } = await get(
+        PRIVATE_URLS.receipt.getFeeDetails,
+        {
+          params: {
+            feeMapId: entryFormik.values.feeMap,
+            studentId: selectStudent._id,
+            receiptTitleId: entryFormik.values.receiptName,
+            installmentId:
+              entryFormik.values.installmentId ||
+              feeMaps.filter((f) => f._id == entryFormik.values.feeMap)[0]
+                ?.installments[0]._id,
+          },
+        }
+      );
+      setFeeDetails(feeReceipt.result);
+      setItemDetails(
+        feeReceipt.result.feeMapCategories.map((d) => ({
+          name: d.name,
+          amount: Number(d.amount),
+          description: d.description,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    setFetchingStudents(false);
+  };
 
   const entryFormik = useFormik({
     initialValues: {
@@ -223,39 +258,6 @@ export default function CollectFees() {
     setPaymentData({});
   };
 
-  // get student fee Details
-  const handleSubmitFind = async (values) => {
-    // setFindLoader(true);
-
-    try {
-      const { data: feeReceipt, status } = await get(
-        PRIVATE_URLS.receipt.getFeeDetails,
-        {
-          params: {
-            feeMapId: entryFormik.values.feeMap,
-            studentId: selectStudent._id,
-            receiptTitleId: entryFormik.values.receiptName,
-            installmentId:
-              entryFormik.values.installmentId ||
-              feeMaps.filter((f) => f._id == entryFormik.values.feeMap)[0]
-                ?.installments[0]._id,
-          },
-        }
-      );
-      setFeeDetails(feeReceipt.result);
-      setItemDetails(
-        feeReceipt.result.feeMapCategories.map((d) => ({
-          name: d.name,
-          amount: Number(d.amount),
-          description: d.description,
-        }))
-      );
-    } catch (error) {
-      console.log(error);
-    }
-    // setFindLoader(false);
-  };
-
   useEffect(() => {
     if (entryFormik.values.installmentId) {
       entryFormik.handleSubmit();
@@ -319,9 +321,13 @@ export default function CollectFees() {
             lg={3}
             style={{ alignSelf: "center", marginTop: "10px" }}
             item>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              loading={fetchingStudents}
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>

@@ -66,7 +66,7 @@ export default function CustomTable({
   onDeleteClick = () => {},
   onViewClick = () => {},
   onCardClick = () => {},
-  onNavigate = () => {},
+  onNavigateFeeMap = () => {},
 
   onToggleSwitch = () => {},
   toggleStatus = false,
@@ -228,7 +228,7 @@ export default function CustomTable({
                               onEditClick={onEditClick}
                               data={data}
                               onUpdate={onUpdate}
-                              onNavigate={onNavigate}
+                              onNavigateFeeMap={onNavigateFeeMap}
                             />
                           )}
                           {actions.includes("download") && (
