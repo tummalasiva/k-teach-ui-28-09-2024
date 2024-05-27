@@ -34,7 +34,6 @@ const CustomActionFee = ({
   onNavigateFeeMap = () => {},
 }) => {
   const [loading, setLoading] = useState(false);
-  console.log(data, "kuahsa");
 
   const updateStatus = async () => {
     try {
@@ -79,6 +78,7 @@ const CustomActionFee = ({
 export default function ReceiptBook() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
+  const [feeMaps, setFeeMaps] = useState([]);
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
@@ -87,7 +87,6 @@ export default function ReceiptBook() {
   const [openFeeMap, setOpenFeeMap] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
   const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
-  console.log(selectReceipt, "dyan");
 
   const getData = async () => {
     try {
@@ -100,20 +99,24 @@ export default function ReceiptBook() {
     }
   };
 
+  const getFeeMaps = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.feeMap.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setFeeMaps();
+    } catch (error) {}
+  };
+
   // get Receipt list
   const getReceipts = async () => {
     try {
       const { data, status } = await get(PRIVATE_URLS.receiptTitle.list, {
         params: { schoolId: selectedSetting._id },
       });
-      // console.log(data, status, "usha");
-      // setReceipts(data.result.map((r) => ({ label: r.name, value: r._id })));
-
-      if (status > 199 && status < 299) {
-        setReceipts(data.result);
-        if (data.result.length > 0) {
-          setSelectReceipt(selectReceipt ? selectReceipt : data.result[0]._id);
-        }
+      setReceipts(data.result);
+      if (data.result.length > 0) {
+        setSelectReceipt(selectReceipt ? selectReceipt : data.result[0]._id);
       }
     } catch (error) {
       console.log(error);
@@ -247,6 +250,7 @@ export default function ReceiptBook() {
           </Grid>
         </FormModal>
       </TabPanel>
+
       <TabPanel index={1} value={value}>
         <Grid
           rowSpacing={1}
@@ -283,7 +287,7 @@ export default function ReceiptBook() {
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Fee Map"
-          bodyData={data}
+          bodyData={feeMaps}
           tableKeys={feeMapTableKeys}
           onEditClick={handleFeeMapEdit}
         />
