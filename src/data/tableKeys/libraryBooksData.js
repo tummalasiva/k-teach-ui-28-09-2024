@@ -1,3 +1,5 @@
+/** @format */
+
 export const libraryBookTableKeys = [
   {
     name: "Book Title",
@@ -13,7 +15,8 @@ export const libraryBookTableKeys = [
   },
   {
     name: "Book Cover",
-    key: "cover",
+    key: "backCover",
+    type: "image",
   },
   {
     name: "Price",

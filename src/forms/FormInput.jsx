@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { TextField } from "@mui/material";
 
@@ -7,6 +9,7 @@ export default function FormInput({
   rows = {},
   label = "default label",
   formik,
+
   required = false,
   disabled = false,
   containerStyle = {},
