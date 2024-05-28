@@ -233,7 +233,7 @@ export default function StudentIssueReturn() {
   };
   return (
     <>
-      <PageHeader title="Student Issue & Return" />
+      <PageHeader title="Issue & Return" />
       <TabList
         onChange={handleTabChange}
         value={value}
@@ -273,7 +273,7 @@ export default function StudentIssueReturn() {
           actions={["custom"]}
           tableKeys={studentLibraryDueTableKeys}
           bodyData={data}
-          bodyDataModal="student"
+          bodyDataModal="due list"
           CustomAction={CustomAction}
           onUpdate={getData}
         />
