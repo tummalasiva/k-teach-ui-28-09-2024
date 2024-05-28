@@ -385,4 +385,10 @@ export const PRIVATE_URLS = {
     // update: "/bookIssue/update",
     delete: "/bookIssue/delete",
   },
+  periodical: {
+    list: "/periodical/list",
+    create: "/periodical/create",
+    update: "/periodical/update",
+    delete: "/periodical/delete",
+  },
 };
