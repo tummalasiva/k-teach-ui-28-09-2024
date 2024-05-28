@@ -1,3 +1,5 @@
+/** @format */
+
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 
 import React from "react";
@@ -760,9 +762,8 @@ const SIDE_MENU_DATA = [
       "books",
       "periodical",
       "studentLibraryMember",
-      "studentIssueReturn",
       "employeeLibraryMember",
-      "employeeIssueReturn",
+      "studentIssueReturn",
     ],
     icon: <LibraryBooksIcon color="primary" fontSize="small" />,
     subMenus: [
@@ -800,18 +801,6 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Student Issue & Return",
-        renderName: "studentIssueReturn",
-        path: "/sch/library/student-issue-return",
-        icon: (
-          <SubdirectoryArrowRightOutlinedIcon
-            color="primary"
-            fontSize="small"
-          />
-        ),
-      },
-
-      {
         name: "Employee Library Member",
         renderName: "employeeLibraryMember",
         path: "/sch/library/employee-library-member",
@@ -823,9 +812,9 @@ const SIDE_MENU_DATA = [
         ),
       },
       {
-        name: "Employee Issue & Return",
-        renderName: "employeeIssueReturn",
-        path: "/sch/library/employee-issue-return",
+        name: "Issue & Return",
+        renderName: "studentIssueReturn",
+        path: "/sch/library/student-issue-return",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
