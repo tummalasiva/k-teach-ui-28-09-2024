@@ -27,6 +27,46 @@ import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
+const showInfo = (data) => {
+  let result = [];
+  console.log(data, "fsusg");
+  for (let dep of data.dependencies) {
+    if (dep === "academicYear") {
+      result.push(
+        `[${data.academicYearId.academicYearFrom}-${data.academicYearId.academicYearTo}]-Academic Year`
+      );
+    } else if (dep === "class") {
+      let newItem = `[${data.class?.className}]-Class`;
+      result.push(newItem);
+    } else if (dep === "hostel") {
+      let newItem = `[${data.hostel?.name}]-Hostel`;
+      result.push(newItem);
+    } else if (dep === "roomType") {
+      result.push(`[${data.roomType.name}]-Room_Type`);
+    } else if (dep === "room") {
+      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalSeats} Beds]+[${data.room?.type?.name}]-Room`;
+      result.push(newItem);
+    } else if (dep == "route") {
+      let newItem = `[${data.route.vehicleNumber.vehicleNumber}]+[${data.route.transportRouteTitle}]-Route`;
+      result.push(newItem);
+    } else if (dep == "pickType") {
+      let newItem = `[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    } else if (dep === "stop") {
+      let newItem = `[${data.stop.stopName}]-Stop`;
+      result.push(newItem);
+    } else if (dep === "addedBefore") {
+      // let newItem = `[${moment(data.addedBefore).format("DD/MM/YYYY")}]-Stop`;
+      // result.push(newItem);
+    } else if (dep === "addedAfter") {
+      // let newItem = `[${moment(data.addedAfter).format("DD/MM/YYYY")}]-Stop`;
+      // result.push(newItem);
+    }
+  }
+
+  return result.join(" | ");
+};
+
 const CustomActionFee = ({
   onUpdate = () => {},
   data = {},
@@ -99,12 +139,16 @@ export default function ReceiptBook() {
     }
   };
 
+  // get feemap list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setFeeMaps();
+      console.log(data, "fadata");
+      // setFeeMaps({ ...data });
+      setFeeMaps(data.result);
+      showInfo(data.result.map((f) => ({ ...f, showInfo: showInfo(f) })));
     } catch (error) {}
   };
 
@@ -126,6 +170,7 @@ export default function ReceiptBook() {
   useEffect(() => {
     getData();
     getReceipts();
+    getFeeMaps();
   }, [selectedSetting]);
 
   const handleTabChange = (e, newValue) => {
@@ -181,7 +226,7 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMapEdit = (id, data) => {
-    console.log(data, "hgafs");
+    // console.log(data, "hgafs");
     setDataToEdit({ ...data });
     // setAddForm({
     //   ...data,
@@ -193,13 +238,15 @@ export default function ReceiptBook() {
     // });
   };
 
+  const handleOpenFeeMap = () => {
+    setOpenFeeMap(true);
+  };
+
   const handleFeeMap = (id) => {
+    console.log(id, "id usha");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };
-
-  console.log(entryFormik.values.receipt, "bababa");
-  console.log(selectedReceiptId, "selectedReceiptId");
 
   return (
     <>
@@ -278,7 +325,7 @@ export default function ReceiptBook() {
             <Button
               variant="contained"
               startIcon={<Add />}
-              onClick={() => setOpenFeeMap(true)}>
+              onClick={handleOpenFeeMap}>
               Add Fee Map
             </Button>
           </Grid>
@@ -295,7 +342,7 @@ export default function ReceiptBook() {
         {/* Add/Update Fee Map ========= */}
         <AddUpdateFeeMap
           open={openFeeMap}
-          entryFormik={entryFormik}
+          Formik={entryFormik}
           dataToEdit={dataToEdit}
           setOpen={setOpenFeeMap}
           loading={loading}

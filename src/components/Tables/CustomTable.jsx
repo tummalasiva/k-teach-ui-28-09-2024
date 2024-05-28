@@ -67,13 +67,11 @@ export default function CustomTable({
   onViewClick = () => {},
   onCardClick = () => {},
   onNavigateFeeMap = () => {},
-
   onToggleSwitch = () => {},
   toggleStatus = false,
   isDataReady = true,
   module = "",
   CustomAction = () => {},
-
   onUpdate = () => {},
   onDownloadClick = () => {},
 }) {
