@@ -33,10 +33,10 @@ const showInfo = (data) => {
   for (let dep of data.dependencies) {
     if (dep === "academicYear") {
       result.push(
-        `[${data.academicYearId.academicYearFrom}-${data.academicYearId.academicYearTo}]-Academic Year`
+        `[${data.academicYearId.from}-${data.academicYearId.to}]-Academic Year`
       );
     } else if (dep === "class") {
-      let newItem = `[${data.class?.className}]-Class`;
+      let newItem = `[${data.class?.name}]-Class`;
       result.push(newItem);
     } else if (dep === "hostel") {
       let newItem = `[${data.hostel?.name}]-Hostel`;
@@ -47,13 +47,13 @@ const showInfo = (data) => {
       let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalSeats} Beds]+[${data.room?.type?.name}]-Room`;
       result.push(newItem);
     } else if (dep == "route") {
-      let newItem = `[${data.route.vehicleNumber.vehicleNumber}]+[${data.route.transportRouteTitle}]-Route`;
+      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Route`;
       result.push(newItem);
     } else if (dep == "pickType") {
       let newItem = `[${data.pickType}]-Pick_Type`;
       result.push(newItem);
     } else if (dep === "stop") {
-      let newItem = `[${data.stop.stopName}]-Stop`;
+      let newItem = `[${data.stop.name}]-Stop`;
       result.push(newItem);
     } else if (dep === "addedBefore") {
       // let newItem = `[${moment(data.addedBefore).format("DD/MM/YYYY")}]-Stop`;
@@ -139,17 +139,20 @@ export default function ReceiptBook() {
     }
   };
 
-  // get feemap list
+  console.log(feeMaps, "feeMaps");
+
+  // get fee map list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: { schoolId: selectedSetting._id },
       });
-      console.log(data, "fadata");
-      // setFeeMaps({ ...data });
-      setFeeMaps(data.result);
-      showInfo(data.result.map((f) => ({ ...f, showInfo: showInfo(f) })));
-    } catch (error) {}
+      console.log(data.result, "fadata");
+      // setFeeMaps(data.result);
+      setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // get Receipt list
