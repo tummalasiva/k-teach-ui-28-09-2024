@@ -34,14 +34,10 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  console.log(data._id, "000000000");
-
   const updateStatus = async () => {
     try {
       setLoading(true);
-      console.log(data._id, "888888888888");
       await put(PRIVATE_URLS.bookIssue.submit + "/" + data._id);
-
       onUpdate();
       handleClose();
       setLoading(false);
@@ -78,7 +74,7 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
         onClose={handleClose}
         submitButtonTitle={"Submit"}
         adding={loading}>
-        <Grid rowSpacing={0} columnSpacing={2} container>
+        <Grid spacing={2} container>
           <Grid xs={12} sm={12} md={12} item>
             <Typography>
               Are you sure you want to change the issue status to return?
@@ -94,12 +90,12 @@ export default function StudentIssueReturn() {
   const { selectedSetting } = useContext(SettingContext);
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
-  const [dataToEdit, setDataToEdit] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [book, setBook] = useState([]);
+  const [dueList, setDueList] = useState([]);
 
   const getData = async () => {
     try {
@@ -107,7 +103,7 @@ export default function StudentIssueReturn() {
         params: { schoolId: selectedSetting._id },
       });
 
-      const filteredDataMember = data.result
+      const filteredIssueData = data.result
         .filter((s) => s.submissionDate == null)
         .map((s) => ({
           ...s,
@@ -116,9 +112,23 @@ export default function StudentIssueReturn() {
           issuedName: s.issuedTo.basicInfo,
         }));
 
-      setData(filteredDataMember);
+      const currentDate = new Date();
+      const filtereDueData = data.result
+        .filter(
+          (s) =>
+            s.dueDate &&
+            new Date(s.dueDate) < currentDate &&
+            s.submissionDate == null
+        )
+        .map((s) => ({
+          ...s,
+          bookName: s.book,
+          bookId: s.book,
+          issuedName: s.issuedTo.basicInfo,
+        }));
 
-      console.log(data.result, "/////////////");
+      setData(filteredIssueData);
+      setDueList(filtereDueData);
     } catch (error) {
       console.log(error);
     }
@@ -190,7 +200,7 @@ export default function StudentIssueReturn() {
     onSubmit: console.log("nnnn"),
   });
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
@@ -198,10 +208,9 @@ export default function StudentIssueReturn() {
       };
 
       setLoading(true);
-
       const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);
       getData();
-
+      resetForm();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -229,7 +238,6 @@ export default function StudentIssueReturn() {
 
   const handleClose = () => {
     setOpen(false);
-    setDataToEdit(null);
   };
   return (
     <>
@@ -256,7 +264,7 @@ export default function StudentIssueReturn() {
             Issued: {data.length}
           </Typography>
           <Typography variant="h6" fontSize={16} fontWeight="bold">
-            Due: 1
+            Due: {dueList.length}
           </Typography>
         </BookDetailed>
         <CustomTable
@@ -272,7 +280,7 @@ export default function StudentIssueReturn() {
         <CustomTable
           actions={["custom"]}
           tableKeys={studentLibraryDueTableKeys}
-          bodyData={data}
+          bodyData={dueList}
           bodyDataModal="due list"
           CustomAction={CustomAction}
           onUpdate={getData}
