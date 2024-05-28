@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -118,6 +120,11 @@ const Is_Public = [
 ];
 
 const View_Web = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const Library_Member = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
@@ -245,6 +252,7 @@ export default function AddEmployee() {
         password: values.password,
         active: values.active,
         photo: values.photo,
+        libraryMember: values.libraryMember,
         schoolId: selectedSetting._id,
       };
       setLoading(true);
@@ -302,7 +310,7 @@ export default function AddEmployee() {
       role: dataToEdit?.role._id || "",
       department: dataToEdit?.academicInfo.department._id || "",
       joiningDate: dataToEdit?.academicInfo.joiningDate || null,
-
+      libraryMember: dataToEdit?.libraryMember || false,
       username: dataToEdit?.username || "",
       password: dataToEdit?.otherInfo.password || "",
       public: dataToEdit?.otherInfo.public || false,
@@ -650,6 +658,14 @@ export default function AddEmployee() {
                   options={View_Web}
                 />
               </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="libraryMember"
+                  formik={entryFormik}
+                  label="Library Member"
+                  options={Library_Member}
+                />
+              </Grid>
             </Grid>
           </Box>
         </FormBox>
@@ -678,16 +694,14 @@ export default function AddEmployee() {
                   size="small"
                   color="error"
                   variant="contained"
-                  onClick={() => navigate(-1)}
-                >
+                  onClick={() => navigate(-1)}>
                   Cancel
                 </Button>
                 <LoadingButton
                   loading={loading}
                   type="submit"
                   size="small"
-                  variant="contained"
-                >
+                  variant="contained">
                   Submit
                 </LoadingButton>
               </Stack>

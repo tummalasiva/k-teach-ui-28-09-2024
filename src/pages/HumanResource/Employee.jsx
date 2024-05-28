@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import CustomTable from "../../components/Tables/CustomTable";
 import PageHeader from "../../components/PageHeader";
@@ -166,8 +168,7 @@ export default function Employee() {
             display: "flex",
             gap: 2,
             margin: "15px 0",
-          }}
-        >
+          }}>
           <TextField
             sx={{ ml: 1 }}
             size="small"
@@ -212,8 +213,7 @@ export default function Employee() {
             display: "flex",
             gap: 2,
             margin: "15px 0",
-          }}
-        >
+          }}>
           <TextField
             sx={{ ml: 1 }}
             size="small"
