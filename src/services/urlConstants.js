@@ -366,4 +366,10 @@ export const PRIVATE_URLS = {
     list: "/paymentHistory/list",
     downloadDeductionPdf: "/paymentHistory/downloadDeductionPdf",
   },
+  periodical: {
+    list: "/periodical/list",
+    create: "/periodical/create",
+    update: "/periodical/update",
+    delete: "/periodical/delete",
+  },
 };

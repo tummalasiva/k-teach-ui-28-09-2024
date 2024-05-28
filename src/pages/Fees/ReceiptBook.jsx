@@ -139,17 +139,20 @@ export default function ReceiptBook() {
     }
   };
 
-  // get feemap list
+  console.log(feeMaps, "feeMaps");
+
+  // get fee map list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: { schoolId: selectedSetting._id },
       });
-      console.log(data, "fadata");
-      // setFeeMaps({ ...data });
-      setFeeMaps(data.result);
-      showInfo(data.result.map((f) => ({ ...f, showInfo: showInfo(f) })));
-    } catch (error) {}
+      console.log(data.result, "fadata");
+      // setFeeMaps(data.result);
+      setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // get Receipt list

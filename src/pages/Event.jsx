@@ -1,3 +1,5 @@
+/** @format */
+
 import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
@@ -27,7 +29,7 @@ export default function Event() {
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.event.list);
-      console.log(data, "event");
+      // console.log(data, "event");
       setData(data.result);
     } catch (error) {
       console.log(error);
@@ -148,15 +150,13 @@ export default function Event() {
         formTitle="Add Events"
         onClose={handleClose}
         submitButtonTitle="Submit"
-        adding={loading}
-      >
+        adding={loading}>
         <Grid
           rowSpacing={1}
           columnSpacing={2}
           container
           component="form"
-          onSubmit={entryFormik.handleSubmit}
-        >
+          onSubmit={entryFormik.handleSubmit}>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}

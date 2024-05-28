@@ -1,3 +1,5 @@
+/** @format */
+
 export const periodicalTableKeys = [
   {
     name: "Title",
@@ -9,7 +11,7 @@ export const periodicalTableKeys = [
   },
   {
     name: "Issue Number",
-    key: "issueNNumber",
+    key: "issueNumber",
   },
   {
     name: "Volume Number",
@@ -30,6 +32,7 @@ export const periodicalTableKeys = [
 
   {
     name: "Journal Entry Date",
-    key: "date",
+    key: "entryDate",
+    isDate: true,
   },
 ];
