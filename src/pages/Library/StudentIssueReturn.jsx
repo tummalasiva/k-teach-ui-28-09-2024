@@ -25,15 +25,69 @@ const BookDetailed = styled(Paper)(({ theme }) => ({
   justifyContent: "space-around",
 }));
 
-const Submitted_Option = [
-  { label: "Yes", value: "yes" },
-  { label: "No", value: "no" },
-];
-
 const Issued_To_Type_Option = [
   { label: "Student", value: "student" },
   { label: "Employee", value: "employee" },
 ];
+
+const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  console.log(data._id, "000000000");
+
+  const updateStatus = async () => {
+    try {
+      setLoading(true);
+      console.log(data._id, "888888888888");
+      await put(PRIVATE_URLS.bookIssue.submit + "/" + data._id);
+
+      onUpdate();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const entryFormik = useFormik({
+    initialValues: {},
+    onSubmit: updateStatus,
+  });
+
+  return (
+    <>
+      <Stack direction="row" spacing={1}>
+        <Button size="small" variant="contained" onClick={handleClickOpen}>
+          Return
+        </Button>
+      </Stack>
+
+      <FormModal
+        open={open}
+        formik={entryFormik}
+        formTitle={"Return Book"}
+        onClose={handleClose}
+        submitButtonTitle={"Submit"}
+        adding={loading}>
+        <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} sm={12} md={12} item>
+            <Typography>
+              Are you sure you want to change the issue status to return?
+            </Typography>
+          </Grid>
+        </Grid>
+      </FormModal>
+    </>
+  );
+};
 
 export default function StudentIssueReturn() {
   const { selectedSetting } = useContext(SettingContext);
@@ -44,8 +98,22 @@ export default function StudentIssueReturn() {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
   const [employee, setEmployee] = useState([]);
-
   const [book, setBook] = useState([]);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.bookIssue.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
 
   const getBooks = async () => {
     try {
@@ -53,8 +121,6 @@ export default function StudentIssueReturn() {
         params: { schoolId: selectedSetting._id },
       });
       setBook(data.result.map((s) => ({ ...s, label: s.title, value: s._id })));
-
-      console.log(data.result, "llllllllll");
     } catch (error) {
       console.log(error);
     }
@@ -118,16 +184,10 @@ export default function StudentIssueReturn() {
         schoolId: selectedSetting._id,
       };
 
-      console.log(payload, "000000000000000");
       setLoading(true);
-      if (dataToEdit) {
-        const { data } = await put(
-          PRIVATE_URLS.bookIssue.update + "/" + dataToEdit._id,
-          payload
-        );
-      } else {
-        const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);
-      }
+
+      const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);
+
       handleClose();
     } catch (error) {
       console.log(error);
@@ -137,14 +197,12 @@ export default function StudentIssueReturn() {
 
   const entryFormik = useFormik({
     initialValues: {
-      issueDate: dataToEdit?.issueDate || null,
-      book: dataToEdit?.book || "",
-      quantity: dataToEdit?.quantity || 0,
-      dueDate: dataToEdit?.dueDate || null,
-      issuedToType: dataToEdit?.issuedToType || "",
-      issuedTo: dataToEdit?.issuedTo || "",
-      submitted: dataToEdit?.submitted || "",
-      submissionDate: dataToEdit?.submissionDate || null,
+      issueDate: null,
+      book: "",
+      quantity: 0,
+      dueDate: null,
+      issuedToType: "",
+      issuedTo: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -188,10 +246,12 @@ export default function StudentIssueReturn() {
           </Typography>
         </BookDetailed>
         <CustomTable
-          actions={[]}
+          actions={["custom"]}
           tableKeys={studentLibraryIssueTableKeys}
           bodyData={data}
           bodyDataModal="student"
+          CustomAction={CustomAction}
+          onUpdate={getData}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -243,9 +303,9 @@ export default function StudentIssueReturn() {
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? "Update Issue" : "Add Issue"}
+        formTitle={"Add Issue"}
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        submitButtonTitle={"Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
@@ -316,24 +376,6 @@ export default function StudentIssueReturn() {
               />
             </Grid>
           )}
-
-          <Grid xs={12} sm={6} md={6} item>
-            <FormSelect
-              formik={entryFormik}
-              name="submitted"
-              label="Submitted"
-              required={true}
-              options={Submitted_Option}
-            />
-          </Grid>
-          <Grid xs={12} sm={6} md={6} item>
-            <FormDatePicker
-              formik={entryFormik}
-              name="submissionDate"
-              label="Submission Date"
-              required={true}
-            />
-          </Grid>
         </Grid>
       </FormModal>
     </>

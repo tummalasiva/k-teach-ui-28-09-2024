@@ -382,7 +382,7 @@ export const PRIVATE_URLS = {
   bookIssue: {
     list: "/bookIssue/list",
     create: "/bookIssue/create",
-    // update: "/bookIssue/update",
+    submit: "/bookIssue/submit",
     delete: "/bookIssue/delete",
   },
 };
