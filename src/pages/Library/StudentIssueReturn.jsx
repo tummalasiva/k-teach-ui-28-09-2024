@@ -43,6 +43,7 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
       await put(PRIVATE_URLS.bookIssue.submit + "/" + data._id);
 
       onUpdate();
+      handleClose();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -105,7 +106,19 @@ export default function StudentIssueReturn() {
       const { data } = await get(PRIVATE_URLS.bookIssue.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setData(data.result);
+
+      const filteredDataMember = data.result
+        .filter((s) => s.submissionDate == null)
+        .map((s) => ({
+          ...s,
+          bookName: s.book,
+          bookId: s.book,
+          issuedName: s.issuedTo.basicInfo,
+        }));
+
+      setData(filteredDataMember);
+
+      console.log(data.result, "/////////////");
     } catch (error) {
       console.log(error);
     }
@@ -187,6 +200,7 @@ export default function StudentIssueReturn() {
       setLoading(true);
 
       const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);
+      getData();
 
       handleClose();
     } catch (error) {
@@ -236,10 +250,10 @@ export default function StudentIssueReturn() {
       <TabPanel index={0} value={value}>
         <BookDetailed sx={{ padding: 1 }}>
           <Typography variant="h6" fontWeight="bold" fontSize={16}>
-            Total Books: 1
+            Total Books: {book.length}
           </Typography>
           <Typography variant="h6" fontWeight="bold" fontSize={16}>
-            Issued: 1
+            Issued: {data.length}
           </Typography>
           <Typography variant="h6" fontSize={16} fontWeight="bold">
             Due: 1
@@ -249,17 +263,19 @@ export default function StudentIssueReturn() {
           actions={["custom"]}
           tableKeys={studentLibraryIssueTableKeys}
           bodyData={data}
-          bodyDataModal="student"
+          bodyDataModal="issue list"
           CustomAction={CustomAction}
           onUpdate={getData}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
-          actions={[]}
+          actions={["custom"]}
           tableKeys={studentLibraryDueTableKeys}
           bodyData={data}
           bodyDataModal="student"
+          CustomAction={CustomAction}
+          onUpdate={getData}
         />
       </TabPanel>
       <TabPanel index={2} value={value}>
@@ -348,7 +364,7 @@ export default function StudentIssueReturn() {
             <FormSelect
               formik={entryFormik}
               name="issuedToType"
-              label="issuedToType"
+              label="Issued To Type"
               required={true}
               options={Issued_To_Type_Option}
             />
@@ -358,7 +374,7 @@ export default function StudentIssueReturn() {
               <FormSelect
                 formik={entryFormik}
                 name="issuedTo"
-                label="issuedTo"
+                label="Issued To"
                 required={true}
                 options={students}
               />
@@ -370,7 +386,7 @@ export default function StudentIssueReturn() {
               <FormSelect
                 formik={entryFormik}
                 name="issuedTo"
-                label="issuedTo"
+                label="Issued To"
                 required={true}
                 options={employee}
               />

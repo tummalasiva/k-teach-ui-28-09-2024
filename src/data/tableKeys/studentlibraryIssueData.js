@@ -1,7 +1,10 @@
+/** @format */
+
 export const studentLibraryIssueTableKeys = [
   {
-    name: "Student",
+    name: "Name",
     key: "name",
+    path: "issuedName",
   },
   {
     name: "Library Id",
@@ -10,17 +13,21 @@ export const studentLibraryIssueTableKeys = [
   {
     name: "Title",
     key: "title",
+    path: "bookName",
   },
   {
     name: "Book Id",
-    key: "bookId",
+    key: "id",
+    path: "bookId",
   },
   {
     name: "Issue Date",
     key: "issueDate",
+    isDate: true,
   },
   {
     name: "Due Date",
     key: "dueDate",
+    isDate: true,
   },
 ];
