@@ -167,6 +167,11 @@ export const PRIVATE_URLS = {
     overView: "/student/overView",
     promote: "/student/promote",
     resuffle: "/student/resuffle",
+    updateTransportMember: "/student/updateTransportMember",
+    removeTransportMember: "/student/removeTransportMember",
+
+    updateHostelMember: "/student/updateHostelMember",
+    removeHostelMember: "/student/removeHostelMember",
   },
   studentActivity: {
     list: "/studentActivity/list",
@@ -365,6 +370,20 @@ export const PRIVATE_URLS = {
     downloadPdf: "/paymentHistory/downloadPdf",
     list: "/paymentHistory/list",
     downloadDeductionPdf: "/paymentHistory/downloadDeductionPdf",
+  },
+
+  book: {
+    list: "/book/list",
+    create: "/book/create",
+    update: "/book/update",
+    delete: "/book/delete",
+  },
+
+  bookIssue: {
+    list: "/bookIssue/list",
+    create: "/bookIssue/create",
+    // update: "/bookIssue/update",
+    delete: "/bookIssue/delete",
   },
   periodical: {
     list: "/periodical/list",

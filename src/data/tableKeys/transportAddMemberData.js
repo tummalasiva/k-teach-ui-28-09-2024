@@ -13,15 +13,17 @@ export const transportAddMemberTableKeys = [
   },
   {
     name: "Class",
-    key: "class",
+    key: "name",
+    path: "className",
   },
   {
     name: "Section",
-    key: "section",
+    key: "name",
+    path: "sectionName",
   },
   {
     name: "Roll No",
-    key: "rollNo",
-    path: "academicInfo",
+    key: "rollNumber",
+    path: "rollNo",
   },
 ];

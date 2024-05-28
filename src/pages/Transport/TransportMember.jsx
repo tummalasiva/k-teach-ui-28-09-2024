@@ -18,14 +18,36 @@ import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 
 const Pick_Type = [
-  { label: "Pick", value: "pick" },
-  { label: "Drop", value: "drop" },
-  { label: "Both", value: "both" },
+  { label: "Pick", value: "Pick" },
+  { label: "Drop", value: "Drop" },
+  { label: "Both", value: "Both" },
 ];
 
 const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { selectedSetting } = useContext(SettingContext);
+  const [route, setRoute] = useState([]);
+
+  const getRoute = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.route.list);
+
+      setRoute(
+        data.result.map((s) => ({ ...s, label: s.title, value: s._id }))
+      );
+
+      console.log(data.result, "vvbvbbbbv vbfv vhvbfvvc");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(route, "mmmmmmmmmmm");
+  useEffect(() => {
+    getRoute();
+  }, [selectedSetting]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -34,13 +56,22 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
     setOpen(false);
   };
 
-  console.log(data, "ccccccccccc");
-
-  const addMember = async () => {
+  const addMember = async (values) => {
     try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+        routeId: values.route,
+        stopId: values.stop,
+        pickType: values.type,
+      };
       setLoading(true);
-      await put(PRIVATE_URLS.vehicle.addMember + "/" + data._id);
+      await put(
+        PRIVATE_URLS.student.updateTransportMember + "/" + data._id,
+        payload
+      );
       onUpdate();
+      handleClose();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -92,6 +123,7 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
               name="route"
               label="Route"
               required={true}
+              options={route}
             />
           </Grid>
 
@@ -101,6 +133,14 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
               name="stop"
               label="Stop"
               required={true}
+              options={
+                route
+                  .find((r) => r._id === entryFormik.values.route)
+                  ?.stops.map((stop) => ({
+                    label: stop.name,
+                    value: stop._id,
+                  })) || []
+              }
             />
           </Grid>
           <Grid xs={12} md={6} item>
@@ -120,11 +160,13 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
 export default function TransportMember() {
   const { selectedSetting } = useContext(SettingContext);
   const [value, setSelectValue] = useState(0);
-  const [data, setData] = useState([]);
+
   const [transportMember, setTransportMember] = useState([]);
   const [academicYear, setAcademicYear] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
+
+  const [transportMemberList, setTransportMemberList] = useState([]);
 
   const getAcademicYear = async () => {
     try {
@@ -169,7 +211,7 @@ export default function TransportMember() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            class: formik2.values.class,
+            class: formik1.values.class || formik2.values.class,
           },
         },
       });
@@ -188,7 +230,7 @@ export default function TransportMember() {
     }
   };
 
-  const getList = async (values) => {
+  const getDataMemberList = async (values) => {
     try {
       if (values.section === "all") {
         const { data } = await get(PRIVATE_URLS.student.list, {
@@ -200,13 +242,31 @@ export default function TransportMember() {
             },
           },
         });
-        setData(data.result.filter((s) => !s?.otherInfo?.transportMember));
 
-        setTransportMember(
-          data.result.filter((s) => s?.otherInfo?.transportMember)
-        );
+        const filteredDataMember = data.result
+          .filter((s) => s?.otherInfo?.transportMember)
+          .map((s) => ({
+            ...s,
+            rollNo: s.academicInfo,
+            pickType: s.transportInfo,
+            routeStart: s?.transportInfo?.route,
+            routeEnd: s?.transportInfo?.route,
+            stopName: s?.transportInfo?.stop,
+          }));
 
-        console.log(data.result, "kkkkkkkkk1111");
+        const filteredDataNonMember = data.result
+          .filter((s) => !s?.otherInfo?.transportMember)
+          .map((s) => ({
+            ...s,
+            rollNo: s.academicInfo,
+            className: s.academicInfo.class,
+            sectionName: s.academicInfo.section,
+          }));
+
+        setTransportMember(filteredDataMember);
+        setTransportMemberList(filteredDataNonMember);
+
+        console.log(filteredDataNonMember, "kkkkk");
       } else {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
@@ -218,11 +278,29 @@ export default function TransportMember() {
             },
           },
         });
-        setData(data.result.filter((s) => !s?.otherInfo?.transportMember));
-        setTransportMember(
-          data.result.filter((s) => s?.otherInfo?.transportMember)
-        );
-        console.log(data.result, "kkkkkkkkk2222");
+
+        const filteredDataMember = data.result
+          .filter((s) => s?.otherInfo?.transportMember)
+          .map((s) => ({
+            ...s,
+            rollNo: s.academicInfo,
+            pickType: s.transportInfo,
+            routeStart: s?.transportInfo?.route,
+            routeEnd: s?.transportInfo?.route,
+            stopName: s?.transportInfo?.stop,
+          }));
+
+        const filteredDataNonMember = data.result
+          .filter((s) => !s?.otherInfo?.transportMember)
+          .map((s) => ({
+            ...s,
+            rollNo: s.academicInfo,
+            className: s.academicInfo.class,
+            sectionName: s.academicInfo.section,
+          }));
+
+        setTransportMember(filteredDataMember);
+        setTransportMemberList(filteredDataNonMember);
       }
     } catch (error) {
       console.log(error);
@@ -235,29 +313,42 @@ export default function TransportMember() {
       class: "",
       section: "",
     },
-    onSubmit: getList,
+    onSubmit: getDataMemberList,
+    enableReinitialize: true,
   });
+
   const formik2 = useFormik({
     initialValues: {
       academicYear: "",
       class: "",
       section: "",
     },
-    onSubmit: getList,
+    onSubmit: getDataMemberList,
     enableReinitialize: true,
   });
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 
   useEffect(() => {
-    if (formik2.values.class) {
+    if (formik1.values.class || formik2.values.class) {
       getSections();
     }
-  }, [formik2.values.class]);
+  }, [formik2.values.class, formik1.values.class]);
 
   useEffect(() => {
     getAcademicYear();
     getClasses();
   }, [selectedSetting._id]);
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(
+        PRIVATE_URLS.student.removeTransportMember + "/" + id
+      );
+      formik1.handleSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <PageHeader title="Transport Member" />
@@ -309,10 +400,11 @@ export default function TransportMember() {
           </Paper>
         </form>
         <CustomTable
-          actions={["edit", "delete", "custom"]}
+          actions={["delete"]}
           tableKeys={transportMemberTableKeys}
           bodyData={transportMember}
           bodyDataModal="transport member"
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -359,10 +451,10 @@ export default function TransportMember() {
         <CustomTable
           actions={"custom"}
           tableKeys={transportAddMemberTableKeys}
-          bodyData={data}
+          bodyData={transportMemberList}
           bodyDataModal="transport member"
           CustomAction={CustomActionAdd}
-          onUpdate={getList}
+          onUpdate={formik2.handleSubmit}
         />
       </TabPanel>
     </>
