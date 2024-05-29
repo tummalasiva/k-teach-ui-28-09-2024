@@ -3,7 +3,7 @@
 export const studentMemberTableKeys = [
   {
     name: "Photo",
-    key: "studentPhoto",
+    key: "photo",
     type: "image",
   },
   {
