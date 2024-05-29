@@ -10,7 +10,6 @@ import { studentLibraryHistoryTableKeys } from "../../data/tableKeys/studentLibr
 import { studentLibraryIssueTableKeys } from "../../data/tableKeys/studentlibraryIssueData";
 import { Button, Grid, Paper, Stack, Typography, styled } from "@mui/material";
 import { useFormik } from "formik";
-import { Add } from "@mui/icons-material";
 import FormDatePicker from "../../forms/FormDatePicker";
 import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
@@ -19,6 +18,7 @@ import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useContext } from "react";
 import SettingContext from "../../context/SettingsContext";
+import { downloadFile } from "../../utils";
 
 const BookDetailed = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -96,6 +96,7 @@ export default function StudentIssueReturn() {
   const [employee, setEmployee] = useState([]);
   const [book, setBook] = useState([]);
   const [dueList, setDueList] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const getData = async () => {
     try {
@@ -156,13 +157,15 @@ export default function StudentIssueReturn() {
           schoolId: selectedSetting._id,
         },
       });
-      setStudents(
-        data.result.map((d) => ({
+
+      const filteredData = data.result
+        .filter((d) => d?.otherInfo?.libraryMember)
+        .map((d) => ({
           ...d,
           label: d.basicInfo.name,
           value: d._id,
-        }))
-      );
+        }));
+      setStudents(filteredData);
     } catch (error) {
       console.log(error);
     }
@@ -175,13 +178,15 @@ export default function StudentIssueReturn() {
           schoolId: selectedSetting._id,
         },
       });
-      setEmployee(
-        data.result.map((d) => ({
+
+      const filteredData = data.result
+        .filter((d) => d?.libraryMember)
+        .map((d) => ({
           ...d,
           label: d.basicInfo.name,
           value: d._id,
-        }))
-      );
+        }));
+      setEmployee(filteredData);
     } catch (error) {
       console.log(error);
     }
@@ -192,13 +197,76 @@ export default function StudentIssueReturn() {
     getEmployee();
   }, [selectedSetting]);
 
+  const getList = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.bookIssue.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            fromDate: values.fromDate,
+            toDate: values.toDate,
+          },
+        },
+      });
+      setHistory(
+        data.result.map((s) => ({
+          ...s,
+          bookName: s.book,
+          bookId: s.book,
+          issuedName: s.issuedTo.basicInfo,
+        }))
+      );
+
+      console.log(data.result, "histttttttttt");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       fromDate: null,
       toDate: null,
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getList,
   });
+
+  const handleGetPrintPdf = async () => {
+    try {
+      const getIssuePdf = await get(PRIVATE_URLS.bookIssue.downloadPdf, {
+        params: {
+          schoolId: selectedSetting._id,
+          fromDate: formik.values.fromDate,
+          toDate: formik.values.toDate,
+        },
+      });
+
+      downloadFile("application/pdf", getIssuePdf.data, "Issue_Details.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetDownloadExcel = async () => {
+    try {
+      const getExcel = await get(PRIVATE_URLS.bookIssue.downloadExcel, {
+        params: {
+          schoolId: selectedSetting._id,
+          fromDate: formik.values.fromDate,
+          toDate: formik.values.toDate,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "Issue_Details.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
@@ -239,6 +307,9 @@ export default function StudentIssueReturn() {
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    formik.handleSubmit();
+  }, [selectedSetting]);
   return (
     <>
       <PageHeader title="Issue & Return" />
@@ -251,9 +322,8 @@ export default function StudentIssueReturn() {
       <Button
         variant="contained"
         onClick={handleClickOpen}
-        startIcon={<Add />}
         sx={{ mt: 1, mb: 2 }}>
-        Add Issue
+        Issue Book
       </Button>
       <TabPanel index={0} value={value}>
         <BookDetailed sx={{ padding: 1 }}>
@@ -288,40 +358,54 @@ export default function StudentIssueReturn() {
       </TabPanel>
       <TabPanel index={2} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} sm={6} md={6} lg={4} item>
-              <FormDatePicker
-                formik={formik}
-                label="From Date"
-                name="fromDate"
-              />
-            </Grid>
-            <Grid xs={12} sm={6} md={6} lg={4} item>
-              <FormDatePicker formik={formik} label="To Date" name="toDate" />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{ alignSelf: "center", mt: 1 }}
-              item>
-              <Button size="small" variant="contained">
-                Find
-              </Button>
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
-                <Button size="small" variant="contained">
-                  Download
+          <form onSubmit={formik.handleSubmit}>
+            {" "}
+            <Grid rowSpacing={1} columnSpacing={2} container>
+              <Grid xs={12} sm={6} md={6} lg={4} item>
+                <FormDatePicker
+                  formik={formik}
+                  label="From Date"
+                  name="fromDate"
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={6} lg={4} item>
+                <FormDatePicker formik={formik} label="To Date" name="toDate" />
+              </Grid>
+              <Grid
+                xs={12}
+                md={6}
+                lg={3}
+                sx={{ alignSelf: "center", mt: 1 }}
+                item>
+                <Button size="small" type="submit" variant="contained">
+                  Find
                 </Button>
-                <Button size="small" variant="contained">
-                  Print
-                </Button>
-              </Stack>
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
+                  <Button
+                    size="small"
+                    onClick={handleGetPrintPdf}
+                    variant="contained">
+                    Download
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={handleGetDownloadExcel}
+                    variant="contained">
+                    Print
+                  </Button>
+                </Stack>
+              </Grid>
             </Grid>
-          </Grid>
+          </form>
         </Paper>
-        <CustomTable actions={[]} tableKeys={studentLibraryHistoryTableKeys} />
+        <CustomTable
+          actions={[]}
+          bodyData={history}
+          bodyDataModal="list"
+          tableKeys={studentLibraryHistoryTableKeys}
+        />
       </TabPanel>
 
       <FormModal

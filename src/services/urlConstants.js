@@ -384,6 +384,8 @@ export const PRIVATE_URLS = {
     create: "/bookIssue/create",
     submit: "/bookIssue/submit",
     delete: "/bookIssue/delete",
+    downloadPdf: "/bookIssue/downloadPdf",
+    downloadExcel: "/bookIssue/downloadExcel",
   },
   periodical: {
     list: "/periodical/list",
