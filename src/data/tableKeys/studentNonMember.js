@@ -1,23 +1,30 @@
+/** @format */
+
 export const studentNonMemberTableKeys = [
   {
     name: "Photo",
-    key: "image",
+    key: "studentPhoto",
+    type: "image",
   },
   {
     name: "Name",
     key: "name",
+    path: "studentName",
   },
   {
     name: "Class",
-    key: "class",
+    key: "name",
+    path: "className",
   },
   {
     name: "Section",
-    key: "section",
+    key: "name",
+    path: "sectionName",
   },
   {
     name: "Roll No",
-    key: "rolNo",
+    key: "rollNumber",
+    path: "rollNo",
   },
   {
     name: "Library Id",

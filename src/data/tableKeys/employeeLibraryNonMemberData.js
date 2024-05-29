@@ -1,11 +1,14 @@
+/** @format */
+
 export const employeeLibraryMemberTableKeys = [
   {
     name: "Name",
     key: "name",
+    path: "empName",
   },
   {
     name: "Phone",
-    key: "id",
+    key: "contactNumber",
   },
 
   {

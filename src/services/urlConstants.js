@@ -29,6 +29,8 @@ export const PRIVATE_URLS = {
     update: "/employee/update",
     delete: "/employee/delete",
     getEmpById: "/employee/details",
+    updateLibraryMember: "/employee/updateLibraryMember",
+    removeLibraryMember: "/employee/removeLibraryMember",
   },
   designation: {
     list: "/designation/list",
@@ -169,6 +171,9 @@ export const PRIVATE_URLS = {
     resuffle: "/student/resuffle",
     updateTransportMember: "/student/updateTransportMember",
     removeTransportMember: "/student/removeTransportMember",
+
+    updateLibraryMember: "/student/updateLibraryMember",
+    removeLibraryMember: "/student/removeLibraryMember",
 
     updateHostelMember: "/student/updateHostelMember",
     removeHostelMember: "/student/removeHostelMember",
