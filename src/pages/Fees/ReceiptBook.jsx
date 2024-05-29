@@ -29,7 +29,7 @@ import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
 const showInfo = (data) => {
   let result = [];
-  console.log(data, "fsusg");
+  // console.log(data, "fsusg");
   for (let dep of data.dependencies) {
     if (dep === "academicYear") {
       result.push(
@@ -139,8 +139,6 @@ export default function ReceiptBook() {
     }
   };
 
-  console.log(feeMaps, "feeMaps");
-
   // get fee map list
   const getFeeMaps = async () => {
     try {
@@ -150,8 +148,6 @@ export default function ReceiptBook() {
           Search: { receiptTitle: selectReceipt },
         },
       });
-      console.log(data.result, "fadata");
-      // setFeeMaps(data.result);
       setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
     } catch (error) {
       console.error(error);
@@ -254,7 +250,7 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMap = (id) => {
-    console.log(id, "id usha");
+    // console.log(id, "id usha");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };

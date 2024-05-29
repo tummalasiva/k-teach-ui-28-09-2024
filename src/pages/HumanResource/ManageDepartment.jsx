@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import CustomTable from "../../components/Tables/CustomTable";
 import PageHeader from "../../components/PageHeader";
@@ -21,11 +23,12 @@ export default function ManageDepartment() {
       const { data } = await get(PRIVATE_URLS.department.list);
       setData(data.result);
 
-      console.log(data.result, "result");
+      // console.log(data.result, "result");
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -111,8 +114,7 @@ export default function ManageDepartment() {
         formTitle="Add Department"
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Add"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
