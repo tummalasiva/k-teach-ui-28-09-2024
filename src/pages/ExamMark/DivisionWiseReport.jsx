@@ -13,6 +13,7 @@ export default function DivisionWiseReport() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
+  const [exams, setExams] = useState([]);
 
   const getClass = async () => {
     try {
@@ -46,6 +47,20 @@ export default function DivisionWiseReport() {
       console.log(error);
     }
   };
+
+  // get exam list
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      // console.log(data, "exam");
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       class: "",
@@ -56,6 +71,7 @@ export default function DivisionWiseReport() {
   });
   useEffect(() => {
     getClass();
+    getExams();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -93,7 +109,7 @@ export default function DivisionWiseReport() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={exams}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>

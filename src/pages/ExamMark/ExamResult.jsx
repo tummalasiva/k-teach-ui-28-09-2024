@@ -16,6 +16,8 @@ export default function ExamResult() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
+  const [exams, setExams] = useState([]);
+
   const getClass = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.class.list, {
@@ -56,8 +58,22 @@ export default function ExamResult() {
     onSubmit: console.log("nnnn"),
   });
 
+  // get exam list
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      // console.log(data, "exam");
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getClass();
+    getExams();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -96,7 +112,7 @@ export default function ExamResult() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={exams}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>

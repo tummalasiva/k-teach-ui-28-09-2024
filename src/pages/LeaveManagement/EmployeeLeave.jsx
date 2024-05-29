@@ -224,12 +224,12 @@ export default function EmployeeLeave() {
         />
       </TabPanel>
 
-      <AddForm title="Add Leave" onAddClick={AddLeave} />
+      <AddForm title="Add Employee Leave" onAddClick={AddLeave} />
 
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? "Update Leave" : "Add Leave"}
+        formTitle={dataToEdit ? "Update Employee Leave" : "Add Employee Leave"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
         adding={loading}>

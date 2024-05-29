@@ -17,9 +17,10 @@ export default function ManageMark() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
-
+  const [exams, setExams] = useState([]);
   const [subject, setSubject] = useState([]);
 
+  // get class list
   const getClass = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.class.list, {
@@ -34,6 +35,7 @@ export default function ManageMark() {
     }
   };
 
+  // get section list
   const getSection = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
@@ -53,6 +55,20 @@ export default function ManageMark() {
     }
   };
 
+  // get exam list
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      // console.log(data, "exam");
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get subject list
   const getSubject = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.subject.list, {
@@ -75,7 +91,7 @@ export default function ManageMark() {
 
   const entryFormik = useFormik({
     initialValues: {
-      teacher: "",
+      exam: "",
       class: "",
       section: "",
       subject: "",
@@ -85,6 +101,7 @@ export default function ManageMark() {
 
   useEffect(() => {
     getClass();
+    getExams();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -129,7 +146,7 @@ export default function ManageMark() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={exams}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>

@@ -16,7 +16,7 @@ export default function ExamAttendance() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
-
+  const [exams, setExams] = useState([]);
   const [subject, setSubject] = useState([]);
 
   const getClass = async () => {
@@ -62,6 +62,18 @@ export default function ExamAttendance() {
     }
   };
 
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      // console.log(data, "exam");
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getSubject = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.subject.list, {
@@ -84,6 +96,7 @@ export default function ExamAttendance() {
 
   useEffect(() => {
     getClass();
+    getExams();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -128,7 +141,7 @@ export default function ExamAttendance() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={exams}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
