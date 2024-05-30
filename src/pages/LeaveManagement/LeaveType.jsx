@@ -215,258 +215,258 @@ export default function LeaveType() {
             width: "100%",
             maxWidth: 650,
           },
-          component: "form",
-          onSubmit: { handleSubmit },
         }}>
-        <DialogTitle sx={{ fontWeight: 600 }}>
-          {dataToEdit ? "Update  Leave Type" : "Add  Leave Type"}
-        </DialogTitle>
-        <Divider />
-        <DialogContent p={2}>
-          <Grid rowSpacing={0} columnSpacing={2} container>
-            <Grid xs={12} sm={6} md={6} item>
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  id="basic-standard"
-                  name="name"
-                  size="small"
-                  value={name}
-                  onChange={handleChange}
-                  label="Name"
-                  sx={{ label: { fontSize: 12 } }}
-                />
-              </FormControl>
-            </Grid>
-            <Grid xs={12} sm={6} md={6} item>
-              <FormControl fullWidth size="small">
-                <InputLabel size="small" required>
-                  Select Leave Type
-                </InputLabel>
-                <Select
-                  required={true}
-                  label="Select Leave Types"
-                  labelId="demo-simpless-select-filled-label"
-                  id="demo-simple-select-filled-l"
-                  name="leaveTypeFor"
-                  value={leaveTypeFor}
-                  onChange={handleChange}>
-                  <MenuItem value={"Student"}>Student</MenuItem>
-                  <MenuItem value={"Employee"}>Employee</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+        <form onSubmit={handleSubmit}>
+          <DialogTitle sx={{ fontWeight: 600 }}>
+            {dataToEdit ? "Update  Leave Type" : "Add  Leave Type"}
+          </DialogTitle>
+          <Divider />
+          <DialogContent p={2}>
+            <Grid rowSpacing={0} columnSpacing={2} container>
+              <Grid xs={12} sm={6} md={6} item>
+                <FormControl fullWidth>
+                  <TextField
+                    required
+                    id="basic-standard"
+                    name="name"
+                    size="small"
+                    value={name}
+                    onChange={handleChange}
+                    label="Name"
+                    sx={{ label: { fontSize: 12 } }}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid xs={12} sm={6} md={6} item>
+                <FormControl fullWidth size="small">
+                  <InputLabel size="small" required>
+                    Select Leave Type
+                  </InputLabel>
+                  <Select
+                    required={true}
+                    label="Select Leave Types"
+                    labelId="demo-simpless-select-filled-label"
+                    id="demo-simple-select-filled-l"
+                    name="leaveTypeFor"
+                    value={leaveTypeFor}
+                    onChange={handleChange}>
+                    <MenuItem value={"Student"}>Student</MenuItem>
+                    <MenuItem value={"Employee"}>Employee</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            {state?.leaveTypeFor === "Employee" && (
-              <>
-                <Grid item xs={12} md={12} mt={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel size="small" required>
-                      Select Department
-                    </InputLabel>
-                    <Select
-                      label="Select Departments"
-                      labelId="demo-simpless-select-filled-label"
-                      id="demo-simple-select-filled-l"
-                      name="departments"
-                      value={multipleDepartments || ""}
-                      onChange={handleChange}
-                      multiple>
-                      {selectDepartments.map((d) => (
-                        <MenuItem key={d.value} value={d.value}>
-                          {d.label}
-                        </MenuItem>
+              {state?.leaveTypeFor === "Employee" && (
+                <>
+                  <Grid item xs={12} md={12} mt={2}>
+                    <FormControl fullWidth size="small">
+                      <InputLabel size="small" required>
+                        Select Department
+                      </InputLabel>
+                      <Select
+                        label="Select Departments"
+                        labelId="demo-simpless-select-filled-label"
+                        id="demo-simple-select-filled-l"
+                        name="departments"
+                        value={multipleDepartments || ""}
+                        onChange={handleChange}
+                        multiple>
+                        {selectDepartments.map((d) => (
+                          <MenuItem key={d.value} value={d.value}>
+                            {d.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <ListContainer>
+                      {multipleDepartments.map((m) => (
+                        <ListItemContainer key={m}>
+                          <ListItem component="span">
+                            {
+                              selectDepartments.filter((d) => d.value == m)[0]
+                                ?.label
+                            }
+                          </ListItem>
+                          <IconButton
+                            color="error"
+                            onClick={() => handleRemoveDepartments(m)}>
+                            <CloseRounded fontSize="small" />
+                          </IconButton>
+                        </ListItemContainer>
                       ))}
-                    </Select>
-                  </FormControl>
+                    </ListContainer>
+                  </Grid>
 
-                  <ListContainer>
-                    {multipleDepartments.map((m) => (
-                      <ListItemContainer key={m}>
-                        <ListItem component="span">
-                          {
-                            selectDepartments.filter((d) => d.value == m)[0]
-                              ?.label
-                          }
-                        </ListItem>
-                        <IconButton
-                          color="error"
-                          onClick={() => handleRemoveDepartments(m)}>
-                          <CloseRounded fontSize="small" />
-                        </IconButton>
-                      </ListItemContainer>
-                    ))}
-                  </ListContainer>
-                </Grid>
+                  <Grid item xs={12} sm={12} md={12}>
+                    <FormControl required fullWidth size="small">
+                      <RadioGroup
+                        size="small"
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="isSpecial"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        value={isSpecial}
+                        onChange={handleChange}>
+                        <FormLabel
+                          id="demo-row-radio-buttons-group-label"
+                          sx={{ fontSize: "15px", fontWeight: 600 }}>
+                          Is Special Type:
+                        </FormLabel>
+                        <Stack direction="row" marginLeft={2}>
+                          <FormControlLabel
+                            value={true}
+                            control={<Radio size="small" />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value={false}
+                            control={<Radio size="small" />}
+                            label="No"
+                          />
+                        </Stack>
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} item>
+                    <FormControl fullWidth size="small">
+                      <TextField
+                        required
+                        id="basic-standard"
+                        size="small"
+                        name="total"
+                        value={total}
+                        onChange={handleChange}
+                        label="Total"
+                        sx={{ label: { fontSize: 12 } }}
+                        type="number"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} mt={2}>
+                    <FormControl fullWidth size="small">
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="autoEarned"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        // value={autoEarned}
+                        onChange={handleChange}>
+                        <FormLabel
+                          id="demo-row-radio-buttons-group-label"
+                          sx={{ fontSize: "15px", fontWeight: 600 }}>
+                          Is Leave Auto Earned:
+                        </FormLabel>
+                        <Stack direction="row" marginLeft={2}>
+                          <FormControlLabel
+                            value={true}
+                            control={<Radio size="small" />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            size="small"
+                            value={false}
+                            control={<Radio size="small" />}
+                            label="No"
+                          />
+                        </Stack>
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} item>
+                    <FormControl fullWidth size="small">
+                      <TextField
+                        required
+                        id="basic-standard"
+                        size="small"
+                        name="autoEarnCount"
+                        value={autoEarnCount}
+                        onChange={handleChange}
+                        label="Enter Auto Earn Count"
+                        sx={{ label: { fontSize: 12 } }}
+                        type="number"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} mt={2}>
+                    <FormControl fullWidth>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="canResetCarryForward"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        value={canResetCarryForward}
+                        onChange={handleChange}>
+                        <FormLabel
+                          id="demo-row-radio-buttons-group-label"
+                          sx={{ fontSize: "15px", fontWeight: 600 }}>
+                          Is Carryforward Reset:
+                        </FormLabel>
+                        <Stack direction="row" marginLeft={2}>
+                          <FormControlLabel
+                            size="small"
+                            value={true}
+                            sx={{ fontSize: 15 }}
+                            control={<Radio size="small" />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            size="small"
+                            value={false}
+                            sx={{ fontSize: 15 }}
+                            control={<Radio size="small" />}
+                            label="No"
+                          />
+                        </Stack>
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} item>
+                    <FormControl fullWidth size="small">
+                      <TextField
+                        required
+                        id="basic-standard"
+                        size="small"
+                        name="carryForwardCount"
+                        value={carryForwardCount}
+                        onChange={handleChange}
+                        label="Enter Carryforward Count"
+                        sx={{ label: { fontSize: 12 } }}
+                        type="number"
+                      />
+                    </FormControl>
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </DialogContent>
 
-                <Grid item xs={12} sm={12} md={12}>
-                  <FormControl required fullWidth size="small">
-                    <RadioGroup
-                      size="small"
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="isSpecial"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      value={isSpecial}
-                      onChange={handleChange}>
-                      <FormLabel
-                        id="demo-row-radio-buttons-group-label"
-                        sx={{ fontSize: "15px", fontWeight: 600 }}>
-                        Is Special Type:
-                      </FormLabel>
-                      <Stack direction="row" marginLeft={2}>
-                        <FormControlLabel
-                          value={true}
-                          control={<Radio size="small" />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value={false}
-                          control={<Radio size="small" />}
-                          label="No"
-                        />
-                      </Stack>
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} item>
-                  <FormControl fullWidth size="small">
-                    <TextField
-                      required
-                      id="basic-standard"
-                      size="small"
-                      name="total"
-                      value={total}
-                      onChange={handleChange}
-                      label="Total"
-                      sx={{ label: { fontSize: 12 } }}
-                      type="number"
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} mt={2}>
-                  <FormControl fullWidth size="small">
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="autoEarned"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      // value={autoEarned}
-                      onChange={handleChange}>
-                      <FormLabel
-                        id="demo-row-radio-buttons-group-label"
-                        sx={{ fontSize: "15px", fontWeight: 600 }}>
-                        Is Leave Auto Earned:
-                      </FormLabel>
-                      <Stack direction="row" marginLeft={2}>
-                        <FormControlLabel
-                          value={true}
-                          control={<Radio size="small" />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          size="small"
-                          value={false}
-                          control={<Radio size="small" />}
-                          label="No"
-                        />
-                      </Stack>
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} item>
-                  <FormControl fullWidth size="small">
-                    <TextField
-                      required
-                      id="basic-standard"
-                      size="small"
-                      name="autoEarnCount"
-                      value={autoEarnCount}
-                      onChange={handleChange}
-                      label="Enter Auto Earn Count"
-                      sx={{ label: { fontSize: 12 } }}
-                      type="number"
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} mt={2}>
-                  <FormControl fullWidth>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="canResetCarryForward"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      value={canResetCarryForward}
-                      onChange={handleChange}>
-                      <FormLabel
-                        id="demo-row-radio-buttons-group-label"
-                        sx={{ fontSize: "15px", fontWeight: 600 }}>
-                        Is Carryforward Reset:
-                      </FormLabel>
-                      <Stack direction="row" marginLeft={2}>
-                        <FormControlLabel
-                          size="small"
-                          value={true}
-                          sx={{ fontSize: 15 }}
-                          control={<Radio size="small" />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          size="small"
-                          value={false}
-                          sx={{ fontSize: 15 }}
-                          control={<Radio size="small" />}
-                          label="No"
-                        />
-                      </Stack>
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} item>
-                  <FormControl fullWidth size="small">
-                    <TextField
-                      required
-                      id="basic-standard"
-                      size="small"
-                      name="carryForwardCount"
-                      value={carryForwardCount}
-                      onChange={handleChange}
-                      label="Enter Carryforward Count"
-                      sx={{ label: { fontSize: 12 } }}
-                      type="number"
-                    />
-                  </FormControl>
-                </Grid>
-              </>
-            )}
-          </Grid>
-        </DialogContent>
-
-        <DialogActions>
-          <Button
-            size="small"
-            color="error"
-            variant="contained"
-            onClick={handleClose}>
-            Close
-          </Button>
-          <LoadingButton
-            size="small"
-            loading={loading}
-            variant="contained"
-            type="submit">
-            {dataToEdit ? "Update" : "Submit"}
-          </LoadingButton>
-        </DialogActions>
+          <DialogActions>
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={handleClose}>
+              Close
+            </Button>
+            <LoadingButton
+              size="small"
+              loading={loading}
+              variant="contained"
+              type="submit">
+              {dataToEdit ? "Update" : "Submit"}
+            </LoadingButton>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );
