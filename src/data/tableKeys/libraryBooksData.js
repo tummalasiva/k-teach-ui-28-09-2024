@@ -15,7 +15,7 @@ export const libraryBookTableKeys = [
   },
   {
     name: "Book Cover",
-    key: "backCover",
+    key: "bookCover",
     type: "image",
   },
   {

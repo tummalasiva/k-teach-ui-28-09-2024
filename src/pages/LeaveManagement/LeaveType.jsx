@@ -1,7 +1,6 @@
 /** @format */
 
 import React, { useContext, useEffect, useState } from "react";
-import { useFormik } from "formik";
 import {
   Box,
   Button,
@@ -29,17 +28,12 @@ import { leaveTypeTableKeys } from "../../data/tableKeys/leaveTypeData";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import AddForm from "../../forms/AddForm";
-import FormModal from "../../forms/FormModal";
-import FormSelect from "../../forms/FormSelect";
-import FormInput from "../../forms/FormInput";
 import SettingContext from "../../context/SettingsContext";
 import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 
 // icons
 import { CloseRounded } from "@mui/icons-material";
-import CustomInput from "../../forms/CustomInput";
-import CustomSelect from "../../forms/CustomSelect";
 import { LoadingButton } from "@mui/lab";
 
 const ListContainer = styled(Box)(() => ({
@@ -72,7 +66,7 @@ const LeaveType_Option = [
   { label: "Employee", value: "Employee" },
 ];
 
-export default function LeaveType() {
+export default function LeaveType({}) {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [selectDepartments, setSelectDepartments] = useState([]);
@@ -104,6 +98,17 @@ export default function LeaveType() {
     autoEarnCount,
   } = state;
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.leaveType.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   console.log(multipleDepartments, "multipleDepartments");
 
   const getDepartments = async () => {
@@ -119,6 +124,7 @@ export default function LeaveType() {
 
   useEffect(() => {
     getDepartments();
+    getData();
   }, []);
 
   const AddLeaveType = () => {
@@ -154,8 +160,10 @@ export default function LeaveType() {
           PRIVATE_URLS.leaveType.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.leaveType.create, payload);
+        getData();
       }
       handleClose();
     } catch (error) {
@@ -192,6 +200,31 @@ export default function LeaveType() {
     setMultipleDepartments(newList);
   };
 
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setState({
+      name: data.name,
+      leaveTypeFor: data.leaveTypeFor,
+      departments: data.departments.map((d) => d._id),
+      autoEarned: data.autoEarned,
+      total: data.total,
+      isSpecial: data.isSpecial,
+      canResetCarryForward: data.canResetCarryForward,
+      carryForwardCount: data.carryForwardCount,
+      autoEarnCount: data.autoEarnCount,
+    });
+    setMultipleDepartments(data.departments.map((d) => d._id));
+    setOpen(true);
+  };
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.leaveType.delete + "/" + id);
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Leave Type" />
@@ -201,6 +234,8 @@ export default function LeaveType() {
         tableKeys={leaveTypeTableKeys}
         bodyDataModal="leave type"
         bodyData={data}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       {/* ====== Fab button component =======*/}
@@ -356,7 +391,7 @@ export default function LeaveType() {
                           display: "flex",
                           alignItems: "center",
                         }}
-                        // value={autoEarned}
+                        value={autoEarned}
                         onChange={handleChange}>
                         <FormLabel
                           id="demo-row-radio-buttons-group-label"

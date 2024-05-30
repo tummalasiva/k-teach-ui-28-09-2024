@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormModal from "../../forms/FormModal";
-import { post, put } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
@@ -52,12 +52,15 @@ const Leave_Options = [
 export default function EmployeeLeave() {
   const [value, setSelectValue] = useState(0);
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
+
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectImg, setSelectImg] = useState([]);
-  const [totalDays, settotalDays] = useState(0);
+  const [totalDays, setotalDays] = useState(0);
+  const [leaveTypes, setLeaveTypes] = useState([]);
+  const [leaveApplication, setLeaveApplication] = useState([]);
+  const [leaveEmployeeApplication, setLeaveEmployeeApplications] = useState([]);
 
   const [range, setRange] = useState([]);
   const [leaveType, setLeaveType] = useState([
@@ -74,30 +77,69 @@ export default function EmployeeLeave() {
     setDataToEdit(null);
   };
 
+  const getLeaveApplication = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.leaveApplication.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setLeaveApplication(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLeaveEmployeeApplications = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.leaveApplication.listEmployeeApplications,
+        {
+          params: { schoolId: selectedSetting._id },
+        }
+      );
+      setLeaveEmployeeApplications(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLeaveType = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.leaveType.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setLeaveTypes(
+        data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getLeaveType();
+    getLeaveApplication();
+    getLeaveEmployeeApplications();
+  }, []);
+
   const handleCreateOrUpdate = async (values) => {
     const formData = new FormData();
     formData.append("schoolId", selectedSetting._id);
-    formData.append("leaveType", values.leaveType);
+    formData.append("leaveTypeId", values.leaveType);
     formData.append("startDate", values.startDate);
     formData.append("endDate", values.endDate);
     formData.append("subject", values.subject);
-
+    formData.append("description", values.description);
+    formData.append("totalDays", totalDays);
     selectImg.forEach((file) => formData.append("file", file));
 
     try {
-      const payload = {
-        ...values,
-        schoolId: selectedSetting._id,
-      };
       setLoading(true);
-      if (dataToEdit) {
-        const { data } = await put(
-          PRIVATE_URLS.books.update + "/" + dataToEdit._id,
-          payload
-        );
-      } else {
-        const { data } = await post(PRIVATE_URLS.books.create, payload);
-      }
+
+      const { data } = await post(
+        PRIVATE_URLS.leaveApplication.create,
+        formData
+      );
+
       handleClose();
     } catch (error) {
       console.log(error);
@@ -107,11 +149,11 @@ export default function EmployeeLeave() {
 
   const entryFormik = useFormik({
     initialValues: {
-      leaveType: dataToEdit?.leaveType || "",
-      startDate: dataToEdit?.startDate || "",
-      endDate: dataToEdit?.endDate || "",
-      subject: dataToEdit?.subject || "",
-      description: dataToEdit?.description || "",
+      leaveType: "",
+      startDate: null,
+      endDate: null,
+      subject: "",
+      description: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -158,7 +200,7 @@ export default function EmployeeLeave() {
         }
       }
     }
-    settotalDays(number);
+    setotalDays(number);
   }, [range]);
 
   useEffect(() => {
@@ -181,6 +223,15 @@ export default function EmployeeLeave() {
     }
   }, [entryFormik.values.endDate, entryFormik.values.startDate]);
 
+  const handleApprove = async (data) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <PageHeader title="Employee Leave" />
@@ -212,14 +263,14 @@ export default function EmployeeLeave() {
 
         <CustomTable
           tableKeys={employeeLeaveTableKeys}
-          bodyData={data}
+          bodyData={leaveApplication}
           bodyDataModal="leave"
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
           tableKeys={employeeLeaveManageTableKeys}
-          bodyData={data}
+          bodyData={leaveEmployeeApplication}
           bodyDataModal="leave"
         />
       </TabPanel>
@@ -240,6 +291,7 @@ export default function EmployeeLeave() {
               name="leaveType"
               label="Leave Type"
               required={true}
+              options={leaveTypes}
             />
           </Grid>
 

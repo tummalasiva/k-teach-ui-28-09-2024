@@ -1,3 +1,5 @@
+/** @format */
+
 export const leaveTypeTableKeys = [
   {
     name: "Name",
@@ -5,12 +7,12 @@ export const leaveTypeTableKeys = [
   },
   {
     name: "Leave Category",
-    key: "leaveCategory",
+    key: "leaveTypeFor",
   },
-  {
-    name: "Department",
-    key: "department",
-  },
+  // {
+  //   name: "Department",
+  //   key: "departments",
+  // },
   {
     name: "Total",
     key: "total",

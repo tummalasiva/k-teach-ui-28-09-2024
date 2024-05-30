@@ -404,4 +404,14 @@ export const PRIVATE_URLS = {
     update: "/leaveType/update",
     delete: "/leaveType/delete",
   },
+  leaveApplication: {
+    list: "/leaveApplication/list",
+    create: "/leaveApplication/createApplicationForEmployee",
+    listEmployeeApplications: "/leaveApplication/listEmployeeApplications",
+    employeeLeaveCredits: "/leaveApplication/employeeLeaveCredits",
+    approveLeave: "/leaveApplication/approveLeave",
+    rejectLeave: "/leaveApplication/rejectLeave",
+    downloadExcel: "/leaveApplication/downloadExcel",
+    downloadPdf: "/leaveApplication/downloadPdf",
+  },
 };
