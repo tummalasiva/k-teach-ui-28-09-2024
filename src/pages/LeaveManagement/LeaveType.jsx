@@ -72,7 +72,7 @@ const LeaveType_Option = [
   { label: "Employee", value: "Employee" },
 ];
 
-export default function LeaveType() {
+export default function LeaveType({}) {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [selectDepartments, setSelectDepartments] = useState([]);
