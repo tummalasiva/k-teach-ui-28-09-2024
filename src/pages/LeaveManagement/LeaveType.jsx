@@ -61,11 +61,6 @@ const ListItemContainer = styled(Box)(() => ({
   minWidth: "150px",
 }));
 
-const LeaveType_Option = [
-  { label: "Student", value: "Student" },
-  { label: "Employee", value: "Employee" },
-];
-
 export default function LeaveType({}) {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
@@ -103,7 +98,12 @@ export default function LeaveType({}) {
       const { data } = await get(PRIVATE_URLS.leaveType.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setData(data.result);
+      setData(
+        data.result.map((s) => ({
+          ...s,
+          department: s.academicInfo.department,
+        }))
+      );
     } catch (error) {
       console.log(error);
     }

@@ -9,10 +9,11 @@ export const leaveTypeTableKeys = [
     name: "Leave Category",
     key: "leaveTypeFor",
   },
-  // {
-  //   name: "Department",
-  //   key: "departments",
-  // },
+  {
+    name: "Department",
+    key: "name",
+    path: "department",
+  },
   {
     name: "Total",
     key: "total",
