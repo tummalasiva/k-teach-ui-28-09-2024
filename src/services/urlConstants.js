@@ -398,4 +398,10 @@ export const PRIVATE_URLS = {
     update: "/periodical/update",
     delete: "/periodical/delete",
   },
+  leaveType: {
+    list: "/leaveType/list",
+    create: "/leaveType/create",
+    update: "/leaveType/update",
+    delete: "/leaveType/delete",
+  },
 };

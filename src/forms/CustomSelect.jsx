@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   FormControl,
   InputLabel,
@@ -31,6 +33,7 @@ function CustomSelect({
   disabled = false,
   required = false,
   multiple = false,
+  isSearch = true,
 }) {
   const [blurred, setBlurred] = useState(false);
 
@@ -64,8 +67,7 @@ function CustomSelect({
       variant="outlined"
       size="small"
       fullWidth
-      sx={{ top: "4px" }}
-    >
+      sx={{ top: "4px" }}>
       <InputLabel sx={{ color: labelColor }} shrink={true} id={label}>
         {label}
       </InputLabel>
@@ -80,30 +82,32 @@ function CustomSelect({
         onChange={onChange}
         onAnimationEnd={() => inputRef?.current?.focus()}
         MenuProps={{ autoFocus: false }}
-        onBlur={() => setBlurred(!blurred)}
-      >
-        <ListSubheader>
-          <TextField
-            onBlur={() => setBlurred(!blurred)}
-            size="small"
-            autoFocus
-            placeholder="Type to search..."
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key !== "Escape") {
-                e.stopPropagation();
-              }
-            }}
-          />
-        </ListSubheader>
+        onBlur={() => setBlurred(!blurred)}>
+        {isSearch && (
+          <ListSubheader>
+            <TextField
+              onBlur={() => setBlurred(!blurred)}
+              size="small"
+              autoFocus
+              placeholder="Type to search..."
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Escape") {
+                  e.stopPropagation();
+                }
+              }}
+            />
+          </ListSubheader>
+        )}
+
         {displayedOptions.map((s, i) => (
           <MenuItem key={i} value={s.value}>
             {s.label}

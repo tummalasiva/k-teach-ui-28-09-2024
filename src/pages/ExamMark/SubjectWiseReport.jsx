@@ -13,7 +13,7 @@ export default function SubjectWiseReport() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
-
+  const [exams, setExams] = useState([]);
   const [subject, setSubject] = useState([]);
 
   const getClass = async () => {
@@ -44,6 +44,19 @@ export default function SubjectWiseReport() {
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
       entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get exam list
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      // console.log(data, "exam");
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +93,7 @@ export default function SubjectWiseReport() {
   });
   useEffect(() => {
     getClass();
+    getExams();
   }, [selectedSetting]);
 
   useEffect(() => {
@@ -93,6 +107,7 @@ export default function SubjectWiseReport() {
       getSubject();
     }
   }, [entryFormik.values.class, entryFormik.values.section, selectedSetting]);
+
   return (
     <>
       <PageHeader title="Subject Wise Report" />
@@ -132,7 +147,7 @@ export default function SubjectWiseReport() {
               name="exam"
               formik={entryFormik}
               label="Select Exam"
-              // options={""}
+              options={exams}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>

@@ -16,7 +16,7 @@ import {
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import { useFormik } from "formik";
-import { Add } from "@mui/icons-material";
+import { Add, Search } from "@mui/icons-material";
 import { feeMapTableKeys } from "../../data/tableKeys/feeMapData";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
@@ -29,7 +29,7 @@ import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
 const showInfo = (data) => {
   let result = [];
-  console.log(data, "fsusg");
+  // console.log(data, "fsusg");
   for (let dep of data.dependencies) {
     if (dep === "academicYear") {
       result.push(
@@ -44,7 +44,7 @@ const showInfo = (data) => {
     } else if (dep === "roomType") {
       result.push(`[${data.roomType.name}]-Room_Type`);
     } else if (dep === "room") {
-      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalSeats} Beds]+[${data.room?.type?.name}]-Room`;
+      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalBeds} Beds]+[${data.room?.type?.name}]-Room`;
       result.push(newItem);
     } else if (dep == "route") {
       let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Route`;
@@ -139,16 +139,15 @@ export default function ReceiptBook() {
     }
   };
 
-  console.log(feeMaps, "feeMaps");
-
   // get fee map list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
-        params: { schoolId: selectedSetting._id },
+        params: {
+          schoolId: selectedSetting._id,
+          Search: { receiptTitle: selectReceipt },
+        },
       });
-      console.log(data.result, "fadata");
-      // setFeeMaps(data.result);
       setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
     } catch (error) {
       console.error(error);
@@ -171,9 +170,14 @@ export default function ReceiptBook() {
   };
 
   useEffect(() => {
+    if (selectReceipt) {
+      getFeeMaps();
+    }
+  }, [selectReceipt]);
+
+  useEffect(() => {
     getData();
     getReceipts();
-    getFeeMaps();
   }, [selectedSetting]);
 
   const handleTabChange = (e, newValue) => {
@@ -246,7 +250,7 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMap = (id) => {
-    console.log(id, "id usha");
+    // console.log(id, "id usha");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };
@@ -335,10 +339,11 @@ export default function ReceiptBook() {
         </Grid>
 
         <CustomTable
-          actions={["edit"]}
+          actions={["edit", "switch"]}
           bodyDataModal="Fee Map"
           bodyData={feeMaps}
           tableKeys={feeMapTableKeys}
+          CustomAction={CustomActionFee}
           onEditClick={handleFeeMapEdit}
         />
 
