@@ -101,9 +101,11 @@ export default function LeaveType({}) {
       setData(
         data.result.map((s) => ({
           ...s,
-          department: s.academicInfo.department,
+          departmentName: s?.departments.map((d) => d.name).join(", "),
         }))
       );
+
+      console.log(data.result, "bbbnvghfhfd");
     } catch (error) {
       console.log(error);
     }

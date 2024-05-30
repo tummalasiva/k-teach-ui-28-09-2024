@@ -11,8 +11,7 @@ export const leaveTypeTableKeys = [
   },
   {
     name: "Department",
-    key: "name",
-    path: "department",
+    key: "departmentName",
   },
   {
     name: "Total",
