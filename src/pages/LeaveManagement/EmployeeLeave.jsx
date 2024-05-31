@@ -10,11 +10,8 @@ import { employeeLeaveTableKeys } from "../../data/tableKeys/employeeLeaveListDa
 import {
   Box,
   Button,
-  FormControl,
   Grid,
-  MenuItem,
   Paper,
-  Select,
   Stack,
   Typography,
   styled,
@@ -31,6 +28,7 @@ import { useContext } from "react";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import CustomSelect from "../../forms/CustomSelect";
+import { LoadingButton } from "@mui/lab";
 
 const LeaveData = styled(Paper)(({ theme }) => ({
   height: "80px",
@@ -53,32 +51,42 @@ const Leave_Options = [
 
 const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
+  const [loadingApprove, setLoadingApprove] = useState(false);
   const { selectedSetting } = useContext(SettingContext);
-
-  console.log(data, "kkkkkkkkk6666666");
 
   const updateApproveStatus = async () => {
     try {
-      console.log(data._id, "llllllll");
       const payload = {
         schoolId: selectedSetting._id,
       };
+      setLoadingApprove(true);
       await put(
         PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id,
         payload
       );
       onUpdate();
+      setLoadingApprove(false);
     } catch (error) {
       console.log(error);
+      setLoadingApprove(false);
     }
   };
 
   const updateRejectStatus = async () => {
     try {
-      await put(`${PRIVATE_URLS.leaveApplication.rejectLeave}/${data._id}`);
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      await put(
+        PRIVATE_URLS.leaveApplication.rejectLeave + "/" + data._id,
+        payload
+      );
       onUpdate();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -86,22 +94,24 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
     <>
       <Stack direction="row" spacing={1}>
         {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
-          <Button
+          <LoadingButton
+            loading={loadingApprove}
             size="small"
             onClick={updateApproveStatus}
             color="success"
             variant="contained">
             Approve
-          </Button>
+          </LoadingButton>
         ) : null}
         {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
-          <Button
+          <LoadingButton
+            loading={loading}
             size="small"
             onClick={updateRejectStatus}
             color="error"
             variant="contained">
             Reject
-          </Button>
+          </LoadingButton>
         ) : null}
       </Stack>
     </>
@@ -109,9 +119,8 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
 };
 
 export default function EmployeeLeave() {
-  const [value, setSelectValue] = useState(0);
   const { selectedSetting } = useContext(SettingContext);
-
+  const [value, setSelectValue] = useState(0);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -120,16 +129,8 @@ export default function EmployeeLeave() {
   const [leaveTypes, setLeaveTypes] = useState([]);
   const [leaveApplication, setLeaveApplication] = useState([]);
   const [leaveEmployeeApplication, setLeaveEmployeeApplications] = useState([]);
-
-  console.log(totalDays, "0000");
   const [range, setRange] = useState([]);
-
   const [eployeeLeaveCredits, setEployeeLeaveCredits] = useState([]);
-
-  const [leaveType, setLeaveType] = useState([
-    { name: "sick", total: "89" },
-    { name: "common", total: "100" },
-  ]);
 
   const AddLeave = () => {
     setOpen(true);
@@ -162,7 +163,6 @@ export default function EmployeeLeave() {
         }
       );
       setEployeeLeaveCredits(data.result);
-      console.log(data.result, "qqqqqqqqqqqqqqqq");
     } catch (error) {
       console.log(error);
     }
@@ -179,8 +179,6 @@ export default function EmployeeLeave() {
       setLeaveEmployeeApplications(
         data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
       );
-
-      console.log(data.result, "1213455678i");
     } catch (error) {
       console.log(error);
     }
@@ -204,7 +202,7 @@ export default function EmployeeLeave() {
     getLeaveApplication();
     geteEployeeLeaveCredits();
     getLeaveEmployeeApplications();
-  }, []);
+  }, [selectedSetting]);
 
   const handleCreateOrUpdate = async (values) => {
     const formData = new FormData();
@@ -308,15 +306,6 @@ export default function EmployeeLeave() {
     }
   }, [entryFormik.values.endDate, entryFormik.values.startDate]);
 
-  const handleApprove = async (data) => {
-    try {
-      const { data } = await put(
-        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
       <PageHeader title="Employee Leave" />
