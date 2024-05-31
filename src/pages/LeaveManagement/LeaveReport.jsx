@@ -2,12 +2,11 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import FormSelect from "../../forms/FormSelect";
-import { Button, Grid, Paper } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import { useFormik } from "formik";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import PageHeader from "../../components/PageHeader";
-import dayjs from "dayjs";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
@@ -183,6 +182,53 @@ export default function LeaveReport() {
   };
 
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
+  const handleGetPrintPdf = async (values) => {
+    try {
+      setLoadingPdf(true);
+      const getPdf = await get(PRIVATE_URLS.leaveApplication.downloadPdf, {
+        params: {
+          schoolId: selectedSetting._id,
+          fromDate: values.fromDate,
+          toDate: values.toDate,
+          userType: values.userType,
+          academicYearId: values.academicYear,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile("application/pdf", getPdf.data, "leave_details.pdf");
+
+      setLoadingPdf(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingPdf(false);
+    }
+  };
+
+  const handleGetDownloadExcel = async (values) => {
+    try {
+      setLoadingExcel(true);
+      const getExcel = await get(PRIVATE_URLS.leaveApplication.downloadExcel, {
+        params: {
+          schoolId: selectedSetting._id,
+          userType: values.userType,
+          academicYearId: values.academicYear,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "leave_details.xlsx"
+      );
+      setLoadingExcel(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingExcel(false);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -251,53 +297,6 @@ export default function LeaveReport() {
       getEmployees();
     }
   }, [entryFormik.values.role, formik.values.role]);
-
-  const handleGetPrintPdf = async (values) => {
-    try {
-      setLoadingPdf(true);
-      const getPdf = await get(PRIVATE_URLS.leaveApplication.downloadPdf, {
-        params: {
-          schoolId: selectedSetting._id,
-          fromDate: values.fromDate,
-          toDate: values.toDate,
-          userType: values.userType,
-          academicYearId: values.academicYear,
-        },
-        responseType: "blob",
-      });
-
-      downloadFile("application/pdf", getPdf.data, "leave_details.pdf");
-
-      setLoadingPdf(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingPdf(false);
-    }
-  };
-
-  const handleGetDownloadExcel = async (values) => {
-    try {
-      setLoadingExcel(true);
-      const getExcel = await get(PRIVATE_URLS.leaveApplication.downloadExcel, {
-        params: {
-          schoolId: selectedSetting._id,
-          userType: values.userType,
-          academicYearId: values.academicYear,
-        },
-        responseType: "blob",
-      });
-
-      downloadFile(
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        getExcel.data,
-        "leave_details.xlsx"
-      );
-      setLoadingExcel(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingExcel(false);
-    }
-  };
 
   return (
     <>
