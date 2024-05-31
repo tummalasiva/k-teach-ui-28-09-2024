@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
@@ -16,6 +18,9 @@ import {
   Legend,
 } from "recharts";
 import { ResponsiveContainer } from "recharts";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 const GroupBYData_Options = [
   {
@@ -61,6 +66,27 @@ const DataContainer = styled(Box)(() => ({
 export default function StudentReport() {
   const [value, setSelectValue] = useState(0);
   const [data, setData] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
+
+  const [academicYear, setAcademicYear] = useState([]);
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+      formik.setFieldValue("academicYear", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -75,6 +101,9 @@ export default function StudentReport() {
     },
     onSubmit: console.log("nnnn"),
   });
+  useEffect(() => {
+    getAcademicYear();
+  }, [selectedSetting]);
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
   return (
     <>
@@ -93,7 +122,7 @@ export default function StudentReport() {
                 name="academicYear"
                 formik={entryFormik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYear}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -113,8 +142,7 @@ export default function StudentReport() {
               alignSelf="center"
               display="flex"
               gap={1}
-              item
-            >
+              item>
               <Button size="small" variant="contained">
                 Find
               </Button>
@@ -134,7 +162,7 @@ export default function StudentReport() {
                 name="academicYear"
                 formik={formik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYear}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -154,8 +182,7 @@ export default function StudentReport() {
               alignSelf="center"
               display="flex"
               gap={1}
-              item
-            >
+              item>
               <Button size="small" variant="contained">
                 Find
               </Button>

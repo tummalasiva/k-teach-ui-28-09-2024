@@ -584,7 +584,7 @@ export default function NavDrawer() {
         <Divider sx={{ marginBottom: "20px" }} />
         <DrawerFooter>
           <List sx={{ width: "100%" }}>
-            <ListItem disablePadding>
+            {/* <ListItem disablePadding>
               <Link
                 to={"/settings"}
                 style={{ textDecoration: "none", display: "flex", flex: 1 }}>
@@ -595,7 +595,7 @@ export default function NavDrawer() {
                   <ListItemText primary={"Settings"} />
                 </ListItemButton>
               </Link>
-            </ListItem>
+            </ListItem> */}
             <ListItem disablePadding>
               <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>

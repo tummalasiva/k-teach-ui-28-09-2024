@@ -9,11 +9,13 @@ import { employeeLeaveManageTableKeys } from "../../data/tableKeys/employeeLeave
 import { employeeLeaveTableKeys } from "../../data/tableKeys/employeeLeaveListData";
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   MenuItem,
   Paper,
   Select,
+  Stack,
   Typography,
   styled,
 } from "@mui/material";
@@ -49,6 +51,63 @@ const Leave_Options = [
   { label: "Second half", value: "secondHalf" },
 ];
 
+const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
+  const [loading, setLoading] = useState(false);
+  const { selectedSetting } = useContext(SettingContext);
+
+  console.log(data, "kkkkkkkkk6666666");
+
+  const updateApproveStatus = async () => {
+    try {
+      console.log(data._id, "llllllll");
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      await put(
+        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id,
+        payload
+      );
+      onUpdate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateRejectStatus = async () => {
+    try {
+      await put(`${PRIVATE_URLS.leaveApplication.rejectLeave}/${data._id}`);
+      onUpdate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      <Stack direction="row" spacing={1}>
+        {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
+          <Button
+            size="small"
+            onClick={updateApproveStatus}
+            color="success"
+            variant="contained">
+            Approve
+          </Button>
+        ) : null}
+        {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
+          <Button
+            size="small"
+            onClick={updateRejectStatus}
+            color="error"
+            variant="contained">
+            Reject
+          </Button>
+        ) : null}
+      </Stack>
+    </>
+  );
+};
+
 export default function EmployeeLeave() {
   const [value, setSelectValue] = useState(0);
   const { selectedSetting } = useContext(SettingContext);
@@ -62,7 +121,11 @@ export default function EmployeeLeave() {
   const [leaveApplication, setLeaveApplication] = useState([]);
   const [leaveEmployeeApplication, setLeaveEmployeeApplications] = useState([]);
 
+  console.log(totalDays, "0000");
   const [range, setRange] = useState([]);
+
+  const [eployeeLeaveCredits, setEployeeLeaveCredits] = useState([]);
+
   const [leaveType, setLeaveType] = useState([
     { name: "sick", total: "89" },
     { name: "common", total: "100" },
@@ -82,7 +145,24 @@ export default function EmployeeLeave() {
       const { data } = await get(PRIVATE_URLS.leaveApplication.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setLeaveApplication(data.result);
+      setLeaveApplication(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const geteEployeeLeaveCredits = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.leaveApplication.employeeLeaveCredits,
+        {
+          params: { schoolId: selectedSetting._id },
+        }
+      );
+      setEployeeLeaveCredits(data.result);
+      console.log(data.result, "qqqqqqqqqqqqqqqq");
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +176,11 @@ export default function EmployeeLeave() {
           params: { schoolId: selectedSetting._id },
         }
       );
-      setLeaveEmployeeApplications(data.result);
+      setLeaveEmployeeApplications(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
+
+      console.log(data.result, "1213455678i");
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +202,7 @@ export default function EmployeeLeave() {
   useEffect(() => {
     getLeaveType();
     getLeaveApplication();
+    geteEployeeLeaveCredits();
     getLeaveEmployeeApplications();
   }, []);
 
@@ -139,7 +224,7 @@ export default function EmployeeLeave() {
         PRIVATE_URLS.leaveApplication.create,
         formData
       );
-
+      getLeaveEmployeeApplications();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -249,29 +334,36 @@ export default function EmployeeLeave() {
               </Typography>
             </LeaveData>
           </Grid>
-          {leaveType.map((data) => (
+          {eployeeLeaveCredits.map((data) => (
             <Grid item xs={4} md={4} lg={2}>
               <LeaveData>
                 <Typography fontSize="15px">
                   {data.name}:{data.total}
                 </Typography>
-                <Typography fontSize="15px">Total taken :0</Typography>
+                <Typography fontSize="15px">
+                  {" "}
+                  Total taken :{data.totalTaken ? data.totalTaken : 0}
+                </Typography>
               </LeaveData>
             </Grid>
           ))}
         </DataContainer>
 
         <CustomTable
+          actions={[]}
           tableKeys={employeeLeaveTableKeys}
-          bodyData={leaveApplication}
+          bodyData={leaveEmployeeApplication}
           bodyDataModal="leave"
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
+          actions={["custom"]}
           tableKeys={employeeLeaveManageTableKeys}
-          bodyData={leaveEmployeeApplication}
+          bodyData={leaveApplication}
           bodyDataModal="leave"
+          CustomAction={CustomAction}
+          onUpdate={getLeaveApplication}
         />
       </TabPanel>
 
