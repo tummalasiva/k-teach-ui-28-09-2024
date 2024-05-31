@@ -12,6 +12,8 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { downloadFile } from "../../utils";
+import { LoadingButton } from "@mui/lab";
 
 const Type_Options = [
   {
@@ -25,17 +27,17 @@ const Type_Options = [
 ];
 
 export default function LeaveReport() {
+  const { selectedSetting } = useContext(SettingContext);
   const [value, setSelectValue] = useState(0);
   const [academicYear, setAcademicYear] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
-
   const [roles, setRoles] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
-
   const [employees, setEmployee] = useState([]);
-  const { selectedSetting } = useContext(SettingContext);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  const [loadingExcel, setLoadingExcel] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -191,14 +193,14 @@ export default function LeaveReport() {
       role: "",
       employee: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetDownloadExcel,
   });
 
   const formik = useFormik({
     initialValues: {
       academicYear: "",
-      fromDate: dayjs(new Date()),
-      toDate: dayjs(new Date()),
+      fromDate: null,
+      toDate: null,
       type: "",
       userType: "",
       class: "",
@@ -207,7 +209,7 @@ export default function LeaveReport() {
       role: "",
       employee: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetPrintPdf,
   });
 
   useEffect(() => {
@@ -249,6 +251,54 @@ export default function LeaveReport() {
       getEmployees();
     }
   }, [entryFormik.values.role, formik.values.role]);
+
+  const handleGetPrintPdf = async (values) => {
+    try {
+      setLoadingPdf(true);
+      const getPdf = await get(PRIVATE_URLS.leaveApplication.downloadPdf, {
+        params: {
+          schoolId: selectedSetting._id,
+          fromDate: values.fromDate,
+          toDate: values.toDate,
+          userType: values.userType,
+          academicYearId: values.academicYear,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile("application/pdf", getPdf.data, "leave_details.pdf");
+
+      setLoadingPdf(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingPdf(false);
+    }
+  };
+
+  const handleGetDownloadExcel = async (values) => {
+    try {
+      setLoadingExcel(true);
+      const getExcel = await get(PRIVATE_URLS.leaveApplication.downloadExcel, {
+        params: {
+          schoolId: selectedSetting._id,
+          userType: values.userType,
+          academicYearId: values.academicYear,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "leave_details.xlsx"
+      );
+      setLoadingExcel(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingExcel(false);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Leave Report" />
@@ -333,9 +383,13 @@ export default function LeaveReport() {
             )}
 
             <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-              <Button size="small" variant="contained">
+              <LoadingButton
+                loading={loadingPdf}
+                onClick={handleGetDownloadExcel}
+                size="small"
+                variant="contained">
                 Download
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
@@ -435,9 +489,13 @@ export default function LeaveReport() {
             )}
 
             <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-              <Button size="small" variant="contained">
+              <LoadingButton
+                loading={loadingExcel}
+                onClick={handleGetPrintPdf}
+                size="small"
+                variant="contained">
                 Print
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
