@@ -1,26 +1,30 @@
+/** @format */
+
 export const employeeLeaveTableKeys = [
   {
     name: "Name",
-    key: "name",
+    key: "applierRoleName",
   },
   {
     name: "Leave Type",
-    key: "leaveType",
+    key: "leaveTypeName",
   },
   {
     name: "Number Of Days",
-    key: "numberOfDays",
+    key: "totalDays",
   },
   {
     name: "Start Date",
     key: "startDate",
+    isDate: true,
   },
   {
     name: "End Date",
     key: "endDate",
+    isDate: true,
   },
   {
     name: "Status",
-    key: "status",
+    key: "leaveStatus",
   },
 ];

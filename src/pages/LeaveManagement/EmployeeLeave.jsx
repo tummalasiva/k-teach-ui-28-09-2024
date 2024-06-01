@@ -9,17 +9,16 @@ import { employeeLeaveManageTableKeys } from "../../data/tableKeys/employeeLeave
 import { employeeLeaveTableKeys } from "../../data/tableKeys/employeeLeaveListData";
 import {
   Box,
-  FormControl,
+  Button,
   Grid,
-  MenuItem,
   Paper,
-  Select,
+  Stack,
   Typography,
   styled,
 } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormModal from "../../forms/FormModal";
-import { post, put } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
@@ -29,6 +28,7 @@ import { useContext } from "react";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import CustomSelect from "../../forms/CustomSelect";
+import { LoadingButton } from "@mui/lab";
 
 const LeaveData = styled(Paper)(({ theme }) => ({
   height: "80px",
@@ -49,21 +49,88 @@ const Leave_Options = [
   { label: "Second half", value: "secondHalf" },
 ];
 
-export default function EmployeeLeave() {
-  const [value, setSelectValue] = useState(0);
+const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
+  const [loading, setLoading] = useState(false);
+  const [loadingApprove, setLoadingApprove] = useState(false);
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
+
+  const updateApproveStatus = async () => {
+    try {
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      setLoadingApprove(true);
+      await put(
+        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id,
+        payload
+      );
+      onUpdate();
+      setLoadingApprove(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingApprove(false);
+    }
+  };
+
+  const updateRejectStatus = async () => {
+    try {
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      await put(
+        PRIVATE_URLS.leaveApplication.rejectLeave + "/" + data._id,
+        payload
+      );
+      onUpdate();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Stack direction="row" spacing={1}>
+        {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
+          <LoadingButton
+            loading={loadingApprove}
+            size="small"
+            onClick={updateApproveStatus}
+            color="success"
+            variant="contained">
+            Approve
+          </LoadingButton>
+        ) : null}
+        {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
+          <LoadingButton
+            loading={loading}
+            size="small"
+            onClick={updateRejectStatus}
+            color="error"
+            variant="contained">
+            Reject
+          </LoadingButton>
+        ) : null}
+      </Stack>
+    </>
+  );
+};
+
+export default function EmployeeLeave() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [value, setSelectValue] = useState(0);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectImg, setSelectImg] = useState([]);
-  const [totalDays, settotalDays] = useState(0);
-
+  const [totalDays, setotalDays] = useState(0);
+  const [leaveTypes, setLeaveTypes] = useState([]);
+  const [leaveApplication, setLeaveApplication] = useState([]);
+  const [leaveEmployeeApplication, setLeaveEmployeeApplications] = useState([]);
   const [range, setRange] = useState([]);
-  const [leaveType, setLeaveType] = useState([
-    { name: "sick", total: "89" },
-    { name: "common", total: "100" },
-  ]);
+  const [eployeeLeaveCredits, setEployeeLeaveCredits] = useState([]);
 
   const AddLeave = () => {
     setOpen(true);
@@ -74,30 +141,88 @@ export default function EmployeeLeave() {
     setDataToEdit(null);
   };
 
+  const getLeaveApplication = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.leaveApplication.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setLeaveApplication(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const geteEployeeLeaveCredits = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.leaveApplication.employeeLeaveCredits,
+        {
+          params: { schoolId: selectedSetting._id },
+        }
+      );
+      setEployeeLeaveCredits(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLeaveEmployeeApplications = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.leaveApplication.listEmployeeApplications,
+        {
+          params: { schoolId: selectedSetting._id },
+        }
+      );
+      setLeaveEmployeeApplications(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLeaveType = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.leaveType.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setLeaveTypes(
+        data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getLeaveType();
+    getLeaveApplication();
+    geteEployeeLeaveCredits();
+    getLeaveEmployeeApplications();
+  }, [selectedSetting]);
+
   const handleCreateOrUpdate = async (values) => {
     const formData = new FormData();
     formData.append("schoolId", selectedSetting._id);
-    formData.append("leaveType", values.leaveType);
+    formData.append("leaveTypeId", values.leaveType);
     formData.append("startDate", values.startDate);
     formData.append("endDate", values.endDate);
     formData.append("subject", values.subject);
-
+    formData.append("description", values.description);
+    formData.append("totalDays", totalDays);
     selectImg.forEach((file) => formData.append("file", file));
 
     try {
-      const payload = {
-        ...values,
-        schoolId: selectedSetting._id,
-      };
       setLoading(true);
-      if (dataToEdit) {
-        const { data } = await put(
-          PRIVATE_URLS.books.update + "/" + dataToEdit._id,
-          payload
-        );
-      } else {
-        const { data } = await post(PRIVATE_URLS.books.create, payload);
-      }
+
+      const { data } = await post(
+        PRIVATE_URLS.leaveApplication.create,
+        formData
+      );
+      getLeaveEmployeeApplications();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -107,11 +232,11 @@ export default function EmployeeLeave() {
 
   const entryFormik = useFormik({
     initialValues: {
-      leaveType: dataToEdit?.leaveType || "",
-      startDate: dataToEdit?.startDate || "",
-      endDate: dataToEdit?.endDate || "",
-      subject: dataToEdit?.subject || "",
-      description: dataToEdit?.description || "",
+      leaveType: "",
+      startDate: null,
+      endDate: null,
+      subject: "",
+      description: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -158,7 +283,7 @@ export default function EmployeeLeave() {
         }
       }
     }
-    settotalDays(number);
+    setotalDays(number);
   }, [range]);
 
   useEffect(() => {
@@ -198,29 +323,36 @@ export default function EmployeeLeave() {
               </Typography>
             </LeaveData>
           </Grid>
-          {leaveType.map((data) => (
+          {eployeeLeaveCredits.map((data) => (
             <Grid item xs={4} md={4} lg={2}>
               <LeaveData>
                 <Typography fontSize="15px">
                   {data.name}:{data.total}
                 </Typography>
-                <Typography fontSize="15px">Total taken :0</Typography>
+                <Typography fontSize="15px">
+                  {" "}
+                  Total taken :{data.totalTaken ? data.totalTaken : 0}
+                </Typography>
               </LeaveData>
             </Grid>
           ))}
         </DataContainer>
 
         <CustomTable
+          actions={[]}
           tableKeys={employeeLeaveTableKeys}
-          bodyData={data}
+          bodyData={leaveEmployeeApplication}
           bodyDataModal="leave"
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
+          actions={["custom"]}
           tableKeys={employeeLeaveManageTableKeys}
-          bodyData={data}
+          bodyData={leaveApplication}
           bodyDataModal="leave"
+          CustomAction={CustomAction}
+          onUpdate={getLeaveApplication}
         />
       </TabPanel>
 
@@ -240,6 +372,7 @@ export default function EmployeeLeave() {
               name="leaveType"
               label="Leave Type"
               required={true}
+              options={leaveTypes}
             />
           </Grid>
 

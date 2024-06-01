@@ -20,6 +20,7 @@ export const periodicalTableKeys = [
   {
     name: "Book Cover",
     key: "bookCover",
+    type: "image",
   },
   {
     name: "Price",
