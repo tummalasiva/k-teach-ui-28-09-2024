@@ -9,6 +9,7 @@ export default function CustomInput({
   required = false,
   onChange = () => {},
   value,
+  style = {},
   ...rest
 }) {
   const theme = useTheme();
@@ -27,6 +28,7 @@ export default function CustomInput({
         mt: 2,
         borderWidth: 1,
         borderRadius: theme.shape.borderRadius,
+        ...style,
       }}
       variant="outlined"
       InputLabelProps={{

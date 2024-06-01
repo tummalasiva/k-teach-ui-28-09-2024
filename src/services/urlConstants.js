@@ -414,4 +414,9 @@ export const PRIVATE_URLS = {
     downloadExcel: "/leaveApplication/downloadExcel",
     downloadPdf: "/leaveApplication/downloadPdf",
   },
+  studentMarks: {
+    listStudentMarks: "/studentMark/listStudentMarks",
+    updateStudentsMarks: "/studentMark/updateStudentsMarks",
+    getbulkUpdateStudentMarks: "/studentMark/getbulkUpdateStudentMarks",
+  },
 };
