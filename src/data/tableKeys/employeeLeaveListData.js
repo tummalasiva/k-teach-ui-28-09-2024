@@ -1,3 +1,5 @@
+/** @format */
+
 export const employeeLeaveTableKeys = [
   {
     name: "Name",
@@ -14,10 +16,12 @@ export const employeeLeaveTableKeys = [
   {
     name: "Start Date",
     key: "startDate",
+    isDate: true,
   },
   {
     name: "End Date",
     key: "endDate",
+    isDate: true,
   },
   {
     name: "Status",
