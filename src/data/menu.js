@@ -27,6 +27,7 @@ import {
   Person,
   CurrencyRupee,
   BarChart,
+  InstallMobileRounded,
 } from "@mui/icons-material";
 
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
@@ -460,6 +461,48 @@ const SIDE_MENU_DATA = [
     renderName: ["assgnment"],
     subMenus: [],
     icon: <AssignmentRoundedIcon color="primary" fontSize="small" />,
+  },
+
+  {
+    name: "Communication",
+    path: "",
+    renderName: ["compose", "report", "credentials"],
+    icon: <InstallMobileRounded color="primary" fontSize="small" />,
+    subMenus: [
+      {
+        name: "Compose",
+        renderName: "compose",
+        path: "/sch/communication_compose",
+        icon: (
+          <SubdirectoryArrowRightOutlinedIcon
+            color="primary"
+            fontSize="small"
+          />
+        ),
+      },
+      {
+        name: "Report",
+        renderName: "report",
+        path: "/sch/communication_report",
+        icon: (
+          <SubdirectoryArrowRightOutlinedIcon
+            color="primary"
+            fontSize="small"
+          />
+        ),
+      },
+      {
+        name: "Credentials",
+        renderName: "credentials",
+        path: "/sch/communication_credentials",
+        icon: (
+          <SubdirectoryArrowRightOutlinedIcon
+            color="primary"
+            fontSize="small"
+          />
+        ),
+      },
+    ],
   },
 
   {

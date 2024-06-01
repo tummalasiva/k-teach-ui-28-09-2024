@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -13,8 +15,12 @@ import {
 } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
 
 export default function EmployeeYearlyAttendance() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([
     {
       name: "abc",
@@ -23,6 +29,49 @@ export default function EmployeeYearlyAttendance() {
       absentDays: "5",
     },
   ]);
+
+  const [academicYear, setAcademicYear] = useState([]);
+  const [employees, setEmployee] = useState([]);
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getEmployees = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      setEmployee(
+        data.result.map((emp) => ({
+          ...emp,
+          label: emp.basicInfo.name,
+          value: emp._id,
+        }))
+      );
+
+      console.log(data.result, " qAWSFGHJNM");
+      entryFormik.setFieldValue("employee", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -30,6 +79,11 @@ export default function EmployeeYearlyAttendance() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getAcademicYear();
+    getEmployees();
+  }, [selectedSetting._id]);
 
   const numbers = [];
   for (let i = 1; i <= 31; i++) {
@@ -50,6 +104,7 @@ export default function EmployeeYearlyAttendance() {
               name="academicYear"
               formik={entryFormik}
               label="Select Academic Year"
+              options={academicYear}
             />
           </Grid>
 
@@ -59,6 +114,7 @@ export default function EmployeeYearlyAttendance() {
               name="employee"
               formik={entryFormik}
               label="Select Employee"
+              options={employees}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item alignSelf="center">
@@ -75,8 +131,7 @@ export default function EmployeeYearlyAttendance() {
               theme.palette.mode === "dark"
                 ? theme.palette.primary.dark
                 : theme.palette.primary.light,
-          }}
-        >
+          }}>
           <TableRow>
             <TableCell align="center">Student Name</TableCell>
 

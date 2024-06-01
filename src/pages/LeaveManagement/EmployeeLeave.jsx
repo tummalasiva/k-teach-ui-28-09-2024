@@ -9,11 +9,10 @@ import { employeeLeaveManageTableKeys } from "../../data/tableKeys/employeeLeave
 import { employeeLeaveTableKeys } from "../../data/tableKeys/employeeLeaveListData";
 import {
   Box,
-  FormControl,
+  Button,
   Grid,
-  MenuItem,
   Paper,
-  Select,
+  Stack,
   Typography,
   styled,
 } from "@mui/material";
@@ -29,6 +28,7 @@ import { useContext } from "react";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import CustomSelect from "../../forms/CustomSelect";
+import { LoadingButton } from "@mui/lab";
 
 const LeaveData = styled(Paper)(({ theme }) => ({
   height: "80px",
@@ -49,10 +49,78 @@ const Leave_Options = [
   { label: "Second half", value: "secondHalf" },
 ];
 
-export default function EmployeeLeave() {
-  const [value, setSelectValue] = useState(0);
+const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
+  const [loading, setLoading] = useState(false);
+  const [loadingApprove, setLoadingApprove] = useState(false);
   const { selectedSetting } = useContext(SettingContext);
 
+  const updateApproveStatus = async () => {
+    try {
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      setLoadingApprove(true);
+      await put(
+        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id,
+        payload
+      );
+      onUpdate();
+      setLoadingApprove(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingApprove(false);
+    }
+  };
+
+  const updateRejectStatus = async () => {
+    try {
+      const payload = {
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+      await put(
+        PRIVATE_URLS.leaveApplication.rejectLeave + "/" + data._id,
+        payload
+      );
+      onUpdate();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Stack direction="row" spacing={1}>
+        {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
+          <LoadingButton
+            loading={loadingApprove}
+            size="small"
+            onClick={updateApproveStatus}
+            color="success"
+            variant="contained">
+            Approve
+          </LoadingButton>
+        ) : null}
+        {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
+          <LoadingButton
+            loading={loading}
+            size="small"
+            onClick={updateRejectStatus}
+            color="error"
+            variant="contained">
+            Reject
+          </LoadingButton>
+        ) : null}
+      </Stack>
+    </>
+  );
+};
+
+export default function EmployeeLeave() {
+  const { selectedSetting } = useContext(SettingContext);
+  const [value, setSelectValue] = useState(0);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -61,12 +129,8 @@ export default function EmployeeLeave() {
   const [leaveTypes, setLeaveTypes] = useState([]);
   const [leaveApplication, setLeaveApplication] = useState([]);
   const [leaveEmployeeApplication, setLeaveEmployeeApplications] = useState([]);
-
   const [range, setRange] = useState([]);
-  const [leaveType, setLeaveType] = useState([
-    { name: "sick", total: "89" },
-    { name: "common", total: "100" },
-  ]);
+  const [eployeeLeaveCredits, setEployeeLeaveCredits] = useState([]);
 
   const AddLeave = () => {
     setOpen(true);
@@ -82,7 +146,23 @@ export default function EmployeeLeave() {
       const { data } = await get(PRIVATE_URLS.leaveApplication.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setLeaveApplication(data.result);
+      setLeaveApplication(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const geteEployeeLeaveCredits = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.leaveApplication.employeeLeaveCredits,
+        {
+          params: { schoolId: selectedSetting._id },
+        }
+      );
+      setEployeeLeaveCredits(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +176,9 @@ export default function EmployeeLeave() {
           params: { schoolId: selectedSetting._id },
         }
       );
-      setLeaveEmployeeApplications(data.result);
+      setLeaveEmployeeApplications(
+        data.result.map((s) => ({ ...s, leaveTypeName: s.leaveType.name }))
+      );
     } catch (error) {
       console.log(error);
     }
@@ -118,8 +200,9 @@ export default function EmployeeLeave() {
   useEffect(() => {
     getLeaveType();
     getLeaveApplication();
+    geteEployeeLeaveCredits();
     getLeaveEmployeeApplications();
-  }, []);
+  }, [selectedSetting]);
 
   const handleCreateOrUpdate = async (values) => {
     const formData = new FormData();
@@ -139,7 +222,7 @@ export default function EmployeeLeave() {
         PRIVATE_URLS.leaveApplication.create,
         formData
       );
-
+      getLeaveEmployeeApplications();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -223,15 +306,6 @@ export default function EmployeeLeave() {
     }
   }, [entryFormik.values.endDate, entryFormik.values.startDate]);
 
-  const handleApprove = async (data) => {
-    try {
-      const { data } = await put(
-        PRIVATE_URLS.leaveApplication.approveLeave + "/" + data._id
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
       <PageHeader title="Employee Leave" />
@@ -249,29 +323,36 @@ export default function EmployeeLeave() {
               </Typography>
             </LeaveData>
           </Grid>
-          {leaveType.map((data) => (
+          {eployeeLeaveCredits.map((data) => (
             <Grid item xs={4} md={4} lg={2}>
               <LeaveData>
                 <Typography fontSize="15px">
                   {data.name}:{data.total}
                 </Typography>
-                <Typography fontSize="15px">Total taken :0</Typography>
+                <Typography fontSize="15px">
+                  {" "}
+                  Total taken :{data.totalTaken ? data.totalTaken : 0}
+                </Typography>
               </LeaveData>
             </Grid>
           ))}
         </DataContainer>
 
         <CustomTable
+          actions={[]}
           tableKeys={employeeLeaveTableKeys}
-          bodyData={leaveApplication}
+          bodyData={leaveEmployeeApplication}
           bodyDataModal="leave"
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
+          actions={["custom"]}
           tableKeys={employeeLeaveManageTableKeys}
-          bodyData={leaveEmployeeApplication}
+          bodyData={leaveApplication}
           bodyDataModal="leave"
+          CustomAction={CustomAction}
+          onUpdate={getLeaveApplication}
         />
       </TabPanel>
 
