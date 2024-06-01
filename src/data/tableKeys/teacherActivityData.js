@@ -1,10 +1,13 @@
+/** @format */
+
 export const teacherActivityTableKeys = [
   {
     name: "Date",
-    key: "date",
+    key: "createdAt",
+    isDate: true,
   },
   {
-    name: "topic",
+    name: "Topic",
     key: "topic",
   },
 ];

@@ -1,14 +1,24 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import {
+  Autocomplete,
   Box,
+  Button,
   Card,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
   Grid,
+  InputLabel,
   LinearProgress,
   linearProgressClasses,
+  ListItemText,
+  MenuItem,
+  Select,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
@@ -16,6 +26,23 @@ import FormSelect from "../../forms/FormSelect";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import FileSelect from "../../forms/FileSelect";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+      color: "black",
+    },
+  },
+};
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 25,
@@ -58,6 +85,9 @@ export default function Compose() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [selectRoles, setSelectRoles] = useState([]);
+  const [employees, setEmployee] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
       receiverType: "",
@@ -70,6 +100,15 @@ export default function Compose() {
     // onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+
+  const handleSelectRoleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectRoles(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const [selectFile, setSelectFile] = useState([]);
 
   //get class
   const getClasses = async () => {
@@ -134,6 +173,90 @@ export default function Compose() {
     }
   };
 
+  const getRoles = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list);
+
+      setRoles(
+        data.result.map((r) => ({
+          ...r,
+          label: r.name,
+          value: r._id,
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getEmployees = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            role: entryFormik.values.role,
+          },
+        },
+      });
+
+      setEmployee(
+        data.result.map((emp) => ({
+          ...emp,
+          label: emp.basicInfo.name,
+          value: emp._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSections();
+    }
+  }, [entryFormik.values.class]);
+
+  useEffect(() => {
+    getClasses();
+    getRoles();
+  }, [selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.class && entryFormik.values.section) {
+      getStudents();
+    }
+  }, [entryFormik.values.class, entryFormik.values.section, selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.role) {
+      getEmployees();
+    }
+  }, [entryFormik.values.role]);
+
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setSelectFile(fileList);
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setSelectFile(selectFile.filter((file) => file.name != fileName));
+  };
+
+  const handleChangeUser = (event, value) => {
+    entryFormik.setFieldValue("employee", value);
+  };
+
   return (
     <>
       <PageHeader title="Compose" />
@@ -193,6 +316,153 @@ export default function Compose() {
               options={Recevier_Type}
             />
           </Grid>
+
+          {entryFormik.values.receiverType === "role" && (
+            <>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormControl
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  sx={{ borderRadius: 20 }}
+                  fullWidth>
+                  <InputLabel sx={{ fontSize: 12 }}>Role</InputLabel>
+                  <Select
+                    label="Role"
+                    labelId="demo-simple-select-filled-label"
+                    id="demo-simple-select-filled"
+                    value={selectRoles}
+                    onChange={handleSelectRoleChange}
+                    multiple
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}>
+                    {roles &&
+                      roles.map((row, index) => (
+                        <MenuItem
+                          key={row._id}
+                          value={row.name}
+                          sx={{ fontSize: 12, fontWeight: 500 }}>
+                          <Checkbox
+                            checked={selectRoles.indexOf(row.name) > -1}
+                          />
+                          <ListItemText primary={row.name} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </>
+          )}
+
+          {entryFormik.values.receiverType === "students" && (
+            <>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="class"
+                  formik={entryFormik}
+                  label="Select Class"
+                  options={classes}
+                />
+              </Grid>
+
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="section"
+                  formik={entryFormik}
+                  label="Select Section"
+                  options={sections}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="student"
+                  formik={entryFormik}
+                  label="Select Student"
+                  options={students}
+                />
+              </Grid>
+            </>
+          )}
+
+          {entryFormik.values.receiverType === "user" && (
+            <>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="role"
+                  formik={entryFormik}
+                  label="Select Role"
+                  options={roles}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormControl
+                  required={true}
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  sx={{ borderRadius: 20 }}
+                  fullWidth>
+                  <Autocomplete
+                    multiple
+                    fullWidth
+                    size="small"
+                    onChange={handleChangeUser}
+                    id="checkboxes-tags-demo"
+                    options={employees}
+                    disableCloseOnSelect
+                    getOptionLabel={(option) =>
+                      `${option.basicInfo.name} (${option.contactNumber})`
+                    }
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {`${option.basicInfo.name} (${option.contactNumber})`}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        {...params}
+                        label="Employees"
+                        placeholder="Favorites"
+                      />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+            </>
+          )}
+
+          {entryFormik.values.receiverType === "file" && (
+            <>
+              <Grid item xs={12} sm={12} md={6} sx={{ display: "flex" }}>
+                {" "}
+                <Button size="small" variant="contained">
+                  Sample File
+                </Button>
+                <FileSelect
+                  name="file"
+                  onChange={(e) => handleChangeFiles(e)}
+                  customOnChange={true}
+                  selectedFiles={selectFile}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </Card>
     </>

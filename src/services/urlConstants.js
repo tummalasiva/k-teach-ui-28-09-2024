@@ -419,4 +419,10 @@ export const PRIVATE_URLS = {
     updateStudentsMarks: "/studentMark/updateStudentsMarks",
     getbulkUpdateStudentMarks: "/studentMark/getbulkUpdateStudentMarks",
   },
+  teacherActivity: {
+    list: "/teacherActivity/list",
+    create: "/teacherActivity/create",
+    update: "/teacherActivity/update",
+    delete: "/teacherActivity/delete",
+  },
 };
