@@ -163,6 +163,9 @@ import AddStudent from "../pages/Student/AddStudent";
 import AddCourse from "../pages/LMS/AddCourse";
 import UpdateCourse from "../pages/LMS/UpdateCourse";
 import Room from "../pages/LMS/Room";
+import Compose from "../pages/Communication/Compose";
+import Report from "../pages/Communication/Report";
+import Credentials from "../pages/Communication/Credentials";
 
 const drawerWidth = 270;
 
@@ -859,6 +862,10 @@ export default function NavDrawer() {
           <Route path="help-desk" element={<HelpDesk />} />
           <Route path="guardian-feedback" element={<GuardianFeedback />} />
           <Route path="human-resource/add-employee" element={<AddEmployee />} />
+
+          <Route path="communication_compose" element={<Compose />} />
+          <Route path="communication_report" element={<Report />} />
+          <Route path="communication_credentials" element={<Credentials />} />
 
           <Route
             path="human-resource/edit-employee/:id"

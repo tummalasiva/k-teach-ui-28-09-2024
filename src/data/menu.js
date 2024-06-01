@@ -472,7 +472,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Compose",
         renderName: "compose",
-        path: "/sch/Communication/compose",
+        path: "/sch/communication_compose",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -483,7 +483,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Report",
         renderName: "report",
-        path: "/sch/Communication/report",
+        path: "/sch/communication_report",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
@@ -494,7 +494,7 @@ const SIDE_MENU_DATA = [
       {
         name: "Credentials",
         renderName: "credentials",
-        path: "/sch/communication/credentials",
+        path: "/sch/communication_credentials",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
