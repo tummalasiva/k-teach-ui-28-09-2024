@@ -270,12 +270,33 @@ export default function ManageMark() {
         }
       );
 
-      console.log(data, "data");
-
       downloadFile(
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         data,
         "studentMarks"
+      );
+    } catch (error) {}
+  };
+
+  const updateThroughScheet = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("schoolId", selectedSetting._id);
+      formData.append("classId", entryFormik.values.class);
+      formData.append("sectionId", entryFormik.values.section);
+      formData.append("subjectId", entryFormik.values.subject);
+      formData.append("examTermId", entryFormik.values.exam);
+
+      fileChoosen.forEach((f) => formData.append("file", f));
+      const { data } = await put(
+        PRIVATE_URLS.studentMarks.bulkUpdateStudentMarks,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
     } catch (error) {}
   };
@@ -445,7 +466,7 @@ export default function ManageMark() {
             },
           },
         }}>
-        <Box component={"form"} sx={modalStyle}>
+        <Box component={"form"} onSubmit={updateThroughScheet} sx={modalStyle}>
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Typography
@@ -515,7 +536,7 @@ export default function ManageMark() {
                   ":hover": { background: "rgb(27, 55, 121)" },
                 }}
                 type="submit">
-                submit
+                Update Marks
               </LoadingButton>
             </Grid>
           </Grid>

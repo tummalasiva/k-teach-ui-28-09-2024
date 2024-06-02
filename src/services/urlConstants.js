@@ -418,5 +418,6 @@ export const PRIVATE_URLS = {
     listStudentMarks: "/studentMark/listStudentMarks",
     updateStudentsMarks: "/studentMark/updateStudentsMarks",
     getbulkUpdateStudentMarks: "/studentMark/getbulkUpdateStudentMarks",
+    bulkUpdateStudentMarks: "/studentMark/bulkUpdateStudentMarks",
   },
 };
