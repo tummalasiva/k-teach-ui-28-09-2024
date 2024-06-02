@@ -419,4 +419,13 @@ export const PRIVATE_URLS = {
     updateStudentsMarks: "/studentMark/updateStudentsMarks",
     getbulkUpdateStudentMarks: "/studentMark/getbulkUpdateStudentMarks",
   },
+  storage: {
+    details: "/storage/getDetails",
+  },
+  preadmissionEnqiry: {
+    list: "/preadmissionEnqiry/list",
+    create: "/preadmissionEnqiry/create",
+    update: "/preadmissionEnqiry/update",
+    delete: "/preadmissionEnqiry/delete",
+  },
 };

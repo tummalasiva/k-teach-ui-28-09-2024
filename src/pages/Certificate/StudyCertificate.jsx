@@ -65,7 +65,7 @@ export default function StudyCertificate() {
   const [bulkIssue, setBulkIssue] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  console.log(selectedSetting, "sselectedSetting");
+  // console.log(selectedSetting, "sselectedSetting");
   //get academic year
   const getAcademicYear = async () => {
     try {
