@@ -1,11 +1,16 @@
+/** @format */
+
 import { Box, Card, Grid, Paper, Typography, styled } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Collapsible from "react-collapsible";
 
 import dayjs from "dayjs";
 import "../Styles/Dashboard.css";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
 
 const ScrollContainer = styled(Box)(({ theme }) => ({
   borderRadius: "5px",
@@ -67,16 +72,53 @@ const TitleDiscrption = styled(Box)(({ theme }) => ({
 }));
 
 export default function Events() {
-  const [notice, setNotice] = useState([
-    { title: " 1", notice: "wertfygjhkl" },
-    { title: " 2", notice: "sdfghjnm,." },
-    { title: " 3", notice: "asdfghjnkm" },
-  ]);
-  const [holidays, setHolidays] = useState([
-    { title: " 1", note: "ertyui" },
-    { title: " 2", note: "rsetyghujkl;dfh rdtfgyhkj rdtfgy" },
-    { title: " 3", note: "qwesrrfghjkm" },
-  ]);
+  // const [notice, setNotice] = useState([
+  //   { title: " 1", notice: "wertfygjhkl" },
+  //   { title: " 2", notice: "sdfghjnm,." },
+  //   { title: " 3", notice: "asdfghjnkm" },
+  // ]);
+  // const [holidays, setHolidays] = useState([
+  //   { title: " 1", note: "ertyui" },
+  //   { title: " 2", note: "rsetyghujkl;dfh rdtfgyhkj rdtfgy" },
+  //   { title: " 3", note: "qwesrrfghjkm" },
+  // ]);
+
+  const { selectedSetting } = useContext(SettingContext);
+  const [notice, setNotice] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+  console.log(notice.length, "resss");
+
+  const getNotice = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.notice.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setNotice(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getHolidays = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.holiday.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setHolidays(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getNotice();
+    getHolidays();
+  }, []);
+
   return (
     <>
       <Paper sx={{ padding: 2, mt: 2 }}>
@@ -102,8 +144,7 @@ export default function Events() {
                         <DashboardScorlText key={index}>
                           <DashboardNewsConent>
                             <NewsDateMonth
-                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}
-                            >
+                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}>
                               <Box>
                                 {dayjs(data.date).format("DD-MMM-YYYY")}
                               </Box>
@@ -136,8 +177,7 @@ export default function Events() {
                         <DashboardScorlText key={index}>
                           <DashboardNewsConent>
                             <NewsDateMonth
-                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}
-                            >
+                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}>
                               <Box className="date">
                                 {dayjs(data.fromDate).format("DD-MMM-YYYY")}
                               </Box>

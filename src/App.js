@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "slick-carousel/slick/slick.css";
@@ -308,8 +310,7 @@ function App() {
         setSettings,
         selectedSetting,
         setSelectedSetting,
-      }}
-    >
+      }}>
       <WebsiteThemeContext.Provider value={{ selectedTheme, setSelectedTheme }}>
         <ThemeProvider theme={webTheme}>
           <SpalshNewsPopup
