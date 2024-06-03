@@ -7,12 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
-  baseURL:
-    "https://569d-2404-ca40-fa02-3f00-1515-5a52-7ea5-8239.ngrok-free.app/ecamps/v1",
+  baseURL: "http://localhost:5000/ecamps/v1",
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin":
-      "https://569d-2404-ca40-fa02-3f00-1515-5a52-7ea5-8239.ngrok-free.app",
+    "Access-Control-Allow-Origin": "http://localhost:5000",
   },
 });
 
