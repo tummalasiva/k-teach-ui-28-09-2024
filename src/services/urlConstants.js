@@ -420,4 +420,10 @@ export const PRIVATE_URLS = {
     getbulkUpdateStudentMarks: "/studentMark/getbulkUpdateStudentMarks",
     bulkUpdateStudentMarks: "/studentMark/bulkUpdateStudentMarks",
   },
+  teacherActivity: {
+    list: "/teacherActivity/list",
+    create: "/teacherActivity/create",
+    update: "/teacherActivity/update",
+    delete: "/teacherActivity/delete",
+  },
 };

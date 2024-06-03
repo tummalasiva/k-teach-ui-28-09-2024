@@ -3,10 +3,10 @@
 import React from "react";
 import PageHeader from "../../components/PageHeader";
 
-export default function Credentials() {
+export default function Routine() {
   return (
     <>
-      <PageHeader title="Credentials" />
+      <PageHeader title="Routine" />
     </>
   );
 }
