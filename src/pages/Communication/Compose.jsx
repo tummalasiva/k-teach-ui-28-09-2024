@@ -29,6 +29,7 @@ import SettingContext from "../../context/SettingsContext";
 import FileSelect from "../../forms/FileSelect";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import FormInput from "../../forms/FormInput";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -57,7 +58,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-const Recevier_Type = [
+const Receiver_Type = [
   {
     label: "Role",
     value: "role",
@@ -80,6 +81,72 @@ const Recevier_Type = [
   },
 ];
 
+const SMS_Type = [
+  {
+    label: "General",
+    value: "general",
+  },
+  {
+    label: "Attendence",
+    value: "attendence",
+  },
+  {
+    label: "Fee",
+    value: "fee",
+  },
+  {
+    label: "Credential",
+    value: "credential",
+  },
+  {
+    label: "Exam",
+    value: "exam",
+  },
+
+  {
+    label: "Leave",
+    value: "leave",
+  },
+  {
+    label: "Library",
+    value: "library",
+  },
+  {
+    label: "Transport",
+    value: "transport",
+  },
+
+  {
+    label: "Hostel",
+    value: "hostel",
+  },
+  {
+    label: "Preaddmission",
+    value: "preaddmission",
+  },
+  {
+    label: "Parent Meeting",
+    value: "parentMeeting",
+  },
+
+  {
+    label: "School Timing",
+    value: "schoolTiming ",
+  },
+  {
+    label: "Notice",
+    value: "notice",
+  },
+  {
+    label: "School Open",
+    value: "schoolOpen",
+  },
+  {
+    label: "Education",
+    value: "education",
+  },
+];
+
 export default function Compose() {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
@@ -87,6 +154,7 @@ export default function Compose() {
   const [students, setStudents] = useState([]);
   const [roles, setRoles] = useState([]);
   const [selectRoles, setSelectRoles] = useState([]);
+  const [selectClasses, setSelectClasses] = useState([]);
   const [employees, setEmployee] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
@@ -96,8 +164,8 @@ export default function Compose() {
       class: "",
       section: "",
       student: "",
+      smsType: "",
     },
-    // onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
 
@@ -108,9 +176,15 @@ export default function Compose() {
     setSelectRoles(typeof value === "string" ? value.split(",") : value);
   };
 
+  const handleSelectClassChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectClasses(typeof value === "string" ? value.split(",") : value);
+  };
+
   const [selectFile, setSelectFile] = useState([]);
 
-  //get class
   const getClasses = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.class.list, {
@@ -127,7 +201,6 @@ export default function Compose() {
     }
   };
 
-  //get sections
   const getSections = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
@@ -147,7 +220,6 @@ export default function Compose() {
     }
   };
 
-  //get students
   const getStudents = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.student.list, {
@@ -262,9 +334,11 @@ export default function Compose() {
       <PageHeader title="Compose" />
       <Card sx={{ mt: 3 }}>
         <Box
-          style={{
+          sx={{
             display: "flex",
-            gap: "5px",
+            justifyContent: "flex-start",
+            gap: "10px",
+            padding: "10px",
           }}>
           <Box>
             {" "}
@@ -297,7 +371,7 @@ export default function Compose() {
         </Box>
         <Box
           sx={{
-            padding: "1rem",
+            padding: "10px",
           }}>
           <BorderLinearProgress
             variant="determinate"
@@ -306,14 +380,14 @@ export default function Compose() {
         </Box>
       </Card>
       <Card sx={{ mt: 3 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} padding={1}>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
               name="receiverType"
               formik={entryFormik}
               label="Receiver Type"
-              options={Recevier_Type}
+              options={Receiver_Type}
             />
           </Grid>
 
@@ -360,13 +434,39 @@ export default function Compose() {
           {entryFormik.values.receiverType === "students" && (
             <>
               <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="class"
-                  formik={entryFormik}
-                  label="Select Class"
-                  options={classes}
-                />
+                <FormControl
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  sx={{ borderRadius: 20 }}
+                  fullWidth>
+                  <InputLabel sx={{ fontSize: 12 }}>Class</InputLabel>
+                  <Select
+                    label="Class"
+                    labelId="demo-multiple-class-label"
+                    id="demo-multiple-class"
+                    value={selectClasses}
+                    onChange={handleSelectClassChange}
+                    multiple
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}>
+                    {classes &&
+                      classes.map((cls, index) => (
+                        <MenuItem
+                          key={cls._id}
+                          value={cls.name}
+                          sx={{ fontSize: 12, fontWeight: 500 }}>
+                          <Checkbox
+                            checked={selectClasses.indexOf(cls.name) > -1}
+                          />
+                          <ListItemText primary={cls.name} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </Grid>
 
               <Grid xs={12} md={6} lg={3} item>
@@ -398,7 +498,9 @@ export default function Compose() {
                   name="role"
                   formik={entryFormik}
                   label="Select Role"
-                  options={roles}
+                  options={roles.filter(
+                    (r) => r.name.toLowerCase() !== "student"
+                  )}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -463,6 +565,22 @@ export default function Compose() {
               </Grid>
             </>
           )}
+        </Grid>
+      </Card>
+      <Card sx={{ mt: 3 }}>
+        <Grid container spacing={2} padding={1}>
+          <Grid item xs={12} md={3}>
+            <FormSelect
+              name="smsType"
+              formik={entryFormik}
+              label="SMS Type"
+              options={SMS_Type}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+            <FormInput name="subject" formik={entryFormik} label="Subject" />
+          </Grid>
         </Grid>
       </Card>
     </>
