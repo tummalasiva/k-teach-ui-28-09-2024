@@ -20,15 +20,18 @@ import { get } from "./services/apiMethods";
 import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
-import { Box } from "@mui/material";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
-const DashBoard = React.lazy(() => import("./components/NavDrawer"));
+const EmployeeDashBoard = React.lazy(() => import("./components/NavDrawer"));
+const StudentDashBoard = React.lazy(() =>
+  import("./components/NavDrawerStudent")
+);
 
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [userType, setUserType] = useState("student");
 
   const [settings, setSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({
@@ -41,6 +44,23 @@ function App() {
   });
   const [horizontalData, setHorizontalData] = useState([]);
   const handleClosePopup = () => setPopupData({ open: false, data: null });
+
+  // const getCurrentUser = async () => {
+  //   try {
+  //     let user = window.localStorage.getItem("userType");
+  //     if (!user) {
+  //       window.location.href = "/";
+  //     } else {
+  //       if (user === "employee") {
+  //         setUserType("employee");
+  //       } else if (user === "student") {
+  //         setUserType("student");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const getSplashNews = async () => {
     try {
@@ -342,7 +362,7 @@ function App() {
                 path="/sch/*"
                 element={
                   <React.Suspense fallback={<Loader />}>
-                    <DashBoard />
+                    <StudentDashBoard />
                   </React.Suspense>
                 }
               />
