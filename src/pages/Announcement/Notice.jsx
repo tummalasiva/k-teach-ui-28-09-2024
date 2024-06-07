@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { noticeTableKeys } from "../../data/tableKeys/noticeData";
@@ -38,6 +40,7 @@ export default function Notice() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -140,8 +143,7 @@ export default function Notice() {
         formTitle={dataToEdit ? "Update Notice" : "Add Notice"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput

@@ -111,7 +111,7 @@ export default function LeaveType({}) {
     }
   };
 
-  console.log(multipleDepartments, "multipleDepartments");
+  // console.log(multipleDepartments, "multipleDepartments");
 
   const getDepartments = async () => {
     try {
@@ -153,7 +153,7 @@ export default function LeaveType({}) {
       autoEarnCount,
       schoolId: selectedSetting._id,
     };
-    console.log(payload, "payload");
+    // console.log(payload, "payload");
 
     try {
       setLoading(true);

@@ -1,3 +1,5 @@
+/** @format */
+
 import client from "./apiClient";
 
 export const get = async (url, config) => {

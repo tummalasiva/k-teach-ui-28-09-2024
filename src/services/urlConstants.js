@@ -426,4 +426,13 @@ export const PRIVATE_URLS = {
     update: "/teacherActivity/update",
     delete: "/teacherActivity/delete",
   },
+  storage: {
+    details: "/storage/getDetails",
+  },
+  preadmissionEnqiry: {
+    list: "/preadmissionEnqiry/list",
+    create: "/preadmissionEnqiry/create",
+    update: "/preadmissionEnqiry/update",
+    delete: "/preadmissionEnqiry/delete",
+  },
 };
