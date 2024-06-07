@@ -197,6 +197,7 @@ export const PRIVATE_URLS = {
     create: "/meeting/create",
     update: "/meeting/update",
     delete: "/meeting/delete",
+    listStudent: "/meeting/listStudent",
     join: "/meeting/join",
   },
   visitorInfo: {
