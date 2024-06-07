@@ -9,7 +9,6 @@ export default function Notice() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="Notice" />
       <CustomTable
         actions={[]}
         tableKeys={studentNoticeTableKeys}

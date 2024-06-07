@@ -90,7 +90,6 @@ export default function Courses() {
 
   return (
     <>
-      <PageHeader title="Courses" />
       <Container maxWidth="xl" sx={{ marginTop: "5px" }}>
         {courseList && courseList.length > 0 ? (
           <Grid container spacing={2}>

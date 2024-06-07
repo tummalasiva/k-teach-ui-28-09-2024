@@ -9,7 +9,6 @@ export default function Invoice() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="Invoice" />
       <CustomTable
         actions={["download"]}
         tableKeys={studentInvoiceTableKeys}

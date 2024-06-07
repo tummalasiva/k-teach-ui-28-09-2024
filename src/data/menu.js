@@ -43,13 +43,7 @@ const SIDE_MENU_DATA = [
     subMenus: [],
     icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
   },
-  {
-    name: "Student Dashboard",
-    path: "/sch/student_dashboard",
-    renderName: [],
-    subMenus: [],
-    icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
-  },
+
   {
     name: "Manage Institute",
     path: "/sch/manage-institute",
