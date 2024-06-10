@@ -9,7 +9,6 @@ export default function News() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="News" />
       <CustomTable
         actions={[]}
         tableKeys={studentNewsTableKeys}

@@ -1,3 +1,5 @@
+/** @format */
+
 .react-calendar {
   width: 100%;
   border: 2px solid rgb(242, 239, 235);
@@ -24,4 +26,114 @@ active:enabled:hover,
 
 .react-calendar__tile--now:hover {
   background: #00bfff !important;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-left: 3px;
+  margin-bottom: 2px;
+  padding-top: -5%;
+  margin-top: -8%;
+  cursor: pointer;
+}
+
+.present {
+  background-color: green;
+  color: white;
+}
+
+.absent {
+  background-color: red;
+  color: white;
+}
+
+.current-date {
+  background-color: white;
+  color: #000;
+}
+.current-date:hover {
+  background-color: white;
+}
+
+.react-calendar__tile--hover {
+  background-color: #f7ecec;
+}
+
+.react-calendar__tile--active {
+  background-color: white;
+  color: black;
+}
+
+.react-calendar {
+  background-color: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 3em;
+}
+.react-calendar__navigation button {
+  color: #000;
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  margin-top: 8px;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f8f8fa;
+}
+.react-calendar__navigation button[disabled] {
+  background-color: #f0f0f0;
+}
+abbr[title] {
+  text-decoration: none;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: #f8f8fa;
+
+  border-radius: 6px;
+}
+.react-calendar__tile--now {
+  border-radius: 6px;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  border-radius: 6px;
+}
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #f8f8fa;
+}
+.react-calendar__tile--active {
+  background: #ffff;
+  border-radius: 6px;
+
+  color: #000;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #ffff;
+  color: #000;
+}
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #f8f8fa;
+}
+.react-calendar__tile--range {
+  background: #f8f8fa;
+  color: #000;
+  border-radius: 0;
+}
+
+.colorBotton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

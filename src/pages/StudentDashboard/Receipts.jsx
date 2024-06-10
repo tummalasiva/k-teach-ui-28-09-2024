@@ -10,7 +10,6 @@ export default function Receipts() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="Receipts" />
       <CustomTable
         actions={["download"]}
         tableKeys={studentReceiptsTableKeys}
