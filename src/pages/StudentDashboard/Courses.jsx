@@ -12,14 +12,13 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import { useNavigate } from "react-router-dom";
-
-import img from "../../assets/images/enroll.png";
-
 import PageHeader from "../../components/PageHeader";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
 
 const Title = styled(Typography)(({ theme }) => ({
   textTransform: "uppercase",
@@ -50,7 +49,8 @@ const Time = styled(Box)(() => ({
   gap: "5px",
   alignItems: "center",
 }));
-const NoCourse = styled(Box)((theme) => ({
+
+const NoCourse = styled(Box)(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("md")]: {
     width: "40%",
@@ -63,34 +63,31 @@ const NoCourse = styled(Box)((theme) => ({
 }));
 
 export default function Courses() {
+  const { selectedSetting } = useContext(SettingContext);
   const navigate = useNavigate();
+  const [courseList, setCourseList] = useState();
   const handleNavigate = () => {
     navigate("/");
   };
 
-  const [courseList] = useState([
-    {
-      _id: "1",
-      title: "Course 1",
-      description: "Description of Course 1",
-      thumbnailImage: img,
-      courseHours: "10",
-    },
-    {
-      _id: "2",
-      title: "Course 2",
-      description: "Description of Course 2",
-      thumbnailImage: img,
-      courseHours: "15",
-    },
-    {
-      _id: "3",
-      title: "Course 3",
-      description: "Description of Course 3",
-      thumbnailImage: img,
-      courseHours: "8",
-    },
-  ]);
+  const getCourse = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.course.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      setCourseList(data.result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCourse();
+  }, []);
+
   return (
     <>
       <PageHeader title="Courses" />

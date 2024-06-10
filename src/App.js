@@ -362,7 +362,8 @@ function App() {
                 path="/sch/*"
                 element={
                   <React.Suspense fallback={<Loader />}>
-                    <StudentDashBoard />
+                    {/* <StudentDashBoard /> */}
+                    <EmployeeDashBoard />
                   </React.Suspense>
                 }
               />
