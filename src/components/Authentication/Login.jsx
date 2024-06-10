@@ -1,4 +1,6 @@
-import React from "react";
+/** @format */
+
+import React, { useContext } from "react";
 import {
   Button,
   Grid,
@@ -32,6 +34,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { post } from "../../services/apiMethods";
 import { PUBLIC_URLS } from "../../services/urlConstants";
 import * as jwtdecode from "jwt-decode";
+import UserTypeContext from "../../context/UserTypeContext";
 
 const OuterBox = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${desktopImg})`,
@@ -68,20 +71,25 @@ const BackButtonContainer = styled(Box)(() => ({
   height: 70,
   width: 70,
   top: 0,
-  left: -70,
+  left: -75,
   zIndex: 10000,
-  background: "rgba(255,255,255,0.3)",
   borderTopLeftRadius: 35,
   borderBottomLeftRadius: 35,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  backgroundColor: "rgba(255,255,255,0.2)",
+  boxShadow: "0px 4px 30px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(10.8px)",
+  WebkitBackdropFilter: "blur(10.8px)",
+  border: "1px solid rgba(255,255,255,0.45)",
 }));
 
 const Login = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserType } = useContext(UserTypeContext);
   const [selectedButton, setSelectedButton] = useState("employee");
   const theme = useTheme();
 
@@ -109,6 +117,7 @@ const Login = () => {
     window.localStorage.setItem("current_ecs_user", JSON.stringify(user));
     window.localStorage.setItem("refresh_token", refresh_token);
     window.localStorage.setItem("userType", decodedToken.userType);
+    setUserType(decodedToken.userType);
     navigate("/sch/dashboard");
   };
 
@@ -135,12 +144,17 @@ const Login = () => {
             sx={{
               maxWidth: 370,
               width: "100%",
-              background: "rgba(255,255,255,0.3)",
+              // background: "rgba(255,255,255,0.3)",
               borderRadius: "5px",
               padding: "30px",
               position: "relative",
-            }}
-          >
+              backgroundColor: "rgba(255,255,255,0.2)",
+              // borderRadius: "16px",
+              boxShadow: "0px 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(10.8px)",
+              WebkitBackdropFilter: "blur(10.8px)",
+              border: "1px solid rgba(255,255,255,0.45)",
+            }}>
             <BackButtonContainer>
               <IconButton onClick={() => navigate("/")}>
                 <ArrowBack fontSize="medium" />
@@ -165,22 +179,19 @@ const Login = () => {
                 <ButtonGroup
                   fullWidth
                   variant="contained"
-                  aria-label="Basic button group"
-                >
+                  aria-label="Basic button group">
                   <Button
                     variant={
                       selectedButton === "employee" ? "contained" : "outlined"
                     }
-                    onClick={() => handleButtonClick("employee")}
-                  >
+                    onClick={() => handleButtonClick("employee")}>
                     Employee
                   </Button>
                   <Button
                     variant={
                       selectedButton === "student" ? "contained" : "outlined"
                     }
-                    onClick={() => handleButtonClick("student")}
-                  >
+                    onClick={() => handleButtonClick("student")}>
                     Student
                   </Button>
                 </ButtonGroup>
@@ -243,8 +254,7 @@ const Login = () => {
                       <InputAdornment position="end" sx={{ pr: 1 }}>
                         <IconButton
                           onClick={togglePasswordVisibility}
-                          edge="end"
-                        >
+                          edge="end">
                           {showPassword ? (
                             <VisibilityOff sx={{ color: "grey" }} />
                           ) : (
@@ -274,8 +284,7 @@ const Login = () => {
                   loading={isPending}
                   type="submit"
                   fullWidth
-                  variant="contained"
-                >
+                  variant="contained">
                   Log In
                 </LoadingButton>
               </Grid>
@@ -289,12 +298,10 @@ const Login = () => {
                 md={12}
                 lg={12}
                 textAlign="center"
-                mt={1}
-              >
+                mt={1}>
                 <Link to="/forgot-password">
                   <Typography
-                    sx={{ color: themeData.darkPalette.secondary.main }}
-                  >
+                    sx={{ color: themeData.darkPalette.secondary.main }}>
                     Forgot Password?
                   </Typography>
                 </Link>

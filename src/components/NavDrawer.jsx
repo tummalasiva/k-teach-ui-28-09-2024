@@ -167,7 +167,10 @@ import Compose from "../pages/Communication/Compose";
 import Report from "../pages/Communication/Report";
 import Credentials from "../pages/Communication/Credentials";
 
-const drawerWidth = 270;
+// exlnt_70471681
+// 9538063455
+
+const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
