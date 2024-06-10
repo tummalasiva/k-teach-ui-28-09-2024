@@ -435,4 +435,10 @@ export const PRIVATE_URLS = {
     update: "/preadmissionEnqiry/update",
     delete: "/preadmissionEnqiry/delete",
   },
+  certificate: {
+    getStudyCertificate: "/certificate/getStudyCertificate",
+    getBulkStudyCertificate: "/certificate/getBulkStudyCertificate",
+    getTransferCertificate: "/certificate/getTransferCertificate",
+    getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
+  },
 };

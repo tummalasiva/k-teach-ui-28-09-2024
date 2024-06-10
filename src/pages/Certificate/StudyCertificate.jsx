@@ -62,8 +62,12 @@ export default function StudyCertificate() {
   const { selectedSetting } = useContext(SettingContext);
   const [academicYear, setAcademicYear] = useState([]);
   const [students, setStudents] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);
   const [bulkIssue, setBulkIssue] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  console.log(selectedData, "selectedData");
+  console.log(students, "students");
 
   // console.log(selectedSetting, "sselectedSetting");
   //get academic year
@@ -90,12 +94,13 @@ export default function StudyCertificate() {
           schoolId: selectedSetting._id,
         },
       });
-      console.log(data, "data");
+      // console.log(data, "data");
       setStudents(
         data.result.map((d) => ({
           ...d,
           label: d.basicInfo.name,
-          value: d._id,
+          value: d,
+          // value: d._id,
         }))
       );
       entryFormik.setFieldValue("student", data.result[0]?._id);
@@ -103,6 +108,40 @@ export default function StudyCertificate() {
       console.log(error);
     }
   };
+
+  const handleSubmitCertificate = async (values) => {
+    console.log(values, "bfyy");
+    setLoading(true);
+
+    try {
+      // const { data } = await get(PRIVATE_URLS.certificate.getStudyCertificate, {
+      //   params: {
+      //     schoolId: selectedSetting._id,
+      //     academicYearId: values.academicYear,
+      //     studentId: values.student._id,
+      //   },
+      // });
+      // console.log(data, "certtt");
+
+      setSelectedData({
+        ...selectedData,
+        fatherName: values?.student?.fatherInfo?.name,
+        academicYearFrom: values?.student?.academicYear?.from,
+        academicYearTo: values?.student?.academicYear?.to,
+        studentName: values?.student?.basicInfo.name,
+        currentClass: values?.student?.academicInfo.class.name,
+        dob: values?.student?.basicInfo.dob,
+        grNo: values?.student?.basicInfo.grNo,
+        studentPhoto: values?.student?.photo,
+        schoolName: values?.student?.schoolName,
+        category: values?.student?.basicInfo.category,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -110,7 +149,7 @@ export default function StudyCertificate() {
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: console.log("not sub"),
+    onSubmit: handleSubmitCertificate,
   });
 
   useEffect(() => {
@@ -118,34 +157,44 @@ export default function StudyCertificate() {
     getStudents();
   }, [selectedSetting._id]);
 
-  const handleSubmitCertificate = async (values) => {
-    console.log(values, "values");
-    setLoading(true);
-    try {
-      // setFormData({
-      //   ...formData,
-      //   fatherName:
-      //     studentSelect.fatherInfo && studentSelect.fatherInfo.fatherName,
-      //   academicYearFrom:
-      //     studentSelect.academicYear.academicYearFrom &&
-      //     studentSelect.academicYear.academicYearFrom,
-      //   academicYearTo:
-      //     studentSelect.academicYear.academicYearFrom &&
-      //     studentSelect.academicYear.academicYearTo,
-      //   studentName: studentSelect.basicInfo && studentSelect.basicInfo.name,
-      //   currentClass:
-      //     studentSelect.academicInfo &&
-      //     studentSelect.academicInfo.class.className,
-      //   dob: studentSelect.basicInfo && studentSelect.basicInfo.dob,
-      //   grNo: studentSelect.basicInfo && studentSelect.basicInfo.grNo,
-      //   studentPhoto: studentSelect.studentPhoto?.link,
-      // });
-    } catch (error) {
-      console.log(error);
-    }
+  // const handleSubmitCertificateDownload = async (e) => {
+  //   e.preventDefault();
+  //   setLoadingDownload(true);
 
-    setLoading(false);
-  };
+  //   try {
+  //     const studyCertificateRes = await get(
+  //       `${urls.certificates.getStudyCertificate}/${fromDate.format(
+  //         "YYYY"
+  //       )}/${toDate.format("YYYY")}/${selectedSetting._id}`,
+  //       {
+  //         headers: { roleFunction: "studyCertificate" },
+  //       },
+
+  //       {
+  //         responseType: "blob",
+  //       }
+  //     );
+
+  //     const uri = URL.createObjectURL(studyCertificateRes.data);
+
+  //     // window.open(uri, "__blank");
+
+  //     const link = document.createElement("a");
+
+  //     link.href = uri;
+
+  //     link.setAttribute("download", "studyCertificate.pdf");
+
+  //     document.body.appendChild(link);
+
+  //     link.click();
+
+  //     link.parentNode.removeChild(link);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setLoadingDownload(false);
+  // };
 
   console.log(entryFormik.values.student, "jjjh");
 
@@ -171,7 +220,6 @@ export default function StudyCertificate() {
               options={academicYear}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} lg={3} item>
             <FormDatePicker
               formik={entryFormik}
@@ -210,7 +258,7 @@ export default function StudyCertificate() {
               size="small"
               variant="contained"
               type="submit"
-              onClick={handleSubmitCertificate}
+              onClick={entryFormik.handleSubmit}
               loading={loading}>
               Issue
             </LoadingButton>
@@ -242,31 +290,33 @@ export default function StudyCertificate() {
             <img src="" alt="photo" height={120} width={100} />
           </Grid>
         </Grid>
-
         <Heading>STUDY CERTIFICATE</Heading>
-
         <TextOuterContent>
           <Typography
             component="span"
             sx={{
               fontSize: "25px",
-              fontFamily: " Georgia, sans-serif",
+              fontFamily: "sans-serif",
             }}>
-            {" "}
-            This is to certify Mister/Miss son/daughter of Sri{" "}
-            <Content component={"span"}>abc</Content> a resident of{" "}
-            <Content component={"span"}>xyz</Content> is a bonafide student of
-            our school. He / She is studying in class
-            <Content component={"span"}>1</Content>
-            for the academic year
-            <Content component={"span"}>2023-2024</Content>
-            and His/Her date of birth is
-            <Content component={"span"}>04-08-1999</Content>
-            as per our school record G R No is{" "}
-            <Content component={"span"}>123</Content>
+            This is to certify that Sri./Kum.
+            <Content component={"span"}>{selectedData.fatherName}</Content>
+            son/daughter of Mr.
+            <Content component={"span"}>{selectedData.studentName},</Content>
+            studying in {selectedData.currentClass} in our school for the
+            academic year
+            <Content component={"span"}>
+              {selectedData.academicYearFrom - selectedData.academicYearTo}.
+            </Content>
+            The residential address is as follows:
+            <Content component={"span"}>
+              No. 49, RMCR, Hanumanth Nagar, Ramanagar Taluk and Dist.
+            </Content>
+            According to our school records his/her date of birth is
+            <Content component={"span"}>{selectedData.dob}.</Content>
+            and category is as per our school record G R No is{" "}
+            <Content component={"span"}>{selectedData.grNo}</Content>
           </Typography>
         </TextOuterContent>
-
         <DateContaner>
           <Box>
             <Typography gutterBottom fontSize="20px">

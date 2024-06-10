@@ -102,7 +102,7 @@ export default function FilterStudent() {
     getClasses();
   }, []);
 
-  console.log(entryFormik.values, "uuuuuu");
+  // console.log(entryFormik.values, "uuuuuu");
 
   return (
     <>
