@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -10,11 +12,32 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import CustomTable from "../../components/Tables/CustomTable";
 import { employeeAttendanceTableKeys } from "../../data/tableKeys/employeeAttendanceData";
 import { employeeAttendanceReportTableKeys } from "../../data/tableKeys/employeeReportData";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
 
 export default function EmployeeAttendance() {
   const [data, setData] = useState([]);
   const [value, setSelectValue] = useState(0);
+  const [roles, setRoles] = useState([]);
 
+  const getRoles = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list);
+      const roles = data.result
+        .filter((r) => r.name?.toLowerCase() !== "student")
+        .map((r) => ({
+          label: r.name,
+          value: r._id,
+        }));
+      setRoles(roles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getRoles();
+  }, []);
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
   };
@@ -28,6 +51,8 @@ export default function EmployeeAttendance() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  const handleFindClick = async () => {};
 
   return (
     <>
@@ -46,14 +71,17 @@ export default function EmployeeAttendance() {
                 name="role"
                 formik={entryFormik}
                 label="Select Roles"
-                // options={""}
+                options={roles}
               />
             </Grid>
             <Grid xs={12} sm={6} md={6} lg={3} item>
               <FormDatePicker formik={entryFormik} label="Date" name="date" />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <Button size="small" variant="contained">
+              <Button
+                onClick={handleFindClick}
+                size="small"
+                variant="contained">
                 Find
               </Button>
             </Grid>
