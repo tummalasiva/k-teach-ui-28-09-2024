@@ -20,6 +20,7 @@ import { get } from "./services/apiMethods";
 import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
+import UserTypeContext from "./context/UserTypeContext";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -31,7 +32,7 @@ const StudentDashBoard = React.lazy(() =>
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(2);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [userType, setUserType] = useState("student");
+  const [userType, setUserType] = useState("employee");
 
   const [settings, setSettings] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({
@@ -45,22 +46,12 @@ function App() {
   const [horizontalData, setHorizontalData] = useState([]);
   const handleClosePopup = () => setPopupData({ open: false, data: null });
 
-  // const getCurrentUser = async () => {
-  //   try {
-  //     let user = window.localStorage.getItem("userType");
-  //     if (!user) {
-  //       window.location.href = "/";
-  //     } else {
-  //       if (user === "employee") {
-  //         setUserType("employee");
-  //       } else if (user === "student") {
-  //         setUserType("student");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  useEffect(() => {
+    let userType = window.localStorage.getItem("userType");
+    if (userType) {
+      setUserType(userType);
+    }
+  }, []);
 
   const getSplashNews = async () => {
     try {
@@ -70,7 +61,6 @@ function App() {
         },
       });
 
-      console.log(selectedSetting, "mmmmmm");
       if (data.result.length) {
         let allSplashNews = data.result;
         setHorizontalData(
@@ -174,7 +164,7 @@ function App() {
           },
           root: {
             padding: "4px",
-            height: "35px",
+            height: "50px",
           },
         },
       },
@@ -224,6 +214,15 @@ function App() {
         styleOverrides: {
           root: {
             borderRadius: 5,
+            input: {
+              "&:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px rgba(0, 0, 0, 0) inset",
+                boxShadow: "0 0 0 100px rgba(0, 0, 0, 0) inset",
+                backgroundColor: "transparent !important",
+                WebkitTextFillColor: "#000 !important", // Ensure text color is set
+                transition: "background-color 5000s ease-in-out 0s",
+              },
+            },
           },
         },
       },
@@ -331,46 +330,53 @@ function App() {
         selectedSetting,
         setSelectedSetting,
       }}>
-      <WebsiteThemeContext.Provider value={{ selectedTheme, setSelectedTheme }}>
-        <ThemeProvider theme={webTheme}>
-          <SpalshNewsPopup
-            open={popupData.open}
-            sharedData={popupData.data}
-            handleClose={handleClosePopup}
-          />
-          {horizontalData.length ? (
-            <SplashNewsHorizontal horizontalData={horizontalData} />
-          ) : null}
-          <Routes>
-            <Route
-              path="/*"
-              element={
-                <React.Suspense fallback={<Loader />}>
-                  {selectedTheme % 2 !== 0 ? <Web1 /> : <Web2 />}
-                </React.Suspense>
-              }
+      <UserTypeContext.Provider value={{ userType, setUserType }}>
+        <WebsiteThemeContext.Provider
+          value={{ selectedTheme, setSelectedTheme }}>
+          <ThemeProvider theme={webTheme}>
+            <SpalshNewsPopup
+              open={popupData.open}
+              sharedData={popupData.data}
+              handleClose={handleClosePopup}
             />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </ThemeProvider>
-
-        <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
-          <ThemeProvider theme={theme}>
+            {horizontalData.length ? (
+              <SplashNewsHorizontal horizontalData={horizontalData} />
+            ) : null}
             <Routes>
               <Route
-                path="/sch/*"
+                path="/*"
                 element={
                   <React.Suspense fallback={<Loader />}>
-                    <EmployeeDashBoard />
+                    {selectedTheme % 2 !== 0 ? <Web1 /> : <Web2 />}
                   </React.Suspense>
                 }
               />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </ThemeProvider>
-        </ThemeModeContext.Provider>
-      </WebsiteThemeContext.Provider>
-      <ToastContainer />
+
+          <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+            <ThemeProvider theme={theme}>
+              <Routes>
+                <Route
+                  path="/sch/*"
+                  element={
+                    <React.Suspense fallback={<Loader />}>
+                      {userType === "employee" ? (
+                        <EmployeeDashBoard />
+                      ) : (
+                        <StudentDashBoard />
+                      )}
+                    </React.Suspense>
+                  }
+                />
+              </Routes>
+            </ThemeProvider>
+          </ThemeModeContext.Provider>
+        </WebsiteThemeContext.Provider>
+        <ToastContainer />
+      </UserTypeContext.Provider>
     </SettingContext.Provider>
   );
 }
