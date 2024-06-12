@@ -26,7 +26,7 @@ const Content = styled(Typography)(({ theme }) => ({
   display: "inline",
   fontWeight: "bold",
   textDecoration: "underline",
-  fontFamily: "Lucida Handwriting, Brush Script MT, cursive",
+  fontFamily: "Roboto ,sans-serif",
 }));
 
 const Container = styled(Box)(({ theme }) => ({
@@ -103,7 +103,6 @@ export default function StudyCertificate() {
           // value: d._id,
         }))
       );
-      entryFormik.setFieldValue("student", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -114,15 +113,6 @@ export default function StudyCertificate() {
     setLoading(true);
 
     try {
-      // const { data } = await get(PRIVATE_URLS.certificate.getStudyCertificate, {
-      //   params: {
-      //     schoolId: selectedSetting._id,
-      //     academicYearId: values.academicYear,
-      //     studentId: values.student._id,
-      //   },
-      // });
-      // console.log(data, "certtt");
-
       setSelectedData({
         ...selectedData,
         fatherName: values?.student?.fatherInfo?.name,
@@ -133,8 +123,11 @@ export default function StudyCertificate() {
         dob: values?.student?.basicInfo.dob,
         grNo: values?.student?.basicInfo.grNo,
         studentPhoto: values?.student?.photo,
-        schoolName: values?.student?.schoolName,
+        schoolName: values?.student?.school?.name,
+        schoolAddress: values?.student?.school?.address,
+        schoolLogo: values?.student?.school?.logo,
         category: values?.student?.basicInfo.category,
+        address: values?.student?.contactInfo.presentAddress,
       });
     } catch (error) {
       console.log(error);
@@ -157,44 +150,40 @@ export default function StudyCertificate() {
     getStudents();
   }, [selectedSetting._id]);
 
-  // const handleSubmitCertificateDownload = async (e) => {
-  //   e.preventDefault();
-  //   setLoadingDownload(true);
+  const handleSubmitCertificateDownload = async (e) => {
+    e.preventDefault();
+    setLoadingDownload(true);
 
-  //   try {
-  //     const studyCertificateRes = await get(
-  //       `${urls.certificates.getStudyCertificate}/${fromDate.format(
-  //         "YYYY"
-  //       )}/${toDate.format("YYYY")}/${selectedSetting._id}`,
-  //       {
-  //         headers: { roleFunction: "studyCertificate" },
-  //       },
+    try {
+      const { data } = await get(PRIVATE_URLS.certificate.getStudyCertificate, {
+        params: {
+          schoolId: selectedSetting._id,
+          academicYearId: selectedData.academicYear,
+          studentId: values.student._id,
+        },
+      });
+      console.log(data, "certtt");
 
-  //       {
-  //         responseType: "blob",
-  //       }
-  //     );
+      const uri = URL.createObjectURL(studyCertificateRes.data);
 
-  //     const uri = URL.createObjectURL(studyCertificateRes.data);
+      // window.open(uri, "__blank");
 
-  //     // window.open(uri, "__blank");
+      const link = document.createElement("a");
 
-  //     const link = document.createElement("a");
+      link.href = uri;
 
-  //     link.href = uri;
+      link.setAttribute("download", "studyCertificate.pdf");
 
-  //     link.setAttribute("download", "studyCertificate.pdf");
+      document.body.appendChild(link);
 
-  //     document.body.appendChild(link);
+      link.click();
 
-  //     link.click();
-
-  //     link.parentNode.removeChild(link);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   setLoadingDownload(false);
-  // };
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoadingDownload(false);
+  };
 
   console.log(entryFormik.values.student, "jjjh");
 
@@ -265,84 +254,110 @@ export default function StudyCertificate() {
           </Grid>
         </Grid>
       </Paper>
+      {entryFormik.values.student != "" && (
+        <>
+          <Container>
+            <Grid
+              container
+              spacing={2}
+              display="flex"
+              justifyContent="space-between">
+              <Grid item xs={6} md={6} lg={3} textAlign="start">
+                <img
+                  src={selectedData.schoolLogo || "/world-wide-web.png"}
+                  alt="loading..."
+                  height={100}
+                  width={95}
+                  style={{ objectFit: "contain" }}
+                />
+              </Grid>
 
-      <Container>
-        <Grid
-          container
-          spacing={2}
-          display="flex"
-          justifyContent="space-between">
-          <Grid item xs={6} md={6} lg={3} textAlign="start">
-            <img src="" alt="logo" height={110} width={100} />
-          </Grid>
+              <Grid item xs={6} md={6} lg={6} textAlign="center" mt={2}>
+                <Typography textAlign="center" fontSize="20px">
+                  {selectedData.schoolName || "St Pauls High School"}
+                </Typography>
+                <Typography textAlign="center" fontSize="16px">
+                  {selectedData.schoolAddress || "ABC NAGAR"}
+                </Typography>
+              </Grid>
 
-          <Grid item xs={6} md={6} lg={6} textAlign="center">
-            {" "}
-            <Typography textAlign="center" fontSize="20px">
-              Kayaka School
-            </Typography>
-            <Typography textAlign="center" fontSize="16px">
-              VjayaNagara
-            </Typography>
-          </Grid>
+              <Grid item xs={6} md={6} lg={3} textAlign="end">
+                <img
+                  src={selectedData.studentPhoto || "/studingimg.jpg"}
+                  alt="photo"
+                  height={120}
+                  width={100}
+                  style={{ objectFit: "contain" }}
+                />
+              </Grid>
+            </Grid>
+            <Heading>STUDY CERTIFICATE</Heading>
+            <TextOuterContent>
+              <Typography
+                component="span"
+                sx={{
+                  fontSize: "25px",
+                  fontFamily: "sans-serif",
+                }}>
+                This is to certify that Sri./Kum.
+                <Content component={"span"}>
+                  {selectedData.fatherName || "NA"}
+                </Content>
+                son/daughter of Mr.
+                <Content component={"span"}>
+                  {selectedData.studentName || "NA"}
+                </Content>
+                studying in
+                <Content component={"span"}>
+                  {selectedData.currentClass || "NA"}
+                </Content>
+                in our school for the academic year
+                <Content component={"span"}>
+                  {`${selectedData.academicYearFrom} - ${selectedData.academicYearTo}` ||
+                    "NA"}
+                </Content>
+                .The residential address is as follows:
+                <Content component={"span"}>
+                  {selectedData.address || "NA"}
+                </Content>
+                . According to our school records his/her date of birth is
+                <Content component={"span"}>
+                  {dayjs(selectedData.dob).format("DD-MM-YYYY")}
+                </Content>
+                . and category is as per our school record G R No is{" "}
+                <Content component={"span"}>
+                  {selectedData.grNo || "NA"}
+                </Content>
+                .
+              </Typography>
+            </TextOuterContent>
+            <DateContaner>
+              <Box>
+                <Typography gutterBottom fontSize="20px">
+                  {dayjs().format("DD-MM-YYYY")}
+                </Typography>
+                <Typography component="span" fontSize="20px">
+                  Place:{" "}
+                </Typography>
+                <Typography component="span" fontSize="20px">
+                  {selectedData.schoolAddress}
+                </Typography>
+              </Box>
 
-          <Grid item xs={6} md={6} lg={3} textAlign="end">
-            <img src="" alt="photo" height={120} width={100} />
-          </Grid>
-        </Grid>
-        <Heading>STUDY CERTIFICATE</Heading>
-        <TextOuterContent>
-          <Typography
-            component="span"
-            sx={{
-              fontSize: "25px",
-              fontFamily: "sans-serif",
-            }}>
-            This is to certify that Sri./Kum.
-            <Content component={"span"}>{selectedData.fatherName}</Content>
-            son/daughter of Mr.
-            <Content component={"span"}>{selectedData.studentName},</Content>
-            studying in {selectedData.currentClass} in our school for the
-            academic year
-            <Content component={"span"}>
-              {selectedData.academicYearFrom - selectedData.academicYearTo}.
-            </Content>
-            The residential address is as follows:
-            <Content component={"span"}>
-              No. 49, RMCR, Hanumanth Nagar, Ramanagar Taluk and Dist.
-            </Content>
-            According to our school records his/her date of birth is
-            <Content component={"span"}>{selectedData.dob}.</Content>
-            and category is as per our school record G R No is{" "}
-            <Content component={"span"}>{selectedData.grNo}</Content>
-          </Typography>
-        </TextOuterContent>
-        <DateContaner>
-          <Box>
-            <Typography gutterBottom fontSize="20px">
-              {" "}
-              23-1-2024
-            </Typography>
-            <Typography component="span" fontSize="20px">
-              Place:
-            </Typography>
-            <Typography component="span" fontSize="20px">
-              Bhatkal
-            </Typography>
-          </Box>
+              <Typography fontSize="20px">Sign Of Head Master</Typography>
+            </DateContaner>
+          </Container>
 
-          <Typography fontSize="20px">Sign Of Head Master</Typography>
-        </DateContaner>
-      </Container>
-
-      <MuiBox>
-        <Button variant="contained" size="small">
-          Download
-        </Button>
-        <Button variant="contained" size="small" aria-label="search">
-          Print
-        </Button>
-      </MuiBox>
+          <MuiBox>
+            <Button variant="contained" size="small">
+              Download
+            </Button>
+            <Button variant="contained" size="small" aria-label="search">
+              Print
+            </Button>
+          </MuiBox>
+        </>
+      )}
     </>
   );
 }
