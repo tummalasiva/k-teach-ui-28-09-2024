@@ -450,4 +450,10 @@ export const PRIVATE_URLS = {
   report: {
     groupedLibraryData: "/report/groupedLibraryData",
   },
+  certificate: {
+    getStudyCertificate: "/certificate/getStudyCertificate",
+    getBulkStudyCertificate: "/certificate/getBulkStudyCertificate",
+    getTransferCertificate: "/certificate/getTransferCertificate",
+    getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
+  },
 };

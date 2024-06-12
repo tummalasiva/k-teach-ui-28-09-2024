@@ -106,8 +106,6 @@ export default function FilterStudent() {
     getClasses();
   }, [selectedSetting._id]);
 
-  console.log(entryFormik.values, "uuuuuu");
-
   return (
     <>
       <Paper sx={{ padding: 2 }}>
