@@ -447,4 +447,7 @@ export const PRIVATE_URLS = {
     update: "/employeeAttendance/update",
     getAttendanceReport: "/employeeAttendance/getAttendanceReport",
   },
+  report: {
+    groupedLibraryData: "/report/groupedLibraryData",
+  },
 };

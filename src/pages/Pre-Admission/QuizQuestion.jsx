@@ -42,7 +42,46 @@ const RadioButtons = styled(Radio)(() => ({
   marginTop: "-10px",
 }));
 
-export default function QuizQuestion({ quiz = {}, questionIndex }) {
+export default function QuizQuestion({
+  quiz = {},
+  questionIndex,
+  quizData,
+  setQuizData,
+}) {
+  const handleQuestionChange = (e, i) => {
+    setQuizData(
+      quizData.map((q, index) =>
+        index === i ? { ...q, question: e.target.value } : q
+      )
+    );
+  };
+
+  const handleRemoveQuestion = (questionIndex) => {
+    setQuizData((prevQuizData) =>
+      prevQuizData.filter((_, index) => index !== questionIndex)
+    );
+  };
+
+  const handleSetCorrectOption = (o, questionIndex) => {
+    setQuizData(
+      quizData.map((q, i) =>
+        i === questionIndex ? { ...q, correctOption: o } : q
+      )
+    );
+  };
+
+  const handleOptionChange = (e, questionIndex, optionIndex) => {
+    let questionToUpdate = quizData.filter((q, i) => i === questionIndex)[0];
+    let options = questionToUpdate.options;
+    let newOptions = options.map((o, i) =>
+      i === optionIndex ? e.target.value : o
+    );
+    setQuizData(
+      quizData.map((q, i) =>
+        i === questionIndex ? { ...q, options: newOptions } : q
+      )
+    );
+  };
   return (
     <Wrapper>
       <InputLabels
@@ -59,10 +98,11 @@ export default function QuizQuestion({ quiz = {}, questionIndex }) {
         fullWidth
         size="small"
         name="question"
+        maxRows={3}
         multiline
         value={quiz.question}
         placeholder="Type here..."
-        // onChange={(e) => handleQuestionChange(e, questionIndex)}
+        onChange={(e) => handleQuestionChange(e, questionIndex)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -70,10 +110,7 @@ export default function QuizQuestion({ quiz = {}, questionIndex }) {
                 <IconButton
                   color="error"
                   size="small"
-                  //   onClick={() =>
-                  //     handleRemoveQuestion(questionIndex)
-                  //   }
-                >
+                  onClick={() => handleRemoveQuestion(questionIndex)}>
                   <DeleteIcon fontSize="small" color="error" />
                 </IconButton>
               ) : null}
@@ -87,15 +124,14 @@ export default function QuizQuestion({ quiz = {}, questionIndex }) {
           marginBottom: "10px",
           backgroundColor: (theme) => theme.palette.grey[100],
           borderRadius: "5px",
-          padding: "0 15px 20px 15px",
+          padding: "20px",
           border: "1px solid lightgrey",
           marginTop: "10px",
         }}
         container
-        rowGap={2}
-        columnSpacing={2}>
+        rowGap={2}>
         {quiz.options.map((o, i) => (
-          <Grid key={i} item xs={12} md={6}>
+          <Grid key={i} item xs={12} md={6} sx={{ padding: "0 10px" }}>
             <Box
               sx={{
                 justifyContent: "flex-start",
@@ -107,22 +143,20 @@ export default function QuizQuestion({ quiz = {}, questionIndex }) {
                 {...label}
                 color="default"
                 checked={quiz.correctOption && quiz.correctOption === o}
-                // onChange={(e) =>
-                //   handleSetCorrectOption(o, questionIndex)
-                // }
+                onChange={(e) => handleSetCorrectOption(o, questionIndex)}
                 value={o}
                 type="radio"
               />
               <InputLabels>Option {i + 1}</InputLabels>
             </Box>
             <TextField
+              multiline
+              maxRows={3}
               fullWidth
               size="small"
               name={`option${i + 1}`}
               value={o}
-              //   onChange={(e) =>
-              //     handleOptionChange(e, questionIndex, i)
-              //   }
+              onChange={(e) => handleOptionChange(e, questionIndex, i)}
             />
           </Grid>
         ))}

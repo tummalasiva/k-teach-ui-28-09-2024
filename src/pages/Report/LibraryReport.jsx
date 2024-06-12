@@ -85,20 +85,34 @@ export default function LibraryReport() {
       console.log(error);
     }
   };
+
+  const handleGetDataByGroup = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.report.groupedLibraryData, {
+        params: {
+          schoolId: selectedSetting._id,
+          groupByData: values.groupByData,
+          fromDate: dayjs(values.fromDate),
+          toDate: dayjs(values.toDate),
+        },
+      });
+
+      console.log(data, "data=======");
+    } catch (error) {}
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       groupByData: "",
-
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetDataByGroup,
   });
+
   const formik = useFormik({
     initialValues: {
       academicYear: "",
-
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
@@ -162,7 +176,10 @@ export default function LibraryReport() {
               alignSelf="center"
               gap={1}
               item>
-              <Button size="small" variant="contained">
+              <Button
+                onClick={entryFormik.handleSubmit}
+                size="small"
+                variant="contained">
                 Find
               </Button>
               <Button size="small" variant="contained">

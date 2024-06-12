@@ -19,6 +19,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useContext } from "react";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
+import dayjs from "dayjs";
 
 const BookDetailed = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -208,6 +209,7 @@ export default function StudentIssueReturn() {
           },
         },
       });
+      console.log(data.result, "issues");
       setHistory(
         data.result.map((s) => ({
           ...s,
@@ -272,14 +274,19 @@ export default function StudentIssueReturn() {
     try {
       const payload = {
         ...values,
+        issueDate: dayjs(values.issueDate).format("YYYY/MM/DD"),
+        dueDate: dayjs(values.dueDate).format("YYYY/MM/DD"),
         schoolId: selectedSetting._id,
       };
+
+      console.log(payload, "payload");
 
       setLoading(true);
       const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);
       getData();
       resetForm();
       handleClose();
+      getBooks();
     } catch (error) {
       console.log(error);
     }
@@ -328,7 +335,8 @@ export default function StudentIssueReturn() {
       <TabPanel index={0} value={value}>
         <BookDetailed sx={{ padding: 1 }}>
           <Typography variant="h6" fontWeight="bold" fontSize={16}>
-            Total Books: {book.length}
+            Total Books:{" "}
+            {book.reduce((total, current) => total + current.leftInStock, 0)}
           </Typography>
           <Typography variant="h6" fontWeight="bold" fontSize={16}>
             Issued: {data.length}
