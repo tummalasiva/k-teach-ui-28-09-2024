@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 // custome components
 import PageHeader from "../../components/PageHeader";
@@ -274,8 +276,7 @@ export default function RolePermission() {
         formik={formik}
         formTitle="Create Role"
         onClose={handleModalClose}
-        submitButtonTitle="Create"
-      >
+        submitButtonTitle="Create">
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput
@@ -307,8 +308,7 @@ export default function RolePermission() {
                   margin: "10px 0px",
                   fontWeight: "500",
                   fontSize: "16px",
-                }}
-              >
+                }}>
                 {" "}
                 Set permission for this role
               </Typography>
@@ -322,8 +322,7 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
-                    }}
-                  >
+                    }}>
                     Module Name
                   </TableCell>
                   <TableCell
@@ -331,8 +330,7 @@ export default function RolePermission() {
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
                     }}
-                    align="center"
-                  >
+                    align="center">
                     View
                     <Checkbox
                       onChange={() => handleUpdateAll("view")}
@@ -345,8 +343,7 @@ export default function RolePermission() {
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
                     }}
-                    align="center"
-                  >
+                    align="center">
                     Add{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("add")}
@@ -359,8 +356,7 @@ export default function RolePermission() {
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
                     }}
-                    align="center"
-                  >
+                    align="center">
                     Update{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("update")}
@@ -373,8 +369,7 @@ export default function RolePermission() {
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
                     }}
-                    align="center"
-                  >
+                    align="center">
                     Delete{" "}
                     <Checkbox
                       checked={allPermissionUpdate.includes("delete")}
@@ -398,8 +393,7 @@ export default function RolePermission() {
                               theme.palette.mode === "dark"
                                 ? "rgba(32,33,32,1)"
                                 : theme.palette.grey[100],
-                          }}
-                        >
+                          }}>
                           <b>{module}</b>
                         </TableCell>
                       </TableRow>
@@ -437,22 +431,19 @@ export default function RolePermission() {
                     theme.palette.mode === "dark"
                       ? "rgba(32,33,32,1)"
                       : theme.palette.grey[100],
-                }}
-              >
+                }}>
                 <Stack spacing={2} direction="row">
                   <Button
                     onClick={handleCancelClick}
                     variant="outlined"
                     color="error"
-                    size="small"
-                  >
+                    size="small">
                     Cancel
                   </Button>
                   <Button
                     onClick={formikUpdate.handleSubmit}
                     variant="contained"
-                    size="small"
-                  >
+                    size="small">
                     Update
                   </Button>
                 </Stack>

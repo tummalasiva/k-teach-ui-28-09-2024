@@ -44,7 +44,7 @@ export default function QuickLinks() {
           </Grid>
           <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
             <Link
-              to="/sch/exam-Mark/exam-result"
+              to="/sch/student/add-student"
               style={{ textDecoration: "none" }}>
               <DataContainer>
                 <Box>
@@ -58,7 +58,7 @@ export default function QuickLinks() {
           </Grid>
           <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
             <Link
-              to="/sch/exam-Mark/exam-result"
+              to="/sch/human-resource/add-employee"
               style={{ textDecoration: "none" }}>
               <DataContainer>
                 <Box>

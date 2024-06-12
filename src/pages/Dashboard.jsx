@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import PageHeader from "../components/PageHeader";
 
@@ -9,7 +11,7 @@ import FilterStudent from "../components/Dashboard/FilterStudent";
 export default function Dashboard() {
   return (
     <>
-      <PageHeader title="Welcome to school ERP " />
+      <PageHeader title="Welcome To School ERP " />
       <FilterStudent />
       <Attendance />
       <QuickLinks />

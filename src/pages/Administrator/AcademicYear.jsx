@@ -1,6 +1,9 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
+
 // custom components
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
@@ -11,7 +14,11 @@ import FormInput from "../../forms/FormInput";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put } from "../../services/apiMethods";
 
+import SettingContext from "../../context/SettingsContext";
+import { useContext } from "react";
+
 export default function AcademicYear() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
@@ -19,7 +26,9 @@ export default function AcademicYear() {
 
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.academicYear.list);
+      const { data } = await get(PRIVATE_URLS.academicYear.list, {
+        params: { schoolId: selectedSetting._id },
+      });
       setData(
         data.result.map((d) => ({ ...d, academicYear: `${d.from}-${d.to}` }))
       );
@@ -70,11 +79,11 @@ export default function AcademicYear() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
-
+  console.log(selectedSetting, "0000000");
   // get data on page load
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting._id]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
@@ -116,8 +125,7 @@ export default function AcademicYear() {
         formTitle="Add Academic Year"
         onClose={handleClose}
         submitButtonTitle="Submit"
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput

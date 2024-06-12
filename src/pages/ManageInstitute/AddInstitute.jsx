@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import {
@@ -30,6 +30,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
 import CloseIcon from "@mui/icons-material/Close";
+import ThemeModeContext from "../../context/ThemeModeContext";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -127,6 +128,7 @@ export default function AddInstitute({ initialValue = null }) {
   const [loading, setLoading] = useState(false);
   const [logo, setLogo] = useState([]);
   const [bannerImages, setBannerImages] = useState([]);
+  const { isDarkMode } = useContext(ThemeModeContext);
 
   const getSchoolDetails = async () => {
     try {
@@ -267,9 +269,26 @@ export default function AddInstitute({ initialValue = null }) {
 
       <form onSubmit={entryFormik.handleSubmit}>
         <BasicData>
-          <MuiBox>
+          {/* <MuiBox>
             <img
               src={dataToEdit?.logo || avatar}
+              style={{
+                width: "100px",
+                height: "100px",
+                objectFit: "contain",
+              }}
+              alt="Preview"
+            />
+          </MuiBox> */}
+          <MuiBox>
+            <img
+              src={
+                logo.length > 0
+                  ? URL.createObjectURL(logo[0])
+                  : dataToEdit?.logo
+                  ? dataToEdit?.logo
+                  : avatar
+              }
               style={{
                 width: "100px",
                 height: "100px",
@@ -295,7 +314,7 @@ export default function AddInstitute({ initialValue = null }) {
         </BasicData>
 
         {/* Basic Info */}
-        <FormBox>
+        <FormBox style={{ position: "relative", zIndex: "1" }}>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Basic Information
           </Title>
@@ -466,14 +485,25 @@ export default function AddInstitute({ initialValue = null }) {
                     control: (baseStyle, state) => ({
                       ...baseStyle,
                       height: "42px",
+                      backgroundColor: isDarkMode ? "black" : "white",
                     }),
                     menu: (provided, state) => ({
                       ...provided,
                       zIndex: 1000,
-                      backgroundColor: "white",
+                    }),
+
+                    option: (provided, state) => ({
+                      ...provided,
+                      zIndex: 1000,
+                      backgroundColor: isDarkMode ? "black" : "white",
+                      color: isDarkMode ? "white" : "black",
+                      "&:hover": {
+                        backgroundColor: isDarkMode ? "lightgray" : "white",
+                        color: isDarkMode ? "black" : "",
+                      },
                     }),
                   }}
-                  placeholder="Select Default Timezone"
+                  placeholder="Default Timezone"
                   name="defaultTimeZone"
                   value={entryFormik.values.defaultTimeZone}
                   onChange={(value) =>
