@@ -27,26 +27,26 @@ export default function Profile() {
   return (
     <>
       <PageHeader title="Profile" />
-      <TabList
+      {/* <TabList
         onChange={handleTabChange}
         value={value}
         labels={["Profile", "Update Profile"]}
       />
-      <TabPanel index={0} value={value}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: 3,
-          }}>
-          <ViewTable student={student} />
-        </Box>
-      </TabPanel>
+      <TabPanel index={0} value={value}> */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 3,
+        }}>
+        <ViewTable student={student} />
+      </Box>
+      {/* </TabPanel>
       <TabPanel index={1} value={value}>
         <UpdateProfile setSelectValue={setSelectValue} />
-      </TabPanel>
+      </TabPanel> */}
     </>
   );
 }

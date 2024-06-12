@@ -436,4 +436,15 @@ export const PRIVATE_URLS = {
     update: "/preadmissionEnqiry/update",
     delete: "/preadmissionEnqiry/delete",
   },
+  preadmissionExam: {
+    list: "/preadmissionExam/list",
+    create: "/preadmissionExam/create",
+    update: "/preadmissionExam/update",
+    delete: "/preadmissionExam/delete",
+  },
+  employeeAttendance: {
+    list: "/employeeAttendance/list",
+    update: "/employeeAttendance/update",
+    getAttendanceReport: "/employeeAttendance/getAttendanceReport",
+  },
 };

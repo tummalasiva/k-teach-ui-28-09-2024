@@ -1,7 +1,9 @@
+/** @format */
+
 export const enquriesTableKeys = [
   {
     name: "Student Name",
-    key: "name",
+    key: "studentName",
   },
   {
     name: "Class",
@@ -10,6 +12,7 @@ export const enquriesTableKeys = [
   {
     name: "Submitted On",
     key: "submittedOn",
+    isDate: true,
   },
   {
     name: "Approval Status",

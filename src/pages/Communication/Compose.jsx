@@ -583,6 +583,22 @@ export default function Compose() {
           </Grid>
         </Grid>
       </Card>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12} lg={12}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <span>Dynamic Tag: </span>
+
+            <div>
+              [name],[school_name] - wil get autoreplaced,
+              <span style={{ color: "red" }}>
+                replace - {"{{var}}"} with your content, variable fields may
+                vary in length. Space consumed for 1 variable is 30 char and
+                avoid double space.
+              </span>
+            </div>
+          </div>
+        </Grid>
+      </Grid>
     </>
   );
 }
