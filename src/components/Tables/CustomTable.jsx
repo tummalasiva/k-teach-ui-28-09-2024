@@ -53,7 +53,7 @@ const getDataValue = (data, k) => {
   if (k.isDate) {
     return data[k.key] ? new Date(data[k.key]).toDateString() : "NA";
   } else {
-    return data[k.key] || "NA";
+    return data[k.key];
   }
 };
 
@@ -137,7 +137,7 @@ export default function CustomTable({
               ? bodyData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((data, index) => (
-                    <TableRow key={data._id}>
+                    <TableRow key={data._id || index}>
                       <TableCell align="center">{index + 1}</TableCell>
                       {tableKeys.map((k, i) =>
                         k.type === "image" ? (

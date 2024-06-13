@@ -13,6 +13,7 @@ import { Box, ButtonGroup, styled } from "@mui/material";
 import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import { LoadingButton } from "@mui/lab";
 
 const MuiBUtton = styled(Box)({
   display: "flex",
@@ -23,11 +24,17 @@ const MuiBUtton = styled(Box)({
 
 export default function Enquiries() {
   const { selectedSetting } = useContext(SettingContext);
+  const [activeButton, setActiveButton] = useState("Pending");
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [academicYear, setAcademicYear] = useState([]);
-
   const [classes, setClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleButtonClick = (status) => {
+    setActiveButton(status);
+  };
 
   const getAcademicYear = async () => {
     try {
@@ -66,20 +73,58 @@ export default function Enquiries() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getAcademicYear();
     getClasses();
   }, [selectedSetting._id]);
+
+  const getEnquiries = async (values) => {
+    try {
+      setLoading(true);
+      const { data } = await get(PRIVATE_URLS.preadmissionEnqiry.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            "studentDetails.academicDetails.academicYear": values.academicYear,
+            "studentDetails.academicDetails.class": values.class,
+            fromDate: values.fromDate,
+            toDate: values.toDate,
+          },
+        },
+      });
+      let tableData = data.result.map((d) => ({
+        ...d,
+        studentName: d.studentDetails?.basicDetails?.name,
+        submittedOn: d.createdAt,
+        class: d.studentDetails?.academicDetails?.class?.name,
+      }));
+      setData(tableData);
+      setFilteredData(tableData.filter((d) => d.status === activeButton));
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       class: "",
-
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getEnquiries,
   });
+
+  useEffect(() => {
+    if (!activeButton) {
+      return setFilteredData(data);
+    }
+    setFilteredData(data.filter((e) => e.status === activeButton));
+  }, [activeButton]);
+
   return (
     <>
       <PageHeader title="Enquiries" />
@@ -119,19 +164,34 @@ export default function Enquiries() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              loading={loading}
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
 
       <MuiBUtton>
         <ButtonGroup variant="outlined" aria-label="outlined button group">
-          <Button variant="contained">Pending:56</Button>
-          <Button>Approved: 100</Button>
-
-          <Button>Rejected:0</Button>
+          {["Pending", "Approved", "Rejected"].map((v, i) => (
+            <Button
+              key={i}
+              variant="outlined"
+              onClick={() => {
+                handleButtonClick(v);
+              }}
+              style={{
+                backgroundColor: activeButton === v ? "#1b3779" : "",
+                color: activeButton === v ? "white" : "black",
+                textTransform: "capitalize",
+              }}>
+              {v}:{data.filter((item) => item.status === v).length}
+            </Button>
+          ))}
         </ButtonGroup>
       </MuiBUtton>
 
@@ -139,7 +199,7 @@ export default function Enquiries() {
         actions={["edit"]}
         tableKeys={enquriesTableKeys}
         bodyDataModal="enquiries"
-        bodyData={data}
+        bodyData={filteredData}
       />
     </>
   );

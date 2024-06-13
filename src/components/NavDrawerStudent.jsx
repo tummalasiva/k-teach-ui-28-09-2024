@@ -59,6 +59,7 @@ import Feedback from "../pages/StudentDashboard/Feedback";
 import Assignment from "../pages/StudentDashboard/Assignment";
 import Attendance from "../pages/StudentDashboard/Attendance";
 import Receipts from "../pages/StudentDashboard/Receipts";
+import Profile from "../pages/StudentDashboard/accountSetting/Profile";
 
 const drawerWidth = 270;
 
@@ -354,7 +355,7 @@ export default function NavDrawerStudent() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         <MenuItem onClick={handleClose}>
           <Link
-            to="/sch/profile"
+            to="/sch/student_profile"
             style={{ display: "flex", textDecoration: "none" }}>
             <ListItemIcon>
               <PersonIcon fontSize="small" />
@@ -515,6 +516,7 @@ export default function NavDrawerStudent() {
 
           <Route path="student_courses" element={<Courses />} />
           <Route path="student_live" element={<Live />} />
+          <Route path="student_profile" element={<Profile />} />
         </Routes>
         <Outlet />
       </Box>

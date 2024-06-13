@@ -27,13 +27,13 @@ const SIDE_MENU_DATA_STUDENT = [
     subMenus: [],
     icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
   },
-  {
-    name: "Invoice",
-    path: "/sch/student_invoice",
-    renderName: [],
-    subMenus: [],
-    icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
-  },
+  //   {
+  //     name: "Invoice",
+  //     path: "/sch/student_invoice",
+  //     renderName: [],
+  //     subMenus: [],
+  //     icon: <DashboardRoundedIcon color="primary" fontSize="small" />,
+  //   },
 
   {
     name: "My Receipts",

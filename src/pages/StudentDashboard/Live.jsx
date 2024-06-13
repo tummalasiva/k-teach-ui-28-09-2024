@@ -50,7 +50,6 @@ export default function Live() {
 
   return (
     <>
-      <PageHeader title="Live" />
       <FilterBox>
         <FormControl size="small" sx={{ m: 1, minWidth: 250 }}>
           <Label id="demo-simple-select-label">

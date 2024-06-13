@@ -44,7 +44,6 @@ export default function Feedback() {
   return (
     <>
       {" "}
-      <PageHeader title="Feedback" />
       <Grid container spacing={2}>
         <Grid xs={12} md={6} lg={3} item>
           <FormSelect

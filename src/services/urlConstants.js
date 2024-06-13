@@ -442,4 +442,15 @@ export const PRIVATE_URLS = {
     getTransferCertificate: "/certificate/getTransferCertificate",
     getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
   },
+  preadmissionExam: {
+    list: "/preadmissionExam/list",
+    create: "/preadmissionExam/create",
+    update: "/preadmissionExam/update",
+    delete: "/preadmissionExam/delete",
+  },
+  employeeAttendance: {
+    list: "/employeeAttendance/list",
+    update: "/employeeAttendance/update",
+    getAttendanceReport: "/employeeAttendance/getAttendanceReport",
+  },
 };

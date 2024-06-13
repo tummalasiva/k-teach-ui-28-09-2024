@@ -65,6 +65,7 @@ export default function StudyCertificate() {
   const [selectedData, setSelectedData] = useState([]);
   const [bulkIssue, setBulkIssue] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingDownload, setLoadingDownload] = useState(false);
 
   console.log(selectedData, "selectedData");
   console.log(students, "students");
@@ -118,7 +119,9 @@ export default function StudyCertificate() {
         fatherName: values?.student?.fatherInfo?.name,
         academicYearFrom: values?.student?.academicYear?.from,
         academicYearTo: values?.student?.academicYear?.to,
+        academicId: values?.academicYear,
         studentName: values?.student?.basicInfo.name,
+        studentId: values?.student?._id,
         currentClass: values?.student?.academicInfo.class.name,
         dob: values?.student?.basicInfo.dob,
         grNo: values?.student?.basicInfo.grNo,
@@ -151,41 +154,42 @@ export default function StudyCertificate() {
   }, [selectedSetting._id]);
 
   const handleSubmitCertificateDownload = async (e) => {
-    e.preventDefault();
     setLoadingDownload(true);
 
     try {
-      const { data } = await get(PRIVATE_URLS.certificate.getStudyCertificate, {
+      const response = await get(PRIVATE_URLS.certificate.getStudyCertificate, {
+        responseType: "blob",
         params: {
           schoolId: selectedSetting._id,
-          academicYearId: selectedData.academicYear,
-          studentId: values.student._id,
+          academicYearId: selectedData?.academicId,
+          studentId: selectedData?.studentId,
         },
       });
-      console.log(data, "certtt");
 
-      const uri = URL.createObjectURL(studyCertificateRes.data);
+      // Create a Blob from the data
+      const blob = new Blob([response.data], { type: "application/pdf" });
 
-      // window.open(uri, "__blank");
-
+      // Create a link element
       const link = document.createElement("a");
+      const uri = URL.createObjectURL(blob);
 
       link.href = uri;
-
       link.setAttribute("download", "studyCertificate.pdf");
 
       document.body.appendChild(link);
 
       link.click();
 
-      link.parentNode.removeChild(link);
+      // Remove the link from the document
+      document.body.removeChild(link);
+
+      // Revoke the object URL to free up memory
+      URL.revokeObjectURL(uri);
     } catch (error) {
       console.log(error);
     }
     setLoadingDownload(false);
   };
-
-  console.log(entryFormik.values.student, "jjjh");
 
   const handleClose = () => {
     setBulkIssue(false);
@@ -349,9 +353,14 @@ export default function StudyCertificate() {
           </Container>
 
           <MuiBox>
-            <Button variant="contained" size="small">
+            <LoadingButton
+              variant="contained"
+              size="small"
+              type="submit"
+              loading={loadingDownload}
+              onClick={handleSubmitCertificateDownload}>
               Download
-            </Button>
+            </LoadingButton>
             <Button variant="contained" size="small" aria-label="search">
               Print
             </Button>

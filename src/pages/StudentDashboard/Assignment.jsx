@@ -10,7 +10,6 @@ export default function Assignment() {
   const [data, setData] = useState([]);
   return (
     <>
-      <PageHeader title="Assignment" />
       <CustomTable
         actions={["download"]}
         tableKeys={studentAssignmentTableKeys}

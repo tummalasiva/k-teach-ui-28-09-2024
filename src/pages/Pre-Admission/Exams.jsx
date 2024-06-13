@@ -11,14 +11,26 @@ import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useContext } from "react";
+import { LoadingButton } from "@mui/lab";
+import AddForm from "../../forms/AddForm";
+import AddOrUpdateExamModal from "./AddOrUpdateExamModal";
 
 export default function Exams() {
   const { selectedSetting } = useContext(SettingContext);
+  const [gettingList, setGettingList] = useState(false);
   const [data, setData] = useState([]);
 
   const [academicYear, setAcademicYear] = useState([]);
-
   const [classes, setClasses] = useState([]);
+
+  // question model;
+
+  const [openQuestionModel, setOpenQuestionModel] = useState(false);
+
+  const handleCloseQuestionModel = () => setOpenQuestionModel(false);
+
+  const handleOpenQuestionModel = () => setOpenQuestionModel(true);
+
   const getAcademicYear = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list, {
@@ -61,16 +73,38 @@ export default function Exams() {
     getClasses();
   }, [selectedSetting._id]);
 
+  const getExamList = async (values) => {
+    try {
+      setGettingList(true);
+      const { data } = await get(PRIVATE_URLS.preadmissionExam.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            academicYear: values.academicYear,
+            class: values.class,
+          },
+        },
+      });
+      console.log(data, "exam list");
+    } catch (error) {
+      console.log(error);
+    }
+    setGettingList(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       class: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getExamList,
   });
+
   return (
     <>
       <PageHeader title="Exams" />
+
+      <AddForm title="Add Exam" onAddClick={handleOpenQuestionModel} />
 
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid rowSpacing={1} columnSpacing={2} container>
@@ -94,9 +128,13 @@ export default function Exams() {
           </Grid>
 
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              loading={gettingList}
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -106,6 +144,10 @@ export default function Exams() {
         tableKeys={examsTableKeys}
         bodyDataModal="exams"
         bodyData={data}
+      />
+      <AddOrUpdateExamModal
+        open={openQuestionModel}
+        onClose={handleCloseQuestionModel}
       />
     </>
   );

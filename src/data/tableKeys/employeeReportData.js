@@ -1,19 +1,21 @@
+/** @format */
+
 export const employeeAttendanceReportTableKeys = [
   {
     name: "Employee Name",
-    key: "name",
+    key: "employee",
   },
   {
     name: "Working Days",
-    key: "workingDay",
+    key: "workingDays",
   },
   {
     name: "Present Days",
-    key: "presentDay",
+    key: "presentDays",
   },
 
   {
     name: "Percentage",
-    key: "percentage",
+    key: "percentagePresent",
   },
 ];
