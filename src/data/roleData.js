@@ -331,4 +331,303 @@ export const ROLE_PERMISSIONS = [
       },
     ],
   },
+
+  {
+    module: "LMS",
+    subModule: [
+      {
+        module: "Storage",
+        permissions: [],
+      },
+      {
+        module: "Courses",
+        permissions: [],
+      },
+
+      {
+        module: "Course Content",
+        permissions: [],
+      },
+
+      {
+        module: "Live",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Library",
+    subModule: [
+      {
+        module: "Books",
+        permissions: [],
+      },
+      {
+        module: "Periodical",
+        permissions: [],
+      },
+
+      {
+        module: "Student Library Member",
+        permissions: [],
+      },
+
+      {
+        module: "Employee Library Member",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Leave Management",
+    subModule: [
+      {
+        module: "Leave Type",
+        permissions: [],
+      },
+      {
+        module: "Employee Leave",
+        permissions: [],
+      },
+
+      {
+        module: "Student Leave",
+        permissions: [],
+      },
+
+      {
+        module: "Leave Report",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Inventory",
+    subModule: [
+      {
+        module: "Item",
+        permissions: [],
+      },
+      {
+        module: "Vendor",
+        permissions: [],
+      },
+
+      {
+        module: "In/Out Transaction",
+        permissions: [],
+      },
+
+      {
+        module: "Stock ist",
+        permissions: [],
+      },
+
+      {
+        module: "Issue",
+        permissions: [],
+      },
+
+      {
+        module: "Sell",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Certificate",
+    subModule: [
+      {
+        module: "Study Certificate",
+        permissions: [],
+      },
+      {
+        module: "Transfer Certificate",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Fees",
+    subModule: [
+      {
+        module: "Receipt Book",
+        permissions: [],
+      },
+      {
+        module: "Fee Map Category",
+        permissions: [],
+      },
+
+      {
+        module: "Collect Fees",
+        permissions: [],
+      },
+
+      {
+        module: "Balance Fee",
+        permissions: [],
+      },
+
+      {
+        module: "Fee Overview",
+        permissions: [],
+      },
+
+      {
+        module: "Reconciliation",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Hostel",
+    subModule: [
+      {
+        module: "Manage Hostel",
+        permissions: [],
+      },
+      {
+        module: "Manage Room Type",
+        permissions: [],
+      },
+
+      {
+        module: "Manage Room Bed",
+        permissions: [],
+      },
+
+      {
+        module: "Hostel Member",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Transport",
+    subModule: [
+      {
+        module: "Vehicle",
+        permissions: [],
+      },
+      {
+        module: "Manage Route And Trips",
+        permissions: [],
+      },
+
+      {
+        module: "Routes",
+        permissions: [],
+      },
+
+      {
+        module: "Transport Member",
+        permissions: [],
+      },
+
+      {
+        module: "Vehicle Log",
+        permissions: [],
+      },
+
+      {
+        module: "Vehicle Maintenance",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Payroll",
+    subModule: [
+      {
+        module: "Salary Grade",
+        permissions: [],
+      },
+      {
+        module: "Make Payment",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Report",
+    subModule: [
+      {
+        module: "Library Report",
+        permissions: [],
+      },
+      {
+        module: "Student Attendance",
+        permissions: [],
+      },
+
+      {
+        module: "Studnet Yearly Attendance",
+        permissions: [],
+      },
+
+      {
+        module: "Emplyee Attendance",
+        permissions: [],
+      },
+
+      {
+        module: "Employee Yearly Attendance",
+        permissions: [],
+      },
+
+      {
+        module: "Student Report",
+        permissions: [],
+      },
+
+      {
+        module: "Student Activity Report",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Visitor Info",
+    subModule: [
+      {
+        module: "Visitor Info",
+        permissions: [],
+      },
+      {
+        module: "Student Checkout",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Help Desk",
+    subModule: [
+      {
+        module: "Help Desk",
+        permissions: [],
+      },
+    ],
+  },
+
+  {
+    module: "Guardian Feedback",
+    subModule: [
+      {
+        module: "Guardian Feedback",
+        permissions: [],
+      },
+    ],
+  },
 ];

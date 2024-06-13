@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
@@ -27,7 +29,6 @@ export default function RelievingLetter() {
   const [modalData, setModalData] = useState({
     open: false,
     containt: "",
-    action: () => {},
   });
   const componentRef = useRef();
 
@@ -50,7 +51,7 @@ export default function RelievingLetter() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting._id]);
 
   const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
@@ -79,9 +80,13 @@ export default function RelievingLetter() {
 
   const entryFormik = useFormik({
     initialValues: {
-      name: "",
-      joiningDate: dayjs(new Date()),
-      relievingLetter: `<p>Webpruce Company</p>
+      name: dataToEdit?.name || "",
+      joiningDate: dataToEdit?.joiningDate
+        ? dayjs(dataToEdit?.joiningDate).format("YYYY/MM/DD")
+        : null,
+      relievingLetter:
+        dataToEdit?.relievingLetter ||
+        `<p>Webpruce Company</p>
       <p>Rajajingar, Banglore, Karnataka</p>
       <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
       <p>Contact: +91 876xxxxxxxxx</p>
@@ -99,20 +104,13 @@ export default function RelievingLetter() {
       `,
     },
     onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
-  useEffect(() => {
-    if (dataToEdit) {
-      entryFormik.setValues({
-        name: dataToEdit?.name,
-        joiningDate: dayjs(dataToEdit?.joiningDate),
-        relievingLetter: dataToEdit?.relievingLetter,
-      });
-    }
-  }, [dataToEdit]);
 
   useEffect(() => {
     if (value === 1) {
       entryFormik.resetForm();
+      setDataToEdit(null);
     }
   }, [value]);
 
@@ -140,7 +138,6 @@ export default function RelievingLetter() {
       ...modalData,
       open: true,
       containt: data.relievingLetter,
-      //  action: () => handleGetDownloadSheet(data._id),
     });
   };
 
@@ -222,22 +219,19 @@ export default function RelievingLetter() {
               gap={1}
               mt={6}
               display="flex"
-              justifyContent="flex-end"
-            >
+              justifyContent="flex-end">
               <Button
                 size="small"
                 onClick={() => setSelectValue(0)}
                 color="error"
-                variant="contained"
-              >
+                variant="contained">
                 Cancel
               </Button>
               <LoadingButton
                 loading={loading}
                 size="small"
                 type="submit"
-                variant="contained"
-              >
+                variant="contained">
                 Submit
               </LoadingButton>
             </Grid>
@@ -284,22 +278,19 @@ export default function RelievingLetter() {
               mt={6}
               gap={1}
               display="flex"
-              justifyContent="flex-end"
-            >
+              justifyContent="flex-end">
               <Button
                 size="small"
                 onClick={() => setSelectValue(0)}
                 color="error"
-                variant="contained"
-              >
+                variant="contained">
                 Cancel
               </Button>
               <LoadingButton
                 loading={loading}
                 size="small"
                 type="submit"
-                variant="contained"
-              >
+                variant="contained">
                 Submit
               </LoadingButton>
             </Grid>

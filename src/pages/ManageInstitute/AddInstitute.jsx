@@ -113,11 +113,11 @@ const Attendence_Type = [
 const Admission_Options = [
   {
     label: "Manual",
-    value: "Manual",
+    value: "manual",
   },
   {
     label: "Auto ascending no",
-    value: "Auto ascending no",
+    value: "autoAscendingNo",
   },
 ];
 export default function AddInstitute({ initialValue = null }) {
@@ -213,7 +213,11 @@ export default function AddInstitute({ initialValue = null }) {
       name: dataToEdit?.name || "",
       address: dataToEdit?.address || "",
       phone: dataToEdit?.phone || "",
-      regDate: dataToEdit && dataToEdit.regDate ? dataToEdit.regDate : null,
+
+      regDate: dataToEdit?.regDate
+        ? dayjs(dataToEdit.regDate).format("YYYY/MM/DD")
+        : null,
+
       email: dataToEdit?.email || "",
       fax: dataToEdit?.fax || "",
       websiteFooter: dataToEdit?.websiteFooter || "",
@@ -294,7 +298,7 @@ export default function AddInstitute({ initialValue = null }) {
                 height: "100px",
                 objectFit: "contain",
               }}
-              alt="Preview"
+              alt="loogo"
             />
           </MuiBox>
           <Grid container spacing={2} display="flex" justifyContent="center">

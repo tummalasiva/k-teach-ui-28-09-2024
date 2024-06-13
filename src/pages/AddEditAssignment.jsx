@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -143,14 +145,14 @@ export default function AddEditAssignment({
 
   useEffect(() => {
     getClasses();
-  }, []);
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
       getSubject();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting._id]);
 
   console.log(dataToEdit, "dataToEdit");
 
@@ -162,8 +164,7 @@ export default function AddEditAssignment({
           columnSpacing={2}
           container
           component="form"
-          onSubmit={entryFormik.handleSubmit}
-        >
+          onSubmit={entryFormik.handleSubmit}>
           <Grid xs={12} md={6} lg={3} item>
             <FormInput
               required={true}
@@ -270,14 +271,12 @@ export default function AddEditAssignment({
             md={6}
             lg={3}
             style={{ alignSelf: "center", marginTop: "10px" }}
-            item
-          >
+            item>
             <Button
               size="small"
               color="error"
               variant="contained"
-              onClick={handleClose}
-            >
+              onClick={handleClose}>
               Cancel
             </Button>
             <LoadingButton
@@ -285,8 +284,7 @@ export default function AddEditAssignment({
               type="submit"
               variant="contained"
               sx={{ ml: 2 }}
-              loading={loading}
-            >
+              loading={loading}>
               Submit
             </LoadingButton>
           </Grid>

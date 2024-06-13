@@ -136,19 +136,15 @@ const Salary_Type = [
 
 export default function AddEmployee() {
   const { selectedSetting } = useContext(SettingContext);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [dataToEdit, setDataToEdit] = useState(null);
-
   const [loading, setLoading] = useState(false);
   const [designationData, setDesgnationData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [rolesData, setRolesData] = useState([]);
-  const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState([]);
   const [resume, setResume] = useState([]);
-
-  const navigate = useNavigate();
-
-  const { id } = useParams();
 
   const getEmployeeDetails = async () => {
     try {
@@ -239,7 +235,7 @@ export default function AddEmployee() {
           email: values.email,
           salaryType: values.salaryType,
           department: values.department,
-          joiningDate: dayjs(values.joiningDate),
+          joiningDate: values.joiningDate,
           resume: values.resume,
         },
         otherInfo: {
@@ -296,7 +292,9 @@ export default function AddEmployee() {
       religion: dataToEdit?.basicInfo.religion || "",
       presentAddress: dataToEdit?.basicInfo.presentAddress || "",
       permanentAddress: dataToEdit?.basicInfo.permanentAddress || "",
-      dob: dataToEdit?.basicInfo.dob || null,
+      dob: dataToEdit?.basicInfo?.dob
+        ? dayjs(dataToEdit.basicInfo.dob).format("YYYY/MM/DD")
+        : null,
       fatherName: dataToEdit?.basicInfo.fatherName || "",
       spouseName: dataToEdit?.basicInfo.spouseName || "",
       aadharNo: dataToEdit?.basicInfo.aadharNo || "",
@@ -309,26 +307,19 @@ export default function AddEmployee() {
       salaryType: dataToEdit?.academicInfo.salaryType || "",
       role: dataToEdit?.role._id || "",
       department: dataToEdit?.academicInfo.department._id || "",
-      joiningDate: dataToEdit?.academicInfo.joiningDate || null,
+      joiningDate: dataToEdit?.academicInfo?.joiningDate
+        ? dayjs(dataToEdit.academicInfo.joiningDate).format("YYYY/MM/DD")
+        : null,
       libraryMember: dataToEdit?.libraryMember || false,
       username: dataToEdit?.username || "",
       password: dataToEdit?.otherInfo.password || "",
       public: dataToEdit?.otherInfo.public || false,
       showDetailsForWeb: dataToEdit?.otherInfo.showDetailsForWeb || false,
-
       active: dataToEdit?.active || true,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewCreateUrl(imageUrl);
-    }
-  };
 
   const handleChangePhoto = (e, type) => {
     const { files } = e.target;
@@ -360,7 +351,13 @@ export default function AddEmployee() {
       <BasicData>
         <MuiBox>
           <img
-            src={dataToEdit?.photo || avatar}
+            src={
+              selectedPhoto.length > 0
+                ? URL.createObjectURL(selectedPhoto[0])
+                : dataToEdit?.photo
+                ? dataToEdit?.photo
+                : avatar
+            }
             style={{
               width: "100px",
               height: "100px",

@@ -28,9 +28,12 @@ export default function Assignment() {
   const [sections, setSections] = useState([]);
   const Section_Options = [{ label: "All", value: "all" }, ...sections];
 
+  const [loading, setLoading] = useState(false);
+
   // get assignment
   const getData = async (values) => {
     try {
+      setLoading(true);
       if (values?.section === "all") {
         const { data } = await get(PRIVATE_URLS.assignment.list, {
           params: {
@@ -74,8 +77,10 @@ export default function Assignment() {
           );
         }
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -125,14 +130,14 @@ export default function Assignment() {
 
   useEffect(() => {
     getClasses();
-  }, []);
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
       getData();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting._id]);
 
   const handleClose = () => {
     setSelectValue(0);
@@ -217,13 +222,14 @@ export default function Assignment() {
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <Button
+              <LoadingButton
+                loading={loading}
                 size="small"
                 type="submit"
                 variant="contained"
                 sx={{ ml: 2 }}>
                 Search
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>

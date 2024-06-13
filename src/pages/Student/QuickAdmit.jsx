@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
@@ -50,8 +52,8 @@ export default function QuickAdmit() {
       const payload = {
         basicInfo: {
           name: values.name,
-          admissionDate: values.admissionDate,
-          dob: values.dob,
+          admissionDate: dayjs(values.admissionDate).format("YYYY/MM/DD"),
+          dob: dayjs(values.dob).format("YYYY/MM/DD"),
           gender: values.gender,
           caste: values.caste,
         },
@@ -153,16 +155,14 @@ export default function QuickAdmit() {
               component="span"
               color="red"
               fontWeight="bold"
-              sx={{ display: "inline" }}
-            >
+              sx={{ display: "inline" }}>
               Note:{" "}
             </Typography>
             <Typography
               variant="h6"
               component="span"
               fontWeight="bold"
-              sx={{ display: "inline" }}
-            >
+              sx={{ display: "inline" }}>
               Student will be admited to session
             </Typography>
           </Grid>
@@ -334,14 +334,12 @@ export default function QuickAdmit() {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",
-        }}
-      >
+        }}>
         <LoadingButton
           loading={loading}
           onClick={entryFormik.handleSubmit}
           size="small"
-          variant="contained"
-        >
+          variant="contained">
           Submit
         </LoadingButton>
       </Box>

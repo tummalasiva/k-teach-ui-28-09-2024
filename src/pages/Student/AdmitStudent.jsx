@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -136,13 +138,13 @@ export default function AdmitStudent() {
   useEffect(() => {
     getAcademicYear();
     getClass();
-  }, []);
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
       getSection();
     }
-  }, [entryFormik.values.class, selectedSetting]);
+  }, [entryFormik.values.class, selectedSetting._id]);
 
   useEffect(() => {
     if (
@@ -152,7 +154,7 @@ export default function AdmitStudent() {
     ) {
       entryFormik.handleSubmit();
     }
-  }, [entryFormik.values]);
+  }, [entryFormik.values, selectedSetting._id]);
 
   const handleDelete = async (id) => {
     try {
@@ -213,8 +215,7 @@ export default function AdmitStudent() {
               md={12}
               lg={12}
               display="flex"
-              justifyContent="flex-start"
-            >
+              justifyContent="flex-start">
               <Button size="small" variant="contained" type="submit">
                 Find
               </Button>
@@ -227,8 +228,7 @@ export default function AdmitStudent() {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Stack direction="row">
             <Tooltip title="Download">
               <IconButton>

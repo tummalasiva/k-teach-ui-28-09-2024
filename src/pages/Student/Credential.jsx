@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -9,6 +11,7 @@ import { studentCrendentialsTableKeys } from "../../data/tableKeys/studentCreden
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function Credential() {
   const { selectedSetting } = useContext(SettingContext);
@@ -63,10 +66,11 @@ export default function Credential() {
           },
         },
       });
-      entryFormik.setFieldValue("section", data.result[0]?._id);
+
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+      entryFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -116,13 +120,13 @@ export default function Credential() {
   useEffect(() => {
     getAcademicYear();
     getClasses();
-  }, []);
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting._id]);
 
   return (
     <>
@@ -133,8 +137,7 @@ export default function Credential() {
           columnSpacing={2}
           container
           component="form"
-          onSubmit={entryFormik.handleSubmit}
-        >
+          onSubmit={entryFormik.handleSubmit}>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -157,7 +160,7 @@ export default function Credential() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="sectiion"
+              name="section"
               formik={entryFormik}
               label="Select Section"
               options={sections}
@@ -165,9 +168,13 @@ export default function Credential() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-            <Button size="small" type="submit" variant="contained">
+            <LoadingButton
+              loading={loader}
+              size="small"
+              type="submit"
+              variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>

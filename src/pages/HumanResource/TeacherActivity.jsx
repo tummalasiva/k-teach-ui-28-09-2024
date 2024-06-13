@@ -14,6 +14,8 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
+import dayjs from "dayjs";
 
 export default function TeacherActivity() {
   const { selectedSetting } = useContext(SettingContext);
@@ -21,6 +23,7 @@ export default function TeacherActivity() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingFind, setLoadingFind] = useState(false);
   const [academicYear, setAcademicYear] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
@@ -33,6 +36,7 @@ export default function TeacherActivity() {
 
   const getData = async (values) => {
     try {
+      setLoadingFind(true);
       const { data } = await get(PRIVATE_URLS.teacherActivity.list, {
         params: {
           schoolId: selectedSetting._id,
@@ -41,14 +45,16 @@ export default function TeacherActivity() {
             class: values.class,
             section: values.section,
             subject: values.subject,
-            fromDate: values.fromDate,
-            toDate: values.toDate,
+            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
       setData(data.result);
+      setLoadingFind(false);
     } catch (error) {
       console.log(error);
+      setLoadingFind(false);
     }
   };
 
@@ -175,6 +181,7 @@ export default function TeacherActivity() {
       setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
     setLoading(false);
   };
@@ -210,7 +217,6 @@ export default function TeacherActivity() {
       toDate: null,
     },
     onSubmit: getData,
-    enableReinitialize: true,
   });
 
   useEffect(() => {
@@ -294,10 +300,20 @@ export default function TeacherActivity() {
               <Grid xs={12} sm={6} md={6} lg={4} item>
                 <FormDatePicker formik={formik} label="To Date" name="toDate" />
               </Grid>
-              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-                <Button size="small" type="submit" variant="contained">
+              <Grid
+                xs={12}
+                md={12}
+                lg={12}
+                item
+                display={"flex"}
+                justifyContent={"flex-end"}>
+                <LoadingButton
+                  loading={loadingFind}
+                  size="small"
+                  type="submit"
+                  variant="contained">
                   Find
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </form>
@@ -377,9 +393,13 @@ export default function TeacherActivity() {
                   onClick={handleClose}>
                   Cancel
                 </Button>
-                <Button size="small" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  type="submit"
+                  variant="contained">
                   {dataToEdit ? "Update" : "Submit"}
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </form>

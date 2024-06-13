@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -82,7 +84,7 @@ export default function Subject() {
   useEffect(() => {
     getEmployees();
     getClasses();
-  }, [selectedSetting]);
+  }, [selectedSetting, selectedSetting._id]);
 
   const AddDepartmentHandel = () => {
     setOpen(true);
@@ -135,10 +137,14 @@ export default function Subject() {
   });
 
   useEffect(() => {
+    console.log(selectedClass, "000000");
     if (selectedClass) {
+      setData([]);
       getData();
+    } else {
+      setData([]);
     }
-  }, [selectedClass, selectedSetting]);
+  }, [selectedClass, selectedSetting._id]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
@@ -201,8 +207,7 @@ export default function Subject() {
         formTitle={dataToEdit ? "Update" : "Add Subject"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Add"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput

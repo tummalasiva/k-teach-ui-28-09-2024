@@ -1,3 +1,5 @@
+/** @format */
+
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -28,7 +30,6 @@ export default function ExperienceLetter() {
   const [modalData, setModalData] = useState({
     open: false,
     containt: "",
-    action: () => {},
   });
 
   const handlePrint = useReactToPrint({
@@ -43,8 +44,6 @@ export default function ExperienceLetter() {
         },
       });
       setData(data.result);
-
-      console.log(data.result, "result");
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +51,7 @@ export default function ExperienceLetter() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting._id]);
 
   const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
@@ -81,9 +80,13 @@ export default function ExperienceLetter() {
   };
   const entryFormik = useFormik({
     initialValues: {
-      name: "",
-      joiningDate: dayjs(new Date()),
-      experienceLetter: `<p>Webpruce Company</p>
+      name: dataToEdit?.name || "",
+      joiningDate: dataToEdit?.joiningDate
+        ? dayjs(dataToEdit?.joiningDate).format("YYYY/MM/DD")
+        : null,
+      experienceLetter:
+        dataToEdit?.experienceLetter ||
+        `<p>Webpruce Company</p>
       <p>Rajajingar, Banglore, Karnataka</p>
       <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
       <p>Contact: +91 876xxxxxxxxx</p>
@@ -101,21 +104,13 @@ export default function ExperienceLetter() {
       `,
     },
     onSubmit: handleCreateOrUpdate,
-    // enableReinitialize: true,
+    enableReinitialize: true,
   });
-  useEffect(() => {
-    if (dataToEdit) {
-      entryFormik.setValues({
-        name: dataToEdit?.name,
-        joiningDate: dayjs(dataToEdit?.joiningDate),
-        experienceLetter: dataToEdit?.experienceLetter,
-      });
-    }
-  }, [dataToEdit]);
 
   useEffect(() => {
     if (value === 1) {
       entryFormik.resetForm();
+      setDataToEdit(null);
     }
   }, [value]);
 
@@ -143,7 +138,6 @@ export default function ExperienceLetter() {
       ...modalData,
       open: true,
       containt: data.experienceLetter,
-      //  action: () => handleGetDownloadSheet(data._id),
     });
   };
 
@@ -229,22 +223,19 @@ export default function ExperienceLetter() {
               mt={6}
               gap={1}
               display="flex"
-              justifyContent="flex-end"
-            >
+              justifyContent="flex-end">
               <Button
                 size="small"
                 onClick={() => setSelectValue(0)}
                 color="error"
-                variant="contained"
-              >
+                variant="contained">
                 Cancel
               </Button>
               <LoadingButton
                 size="small"
                 loading={loading}
                 variant="contained"
-                type="submit"
-              >
+                type="submit">
                 Submit
               </LoadingButton>
             </Grid>
@@ -295,22 +286,19 @@ export default function ExperienceLetter() {
               item
               mt={6}
               display="flex"
-              justifyContent="flex-end"
-            >
+              justifyContent="flex-end">
               <Button
                 size="small"
                 onClick={() => setSelectValue(0)}
                 color="error"
-                variant="contained"
-              >
+                variant="contained">
                 Cancel
               </Button>
               <LoadingButton
                 size="small"
                 loading={loading}
                 variant="contained"
-                type="submit"
-              >
+                type="submit">
                 Submit
               </LoadingButton>
             </Grid>

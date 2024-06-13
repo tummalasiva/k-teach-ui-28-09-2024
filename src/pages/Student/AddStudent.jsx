@@ -22,6 +22,7 @@ import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
+import dayjs from "dayjs";
 
 const FormBox = styled(Box)(({ theme }) => ({
   border: "1px solid",
@@ -233,9 +234,14 @@ export default function AddStudent() {
     initialValues: {
       academicYear: dataToEdit?.academicYear._id || "",
       name: dataToEdit?.basicInfo.name || "",
-      admissionDate: dataToEdit?.basicInfo.admissionDate || null,
+
+      admissionDate: dataToEdit?.admissionDateb
+        ? dayjs(dataToEdit.admissionDate).format("YYYY/MM/DD")
+        : null,
+
       motherTongue: dataToEdit?.basicInfo.motherTongue || "",
-      dob: dataToEdit?.basicInfo.dob || null,
+
+      dob: dataToEdit?.dob ? dayjs(dataToEdit.dob).format("YYYY/MM/DD") : null,
       gender: dataToEdit?.basicInfo.gender || "",
       bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
       cicn: dataToEdit?.basicInfo.cicn || "",

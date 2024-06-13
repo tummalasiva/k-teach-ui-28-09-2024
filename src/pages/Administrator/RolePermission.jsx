@@ -308,6 +308,7 @@ export default function RolePermission() {
                   margin: "10px 0px",
                   fontWeight: "500",
                   fontSize: "16px",
+                  fontWeight: 700,
                 }}>
                 {" "}
                 Set permission for this role
@@ -322,6 +323,8 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
+                      fontWeight: 700,
+                      paddingLeft: "15px",
                     }}>
                     Module Name
                   </TableCell>
@@ -329,6 +332,7 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
+                      fontWeight: 700,
                     }}
                     align="center">
                     View
@@ -342,6 +346,7 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
+                      fontWeight: 700,
                     }}
                     align="center">
                     Add{" "}
@@ -355,6 +360,7 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
+                      fontWeight: 700,
                     }}
                     align="center">
                     Update{" "}
@@ -368,6 +374,7 @@ export default function RolePermission() {
                     sx={{
                       color: (theme) =>
                         theme.palette.mode === "dark" ? "white" : "black",
+                      fontWeight: 700,
                     }}
                     align="center">
                     Delete{" "}
@@ -394,7 +401,9 @@ export default function RolePermission() {
                                 ? "rgba(32,33,32,1)"
                                 : theme.palette.grey[100],
                           }}>
-                          <b>{module}</b>
+                          <Typography fontWeight={"bold"} paddingLeft={"10px"}>
+                            {module}
+                          </Typography>
                         </TableCell>
                       </TableRow>
                       {subModule.map((m, i) => (
@@ -435,7 +444,7 @@ export default function RolePermission() {
                 <Stack spacing={2} direction="row">
                   <Button
                     onClick={handleCancelClick}
-                    variant="outlined"
+                    variant="contained"
                     color="error"
                     size="small">
                     Cancel

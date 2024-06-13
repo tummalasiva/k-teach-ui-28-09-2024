@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -10,28 +12,132 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { studentAttendanceOverviewTableKeys } from "../../data/tableKeys/studentAttendanceOverviewData";
 import { studentAttendanceTableKeys } from "../../data/tableKeys/studentAttendanceData";
 import FormDatePicker from "../../forms/FormDatePicker";
-import localeData from "dayjs/plugin/localeData";
 import { studentAttendanceReportTableKeys } from "../../data/tableKeys/studentAttendanceReportData";
-dayjs.extend(localeData);
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function StudentAttendance() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setSelectValue] = useState(0);
+  const [academicYearList, setAcademicYearList] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
   };
 
-  const entryFormik = useFormik({
+  const attendanceFormik = useFormik({
     initialValues: {
       class: "",
       section: "",
-      fromDate: dayjs(new Date()),
+      date: dayjs(new Date()),
     },
     onSubmit: console.log("nnnn"),
   });
 
-  // get month
-  const getMonthOption = dayjs.months().map((m) => ({ value: m, label: m }));
+  const overviewFormik = useFormik({
+    initialValues: {
+      class: "",
+      date: dayjs(new Date()),
+    },
+    onSubmit: console.log("nnnn"),
+  });
+
+  const reportFormik = useFormik({
+    initialValues: {
+      academicYear: "",
+      class: "",
+      section: "",
+      month: null,
+    },
+    onSubmit: console.log("nnnn"),
+    enableReinitialize: true,
+  });
+
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+
+      setAcademicYearList(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+      reportFormik.setFieldValue("academicYear", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get class
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setClasses(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+      overviewFormik.setFieldValue("class", data.result[0]._id);
+      attendanceFormik.setFieldValue("class", data.result[0]._id);
+      reportFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get sections
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class:
+              overviewFormik.values.class ||
+              attendanceFormik.values.class ||
+              reportFormik.values.class,
+          },
+        },
+      });
+
+      setSections(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+
+      attendanceFormik.setFieldValue("section", data.result[0]?._id);
+      reportFormik.setFieldValue("section", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      overviewFormik.values.class ||
+      attendanceFormik.values.class ||
+      reportFormik.values.class
+    ) {
+      getSections();
+    }
+  }, [
+    overviewFormik.values.class ||
+      attendanceFormik.values.class ||
+      reportFormik.values.class,
+    selectedSetting._id,
+  ]);
+
+  useEffect(() => {
+    getAcademicYear();
+    getClasses();
+  }, [selectedSetting._id]);
 
   return (
     <>
@@ -48,16 +154,16 @@ export default function StudentAttendance() {
               <FormSelect
                 required={true}
                 name="class"
-                formik={entryFormik}
+                formik={overviewFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} sm={6} md={6} lg={4} item>
               <FormDatePicker
-                formik={entryFormik}
+                formik={overviewFormik}
                 label="Date"
-                name="fromDate"
+                name="date"
               />
             </Grid>
           </Grid>
@@ -76,31 +182,31 @@ export default function StudentAttendance() {
               <FormSelect
                 required={true}
                 name="class"
-                formik={entryFormik}
+                formik={attendanceFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="section"
-                formik={entryFormik}
+                formik={attendanceFormik}
                 label="Select Section"
-                // options={""}
+                options={sections}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
-                formik={entryFormik}
+                formik={attendanceFormik}
                 label="Date"
-                name="fromDate"
+                name="date"
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <Button size="small" variant="contained">
+              <LoadingButton size="small" variant="contained">
                 Find
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
@@ -117,43 +223,51 @@ export default function StudentAttendance() {
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
-                name="academic year"
-                formik={entryFormik}
+                name="academicYear"
+                formik={reportFormik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYearList}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="class"
-                formik={entryFormik}
+                formik={reportFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="section"
-                formik={entryFormik}
+                formik={reportFormik}
                 label="Select Section"
-                // options={""}
+                options={sections}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
+              <FormDatePicker
+                formik={reportFormik}
+                label="Month"
                 name="month"
-                formik={entryFormik}
-                label="Select Month"
-                options={getMonthOption}
+                openTo="month"
+                inputFormat="MM"
+                views={["month"]}
+                required={true}
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <Button size="small" variant="contained">
+            <Grid
+              xs={12}
+              md={12}
+              lg={12}
+              item
+              display={"flex"}
+              justifyContent={"flex-end"}>
+              <LoadingButton size="small" variant="contained">
                 Find
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
