@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
@@ -51,7 +53,7 @@ export default function AddPopup() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);
@@ -161,7 +163,6 @@ export default function AddPopup() {
         bodyDataModal="Popup Splash News"
         bodyData={data}
         tableKeys={popupSplashNewsTableKeys}
-        adding={loading}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
         onToggleSwitch={handleToggle}
@@ -182,8 +183,7 @@ export default function AddPopup() {
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput formik={entryFormik} name="title" label="Title" />

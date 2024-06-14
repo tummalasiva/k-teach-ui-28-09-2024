@@ -132,8 +132,8 @@ export default function AddStudent() {
       const payload = {
         basicInfo: {
           name: values.name,
-          admissionDate: values.admissionDate,
-          dob: values.dob,
+          admissionDate: dayjs(values.admissionDate).format("YYYY/MM/DD"),
+          dob: dayjs(values.dob).format("YYYY/MM/DD"),
           gender: values.gender,
           bloodGroup: values.bloodGroup,
           religion: values.religion,
@@ -218,6 +218,8 @@ export default function AddStudent() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+
+        console.log(formData, "kkkkkk");
         navigate("/sch/student/admit-student");
       } else {
         const { data } = await post(PRIVATE_URLS.student.create, formData, {
@@ -235,13 +237,15 @@ export default function AddStudent() {
       academicYear: dataToEdit?.academicYear._id || "",
       name: dataToEdit?.basicInfo.name || "",
 
-      admissionDate: dataToEdit?.admissionDateb
-        ? dayjs(dataToEdit.admissionDate).format("YYYY/MM/DD")
+      admissionDate: dataToEdit?.basicInfo?.admissionDate
+        ? dayjs(dataToEdit.basicInfo.admissionDate).format("YYYY/MM/DD")
         : null,
 
       motherTongue: dataToEdit?.basicInfo.motherTongue || "",
 
-      dob: dataToEdit?.dob ? dayjs(dataToEdit.dob).format("YYYY/MM/DD") : null,
+      dob: dataToEdit?.basicInfo?.dob
+        ? dayjs(dataToEdit.basicInfo.dob).format("YYYY/MM/DD")
+        : null,
       gender: dataToEdit?.basicInfo.gender || "",
       bloodGroup: dataToEdit?.basicInfo.bloodGroup || "",
       cicn: dataToEdit?.basicInfo.cicn || "",
@@ -371,6 +375,38 @@ export default function AddStudent() {
     setTransperCertificate(
       transferCertificate.filter((img) => img.name != fileName)
     );
+  };
+
+  const handleDownloadFatherPhoto = () => {
+    const downloadUrl = dataToEdit?.fatherInfo?.photo;
+
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
+  const handleDownloadMotherPhoto = () => {
+    const downloadUrl = dataToEdit?.motherInfo?.photo;
+
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
+  const handleDownloadStudentPhoto = () => {
+    const downloadUrl = dataToEdit?.photo;
+
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
+  };
+
+  const handleDownloadTransferCertificate = () => {
+    const downloadUrl = dataToEdit?.prevSchInfo.transferCertificate;
+
+    if (downloadUrl) {
+      window.open(downloadUrl, "_blank");
+    }
   };
 
   return (
@@ -661,6 +697,18 @@ export default function AddStudent() {
                   accept="image/*,.pdf"
                 />
               </Grid>
+
+              {dataToEdit?.prevSchInfo &&
+              dataToEdit.prevSchInfo?.transferCertificate ? (
+                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleDownloadTransferCertificate}>
+                    Download File
+                  </Button>
+                </Grid>
+              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -719,6 +767,16 @@ export default function AddStudent() {
                   accept="image/jpeg, image/png"
                 />
               </Grid>
+              {dataToEdit?.fatherInfo && dataToEdit.fatherInfo?.photo ? (
+                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleDownloadFatherPhoto}>
+                    Download Photo
+                  </Button>
+                </Grid>
+              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -778,6 +836,17 @@ export default function AddStudent() {
                   accept="image/jpeg, image/png"
                 />
               </Grid>
+
+              {dataToEdit?.motherInfo && dataToEdit.motherInfo?.photo ? (
+                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleDownloadMotherPhoto}>
+                    Download Photo
+                  </Button>
+                </Grid>
+              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -873,6 +942,17 @@ export default function AddStudent() {
                   accept="image/jpeg, image/png"
                 />
               </Grid>
+
+              {dataToEdit && dataToEdit?.photo ? (
+                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleDownloadStudentPhoto}>
+                    Download Photo
+                  </Button>
+                </Grid>
+              ) : null}
             </Grid>
           </Box>
         </FormBox>

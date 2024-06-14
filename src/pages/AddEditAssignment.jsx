@@ -11,6 +11,7 @@ import FormSelect from "../forms/FormSelect";
 import FormDatePicker from "../forms/FormDatePicker";
 import FileSelect from "../forms/FileSelect";
 import { LoadingButton } from "@mui/lab";
+import dayjs from "dayjs";
 
 export default function AddEditAssignment({
   dataToEdit = "",
@@ -81,7 +82,8 @@ export default function AddEditAssignment({
     formData.append("section", values.section);
     formData.append("subject", values.subject);
     formData.append("assignmentType", values.assignmentType);
-    formData.append("deadline", values.deadline);
+
+    formData.append("deadline", dayjs(values.deadline).format("YYYY-MM-DD"));
     formData.append("attachmentType", values.attachmentType);
     formData.append("isPublic", values.isPublic ? true : false);
     formData.append("note", values.note);
@@ -132,7 +134,11 @@ export default function AddEditAssignment({
       section: dataToEdit?.section || "",
       subject: dataToEdit?.subject || "",
       assignmentType: dataToEdit?.assignmentType || "",
-      deadline: dataToEdit?.deadline || "",
+
+      deadline: dataToEdit?.deadline
+        ? dayjs(dataToEdit.deadline).format("YYYY/MM/DD")
+        : null,
+
       attachmentType: dataToEdit?.attachmentType || "",
       isPublish: dataToEdit?.isPublish || false,
       note: dataToEdit?.note || "",
@@ -235,6 +241,7 @@ export default function AddEditAssignment({
             <Grid xs={12} md={6} lg={3} item>
               <FileSelect
                 name={`file`}
+                label="Select File"
                 onChange={(e) => handleChangeFiles(e)}
                 customOnChange={true}
                 selectedFiles={selectFile}

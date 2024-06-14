@@ -30,9 +30,9 @@ const Storage = () => {
 
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.storage.details);
-
-      console.log(data, "firm");
+      const { data } = await get(PRIVATE_URLS.storage.details, {
+        params: { schoolId: selectedSetting._id },
+      });
       setStorageDetails(data.result);
     } catch (error) {
       console.error(error);

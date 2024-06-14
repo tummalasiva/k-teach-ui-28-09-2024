@@ -150,7 +150,7 @@ export default function UpdateCourse() {
 
   useEffect(() => {
     getClass();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     if (entryFormik.values.class) {

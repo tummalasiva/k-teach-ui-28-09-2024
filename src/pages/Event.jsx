@@ -28,7 +28,9 @@ export default function Event() {
 
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.event.list);
+      const { data } = await get(PRIVATE_URLS.event.list, {
+        params: { schoolId: selectedSetting._id },
+      });
       // console.log(data, "event");
       setData(data.result);
     } catch (error) {
@@ -71,8 +73,10 @@ export default function Event() {
     formData.append("title", values.title);
     formData.append("eventFor", values.eventFor);
     formData.append("location", values.location);
-    formData.append("fromDate", values.fromDate);
-    formData.append("toDate", values.toDate);
+
+    formData.append("fromDate", dayjs(values.fromDate).format("YYYY-MM-DD"));
+
+    formData.append("toDate", dayjs(values.toDate).format("YYYY-MM-DD"));
     formData.append("isPublic", values.isPublic ? true : false);
     formData.append("video", values.video);
     formData.append("shortEvent", values.shortEvent);
@@ -107,8 +111,14 @@ export default function Event() {
       title: dataToEdit?.title || "",
       eventFor: dataToEdit?.eventFor || "",
       location: dataToEdit?.location || "",
-      fromDate: dataToEdit?.fromDate || "",
-      toDate: dataToEdit?.toDate || "",
+      fromDate: dataToEdit?.fromDate
+        ? dayjs(dataToEdit.fromDate).format("YYYY/MM/DD")
+        : null,
+
+      toDate: dataToEdit?.toDate
+        ? dayjs(dataToEdit.toDate).format("YYYY/MM/DD")
+        : null,
+
       isPublic: dataToEdit?.isPublic || false,
       video: dataToEdit?.video || null,
       shortEvent: dataToEdit?.shortEvent || "",
@@ -127,7 +137,11 @@ export default function Event() {
   useEffect(() => {
     getRole();
     getData();
-  }, []);
+  }, [selectedSetting._id]);
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setOpen(true);
+  };
 
   return (
     <>
@@ -137,6 +151,7 @@ export default function Event() {
         bodyDataModal="events"
         bodyData={data}
         tableKeys={eventTableKeys}
+        onEditClick={handleEditClick}
       />
 
       {/* ====== Fab button component =======*/}
@@ -218,6 +233,7 @@ export default function Event() {
               name={`image`}
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
+              label="Select Photo"
               selectedFiles={selectImg}
               // onRemove={(fileName) => handleRemoveFile(fileName)}
               multi={false}

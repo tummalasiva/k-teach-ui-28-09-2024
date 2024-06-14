@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { holidayTableKeys } from "../../data/tableKeys/holidayData";
 import PageHeader from "../../components/PageHeader";
@@ -12,6 +14,7 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { post, put, get, del } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -47,7 +50,7 @@ export default function Holiday() {
   useEffect(() => {
     getData();
     getClasses();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);
@@ -97,6 +100,8 @@ export default function Holiday() {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+        toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
       };
       setLoading(true);
       if (dataToEdit) {
@@ -117,8 +122,13 @@ export default function Holiday() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-      fromDate: dataToEdit?.fromDate || null,
-      toDate: dataToEdit?.toDate || null,
+      fromDate: dataToEdit?.fromDate
+        ? dayjs(dataToEdit.fromDate).format("YYYY/MM/DD")
+        : null,
+
+      toDate: dataToEdit?.toDate
+        ? dayjs(dataToEdit.toDate).format("YYYY/MM/DD")
+        : null,
       note: dataToEdit?.note || "",
       isPublic: dataToEdit?.isPublic || "",
       class: dataToEdit?.class || "",
@@ -161,7 +171,6 @@ export default function Holiday() {
         bodyDataModal="Holiday"
         bodyData={data}
         tableKeys={holidayTableKeys}
-        adding={loading}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
@@ -174,8 +183,7 @@ export default function Holiday() {
         formTitle={dataToEdit ? "Update Holiday" : "Add Holiday"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput

@@ -42,7 +42,7 @@ export default function SalaryGrade() {
 
   useEffect(() => {
     getData();
-  }, [selectedSetting]);
+  }, [selectedSetting._id]);
 
   const AddSalaryGrade = () => {
     setOpen(true);

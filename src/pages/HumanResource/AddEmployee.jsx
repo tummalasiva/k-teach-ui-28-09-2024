@@ -146,10 +146,12 @@ export default function AddEmployee() {
   const [selectedPhoto, setSelectedPhoto] = useState([]);
   const [resume, setResume] = useState([]);
 
+  const [salaryGrade, setSalaryGrade] = useState([]);
+
   const getEmployeeDetails = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.employee.getEmpById + "/" + id);
-      // console.log(data.result, "==========");
+
       setDataToEdit(data.result);
     } catch (error) {
       console.log(error);
@@ -202,12 +204,29 @@ export default function AddEmployee() {
       console.log(error);
     }
   };
+  const getSalaryGrade = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.salaryGrade.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setSalaryGrade(
+        data.result.map((s) => ({
+          label: s.grade,
+          value: s._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getDesignationData();
     getDepartmentData();
     getRoles();
-  }, []);
+    getSalaryGrade();
+  }, [selectedSetting._id]);
 
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -258,6 +277,8 @@ export default function AddEmployee() {
       selectedPhoto.forEach((file) => formData.append("employeePhoto", file));
       resume.forEach((file) => formData.append("resume", file));
 
+      console.log(formData, "mmmmmmm");
+
       if (dataToEdit) {
         const data = await put(
           PRIVATE_URLS.employee.update + "/" + dataToEdit._id,
@@ -266,6 +287,7 @@ export default function AddEmployee() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+        console.log(formData, "mmmmmmm111");
       } else {
         const { data } = await post(PRIVATE_URLS.employee.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -544,7 +566,7 @@ export default function AddEmployee() {
                   name="salaryGrade"
                   formik={entryFormik}
                   label="Select Salary Grade"
-                  // options={""}
+                  options={salaryGrade}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>

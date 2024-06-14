@@ -128,7 +128,7 @@ export default function Courses() {
     if (selectedClass) {
       getCourse();
     }
-  }, [selectedClass, selectedSetting]);
+  }, [selectedClass, selectedSetting._id]);
 
   const handleSubmit = () => {
     navigate("/sch/lms/add-courses");

@@ -275,7 +275,6 @@ export default function Live() {
   }, [selectedSetting]);
 
   useEffect(() => {
-    getData();
     getDateWithTime();
   }, []);
 
@@ -285,6 +284,10 @@ export default function Live() {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+
+        startDate: dayjs(values.startDate).format("YYYY/MM/DD"),
+        expiryDate: dayjs(values.expiryDate).format("YYYY/MM/DD"),
+
         participants:
           entryFormik.values.participantType === "Single"
             ? [entryFormik.values.participants]
@@ -312,12 +315,12 @@ export default function Live() {
           payload
         );
         getData();
+        handleClose();
       } else {
         const { data } = await post(PRIVATE_URLS.meeting.create, payload);
+        getData();
+        handleClose();
       }
-
-      getData();
-      handleClose();
     } catch (error) {
       console.log(error);
     }
@@ -327,9 +330,16 @@ export default function Live() {
   const entryFormik = useFormik({
     initialValues: {
       classId: dataToEdit?.classId || [],
-      expiryDate: dataToEdit?.expiryDate || "",
+
+      expiryDate: dataToEdit?.expiryDate
+        ? dayjs(dataToEdit.expiryDate).format("YYYY/MM/DD")
+        : null,
+
       expiryTime: dataToEdit?.expiryTime || "",
-      startDate: dataToEdit?.startDate || "",
+      startDate: dataToEdit?.startDate
+        ? dayjs(dataToEdit?.startDate).format("YYYY/MM/DD")
+        : null,
+
       startTime: dataToEdit?.startTime || "",
       createdBy: dataToEdit?.createdBy || "",
       meetingType: dataToEdit?.meetingType || "",
@@ -364,6 +374,7 @@ export default function Live() {
   }, [entryFormik.values.classId, entryFormik.values.section, selectedSetting]);
 
   const handleUpdateModelOpen = (id) => {
+    console.log(id, "idddddd");
     setDataToEdit(id);
     let meetingData = data.filter((m) => m._id == id)[0];
     if (meetingData.userTypes.includes("employee")) {
@@ -452,6 +463,8 @@ export default function Live() {
       console.error(error);
     }
   };
+
+  console.log(data, "0000000");
 
   return (
     <>
@@ -708,7 +721,7 @@ export default function Live() {
           <Grid xs={12} md={6} item>
             <FormDatePicker
               formik={entryFormik}
-              label="Enter Start  Date"
+              label="Enter Start Date"
               name="startDate"
               required={true}
             />
