@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -77,7 +79,8 @@ export default function Gallery() {
   const handleCreateOrUpdate = async (values) => {
     const formData = new FormData();
     formData.append("title", values.title);
-    formData.append("date", values.date);
+    formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
+
     formData.append("isPublic", values.isPublic ? true : false);
     formData.append("note", values.note);
     selectImg.forEach((file) => formData.append("file", file));
@@ -114,7 +117,10 @@ export default function Gallery() {
       title: dataToEdit?.title || "",
       note: dataToEdit?.note || "",
       isPublic: dataToEdit?.isPublic || false,
-      date: dataToEdit?.date || null,
+
+      date: dataToEdit?.date
+        ? dayjs(dataToEdit.date).format("YYYY/MM/DD")
+        : null,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -129,7 +135,7 @@ export default function Gallery() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleEditClick = (data) => {
     // console.log(data, "fff");
@@ -170,8 +176,7 @@ export default function Gallery() {
             columnSpacing={2}
             container
             component="form"
-            onSubmit={entryFormik.handleSubmit}
-          >
+            onSubmit={entryFormik.handleSubmit}>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
@@ -200,6 +205,7 @@ export default function Gallery() {
                 name={`images`}
                 onChange={(e) => handleChangeFiles(e)}
                 customOnChange={true}
+                label="Select Image"
                 selectedFiles={selectImg}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
               />
@@ -218,8 +224,7 @@ export default function Gallery() {
                   display: "flex",
                   position: "relative",
                 }}
-                key={i}
-              >
+                key={i}>
                 <img
                   src={galleryImg}
                   alt="loading..."
@@ -236,8 +241,7 @@ export default function Gallery() {
                     right: 0,
                     transform: "translateY(-50%)",
                   }}
-                  onClick={() => handleRemoveImg(galleryImg)}
-                >
+                  onClick={() => handleRemoveImg(galleryImg)}>
                   <Clear color="error" fontSize="small" />
                 </IconButton>
               </Grid>
@@ -248,8 +252,7 @@ export default function Gallery() {
               md={12}
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
+              item>
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>
@@ -257,8 +260,7 @@ export default function Gallery() {
                 size="small"
                 type="submit"
                 variant="contained"
-                sx={{ ml: 2 }}
-              >
+                sx={{ ml: 2 }}>
                 Submit
               </Button>
             </Grid>

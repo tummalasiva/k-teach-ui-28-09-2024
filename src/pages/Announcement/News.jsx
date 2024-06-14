@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useState } from "react";
 import { newsTableKeys } from "../../data/tableKeys/newsData";
 import PageHeader from "../../components/PageHeader";
@@ -14,6 +16,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { useEffect } from "react";
 import FileSelect from "../../forms/FileSelect";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -42,7 +45,7 @@ export default function News() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);
@@ -57,7 +60,7 @@ export default function News() {
       const formData = new FormData();
       formData.append("title", values.title);
       formData.append("schoolId", selectedSetting._id);
-      formData.append("date", values.date);
+      formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
       formData.append("news", values.news);
       formData.append("shortNews", values.shortNews);
       formData.append("isPublic", values.isPublic);
@@ -92,6 +95,10 @@ export default function News() {
       title: dataToEdit?.title || "",
 
       date: dataToEdit?.date || null,
+
+      date: dataToEdit?.date
+        ? dayjs(dataToEdit.date).format("YYYY/MM/DD")
+        : null,
       news: dataToEdit?.news || "",
       shortNews: dataToEdit?.shortNews || "",
       isPublic: dataToEdit?.isPublic || false,
@@ -142,7 +149,6 @@ export default function News() {
         bodyDataModal="News"
         bodyData={data}
         tableKeys={newsTableKeys}
-        adding={loading}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
@@ -155,8 +161,7 @@ export default function News() {
         formTitle={dataToEdit ? "Update News" : "Add News"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
@@ -187,6 +192,7 @@ export default function News() {
             <FileSelect
               multi={false}
               name="image"
+              label="Select Image"
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectImg}
@@ -217,8 +223,7 @@ export default function News() {
             md={12}
             item
             display="flex"
-            justifyContent="center"
-          >
+            justifyContent="center">
             {dataToEdit && dataToEdit.image && (
               <>
                 <img

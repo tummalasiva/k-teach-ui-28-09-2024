@@ -140,7 +140,6 @@ import LibraryReport from "../pages/Report/LibraryReport";
 import StudentYearlyAttendance from "../pages/Report/StudentYearlyAttendance";
 import EmployeeYearlyAttendance from "../pages/Report/EmployeeYearlyAttendance";
 import StudentActivityReport from "../pages/Report/StudentActivityReport";
-
 import StudentAttendanceReport from "../pages/Report/StudentAttendance";
 import EmployeeAttendanceReport from "../pages/Report/EmployeeAttendance";
 import VisitorInfo from "../pages/VisitorInfo/VisitorInfo";
@@ -252,6 +251,7 @@ export default function NavDrawer() {
   const [open, setOpen] = React.useState(true);
   // const { setUser, user } = React.useContext(UserContext);
   const [sideMenuData, setSideMenuData] = React.useState([]);
+
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -336,6 +336,7 @@ export default function NavDrawer() {
     // setUser(null);
     navigate("/");
   };
+  console.log(selectedSetting, "0000000");
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -490,8 +491,8 @@ export default function NavDrawer() {
         <DrawerHeader sx={{ justifyContent: "space-between" }}>
           <Box></Box>
           <img
-            style={{ height: "60px", width: "150px", objectFit: "contain" }}
-            src={LOGO}
+            style={{ height: "60px", width: "100px", objectFit: "contain" }}
+            src={selectedSetting?.logo}
           />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (

@@ -14,6 +14,7 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { post, put, get, del } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -43,7 +44,7 @@ export default function Notice() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const getRoles = async () => {
     try {
@@ -77,6 +78,7 @@ export default function Notice() {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        date: dayjs(values.date).format("YYYY/MM/DD"),
       };
       setLoading(true);
       if (dataToEdit) {
@@ -99,7 +101,9 @@ export default function Notice() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit ? dataToEdit.title : "",
-      date: dataToEdit?.date || null,
+      date: dataToEdit?.date
+        ? dayjs(dataToEdit.date).format("YYYY/MM/DD")
+        : null,
       noticeFor: dataToEdit ? dataToEdit.noticeFor : "",
       notice: dataToEdit ? dataToEdit.notice : "",
       isPublic: dataToEdit ? dataToEdit.isPublic : false,

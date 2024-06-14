@@ -24,7 +24,7 @@ export default function SubjectWiseReport() {
       setClasses(
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
-      entryFormik.setFieldValue("class", data.result[0]._id);
+      entryFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +43,7 @@ export default function SubjectWiseReport() {
       setSection(
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
-      entryFormik.setFieldValue("section", data.result[0]._id);
+      entryFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +57,7 @@ export default function SubjectWiseReport() {
       });
       // console.log(data, "exam");
       setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+      entryFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +77,7 @@ export default function SubjectWiseReport() {
       setSubject(
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
-      entryFormik.setFieldValue("subject", data.result[0]._id);
+      entryFormik.setFieldValue("subject", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
