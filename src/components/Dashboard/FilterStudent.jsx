@@ -90,19 +90,21 @@ export default function FilterStudent() {
     if (entryFormik.values.class) {
       getSections();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class && entryFormik.values.section) {
       getStudents();
     }
-  }, [entryFormik.values.class, entryFormik.values.section]);
+  }, [
+    entryFormik.values.class,
+    entryFormik.values.section,
+    selectedSetting._id,
+  ]);
 
   useEffect(() => {
     getClasses();
-  }, []);
-
-  // console.log(entryFormik.values, "uuuuuu");
+  }, [selectedSetting._id]);
 
   return (
     <>

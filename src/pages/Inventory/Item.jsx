@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Grid, Paper } from "@mui/material";
 import { itemTableKeys } from "../../data/tableKeys/itemData";
 import PageHeader from "../../components/PageHeader";
@@ -8,25 +10,176 @@ import CustomTable from "../../components/Tables/CustomTable";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function Item() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(0);
+  const [departments, setDepartments] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [PdfLoading, setPdfLoading] = useState(false);
+  const [excelLoading, setExcelLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.item.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      // console.log(data.result, "firm");
+      setData(
+        data.result.map((data) => ({
+          ...data,
+          departmentName: data?.department?.name,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDepartments = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.department.list);
+      setDepartments(
+        data.result.map((s) => ({
+          label: s.name,
+          value: s._id,
+        }))
+      );
+      entryFormik.setFieldValue("department", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
   };
 
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.item.update + "/" + dataToEdit._id,
+          payload
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.item.create, payload);
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
-      name: "",
-      department: "",
-      brand: "",
-      id: "",
-      note: "",
+      name: dataToEdit?.name || "",
+      department: dataToEdit?.department || "",
+      brand: dataToEdit?.brand || "",
+      itemId: dataToEdit?.itemId || "",
+      description: dataToEdit?.description || "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
+
+  useEffect(() => {
+    getDepartments();
+    getData();
+  }, []);
+
+  const handleClose = () => {
+    setValue(0);
+    getData();
+    setDataToEdit(null);
+  };
+
+  const handleEditClick = (data) => {
+    // console.log(data, "fff");
+    setDataToEdit({ ...data, department: data.department._id });
+    setValue(1);
+  };
+
+  // pfd download
+  const handlePdfDownload = async (e) => {
+    setPdfLoading(true);
+
+    try {
+      const response = await get(PRIVATE_URLS.item.downloadPdf, {
+        responseType: "blob",
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      // console.log(response, "response");
+      const uri = URL.createObjectURL(response.data);
+      window.open(uri, "_blank");
+    } catch (error) {
+      console.log(error);
+    }
+    setPdfLoading(false);
+  };
+
+  // excel download
+  const handleExcelDownload = async (e) => {
+    setExcelLoading(true);
+    console.log("usha");
+
+    try {
+      const response = await get(PRIVATE_URLS.item.downloadExcel, {
+        responseType: "blob",
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      // Create a blob from the response data
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Create a download URL
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = `InventoryItem.xlsx`;
+      link.setAttribute("download", fileName);
+
+      // Append the link to the document body
+      document.body.appendChild(link);
+
+      // Simulate a click to trigger the download
+      link.click();
+
+      // Remove the link from the document
+      document.body.removeChild(link);
+
+      // Revoke the object URL to free up memory
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the Excel file:", error);
+      alert("Failed to download the file. Please try again.");
+    }
+    setExcelLoading(false);
+  };
 
   return (
     <>
@@ -34,25 +187,46 @@ export default function Item() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Item List", "Add Item", "Edit Item"]}
+        labels={[
+          "Item List",
+          dataToEdit && value != 0 ? "Edit Item" : "Add Item",
+        ]}
       />
       <TabPanel index={0} value={value}>
-        <Button size="small" variant="contained" sx={{ my: 2 }}>
+        <LoadingButton
+          type="submit"
+          size="small"
+          variant="contained"
+          sx={{ my: 2 }}
+          loading={PdfLoading}
+          onClick={handlePdfDownload}>
           PDF
-        </Button>
-        <Button size="small" variant="contained" sx={{ ml: 2, my: 2 }}>
+        </LoadingButton>
+        <LoadingButton
+          type="submit"
+          size="small"
+          variant="contained"
+          sx={{ ml: 2, my: 2 }}
+          loading={excelLoading}
+          onClick={handleExcelDownload}>
           Excel
-        </Button>
+        </LoadingButton>
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Items"
           bodyData={data}
           tableKeys={itemTableKeys}
+          onEditClick={handleEditClick}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
+          <Grid
+            rowSpacing={1}
+            columnSpacing={2}
+            container
+            component="form"
+            onSubmit={entryFormik.handleSubmit}>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
@@ -67,7 +241,7 @@ export default function Item() {
                 name="department"
                 formik={entryFormik}
                 label="Select Department"
-                // options={}
+                options={departments}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -81,7 +255,7 @@ export default function Item() {
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
-                name="id"
+                name="itemId"
                 formik={entryFormik}
                 label="item Id"
               />
@@ -89,7 +263,7 @@ export default function Item() {
             <Grid xs={12} md={12} lg={12} item>
               <FormInput
                 required={false}
-                name="note"
+                name="description"
                 formik={entryFormik}
                 label="Description"
               />
@@ -99,14 +273,22 @@ export default function Item() {
               md={6}
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
-              <Button size="small" color="error" variant="contained">
+              item>
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
-              <Button size="small" variant="contained" sx={{ ml: 2 }}>
+              <LoadingButton
+                type="submit"
+                size="small"
+                variant="contained"
+                loading={loading}
+                sx={{ ml: 2 }}>
                 Submit
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
@@ -160,8 +342,7 @@ export default function Item() {
               md={6}
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
+              item>
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>

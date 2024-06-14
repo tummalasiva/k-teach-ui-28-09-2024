@@ -1,6 +1,8 @@
+/** @format */
+
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -8,34 +10,214 @@ import { TransactionTableKeys } from "../../data/tableKeys/transactionData";
 import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
+import { get } from "../../services/apiMethods";
+import { LoadingButton } from "@mui/lab";
+import FileSelect from "../../forms/FileSelect";
+
+const paymenyModes = [
+  { label: "Cash", value: "Cash" },
+  { label: "Upi", value: "Upi" },
+  { label: "Netbanking", value: "Netbanking" },
+  { label: "Cheque", value: "Cheque" },
+  { label: "Card", value: "Card" },
+  { label: "Others", value: "Others" },
+  { label: "Null", value: "Null" },
+];
+
+const types = [
+  { label: "In", value: "In" },
+  { label: "Out", value: "Out" },
+];
+
+const purposes = [
+  { label: "Inhouse", value: "Inhouse" },
+  { label: "Damage", value: "Damage" },
+  { label: "Purchase", value: "Purchase" },
+  { label: "Sell", value: "Sell" },
+  { label: "Return", value: "Return" },
+  { label: "InventoryUpdate", value: "InventoryUpdate" },
+];
+
+const fromTypes = [
+  { label: "Vendor", value: "Vendor" },
+  { label: "School", value: "School" },
+];
+
+const status = [
+  { label: "Pending", value: "Pending" },
+  { label: "Completed", value: "Completed" },
+  { label: "Cancelled", value: "Cancelled" },
+];
 
 export default function InOutTransaction() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(0);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [selectInvoice, setSelectInvoice] = useState([]);
 
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
   };
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vendor.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      console.log(data.result, "firm");
+      // setData(
+      //   data.result.map((data) => ({
+      //     ...data,
+      //     departmentName: data?.department?.name,
+      //   }))
+      // );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get items
+  const getItems = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.item.list);
+      // console.log(data, "haha");
+      setItems(
+        data.result.map((item) => ({
+          label: item.name,
+          value: item._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get employee
+  const getEmployees = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      console.log(data, "haha");
+      setEmployees(
+        data.result.map((emp) => ({
+          label: emp?.basicInfo?.name,
+          value: emp._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get section
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get students
+  const getStudents = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            "academicInfo.section": entryFormik.values.section,
+          },
+        },
+      });
+      setStudents(
+        data.result.map((d) => ({
+          ...d,
+          label: d.basicInfo.name,
+          value: d._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       item: "",
-      price: "",
+      pricePerItem: "",
       quantity: "",
-      mode: "",
-      gst: "",
-      dealerName: "",
-      dealerContact: "",
-      TransactionWebsite: "",
-      address: "",
-      city: "",
-      zipCode: "",
-      bankName: "",
-      accountNo: "",
-      branchName: "",
+      trasactionMode: "",
+      type: "",
+      purpose: "",
+      fromType: "",
+      status: "",
+      vender: "",
+      section: "",
+      studentName: "",
+      school: "",
+      note: "",
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getData();
+    getItems();
+    getEmployees();
+    getSections();
+  }, [selectedSetting._id]);
+
+  useEffect(() => {
+    if (entryFormik.values.section) {
+      getStudents();
+    }
+  }, [entryFormik.values.section, selectedSetting._id]);
+
+  const handleClose = () => {
+    setValue(0);
+    getData();
+    setDataToEdit(null);
+  };
+
+  const handleChangeFiles = (e, type) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      if (type === "photo") {
+        setSelectInvoice(fileList);
+      }
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setSelectInvoice(selectInvoice.filter((img) => img.name != fileName));
+  };
 
   return (
     <>
@@ -62,8 +244,7 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}>
                 Item Details
               </Typography>
             </Grid>
@@ -73,15 +254,15 @@ export default function InOutTransaction() {
                 name="item"
                 formik={entryFormik}
                 label="Item"
-                // options={}
+                options={items}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
               <FormInput
                 required={true}
-                name="price"
+                name="pricePerItem"
                 formik={entryFormik}
-                label="Price per Item"
+                label="Price Per Item"
                 type="number"
               />
             </Grid>
@@ -100,18 +281,17 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Transaction Details
               </Typography>
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
-                name="mode"
+                name="trasactionMode"
                 formik={entryFormik}
                 label="Mode of Payment"
-                // options={}
+                options={paymenyModes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
@@ -120,7 +300,7 @@ export default function InOutTransaction() {
                 name="type"
                 formik={entryFormik}
                 label="Type"
-                // options={}
+                options={types}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
@@ -129,7 +309,7 @@ export default function InOutTransaction() {
                 name="purpose"
                 formik={entryFormik}
                 label="Purpose"
-                // options={}
+                options={purposes}
               />
             </Grid>
             <Grid xs={12} md={12} lg={12} item>
@@ -138,8 +318,7 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Transaction Between
               </Typography>
             </Grid>
@@ -149,7 +328,7 @@ export default function InOutTransaction() {
                 name="fromType"
                 formik={entryFormik}
                 label="From Type"
-                // options={}
+                options={fromTypes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={4} item>
@@ -158,46 +337,54 @@ export default function InOutTransaction() {
                 name="status"
                 formik={entryFormik}
                 label="Transaction Status"
-                // options={}
+                options={status}
               />
             </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="vender"
-                formik={entryFormik}
-                label="Venders"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="section"
-                formik={entryFormik}
-                label="section"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="studentName"
-                formik={entryFormik}
-                label="Student Name"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="school"
-                formik={entryFormik}
-                label="School"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={12} item>
+            {entryFormik.values.fromType === "Vendor" && (
+              <>
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="vender"
+                    formik={entryFormik}
+                    label="Venders"
+                    // options={}
+                  />
+                </Grid>
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="section"
+                    formik={entryFormik}
+                    label="Section"
+                    options={sections}
+                  />
+                </Grid>
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="studentName"
+                    formik={entryFormik}
+                    label="Student Name"
+                    options={students}
+                  />
+                </Grid>
+              </>
+            )}
+
+            {entryFormik.values.fromType === "School" && (
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="school"
+                  formik={entryFormik}
+                  label="School"
+                  options={employees}
+                />
+              </Grid>
+            )}
+
+            <Grid xs={12} md={12} lg={12} item>
               <FormInput
                 required={true}
                 name="note"
@@ -206,23 +393,37 @@ export default function InOutTransaction() {
               />
             </Grid>
             <Grid xs={12} md={6} lg={12} item>
-              <Button size="small" variant="outlined" sx={{ my: 2 }}>
-                Upload Invoice
-              </Button>
+              <FileSelect
+                name="invoice"
+                label="Select Invoice"
+                onChange={(e) => handleChangeFiles(e, "invoice")}
+                customOnChange={true}
+                selectedFiles={selectInvoice}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/*,.pdf"
+              />
             </Grid>
             <Grid
               xs={12}
               md={12}
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
-              <Button size="small" color="error" variant="contained">
+              item>
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
-              <Button size="small" variant="contained" sx={{ ml: 2 }}>
-                Done
-              </Button>
+              <LoadingButton
+                type="submit"
+                size="small"
+                variant="contained"
+                loading={loading}
+                sx={{ ml: 2 }}>
+                Submit
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
@@ -236,8 +437,7 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}>
                 Item Details
               </Typography>
             </Grid>
@@ -274,8 +474,7 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Transaction Details
               </Typography>
             </Grid>
@@ -312,8 +511,7 @@ export default function InOutTransaction() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Transaction Between
               </Typography>
             </Grid>
@@ -389,8 +587,7 @@ export default function InOutTransaction() {
               md={12}
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
+              item>
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>

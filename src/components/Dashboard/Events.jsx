@@ -1,6 +1,14 @@
 /** @format */
 
-import { Box, Card, Grid, Paper, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Card,
+  Divider,
+  Grid,
+  Paper,
+  Typography,
+  styled,
+} from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -11,17 +19,22 @@ import "../Styles/Dashboard.css";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import themeData from "../../data/themeData";
 
 const ScrollContainer = styled(Box)(({ theme }) => ({
   borderRadius: "5px",
   margin: "18px",
-  transform: "translateY(100%)",
-  animation: "my-animation 15s linear infinite",
+  transform: "translateY(0%)",
+  animation: "scroll 15s linear infinite",
   animationPlayState: "running",
 
-  "@keyframes my-animation": {
+  "&:hover": {
+    animationPlayState: "paused",
+  },
+
+  "@keyframes scroll": {
     from: {
-      transform: "translateY(100%)",
+      transform: "translateY(50%)",
     },
     to: {
       transform: "translateY(-100%)",
@@ -30,15 +43,17 @@ const ScrollContainer = styled(Box)(({ theme }) => ({
 }));
 
 const DashboardScorlText = styled(Card)(({ theme }) => ({
-  height: "100%",
   textAlign: "center",
   margin: "10px 0px",
+
+  height: "100%",
 }));
 
 const NoDataFound = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   margin: "5px",
   padding: "5px",
+  fontWeight: 700,
 }));
 
 const DashboardNewsConent = styled(Box)(({ theme }) => ({
@@ -48,41 +63,27 @@ const DashboardNewsConent = styled(Box)(({ theme }) => ({
   width: "95%",
   marginLeft: "1rem",
   marginRight: "2rem",
-  padding: "0px",
-  minHeight: "100px",
+  paddingBottom: "5px",
   position: "relative",
-  marginBottom: "10px",
 }));
 
-const NewsDateMonth = styled(Card)(({ theme }) => ({
-  width: "100%",
-  minWidth: "35%",
-  maxWidth: "40%",
-  marginTop: "5px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+const BoldTrigger = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  cursor: "pointer",
+  fontSize: "18px",
+  borderLeft: "7px solid #ffeb3b",
+  paddingLeft: theme.spacing(1),
 }));
 
-const TitleDiscrption = styled(Box)(({ theme }) => ({
-  marginLeft: "8px",
-  wordWrap: "break-word",
-  wordBreak: "break-all",
-  marginTop: "15px",
+const NoticeItem = styled(Typography)(({ theme }) => ({
+  fontWeight: 700,
+  "&:hover": {
+    color: themeData.darkPalette.primary.main,
+    cursor: "pointer",
+  },
 }));
 
 export default function Events() {
-  // const [notice, setNotice] = useState([
-  //   { title: " 1", notice: "wertfygjhkl" },
-  //   { title: " 2", notice: "sdfghjnm,." },
-  //   { title: " 3", notice: "asdfghjnkm" },
-  // ]);
-  // const [holidays, setHolidays] = useState([
-  //   { title: " 1", note: "ertyui" },
-  //   { title: " 2", note: "rsetyghujkl;dfh rdtfgyhkj rdtfgy" },
-  //   { title: " 3", note: "qwesrrfghjkm" },
-  // ]);
-
   const { selectedSetting } = useContext(SettingContext);
   const [notice, setNotice] = useState([]);
   const [holidays, setHolidays] = useState([]);
@@ -117,7 +118,7 @@ export default function Events() {
   useEffect(() => {
     getNotice();
     getHolidays();
-  }, []);
+  }, [selectedSetting._id]);
 
   return (
     <>
@@ -135,69 +136,57 @@ export default function Events() {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Card sx={{ padding: "15px" }}>
-              <Collapsible trigger={`Notices: (${notice.length})`}>
-                <Box sx={{ maxHeight: "130px", overflow: "auto" }}>
-                  <ScrollContainer>
-                    {notice.map((data, index) => (
-                      <>
-                        <DashboardScorlText key={index}>
-                          <DashboardNewsConent>
-                            <NewsDateMonth
-                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}>
-                              <Box>
-                                {dayjs(data.date).format("DD-MMM-YYYY")}
-                              </Box>
-                            </NewsDateMonth>
-                            <TitleDiscrption>
-                              <Box>
-                                <Typography>{data.title}</Typography>
-                              </Box>
-                              <Box>{data.notice}</Box>
-                            </TitleDiscrption>
-                          </DashboardNewsConent>
-                        </DashboardScorlText>
-                      </>
-                    ))}
-                  </ScrollContainer>
+            <Card sx={{ minHeight: "200px", padding: "15px" }}>
+              <Collapsible open={true}>
+                <BoldTrigger>{`Notices: (${notice.length})`}</BoldTrigger>
+                <Divider sx={{ width: "100%", mt: 1 }} />
+                <Box
+                  sx={{
+                    height: "140px",
+                    maxHeight: "140px",
+                    overflow: "auto",
+                  }}>
+                  <DashboardScorlText elevation={0}>
+                    <ScrollContainer>
+                      {notice.map((data, index) => (
+                        <DashboardNewsConent key={index}>
+                          <NoticeItem component="li">{data.notice}</NoticeItem>
+                        </DashboardNewsConent>
+                      ))}
+                    </ScrollContainer>
+                    {!notice.length && (
+                      <NoDataFound variant="h6">No data found</NoDataFound>
+                    )}
+                  </DashboardScorlText>
                 </Box>
               </Collapsible>
-
-              {!notice.length && (
-                <NoDataFound variant="h6">No data found</NoDataFound>
-              )}
             </Card>
 
-            <Card sx={{ padding: "15px", margin: "10px 0px" }}>
-              <Collapsible trigger={`Holidays: (${holidays.length})`}>
-                <Box sx={{ maxHeight: "140px", overflow: "auto" }}>
-                  <ScrollContainer>
-                    {holidays.map((data, index) => (
-                      <>
-                        <DashboardScorlText key={index}>
-                          <DashboardNewsConent>
-                            <NewsDateMonth
-                              sx={{ backgroundColor: "rgb(211, 211, 211)" }}>
-                              <Box className="date">
-                                {dayjs(data.fromDate).format("DD-MMM-YYYY")}
-                              </Box>
-                            </NewsDateMonth>
-                            <TitleDiscrption>
-                              <Box>
-                                <Typography>{data.title}</Typography>
-                              </Box>
-                              <Box>{data.note}</Box>
-                            </TitleDiscrption>
-                          </DashboardNewsConent>
-                        </DashboardScorlText>
-                      </>
-                    ))}
-                  </ScrollContainer>
+            <Card
+              sx={{ minHeight: "200px", padding: "15px", marginTop: "10px" }}>
+              <Collapsible open={true}>
+                <BoldTrigger>{`Holidays: (${holidays.length})`}</BoldTrigger>
+                <Divider sx={{ width: "100%", mt: 1 }} />
+                <Box
+                  sx={{
+                    height: "140px",
+                    maxHeight: "140px",
+                    overflow: "auto",
+                  }}>
+                  <DashboardScorlText elevation={0}>
+                    <ScrollContainer>
+                      {holidays.map((data, index) => (
+                        <DashboardNewsConent key={index}>
+                          <NoticeItem component="li">{data.title}</NoticeItem>
+                        </DashboardNewsConent>
+                      ))}
+                    </ScrollContainer>
+                    {!holidays.length && (
+                      <NoDataFound variant="h6">No data found</NoDataFound>
+                    )}
+                  </DashboardScorlText>
                 </Box>
               </Collapsible>
-              {!holidays.length && (
-                <NoDataFound variant="h6">No data found</NoDataFound>
-              )}
             </Card>
           </Grid>
         </Grid>

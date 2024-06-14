@@ -436,12 +436,6 @@ export const PRIVATE_URLS = {
     update: "/preadmissionEnqiry/update",
     delete: "/preadmissionEnqiry/delete",
   },
-  certificate: {
-    getStudyCertificate: "/certificate/getStudyCertificate",
-    getBulkStudyCertificate: "/certificate/getBulkStudyCertificate",
-    getTransferCertificate: "/certificate/getTransferCertificate",
-    getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
-  },
   preadmissionExam: {
     list: "/preadmissionExam/list",
     create: "/preadmissionExam/create",
@@ -452,5 +446,27 @@ export const PRIVATE_URLS = {
     list: "/employeeAttendance/list",
     update: "/employeeAttendance/update",
     getAttendanceReport: "/employeeAttendance/getAttendanceReport",
+  },
+  report: {
+    groupedLibraryData: "/report/groupedLibraryData",
+  },
+  certificate: {
+    getStudyCertificate: "/certificate/getStudyCertificate",
+    getBulkStudyCertificate: "/certificate/getBulkStudyCertificate",
+    getTransferCertificate: "/certificate/getTransferCertificate",
+    getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
+  },
+  item: {
+    list: "/item/list",
+    create: "/item/create",
+    update: "/item/update",
+    delete: "/item/delete",
+    downloadPdf: "/item/downloadPdf",
+    downloadExcel: "/item/downloadExcel",
+  },
+  vendor: {
+    list: "/vendor/list",
+    create: "/vendor/create",
+    update: "/vendor/update",
   },
 };

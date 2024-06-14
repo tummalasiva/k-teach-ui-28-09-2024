@@ -12,6 +12,10 @@ import {
   Typography,
   useMediaQuery,
   Button,
+  IconButton,
+  InputAdornment,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -21,6 +25,8 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { useTheme } from "@mui/material";
 import QuizQuestion from "./QuizQuestion";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { LoadingButton } from "@mui/lab";
 
 export default function AddOrUpdateExamModal({
   open = false,
@@ -42,6 +48,8 @@ export default function AddOrUpdateExamModal({
       correctOption: "",
     },
   ]);
+  const [additionalInstructions, setAdditionalInstructions] = useState([""]);
+  const [negativeMarking, setNegativeMarking] = useState(false);
 
   const getData = async () => {
     try {
@@ -82,12 +90,28 @@ export default function AddOrUpdateExamModal({
     ]);
   };
 
+  const handleAddInstruction = () => {
+    setAdditionalInstructions([...additionalInstructions, ""]);
+  };
+
+  const handleAdditionalInstructionChange = (e, index) => {
+    const updatedInstructions = [...additionalInstructions];
+    updatedInstructions[index] = e.target.value;
+    setAdditionalInstructions(updatedInstructions);
+  };
+
+  const handleDeleteInstruction = (index) => {
+    const updatedInstructions = [...additionalInstructions];
+    updatedInstructions.splice(index, 1);
+    setAdditionalInstructions(updatedInstructions);
+  };
+
   return (
     <Dialog
       open={open}
       onClose={onClose}
       fullScreen={fullScreen}
-      maxWidth="sm"
+      maxWidth="md"
       fullWidth
       aria-labelledby="responsive-dialog-title">
       <Box component="form" sx={{ padding: 2 }}>
@@ -171,43 +195,65 @@ export default function AddOrUpdateExamModal({
           </Grid>
         </Grid>
 
-        <Typography sx={{ textAlign: "left", fontWeight: "bold", mt: 4 }}>
-          Add Questions:
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            padding: "10px",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mt: 4,
+            mb: 2,
+            border: "1px solid lightgray",
+            borderRadius: "5px",
+          }}>
+          <Typography sx={{ textAlign: "left", fontWeight: "bold" }}>
+            Add Questions:
+          </Typography>
+
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handleAddQuizs}
+            startIcon={<AddIcon />}>
+            ADD
+          </Button>
+        </Box>
 
         {quizData?.map((q, questionIndex) => (
           <QuizQuestion
             quiz={q}
             questionIndex={questionIndex}
             key={questionIndex}
+            quizData={quizData}
+            setQuizData={setQuizData}
           />
         ))}
 
-        <Grid container>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                mt: 1,
-                marginBottom: "15px",
-              }}>
-              <Button
-                size="small"
-                variant="contained"
-                onClick={handleAddQuizs}
-                startIcon={<AddIcon />}>
-                ADD
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
+        <Box sx={{ mt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              padding: "10px",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mt: 4,
+              mb: 2,
+              border: "1px solid lightgray",
+              borderRadius: "5px",
+            }}>
+            <Typography sx={{ fontWeight: "bold" }}>
+              Additional Instruction:
+            </Typography>
 
-        {/* <Box sx={{ mt: 2 }}>
-          <Typography sx={{ fontWeight: "bold" }}>
-            Additional Instruction:
-          </Typography>
+            <Button
+              size="small"
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleAddInstruction}>
+              Add
+            </Button>
+          </Box>
+
           {additionalInstructions.map((instruction, index) => (
             <Grid container key={index} sx={{ mt: 1 }}>
               <Grid item xs={12} md={12} lg={12}>
@@ -232,20 +278,11 @@ export default function AddOrUpdateExamModal({
                   }}
                 />
               </Grid>
-            
             </Grid>
           ))}
-          <Button
-            size="small"
-            sx={{ mt: 2 }}
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleAddInstruction}>
-            Add
-          </Button>
-        </Box> */}
+        </Box>
 
-        {/* <Grid container spacing={2} sx={{ mt: 1.5 }}>
+        <Grid container spacing={2} sx={{ mt: 1.5 }}>
           <Grid item xs={12} md={12} lg={12}>
             <Box
               sx={{
@@ -262,8 +299,8 @@ export default function AddOrUpdateExamModal({
                   control={
                     <Checkbox
                       fontSize="small"
-                      checked={negativeMarking}
-                      onChange={handleCheckboxChange}
+                      //   checked={negativeMarking}
+                      //   onChange={handleCheckboxChange}
                     />
                   }
                   label={
@@ -274,10 +311,10 @@ export default function AddOrUpdateExamModal({
                   control={
                     <Checkbox
                       fontSize="small"
-                      checked={!negativeMarking}
-                      onChange={(event) =>
-                        setNegativeMarking(!event.target.checked)
-                      }
+                      //   checked={!negativeMarking}
+                      //   onChange={(event) =>
+                      //     setNegativeMarking(!event.target.checked)
+                      //   }
                     />
                   }
                   label={
@@ -297,8 +334,8 @@ export default function AddOrUpdateExamModal({
                 label="Negative Marks Per Question"
                 type="number"
                 name="negativeMark"
-                value={markForm.negativeMark}
-                onChange={hanleMarkChange}
+                // value={markForm.negativeMark}
+                // onChange={hanleMarkChange}
                 InputLabelProps={{ style: { fontSize: 12 } }}
               />
             </Grid>
@@ -314,8 +351,8 @@ export default function AddOrUpdateExamModal({
               label="Marks Per Question"
               type="number"
               name="mark"
-              value={markForm.mark}
-              onChange={hanleMarkChange}
+              //   value={markForm.mark}
+              //   onChange={hanleMarkChange}
               InputLabelProps={{ style: { fontSize: 12 } }}
             />
           </Grid>
@@ -328,13 +365,13 @@ export default function AddOrUpdateExamModal({
               required
               type="number"
               name="passingMark"
-              value={markForm.passingMark}
-              onChange={hanleMarkChange}
+              //   value={markForm.passingMark}
+              //   onChange={hanleMarkChange}
               InputLabelProps={{ style: { fontSize: 12 } }}
             />
           </Grid>
-        </Grid> */}
-        {/* <Grid item xs={12} md={12}>
+        </Grid>
+        <Grid item xs={12} md={12}>
           <Box
             sx={{
               display: "flex",
@@ -346,12 +383,13 @@ export default function AddOrUpdateExamModal({
               size="small"
               variant="contained"
               color="error"
-              onClick={handleClose}>
+              //   onClick={handl}
+            >
               Cancel
             </Button>
 
             <LoadingButton
-              loading={submiload}
+              //   loading={submiload}
               variant="contained"
               type="submit"
               size="small"
@@ -364,7 +402,7 @@ export default function AddOrUpdateExamModal({
               Submit
             </LoadingButton>
           </Box>
-        </Grid> */}
+        </Grid>
       </Box>
     </Dialog>
   );

@@ -1,3 +1,5 @@
+/** @format */
+
 export const itemTableKeys = [
   {
     name: "Item Name",
@@ -5,7 +7,11 @@ export const itemTableKeys = [
   },
   {
     name: "Department",
-    key: "department",
+    key: "departmentName",
+  },
+  {
+    name: "Item Id",
+    key: "itemId",
   },
   {
     name: "Brand",

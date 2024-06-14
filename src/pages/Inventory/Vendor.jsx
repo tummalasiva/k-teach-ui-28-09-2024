@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
@@ -8,34 +10,153 @@ import CustomTable from "../../components/Tables/CustomTable";
 import FormInput from "../../forms/FormInput";
 import { VendorTableKeys } from "../../data/tableKeys/vendorData";
 import FormSelect from "../../forms/FormSelect";
+import { LoadingButton } from "@mui/lab";
+import SettingContext from "../../context/SettingsContext";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { get, post, put } from "../../services/apiMethods";
+import FileSelect from "../../forms/FileSelect";
 
 export default function Vendor() {
-  const [data, setData] = useState([]);
+  const { selectedSetting } = useContext(SettingContext);
   const [value, setValue] = useState(0);
+  const [data, setData] = useState([]);
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState([]);
 
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
   };
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vendor.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      console.log(data.result, "firm");
+      setData(
+        data.result.map((data) => ({
+          ...data,
+          name: data?.addedBy?.basicInfo?.name,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Add/Update action
+  const handleCreateOrUpdate = async (values) => {
+    console.log(values, "values");
+    try {
+      const payload = {
+        basicInfo: {
+          name: values.name,
+          category: values.category,
+          phone: values.phone,
+          email: values.email,
+          gstNumber: values.gstNumber,
+          dealerName: values.dealerName,
+          dealerPhoneNumber: values.dealerPhoneNumber,
+          website: values.website,
+        },
+        addressInfo: {
+          address: values.address,
+          state: values.state,
+          city: values.city,
+          zipCode: values.zipCode,
+        },
+        bankInfo: {
+          bankName: values.bankName,
+          accountNumber: values.accountNumber,
+          ifscCode: values.ifscCode,
+          branchName: values.branchName,
+        },
+        photo: values.photo,
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("body", JSON.stringify(payload));
+      logo.forEach((file) => formData.append("photo", file));
+
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.vendor.update + "/" + dataToEdit._id,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.vendor.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
-      category: "",
-      name: "",
-      contactNumber: "",
-      email: "",
-      gst: "",
-      dealerName: "",
-      dealerContact: "",
-      vendorWebsite: "",
-      address: "",
-      city: "",
-      zipCode: "",
-      bankName: "",
-      accountNo: "",
-      branchName: "",
+      category: dataToEdit?.basicInfo?.category || "",
+      name: dataToEdit?.basicInfo?.name || "",
+      phone: dataToEdit?.basicInfo?.phone || "",
+      email: dataToEdit?.basicInfo?.email || "",
+      gstNumber: dataToEdit?.basicInfo?.gstNumber || "",
+      dealerName: dataToEdit?.basicInfo?.dealerName || "",
+      dealerPhoneNumber: dataToEdit?.basicInfo?.dealerPhoneNumber || "",
+      website: dataToEdit?.basicInfo?.website || "",
+      address: dataToEdit?.addressInfo?.address || "",
+      state: dataToEdit?.addressInfo?.state || "",
+      city: dataToEdit?.addressInfo?.city || "",
+      zipCode: dataToEdit?.addressInfo?.zipCode || "",
+      bankName: dataToEdit?.bankInfo?.bankName || "",
+      accountNumber: dataToEdit?.bankInfo?.accountNumber || "",
+      ifscCode: dataToEdit?.bankInfo?.ifscCode || "",
+      branchName: dataToEdit?.bankInfo?.branchName || "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
+  // console.log(dataToEdit, "dataToEdit");
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleClose = () => {
+    setValue(0);
+    getData();
+    setDataToEdit(null);
+  };
+
+  const handleChangePhoto = (e, type) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      if (type === "photo") {
+        setLogo(fileList);
+      }
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setLogo(logo.filter((img) => img.name != fileName));
+  };
 
   return (
     <>
@@ -43,7 +164,10 @@ export default function Vendor() {
       <TabList
         onChange={handleTabChange}
         value={value}
-        labels={["Vendor List", "Add Vendor", "Edit Vendor"]}
+        labels={[
+          "Vendor List",
+          dataToEdit && value != 0 ? "Edit Vendor" : "Add Vendor",
+        ]}
       />
       <TabPanel index={0} value={value}>
         <Button size="small" variant="contained" sx={{ my: 2 }}>
@@ -61,23 +185,30 @@ export default function Vendor() {
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
+          <Grid
+            rowSpacing={1}
+            columnSpacing={2}
+            container
+            component="form"
+            onSubmit={entryFormik.handleSubmit}>
             <Grid xs={12} md={6} lg={3} item>
               <Typography
                 id="modal-modal-title"
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Logo:
               </Typography>
-              <FormInput
-                required={true}
-                name="logo"
-                formik={entryFormik}
-                label="logo"
-                type="file"
+              <FileSelect
+                name="photo"
+                multi={false}
+                label="Select Logo"
+                onChange={(e) => handleChangePhoto(e, "photo")}
+                customOnChange={true}
+                selectedFiles={logo}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/jpeg, image/png"
               />
             </Grid>
 
@@ -87,14 +218,12 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Basic Information
               </Typography>
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
                 name="category"
                 formik={entryFormik}
                 label="Category"
@@ -111,7 +240,7 @@ export default function Vendor() {
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
-                name="contactNumber"
+                name="phone"
                 formik={entryFormik}
                 label="Phone no."
               />
@@ -127,14 +256,13 @@ export default function Vendor() {
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
                 required={true}
-                name="gst"
+                name="gstNumber"
                 formik={entryFormik}
                 label="GST Number"
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
                 name="dealerName"
                 formik={entryFormik}
                 label="Dealer Name"
@@ -142,16 +270,14 @@ export default function Vendor() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
-                name="dealerContact"
+                name="dealerPhoneNumber"
                 formik={entryFormik}
                 label="Dealer Phone No."
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
-                name="vendorWebsite"
+                name="website"
                 formik={entryFormik}
                 label="Vendor Website"
               />
@@ -162,8 +288,7 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Address Information
               </Typography>
             </Grid>
@@ -205,14 +330,12 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Bank Information
               </Typography>
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
                 name="bankName"
                 formik={entryFormik}
                 label="Bank Name"
@@ -220,23 +343,20 @@ export default function Vendor() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
-                name="accountNo"
+                name="accountNumber"
                 formik={entryFormik}
                 label="Account No"
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
-                name="ifsc"
+                name="ifscCode"
                 formik={entryFormik}
                 label="IFSC Code"
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput
-                required={true}
                 name="branchName"
                 formik={entryFormik}
                 label="Branch Name"
@@ -247,14 +367,22 @@ export default function Vendor() {
               md={6}
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
-              <Button size="small" color="error" variant="contained">
+              item>
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
-              <Button size="small" variant="contained" sx={{ ml: 2 }}>
+              <LoadingButton
+                type="submit"
+                size="small"
+                variant="contained"
+                loading={loading}
+                sx={{ ml: 2 }}>
                 Submit
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
@@ -268,8 +396,7 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 2, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 2, fontWeight: "bold" }}>
                 Logo:
               </Typography>
               <FormInput
@@ -287,8 +414,7 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Basic Information
               </Typography>
             </Grid>
@@ -362,8 +488,7 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Address Information
               </Typography>
             </Grid>
@@ -405,8 +530,7 @@ export default function Vendor() {
                 variant="h6"
                 component="h2"
                 textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-              >
+                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
                 Bank Information
               </Typography>
             </Grid>
@@ -447,8 +571,7 @@ export default function Vendor() {
               md={6}
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
+              item>
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>

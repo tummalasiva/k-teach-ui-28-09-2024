@@ -2,7 +2,21 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Box, Button, Grid, Paper, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
+  styled,
+} from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
@@ -11,6 +25,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 const Heading = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -46,9 +61,7 @@ const MuiBox = styled(Box)(({ theme }) => ({
 const DateContaner = styled(Box)(({ theme }) => ({
   display: "flex",
   padding: "20px",
-
   justifyContent: "space-between",
-
   alignItems: "center",
 }));
 
@@ -62,15 +75,19 @@ export default function StudyCertificate() {
   const { selectedSetting } = useContext(SettingContext);
   const [academicYear, setAcademicYear] = useState([]);
   const [students, setStudents] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
-  const [bulkIssue, setBulkIssue] = useState(false);
+  const [openBulkIssue, setOpenBulkIssue] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingDownload, setLoadingDownload] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [fromDate, setFromDate] = useState(dayjs(Date.now()));
+  const [toDate, setToDate] = useState(dayjs(Date.now()));
+  const [sections, setSections] = useState([]);
 
-  console.log(selectedData, "selectedData");
-  console.log(students, "students");
+  // console.log(selectedData, "selectedData");
+  // console.log(students, "students");
 
-  // console.log(selectedSetting, "sselectedSetting");
   //get academic year
   const getAcademicYear = async () => {
     try {
@@ -87,7 +104,7 @@ export default function StudyCertificate() {
       console.log(error);
     }
   };
-
+  // get students
   const getStudents = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.student.list, {
@@ -95,15 +112,44 @@ export default function StudyCertificate() {
           schoolId: selectedSetting._id,
         },
       });
-      // console.log(data, "data");
       setStudents(
         data.result.map((d) => ({
           ...d,
           label: d.basicInfo.name,
           value: d,
-          // value: d._id,
+          id: d._id,
         }))
       );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get class
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get section
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("section", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -148,9 +194,20 @@ export default function StudyCertificate() {
     onSubmit: handleSubmitCertificate,
   });
 
+  const formik = useFormik({
+    initialValues: {
+      academicYear: "",
+      student: "",
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
+    },
+    onSubmit: handleSubmitCertificate,
+  });
+
   useEffect(() => {
     getAcademicYear();
     getStudents();
+    getClasses();
   }, [selectedSetting._id]);
 
   const handleSubmitCertificateDownload = async (e) => {
@@ -192,11 +249,20 @@ export default function StudyCertificate() {
   };
 
   const handleClose = () => {
-    setBulkIssue(false);
+    setOpenBulkIssue(false);
   };
 
-  const handleClickIssue = () => {
-    setBulkIssue(true);
+  const handleBulkIssueOpen = () => {
+    setOpenBulkIssue(true);
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   return (
@@ -244,7 +310,10 @@ export default function StudyCertificate() {
             justifyContent="flex-end"
             gap={1}
             item>
-            <Button size="small" variant="contained">
+            <Button
+              size="small"
+              variant="contained"
+              onClick={handleBulkIssueOpen}>
               Bulk Issue
             </Button>
             <LoadingButton
@@ -367,6 +436,147 @@ export default function StudyCertificate() {
           </MuiBox>
         </>
       )}
+      {/* ======= bulk issue form model ========= */}
+      <Dialog
+        open={openBulkIssue}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "flex-end",
+            p: 2,
+          }}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              textAlign="center"
+              fontSize="20px"
+              fontWeight="bold">
+              Bulk Issue
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <FormSelect
+              required={true}
+              name="academic"
+              formik={formik}
+              label="Select Academic Year"
+              options={academicYear}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={6}>
+            <FormDatePicker
+              formik={entryFormik}
+              label="From Date"
+              name="fromDate"
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <FormDatePicker
+              formik={entryFormik}
+              label="To Date"
+              name="toDate"
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <FormSelect
+              required={true}
+              name="class"
+              formik={formik}
+              label="Select Student"
+              options={classes}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <FormSelect
+              required={true}
+              name="section"
+              formik={formik}
+              label="Select Student"
+              options={sections}
+            />
+          </Grid>
+          {/* 
+          <Grid item xs={12} md={6} lg={6}>
+            <FormControl fullWidth size="small" required>
+              <InputLabel>Student Names</InputLabel>
+              <Select
+                required
+                label="Student Names"
+                id="demo-simple-select-filled"
+                name="name"
+                multiple
+                // value={selectedItems}
+                onChange={handleOnChange}
+                renderValue={(selected) => (
+                  <div style={{ display: "flex", overflowX: "auto" }}>
+                    {selectedData.map((studentId) => (
+                      <Chip
+                        key={studentId}
+                        label={
+                          students.find((student) => student._id === studentId)
+                            ?.basicInfo.name
+                        }
+                        style={{ marginRight: 5 }} // Adjust spacing between chips
+                      />
+                    ))}
+                  </div>
+                )}>
+                {students.map((s) => (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid> */}
+
+          <Grid item xs={12} md={12} lg={12}>
+            <Box
+              display="flex"
+              gap={2}
+              justifyContent={{
+                xs: "center",
+                sm: "center",
+                md: "flex-end",
+                lg: "flex-end",
+              }}>
+              <LoadingButton
+                // loading={downloadLoading}
+                sx={{
+                  color: "#fff",
+                  background: "#1b3779",
+                  ":hover": { background: "#1b3779" },
+                }}
+                // onClick={handleBulkCertificateDownload}
+                disabled={loadingDownload}>
+                Download
+              </LoadingButton>
+
+              <LoadingButton
+                // loading={printerLoader}
+                // onClick={handleBulkPrint}
+                type="button"
+                sx={{
+                  color: "#fff",
+                  background: "#1b3779",
+                  ":hover": { background: "#1b3779" },
+                }}
+                aria-label="search">
+                Print
+              </LoadingButton>
+            </Box>
+          </Grid>
+        </Grid>
+      </Dialog>
     </>
   );
 }

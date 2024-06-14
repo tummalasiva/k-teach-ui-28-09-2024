@@ -153,7 +153,7 @@ export default function AddEmployee() {
   const getEmployeeDetails = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.employee.getEmpById + "/" + id);
-      console.log(data.result, "==========");
+      // console.log(data.result, "==========");
       setDataToEdit(data.result);
     } catch (error) {
       console.log(error);
