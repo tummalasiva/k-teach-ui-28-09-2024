@@ -456,4 +456,17 @@ export const PRIVATE_URLS = {
     getTransferCertificate: "/certificate/getTransferCertificate",
     getBulkTransferCertificate: "/certificate/getBulkTransferCertificate",
   },
+  item: {
+    list: "/item/list",
+    create: "/item/create",
+    update: "/item/update",
+    delete: "/item/delete",
+    downloadPdf: "/item/downloadPdf",
+    downloadExcel: "/item/downloadExcel",
+  },
+  vendor: {
+    list: "/vendor/list",
+    create: "/vendor/create",
+    update: "/vendor/update",
+  },
 };
