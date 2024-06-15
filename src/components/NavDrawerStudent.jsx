@@ -382,7 +382,7 @@ export default function NavDrawerStudent() {
           <Box></Box>
           <img
             style={{ height: "60px", width: "150px", objectFit: "contain" }}
-            src={LOGO}
+            src={selectedSetting?.logo}
           />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (

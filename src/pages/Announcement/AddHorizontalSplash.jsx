@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect } from "react";
 import { Grid } from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
@@ -37,7 +39,7 @@ export default function AddHorizontalSplash() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);
@@ -112,7 +114,6 @@ export default function AddHorizontalSplash() {
         bodyDataModal="Horizontal Splash News"
         bodyData={data}
         tableKeys={horizontalSplashNewsTableKeys}
-        adding={loading}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
         onToggleSwitch={handleToggle}
@@ -134,8 +135,7 @@ export default function AddHorizontalSplash() {
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="title" label="Title" />

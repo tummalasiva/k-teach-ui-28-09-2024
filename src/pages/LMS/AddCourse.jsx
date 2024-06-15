@@ -168,7 +168,7 @@ export default function AddCourse() {
 
   useEffect(() => {
     getClass();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
@@ -369,6 +369,7 @@ export default function AddCourse() {
                   />
                   <Tooltip title="Delete">
                     <DeleteIcon
+                      sx={{ cursor: "pointer" }}
                       fontSize="small"
                       color="error"
                       onClick={() => handleRemoveClickBenifits(i)}

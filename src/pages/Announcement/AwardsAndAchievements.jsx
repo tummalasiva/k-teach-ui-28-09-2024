@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -13,6 +15,7 @@ import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put, del } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
+import dayjs from "dayjs";
 
 const Is_Public = [
   { label: "Yes", value: true },
@@ -35,8 +38,6 @@ export default function AwardsAndAchievements() {
         },
       });
       setData(data.result);
-
-      console.log(data.result, "bbbbbbbbbbbbbbbbbbbb");
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +57,7 @@ export default function AwardsAndAchievements() {
   const handleCreateOrUpdate = async (values, { resetForm }) => {
     const formData = new FormData();
     formData.append("title", values.title);
-    formData.append("date", values.date);
+    formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
     formData.append("location", values.location);
     formData.append("hostedBy", values.hostedBy);
     formData.append("headlines", values.headlines);
@@ -92,14 +93,16 @@ export default function AwardsAndAchievements() {
   const entryFormik = useFormik({
     initialValues: {
       title: dataToEdit?.title || "",
-      date: dataToEdit?.date || null,
+      date: dataToEdit?.date
+        ? dayjs(dataToEdit.date).format("YYYY/MM/DD")
+        : null,
 
       location: dataToEdit?.location || "",
       hostedBy: dataToEdit?.hostedBy || "",
       headlines: dataToEdit?.headlines || "",
 
       note: dataToEdit?.note || "",
-      image: dataToEdit?.image || "",
+
       isPublic: dataToEdit?.isPublic || false,
     },
     onSubmit: handleCreateOrUpdate,
@@ -150,7 +153,6 @@ export default function AwardsAndAchievements() {
         bodyDataModal="Award and Achievements"
         bodyData={data}
         tableKeys={awardAchievementTableKeys}
-        adding={loading}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
@@ -170,8 +172,7 @@ export default function AwardsAndAchievements() {
         }
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
@@ -221,6 +222,7 @@ export default function AwardsAndAchievements() {
             <FileSelect
               multi={false}
               name="image"
+              label="Select Image"
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectImg}
@@ -246,8 +248,7 @@ export default function AwardsAndAchievements() {
             md={12}
             item
             display="flex"
-            justifyContent="center"
-          >
+            justifyContent="center">
             {dataToEdit && dataToEdit.image && (
               <>
                 <img

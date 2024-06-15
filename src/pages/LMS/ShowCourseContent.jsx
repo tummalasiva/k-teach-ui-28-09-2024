@@ -80,7 +80,7 @@ export default function ShowCourseContent({
     } else {
       setOpenCodepractice(entryFormik.values.contents === "codepractice");
     }
-  }, [entryFormik.values.contents]);
+  }, [entryFormik.values.contents, selectedSetting._id]);
 
   const handleEditClick = (data) => {
     console.log(data, "upd");

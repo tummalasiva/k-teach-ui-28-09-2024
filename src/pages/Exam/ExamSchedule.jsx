@@ -17,6 +17,7 @@ import AddForm from "../../forms/AddForm";
 import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import FormDatePicker from "../../forms/FormDatePicker";
+import dayjs from "dayjs";
 
 const ShowIn_HallTick = [
   { label: "Yes", value: true },
@@ -38,13 +39,9 @@ export default function ExamSchedule() {
   const [data, setData] = useState([]);
   const [value, setSelectValue] = useState(0);
   const [examtitle, setExamTitle] = useState([]);
-  const [exam, setExam] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataToEdit, setDataToEdit] = useState(null);
-
-  const [classeData, setClasseData] = useState([]);
-
   const [classes, setClasses] = useState([]);
   const [subject, setSubject] = useState([]);
 
@@ -144,9 +141,9 @@ export default function ExamSchedule() {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        examDate: dayjs(values.examDate).format("YYYY/MM/DD"),
+        marksFreezDate: dayjs(values.marksFreezDate).format("YYYY/MM/DD"),
       };
-
-      console.log(payload, "qqqqqq");
 
       setLoading(true);
       if (dataToEdit) {
@@ -156,8 +153,6 @@ export default function ExamSchedule() {
         );
       } else {
         const { data } = await post(PRIVATE_URLS.examSchedule.create, payload);
-
-        console.log(data, "vvvvvv");
       }
       handleClose();
     } catch (error) {
@@ -171,10 +166,16 @@ export default function ExamSchedule() {
       examTerm: dataToEdit?.examTerm._id || "",
       class: dataToEdit?.class._id || "",
       subject: dataToEdit?.subject._id || "",
-      examDate: dataToEdit?.examDate || "",
+      examDate: dataToEdit?.examDate
+        ? dayjs(dataToEdit.examDate).format("YYYY/MM/DD")
+        : null,
+
       startTime: dataToEdit?.startTime || "",
       endTime: dataToEdit?.endTime || "",
-      marksFreezDate: dataToEdit?.marksFreezDate || "",
+      marksFreezDate: dataToEdit?.marksFreezDate
+        ? dayjs(dataToEdit?.marksFreezDate).format("YYYY/MM/DD")
+        : null,
+
       maximumMarks: dataToEdit?.maximumMarks || "",
 
       pratical: dataToEdit?.pratical || "",
@@ -318,7 +319,7 @@ export default function ExamSchedule() {
                 required={true}
                 name="examDate"
                 formik={formik}
-                label="examDate"
+                label="Exam Date"
               />
             </Grid>
 
