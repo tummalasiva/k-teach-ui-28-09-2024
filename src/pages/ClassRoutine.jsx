@@ -1,16 +1,24 @@
-import React from "react";
+/** @format */
+
+import React, { useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { Grid, Paper } from "@mui/material";
 import FormSelect from "../forms/FormSelect";
 import { useFormik } from "formik";
+import AddForm from "../forms/AddForm";
 
 export default function ClassRoutine() {
+  const [open, setOpen] = useState(false);
   const entryFormik = useFormik({
     initialValues: {
       class: "",
     },
     onSubmit: console.log("nnnn"),
   });
+
+  const AddClassRoutine = () => {
+    setOpen(true);
+  };
 
   return (
     <>
@@ -28,6 +36,10 @@ export default function ClassRoutine() {
           </Grid>
         </Grid>
       </Paper>
+      <AddForm title="Add Class Routine" onAddClick={AddClassRoutine} />
+      {/* ================================== */}
+
+      {/* ==== add/edit classes ======== */}
     </>
   );
 }

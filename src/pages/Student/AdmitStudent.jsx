@@ -242,7 +242,7 @@ export default function AdmitStudent() {
                 <PrintSharp />
               </IconButton>
             </Tooltip>
-            <Link to={"/student/student-bulk-photo"}>
+            <Link to="/sch/student/bulk-photo">
               <Button size="small" sx={{ p: 1, ml: 1 }} variant="contained">
                 Bulk Photo
               </Button>
