@@ -165,6 +165,7 @@ import Room from "../pages/LMS/Room";
 import Compose from "../pages/Communication/Compose";
 import Report from "../pages/Communication/Report";
 import Credentials from "../pages/Communication/Credentials";
+import BulkPhoto from "../pages/Student/BulkPhoto";
 
 // exlnt_70471681
 // 9538063455
@@ -699,6 +700,8 @@ export default function NavDrawer() {
           <Route path="student/bulk-admission" element={<BulkAdmission />} />
           <Route path="student/credential" element={<Credential />} />
           <Route path="student/quick-admit" element={<QuickAdmit />} />
+
+          <Route path="student/bulk-photo" element={<BulkPhoto />} />
           <Route
             path="student/student-activity"
             element={<StudentActivity />}
