@@ -128,6 +128,7 @@ export default function GuardianFeedback() {
     setModalData({ ...modalData, open: false });
   };
 
+  console.log(themeData.darkPalette.mode, "uuu");
   return (
     <>
       <PageHeader title="Guardian Feedback" />
@@ -136,18 +137,26 @@ export default function GuardianFeedback() {
           {["pending", "approved", "rejected"].map((status) => (
             <Button
               key={status}
+              variant="outlined"
               sx={{
                 background:
                   selectedStatus === status
-                    ? themeData.darkPalette.primary.main
+                    ? themeData.lightPalette.primary.main
                     : "",
+                color:
+                  selectedStatus === status
+                    ? themeData.darkPalette.mode === "light"
+                      ? "red"
+                      : "#fff"
+                    : themeData.lightPalette.mode === "dark"
+                    ? "#fff"
+                    : "#18488",
                 ":hover": {
                   background:
                     selectedStatus === status
                       ? themeData.darkPalette.primary.main
                       : "",
                 },
-                color: selectedStatus === status ? "#fff" : "#000",
               }}
               onClick={() => {
                 setSelectedStatus(status);
