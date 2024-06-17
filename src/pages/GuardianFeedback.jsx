@@ -149,8 +149,7 @@ export default function GuardianFeedback() {
                 },
                 color:
                   selectedStatus === status
-                    ? (theme) =>
-                        theme.palette.mode === "dark" ? "#fff" : "#fff"
+                    ? "#fff"
                     : (theme) =>
                         theme.palette.mode === "dark" ? "#fff" : "#000",
               }}
