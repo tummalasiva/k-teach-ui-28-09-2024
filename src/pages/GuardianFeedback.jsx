@@ -128,7 +128,6 @@ export default function GuardianFeedback() {
     setModalData({ ...modalData, open: false });
   };
 
-  console.log(themeData.darkPalette.mode, "uuu");
   return (
     <>
       <PageHeader title="Guardian Feedback" />
@@ -143,20 +142,18 @@ export default function GuardianFeedback() {
                   selectedStatus === status
                     ? themeData.lightPalette.primary.main
                     : "",
-                color:
-                  selectedStatus === status
-                    ? themeData.darkPalette.mode === "light"
-                      ? "red"
-                      : "#fff"
-                    : themeData.lightPalette.mode === "dark"
-                    ? "#fff"
-                    : "#18488",
+
                 ":hover": {
                   background:
                     selectedStatus === status
                       ? themeData.darkPalette.primary.main
                       : "",
                 },
+                color:
+                  selectedStatus === status
+                    ? "#fff"
+                    : (theme) =>
+                        theme.palette.mode === "dark" ? "#fff" : "#18488",
               }}
               onClick={() => {
                 setSelectedStatus(status);
@@ -181,7 +178,11 @@ export default function GuardianFeedback() {
         open={modalData?.open}
         tableData={modalData?.contents}
         onClose={onCloseViewModel}>
-        <Box sx={{ minWidth: 300 }}>
+        <Box
+          sx={{
+            minWidth: 300,
+            p: 1,
+          }}>
           <Typography
             id="modal-modal-description"
             sx={{ wordBreak: "break-word" }}>

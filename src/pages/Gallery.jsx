@@ -80,7 +80,6 @@ export default function Gallery() {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
-
     formData.append("isPublic", values.isPublic ? true : false);
     formData.append("note", values.note);
     selectImg.forEach((file) => formData.append("file", file));
@@ -110,6 +109,7 @@ export default function Gallery() {
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
+    setDataToEdit(null);
   };
 
   const entryFormik = useFormik({
@@ -149,6 +149,15 @@ export default function Gallery() {
     }
   }, [value]);
 
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.delete + "/" + _id);
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Gallery" />
@@ -167,6 +176,7 @@ export default function Gallery() {
           bodyData={data}
           onEditClick={handleEditClick}
           tableKeys={galleryListTableKeys}
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -309,7 +319,11 @@ export default function Gallery() {
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
               item>
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
               <Button

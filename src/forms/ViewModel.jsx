@@ -12,7 +12,9 @@ export default function ViewModel({ open, onClose, title, children }) {
         onClose={onClose}
         aria-labelledby="customized-dialog-title"
         open={open}>
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+        <DialogTitle
+          sx={{ m: 0, p: 2, fontWeight: 600 }}
+          id="customized-dialog-title">
           {title}
         </DialogTitle>
         <IconButton

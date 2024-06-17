@@ -16,11 +16,13 @@ import {
 
 // icons
 import { Close } from "@mui/icons-material";
+import themeData from "../../data/themeData";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   width: "200px",
   "&:nth-of-type(odd)": {
-    backgroundColor: "#F0F8FF",
+    backgroundColor:
+      theme.palette.mode === "dark" ? "rgb(81 81 81)" : "#F0F8FF",
   },
 }));
 
@@ -69,7 +71,7 @@ export default function VisitorInfoViewModel({
                   School Name
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.school?.name}
+                  {tableData?.school?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -78,7 +80,7 @@ export default function VisitorInfoViewModel({
                   Name
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.name}
+                  {tableData?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -87,7 +89,7 @@ export default function VisitorInfoViewModel({
                   Phone
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.phone}
+                  {tableData?.phone || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -96,7 +98,7 @@ export default function VisitorInfoViewModel({
                   Coming From
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.comingForm}
+                  {tableData?.comingForm || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -105,7 +107,7 @@ export default function VisitorInfoViewModel({
                   User Type
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.toMeetUserType?.name}
+                  {tableData?.toMeetUserType?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -114,7 +116,7 @@ export default function VisitorInfoViewModel({
                   To Meet
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.toMeetUserName}
+                  {tableData?.toMeetUserName || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow>
@@ -131,7 +133,7 @@ export default function VisitorInfoViewModel({
                   Check In
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.checkIn}
+                  {tableData?.checkIn || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow>
@@ -139,7 +141,7 @@ export default function VisitorInfoViewModel({
                   Check Out
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.checkOut}
+                  {tableData?.checkOut || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow>
@@ -147,7 +149,7 @@ export default function VisitorInfoViewModel({
                   Note
                 </StyledTableCell>
                 <StyledTableCell align="left" width={100}>
-                  {tableData?.note}
+                  {tableData?.note || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
             </TableBody>
