@@ -165,7 +165,6 @@ export default function AdmitStudent() {
     }
   };
 
-  console.log(data, "ppppp");
   return (
     <>
       <PageHeader title="Students" />
