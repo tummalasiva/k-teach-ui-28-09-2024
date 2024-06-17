@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
@@ -8,13 +10,46 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { issueDetailTableKeys } from "../../data/tableKeys/issueDetailData";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
+import SettingContext from "../../context/SettingsContext";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+
+const status = [
+  { label: "Returned", value: "Returned" },
+  { label: "Pending", value: "Pending" },
+  { label: "Issued", value: "Issued" },
+  { label: "Deleted", value: "Deleted" },
+];
 
 export default function Issue() {
+  const { settings, selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(0);
-
+  const [dataToEdit, setDataToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [selectSchool, setSelectSchool] = useState(
+    settings.map((s) => ({ label: s.name, value: s._id }))
+  );
+  console.log(selectSchool, "selectSchool");
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
+  };
+
+  // get items
+  const getItems = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.item.list);
+      // console.log(data, "haha");
+      setItems(
+        data.result.map((item) => ({
+          label: item.name,
+          value: item._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const entryFormik = useFormik({
@@ -30,6 +65,10 @@ export default function Issue() {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getItems();
+  }, [selectedSetting._id]);
 
   return (
     <>
@@ -62,25 +101,24 @@ export default function Issue() {
                 name="item"
                 formik={entryFormik}
                 label="Select Item"
-                // options={}
+                options={items}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
+              <FormInput
                 required={true}
                 name="quantity"
                 formik={entryFormik}
-                label="Select Quantity"
-                // options={}
+                label="Quantity"
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
-                name="issueStatus"
+                name="status"
                 formik={entryFormik}
                 label="Select Issue Status"
-                // options={}
+                options={status}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -132,8 +170,7 @@ export default function Issue() {
               md={6}
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
-              item
-            >
+              item>
               <Button size="small" color="error" variant="contained">
                 Cancel
               </Button>

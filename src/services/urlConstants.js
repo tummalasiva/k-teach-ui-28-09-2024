@@ -469,4 +469,9 @@ export const PRIVATE_URLS = {
     create: "/vendor/create",
     update: "/vendor/update",
   },
+  issue: {
+    list: "/issue/list",
+    create: "/issue/create",
+    updateStatus: "/issue/updateStatus",
+  },
 };

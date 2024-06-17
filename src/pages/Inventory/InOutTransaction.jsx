@@ -12,7 +12,7 @@ import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
 
@@ -51,8 +51,15 @@ const status = [
   { label: "Cancelled", value: "Cancelled" },
 ];
 
+const toTypes = [
+  { label: "School", value: "School" },
+  { label: "Vendor", value: "Vendor" },
+  { label: "Student", value: "Student" },
+  { label: "Employee", value: "Employee" },
+];
+
 export default function InOutTransaction() {
-  const { selectedSetting } = useContext(SettingContext);
+  const { settings, selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(0);
   const [dataToEdit, setDataToEdit] = useState(null);
@@ -60,9 +67,14 @@ export default function InOutTransaction() {
   const [items, setItems] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [sections, setSections] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [selectInvoice, setSelectInvoice] = useState([]);
-
+  const [vendors, setVendors] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [selectSchool, setSelectSchool] = useState(
+    settings.map((s) => ({ label: s.name, value: s._id }))
+  );
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
   };
@@ -103,21 +115,14 @@ export default function InOutTransaction() {
     }
   };
 
-  // get employee
-  const getEmployees = async () => {
+  // get class
+  const getClasses = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.employee.list, {
-        params: {
-          schoolId: selectedSetting._id,
-        },
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
       });
-      console.log(data, "haha");
-      setEmployees(
-        data.result.map((emp) => ({
-          label: emp?.basicInfo?.name,
-          value: emp._id,
-        }))
-      );
+      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -129,6 +134,9 @@ export default function InOutTransaction() {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
         },
       });
       setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
@@ -156,42 +164,157 @@ export default function InOutTransaction() {
           value: d._id,
         }))
       );
+      entryFormik.setFieldValue("studentName", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // get vendors
+  const getVendors = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.vendor.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      // console.log(data, "vendors");
+      setVendors(
+        data.result.map((d) => ({
+          label: d.addedBy?.basicInfo?.name,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("vendor", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get roles
+  const getRoles = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list);
+      setRoles(
+        data.result.map((r) => ({
+          label: r.name,
+          value: r._id,
+        }))
+      );
+      entryFormik.setFieldValue("role", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get employee
+  const getEmployees = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.employee.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            role: entryFormik.values.role,
+          },
+        },
+      });
+      setEmployees(
+        data.result.map((emp) => ({
+          label: emp?.basicInfo?.name,
+          value: emp._id,
+        }))
+      );
+      entryFormik.setFieldValue("employee", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Add/Update action
+  const handleCreateOrUpdate = async (values) => {
+    console.log(values, "values");
+    try {
+      const payload = {
+        ...values,
+        from: values.fromType === "vendor" ? values.vendor : values.school,
+        // toType: values.toType==="vendor" ? values.
+        schoolId: selectedSetting._id,
+      };
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("body", JSON.stringify(payload));
+      selectInvoice.forEach((file) => formData.append("invoice", file));
+
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.vendor.update + "/" + dataToEdit._id,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      } else {
+        const { data } = await post(PRIVATE_URLS.vendor.create, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const entryFormik = useFormik({
     initialValues: {
-      item: "",
-      pricePerItem: "",
-      quantity: "",
-      trasactionMode: "",
-      type: "",
-      purpose: "",
-      fromType: "",
-      status: "",
-      vender: "",
-      section: "",
-      studentName: "",
-      school: "",
-      note: "",
+      item: dataToEdit?.item || "",
+      pricePerItem: dataToEdit?.pricePerItem || "",
+      quantity: dataToEdit?.quantity || "",
+      trasactionMode: dataToEdit?.trasactionMode || "",
+      type: dataToEdit?.type || "",
+      purpose: dataToEdit?.purpose || "",
+      fromType: dataToEdit?.fromType || "",
+      status: dataToEdit?.status || "",
+      toType: dataToEdit?.toType || "",
+      vendor: dataToEdit?.vendor || "",
+      section: dataToEdit?.section || "",
+      class: dataToEdit?.class || "",
+      employee: dataToEdit?.employee || "",
+      role: dataToEdit?.role || "",
+      studentName: dataToEdit?.studentName || "",
+      school: dataToEdit?.school || "",
+      note: dataToEdit?.note || "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
     getData();
     getItems();
-    getEmployees();
-    getSections();
+    getVendors();
+    getClasses();
+    getRoles();
   }, [selectedSetting._id]);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSections();
+    }
+  }, [entryFormik.values.class]);
 
   useEffect(() => {
     if (entryFormik.values.section) {
       getStudents();
     }
   }, [entryFormik.values.section, selectedSetting._id]);
+
+  useEffect(() => {
+    if (entryFormik.values.role) {
+      getEmployees();
+    }
+  }, [entryFormik.values.role]);
 
   const handleClose = () => {
     setValue(0);
@@ -207,7 +330,7 @@ export default function InOutTransaction() {
         const file = files[i];
         fileList.push(file);
       }
-      if (type === "photo") {
+      if (type === "invoice") {
         setSelectInvoice(fileList);
       }
     } else {
@@ -237,7 +360,12 @@ export default function InOutTransaction() {
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
+          <Grid
+            rowSpacing={1}
+            columnSpacing={2}
+            container
+            component="form"
+            onSubmit={entryFormik.handleSubmit}>
             <Grid xs={12} md={12} lg={12} item>
               <Typography
                 id="modal-modal-title"
@@ -334,21 +462,42 @@ export default function InOutTransaction() {
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
+                name="toType"
+                formik={entryFormik}
+                label="To Type"
+                options={toTypes}
+              />
+            </Grid>
+            {/* <Grid xs={12} md={6} lg={4} item>
+              <FormSelect
+                required={true}
                 name="status"
                 formik={entryFormik}
                 label="Transaction Status"
                 options={status}
               />
-            </Grid>
-            {entryFormik.values.fromType === "Vendor" && (
+            </Grid> */}
+            {(entryFormik.values.fromType === "Vendor" ||
+              entryFormik.values.toType === "Vendor") && (
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="vendor"
+                  formik={entryFormik}
+                  label="Vendors"
+                  options={vendors}
+                />
+              </Grid>
+            )}
+            {entryFormik.values.toType === "Student" && (
               <>
                 <Grid xs={12} md={6} lg={4} item>
                   <FormSelect
                     required={true}
-                    name="vender"
+                    name="class"
                     formik={entryFormik}
-                    label="Venders"
-                    // options={}
+                    label="Select Class"
+                    options={classes}
                   />
                 </Grid>
                 <Grid xs={12} md={6} lg={4} item>
@@ -356,7 +505,7 @@ export default function InOutTransaction() {
                     required={true}
                     name="section"
                     formik={entryFormik}
-                    label="Section"
+                    label="Select Section"
                     options={sections}
                   />
                 </Grid>
@@ -365,23 +514,46 @@ export default function InOutTransaction() {
                     required={true}
                     name="studentName"
                     formik={entryFormik}
-                    label="Student Name"
+                    label="Select Student Name"
                     options={students}
                   />
                 </Grid>
               </>
             )}
 
-            {entryFormik.values.fromType === "School" && (
+            {(entryFormik.values.fromType === "School" ||
+              entryFormik.values.toType === "School") && (
               <Grid xs={12} md={6} lg={4} item>
                 <FormSelect
                   required={true}
                   name="school"
                   formik={entryFormik}
-                  label="School"
-                  options={employees}
+                  label="Select School"
+                  options={selectSchool}
                 />
               </Grid>
+            )}
+            {entryFormik.values.toType === "Employee" && (
+              <>
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="role"
+                    formik={entryFormik}
+                    label="Select Role"
+                    options={roles}
+                  />
+                </Grid>
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="employee"
+                    formik={entryFormik}
+                    label="Select Employees"
+                    options={employees}
+                  />
+                </Grid>
+              </>
             )}
 
             <Grid xs={12} md={12} lg={12} item>
@@ -392,7 +564,7 @@ export default function InOutTransaction() {
                 label="Note"
               />
             </Grid>
-            <Grid xs={12} md={6} lg={12} item>
+            <Grid xs={12} md={6} lg={4} item>
               <FileSelect
                 name="invoice"
                 label="Select Invoice"
