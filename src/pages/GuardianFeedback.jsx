@@ -147,7 +147,11 @@ export default function GuardianFeedback() {
                       ? themeData.darkPalette.primary.main
                       : "",
                 },
-                color: selectedStatus === status ? "#fff" : "#000",
+                color:
+                  selectedStatus === status
+                    ? "#fff"
+                    : (theme) =>
+                        theme.palette.mode === "dark" ? "#fff" : "#000",
               }}
               onClick={() => {
                 setSelectedStatus(status);
