@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper, Tab, Typography } from "@mui/material";
 import FormSelect from "../forms/FormSelect";
 import { useFormik } from "formik";
 import AddForm from "../forms/AddForm";
@@ -11,6 +11,26 @@ import { get } from "../services/apiMethods";
 import FormInput from "../forms/FormInput";
 import FormModal from "../forms/FormModal";
 import SettingContext from "../context/SettingsContext";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "../components/Tabs/Tablist";
+import TabPanel from "../components/Tabs/TabPanel";
+
+const styles = {
+  card: { margin: "10px 0", padding: 10 },
+  Button: {
+    background: "#1b3779",
+    ":hover": { background: "#1b3779" },
+    marginTop: "10px",
+  },
+  table: {
+    width: "100%",
+  },
+  Paper: {
+    margin: "6px 16px",
+    width: "140px",
+    height: "140px",
+  },
+};
 
 export default function ClassRoutine() {
   const { selectedSetting } = useContext(SettingContext);
@@ -21,6 +41,7 @@ export default function ClassRoutine() {
   const [employees, setEmployees] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [value, setSelectValue] = useState(""); // Changed to empty string
   const entryFormik = useFormik({
     initialValues: {
       class: "",
@@ -30,6 +51,13 @@ export default function ClassRoutine() {
       roomNo: "",
       startTime: "",
       endTime: "",
+    },
+    onSubmit: console.log("nnnnnnn"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      class: "",
     },
     onSubmit: console.log("nnnnnnn"),
   });
@@ -53,27 +81,31 @@ export default function ClassRoutine() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+      formik.setFieldValue("class", data.result[0]._id);
       entryFormik.setFieldValue("class", data.result[0]._id);
+      setSelectValue(data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
   };
 
-  //get sections
   const getSections = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            class: entryFormik.values.class,
+            class: formik.values.class,
           },
         },
       });
-      entryFormik.setFieldValue("section", data.result[0]?._id);
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+      entryFormik.setFieldValue("section", data.result[0]?._id);
+      if (data.result.length > 0) {
+        setSelectValue(data.result[0]._id);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -97,6 +129,8 @@ export default function ClassRoutine() {
     }
   };
 
+  const handleTabChange = (e, newValue) => setSelectValue(newValue);
+
   const getEmployees = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.employee.list, {
@@ -116,15 +150,14 @@ export default function ClassRoutine() {
   };
 
   useEffect(() => {
-    if (entryFormik.values.class) {
+    if (formik.values.class) {
       getSections();
       getSubject();
     }
-  }, [entryFormik.values.class]);
+  }, [formik.values.class]);
 
   useEffect(() => {
     getClasses();
-
     getEmployees();
   }, [selectedSetting._id]);
 
@@ -137,17 +170,19 @@ export default function ClassRoutine() {
             <FormSelect
               required={true}
               name="class"
-              formik={entryFormik}
+              formik={formik}
               label="Select Class"
-              // options={""}
+              options={classes}
             />
           </Grid>
         </Grid>
       </Paper>
-      <AddForm title="Add Class Routine" onAddClick={AddClassRoutine} />
-      {/* ================================== */}
 
-      {/* ==== add/edit classes ======== */}
+      <Typography component="h1" sx={{ fontWeight: "bold", mt: 1 }}>
+        Sections
+      </Typography>
+
+      <AddForm title="Add Class Routine" onAddClick={AddClassRoutine} />
 
       <FormModal
         open={open}
