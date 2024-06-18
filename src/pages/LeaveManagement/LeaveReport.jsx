@@ -384,7 +384,7 @@ export default function LeaveReport() {
 
             <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
               <LoadingButton
-                loading={loadingPdf}
+                loading={loadingExcel}
                 onClick={handleGetDownloadExcel}
                 size="small"
                 variant="contained">
@@ -490,7 +490,7 @@ export default function LeaveReport() {
 
             <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
               <LoadingButton
-                loading={loadingExcel}
+                loading={loadingPdf}
                 onClick={handleGetPrintPdf}
                 size="small"
                 variant="contained">

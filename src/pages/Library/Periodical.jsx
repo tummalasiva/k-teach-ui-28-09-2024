@@ -15,6 +15,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
+import dayjs from "dayjs";
 
 export default function Periodical() {
   const { selectedSetting } = useContext(SettingContext);
@@ -37,7 +38,7 @@ export default function Periodical() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting._id]);
 
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
@@ -49,7 +50,7 @@ export default function Periodical() {
     formData.append("volumeNumber", values.volumeNumber);
     formData.append("quantity", values.quantity);
     formData.append("price", values.price);
-    formData.append("entryDate", values.entryDate);
+    formData.append("entryDate", dayjs(values.entryDate).format("YYYY-MM-DD"));
     selectImg.forEach((file) => formData.append("bookCover", file));
     formData.append("schoolId", selectedSetting._id);
 
