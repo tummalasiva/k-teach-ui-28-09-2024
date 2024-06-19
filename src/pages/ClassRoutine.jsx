@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import FormSelect from "../forms/FormSelect";
 import { useFormik } from "formik";
 import AddForm from "../forms/AddForm";
@@ -34,6 +34,13 @@ export default function ClassRoutine() {
     onSubmit: console.log("nnnnnnn"),
   });
 
+  const formik = useFormik({
+    initialValues: {
+      class: "",
+    },
+    onSubmit: console.log("nnnnnnn"),
+  });
+
   const AddClassRoutine = () => {
     setOpen(true);
   };
@@ -53,6 +60,7 @@ export default function ClassRoutine() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+      formik.setFieldValue("class", data.result[0]._id);
       entryFormik.setFieldValue("class", data.result[0]._id);
     } catch (error) {
       console.log(error);
@@ -137,13 +145,18 @@ export default function ClassRoutine() {
             <FormSelect
               required={true}
               name="class"
-              formik={entryFormik}
+              formik={formik}
               label="Select Class"
-              // options={""}
+              options={classes}
             />
           </Grid>
         </Grid>
       </Paper>
+
+      <Typography component="h1" sx={{ fontWeight: "bold", mt: 1 }}>
+        Sections
+      </Typography>
+
       <AddForm title="Add Class Routine" onAddClick={AddClassRoutine} />
       {/* ================================== */}
 

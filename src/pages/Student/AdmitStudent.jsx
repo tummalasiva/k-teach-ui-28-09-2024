@@ -69,7 +69,16 @@ export default function AdmitStudent() {
             },
           },
         });
-        setData(data.result);
+
+        setData(
+          data.result.map((s) => ({
+            ...s,
+            section: s.academicInfo.section,
+            rollNumber: s.academicInfo,
+          }))
+        );
+
+        console.log(data.result, "kkkkkkkkk");
       } else {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
@@ -82,7 +91,15 @@ export default function AdmitStudent() {
             },
           },
         });
-        setData(data.result);
+        setData(
+          data.result.map((s) => ({
+            ...s,
+            section: s.academicInfo.section,
+            rollNumber: s.academicInfo,
+          }))
+        );
+
+        console.log(data.result, "kkkkkkkkk");
       }
     } catch (error) {
       console.log(error);

@@ -122,6 +122,17 @@ function App() {
         styleOverrides: {
           root: {
             borderRadius: 5,
+            input: {
+              "&:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px rgba(0, 0, 0, 0) inset",
+                boxShadow: "0 0 0 100px rgba(0, 0, 0, 0) inset",
+                backgroundColor: "transparent !important",
+                WebkitTextFillColor: isDarkMode
+                  ? "#fff !important"
+                  : "#000 !important", // Ensure text color is set
+                transition: "background-color 5000s ease-in-out 0s",
+              },
+            },
           },
         },
       },
@@ -204,7 +215,7 @@ function App() {
     },
     typography: {
       allVariants: {
-        color: isDarkMode ? "white" : "black",
+        // color: isDarkMode ? "white" : "black",
         fontSize: "14px",
       },
     },
