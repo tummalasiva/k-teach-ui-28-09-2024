@@ -28,7 +28,7 @@ export const libraryBookTableKeys = [
   },
   {
     name: "Issue",
-    key: "issue",
+    key: "issueNumber",
   },
   {
     name: "Available",

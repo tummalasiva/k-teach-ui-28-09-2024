@@ -124,6 +124,7 @@ export default function StudentLibraryMember() {
         }));
 
       setStudents(filteredData);
+
       setNonMember(filteredNonMemberData);
     } catch (error) {
       console.log(error);

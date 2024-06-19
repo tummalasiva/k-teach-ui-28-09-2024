@@ -127,7 +127,7 @@ export default function LeaveType({}) {
   useEffect(() => {
     getDepartments();
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const AddLeaveType = () => {
     setOpen(true);

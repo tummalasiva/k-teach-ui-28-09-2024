@@ -1,3 +1,5 @@
+/** @format */
+
 export const admitStudentTableKeys = [
   {
     name: "Photo",
@@ -10,7 +12,7 @@ export const admitStudentTableKeys = [
     path: "basicInfo",
   },
   {
-    name: "Status",
+    name: "Active",
     key: "active",
   },
   {
@@ -20,8 +22,8 @@ export const admitStudentTableKeys = [
   },
   {
     name: "Roll No",
-    key: "rollNo",
-    path: "academicInfo",
+    key: "rollNumber",
+    path: "rollNumber",
   },
   {
     name: "Admission No",

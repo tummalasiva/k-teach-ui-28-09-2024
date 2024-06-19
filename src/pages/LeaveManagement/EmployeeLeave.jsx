@@ -29,6 +29,7 @@ import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import CustomSelect from "../../forms/CustomSelect";
 import { LoadingButton } from "@mui/lab";
+import dayjs from "dayjs";
 
 const LeaveData = styled(Paper)(({ theme }) => ({
   height: "80px",
@@ -208,8 +209,8 @@ export default function EmployeeLeave() {
     const formData = new FormData();
     formData.append("schoolId", selectedSetting._id);
     formData.append("leaveTypeId", values.leaveType);
-    formData.append("startDate", values.startDate);
-    formData.append("endDate", values.endDate);
+    formData.append("startDate", dayjs(values.startDate).format("YYYY-MM-DD"));
+    formData.append("endDate", dayjs(values.endDate).format("YYYY-MM-DD"));
     formData.append("subject", values.subject);
     formData.append("description", values.description);
     formData.append("totalDays", totalDays);
