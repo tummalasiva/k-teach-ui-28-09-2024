@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CustomInput from "../../forms/CustomInput";
+import ThemeModeContext from "../../context/ThemeModeContext";
 
 const Active = [
   { label: "Active", value: true },
@@ -24,6 +25,7 @@ const Active = [
 
 export default function SalaryGrade() {
   const { selectedSetting } = useContext(SettingContext);
+  const { isDarkMode } = useContext(ThemeModeContext);
   const [data, setData] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
@@ -42,7 +44,7 @@ export default function SalaryGrade() {
 
   useEffect(() => {
     getData();
-  }, [selectedSetting._id]);
+  }, [selectedSetting]);
 
   const AddSalaryGrade = () => {
     setOpen(true);
@@ -199,7 +201,7 @@ export default function SalaryGrade() {
               key={i}
               gap={1}
               sx={{
-                backgroundColor: "#F0F8FF",
+                backgroundColor: isDarkMode ? "transparent" : "#F0F8FF",
                 borderRadius: "5px",
                 padding: "20px 15px 30px 15px",
                 border: "1px solid lightgrey",
@@ -255,7 +257,7 @@ export default function SalaryGrade() {
               key={i}
               gap={1}
               sx={{
-                backgroundColor: "#F0F8FF",
+                backgroundColor: isDarkMode ? "transparent" : "#F0F8FF",
                 borderRadius: "5px",
                 padding: "20px 15px 30px 15px",
                 border: "1px solid lightgrey",

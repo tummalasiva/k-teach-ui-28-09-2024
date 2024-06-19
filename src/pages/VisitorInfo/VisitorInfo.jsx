@@ -208,14 +208,14 @@ export default function VisitorInfo() {
   const handleClose = () => {
     setDataToEdit(null);
     setOpen(false);
-    getData();
+    // getData();
   };
 
   useEffect(() => {
     getRoles();
     getClasses();
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     if (entryFormik.values.class) {

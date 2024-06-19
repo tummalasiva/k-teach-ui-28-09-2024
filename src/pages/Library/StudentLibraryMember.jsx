@@ -125,10 +125,7 @@ export default function StudentLibraryMember() {
 
       setStudents(filteredData);
 
-      console.log(filteredData, "filteredData");
       setNonMember(filteredNonMemberData);
-
-      console.log(filteredNonMemberData, "filteredNonMemberData");
     } catch (error) {
       console.log(error);
     }
