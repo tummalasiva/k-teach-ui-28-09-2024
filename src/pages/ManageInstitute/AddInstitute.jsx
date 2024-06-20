@@ -388,7 +388,7 @@ export default function AddInstitute({ initialValue = null }) {
         </FormBox>
 
         {/* Settings */}
-        <FormBox>
+        <FormBox sx={{ overflow: "visible" }}>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Setting Information
           </Title>
