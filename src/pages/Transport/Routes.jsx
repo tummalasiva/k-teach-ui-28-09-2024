@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -8,15 +8,19 @@ import { routesTableKeys } from "../../data/tableKeys/routesData";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { Card, Typography } from "@mui/material";
+import SettingContext from "../../context/SettingsContext";
 
 export default function Routes() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [sumOfSeat, setSumOfSeat] = useState(0);
 
   // get rout
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.route.list);
+      const { data } = await get(PRIVATE_URLS.route.list, {
+        params: { schoolId: selectedSetting._id },
+      });
       console.log(data, "herere");
       setData(
         data.result.map((r) => ({
@@ -41,13 +45,13 @@ export default function Routes() {
       }
       setSumOfSeat(sum);
     }
-  }, [data]);
+  }, [data, selectedSetting]);
 
   console.log(sumOfSeat, "sumOfSeat");
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   return (
     <>

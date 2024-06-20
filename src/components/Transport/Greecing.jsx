@@ -13,6 +13,7 @@ import SettingContext from "../../context/SettingsContext";
 import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 export default function Greecing() {
   const { selectedSetting } = useContext(SettingContext);
@@ -30,8 +31,8 @@ export default function Greecing() {
           search: {
             vehicle: values.vehicle,
 
-            fromDate: values.fromDate,
-            toDate: values.toDate,
+            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
@@ -72,13 +73,14 @@ export default function Greecing() {
 
   useEffect(() => {
     getVehicle();
-  }, []);
+  }, [selectedSetting]);
 
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        date: dayjs(values.date).format("YYYY/MM/DD"),
       };
       setLoading(true);
       if (dataToEdit) {
@@ -101,8 +103,8 @@ export default function Greecing() {
   const formik = useFormik({
     initialValues: {
       vehicle: "",
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: getData,
   });
@@ -170,7 +172,7 @@ export default function Greecing() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" variant="contained">
+              <Button size="small" type="submit" variant="contained">
                 Find
               </Button>
               <Button size="small" variant="contained">

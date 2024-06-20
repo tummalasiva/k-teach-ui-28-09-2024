@@ -161,7 +161,7 @@ export default function Firm() {
             <FormInput formik={entryFormik} name="state" label="State" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            <FormInput formik={entryFormik} name="zipCode" label="Zipcode" />
+            <FormInput formik={entryFormik} name="zipCode" label="Zip Code" />
           </Grid>
         </Grid>
       </FormModal>

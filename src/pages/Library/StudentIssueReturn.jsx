@@ -204,8 +204,8 @@ export default function StudentIssueReturn() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            fromDate: values.fromDate,
-            toDate: values.toDate,
+            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
@@ -227,8 +227,8 @@ export default function StudentIssueReturn() {
 
   const formik = useFormik({
     initialValues: {
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: getList,
   });
@@ -278,8 +278,6 @@ export default function StudentIssueReturn() {
         dueDate: dayjs(values.dueDate).format("YYYY/MM/DD"),
         schoolId: selectedSetting._id,
       };
-
-      console.log(payload, "payload");
 
       setLoading(true);
       const { data } = await post(PRIVATE_URLS.bookIssue.create, payload);

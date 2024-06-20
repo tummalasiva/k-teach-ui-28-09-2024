@@ -18,6 +18,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import FileSelect from "../../forms/FileSelect";
 import { downloadFile } from "../../utils";
+import dayjs from "dayjs";
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: "20px 8px",
@@ -53,8 +54,8 @@ export default function VehicleLog() {
           search: {
             vehicle: values.vehicle,
             route: values.route,
-            fromDate: values.fromDate,
-            toDate: values.toDate,
+            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
@@ -93,7 +94,7 @@ export default function VehicleLog() {
 
   useEffect(() => {
     getVehicle();
-  }, []);
+  }, [selectedSetting]);
 
   const handleGetPrintPdf = async () => {
     try {
@@ -104,8 +105,8 @@ export default function VehicleLog() {
             vehicle: formik.values.vehicle,
             route: formik.values.route,
 
-            fromDate: formik.values.fromDate,
-            toDate: formik.values.toDate,
+            fromDate: dayjs(formik.values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(formik.values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
@@ -159,7 +160,7 @@ export default function VehicleLog() {
       formDataDeparture.append("schoolId", selectedSetting._id);
       formDataDeparture.append("route", values.route);
       formDataDeparture.append("vehicle", values.vehicle);
-      formDataDeparture.append("date", values.date);
+      formDataDeparture.append("date", dayjs(values.date).format("YYYY-MM-DD"));
 
       formDataDeparture.append("departureTime", values.departureTime);
       formDataDeparture.append("readingAtDeparture", values.readingAtDeparture);
@@ -214,7 +215,7 @@ export default function VehicleLog() {
       arrivalTime: dataToEdit?.arrivalTime || "",
       readingAtArrival: dataToEdit?.readingAtArrival?.reading || "",
       distance: dataToEdit?.spareUse?.distance || "",
-      date: dataToEdit?.date || "",
+      date: dataToEdit?.date || null,
       reason: dataToEdit?.spareUse?.reason || "",
       totalDistanceTravelled: dataToEdit?.totalDistanceTravelled || 0,
 
@@ -228,8 +229,8 @@ export default function VehicleLog() {
     initialValues: {
       vehicle: "",
       route: "",
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: getData,
   });
@@ -493,8 +494,8 @@ export default function VehicleLog() {
                     accept="image/*,.pdf"
                   />
                 </Grid>
-                {dataToEdit?.readingAtDeparture &&
-                dataToEdit.readingAtDeparture?.image ? (
+                {dataToEdit?.readingAtArrival &&
+                dataToEdit.readingAtArrival?.image ? (
                   <Grid xs={12} md={6} lg={6} item>
                     <Button
                       size="small"

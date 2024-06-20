@@ -46,7 +46,9 @@ export default function ManageRouteAndTrips() {
   // get rout
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.route.list);
+      const { data } = await get(PRIVATE_URLS.route.list, {
+        params: { schoolId: selectedSetting._id },
+      });
       // console.log(data, "herere");
       setData(
         data.result.map((v) => ({
@@ -192,7 +194,7 @@ export default function ManageRouteAndTrips() {
   useEffect(() => {
     getVehicles();
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleCustomInputChange = (event, stop) => {
     entryFormik.setFieldValue(

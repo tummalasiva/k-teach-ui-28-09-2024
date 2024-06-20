@@ -96,7 +96,7 @@ export default function Credential() {
           username: student.username,
           fatherName: student.fatherInfo.name,
           name: student.basicInfo.name,
-          rollNumber: student.basicInfo.rollNumber,
+          rollNumber: student.academicInfo,
         }))
       );
     } catch (error) {
