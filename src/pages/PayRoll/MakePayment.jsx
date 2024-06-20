@@ -50,7 +50,7 @@ export default function MakePayment() {
 
   useEffect(() => {
     getDeductions();
-  }, []);
+  }, [selectedSetting]);
 
   const handleProcessPayment = async (values) => {
     setProcessingPayment(true);
@@ -206,7 +206,14 @@ export default function MakePayment() {
             </Grid>
 
             <Grid xs={12} sm={6} md={6} lg={3} item>
-              <FormDatePicker formik={formik} label="Date" name="date" />
+              <FormDatePicker
+                formik={formik}
+                label="Date"
+                openTo="month"
+                inputFormat="MM/yyyy"
+                views={["month", "year"]}
+                name="date"
+              />
             </Grid>
 
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>

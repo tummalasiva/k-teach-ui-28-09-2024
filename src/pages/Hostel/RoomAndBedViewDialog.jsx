@@ -9,22 +9,25 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import ViewModel from "../../forms/ViewModel";
+import ThemeModeContext from "../../context/ThemeModeContext";
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({ theme, isDarkMode }) => ({
   width: "200px",
+  color: isDarkMode ? "#fff" : "#000",
   "&:nth-of-type(odd)": {
-    backgroundColor: "#F0F8FF",
+    backgroundColor: isDarkMode ? "transparent" : "#F0F8FF",
   },
 }));
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(({ theme, isDarkMode }) => ({
   width: "300px",
   border: "1px solid gray",
+  color: isDarkMode ? "#fff" : "#000",
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "blue",
-    color: "#000",
+    backgroundColor: isDarkMode ? "transparent" : "blue",
+    color: isDarkMode ? "#fff" : "#000",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 15,
@@ -38,6 +41,8 @@ export default function RoomAndBedViewDialog({
   tableData,
   schoolName,
 }) {
+  const { isDarkMode } = useContext(ThemeModeContext);
+
   console.log(tableData, "tableData");
 
   return (
@@ -45,38 +50,50 @@ export default function RoomAndBedViewDialog({
       <ViewModel title={title} onClose={onClose} open={open}>
         <Table aria-label="customized table">
           <TableBody>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 School Name
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {schoolName}
               </StyledTableCell>
             </StyledTableRow>
 
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 Room No
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {tableData?.number}
               </StyledTableCell>
             </StyledTableRow>
 
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 Seat Total
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {tableData?.totalBeds}
               </StyledTableCell>
             </StyledTableRow>
 
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 Bed
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {tableData?.beds?.map((s) => (
                   <Box
                     sx={{
@@ -84,30 +101,47 @@ export default function RoomAndBedViewDialog({
                       display: "flex",
                       flexDirection: "column",
                       my: 1,
-                    }}>
-                    <StyledTableRow>
-                      <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+                    }}
+                    key={s.name}>
+                    <StyledTableRow isDarkMode={isDarkMode}>
+                      <StyledTableCell
+                        align="left"
+                        sx={{ fontWeight: "bold" }}
+                        isDarkMode={isDarkMode}>
                         Bed Name
                       </StyledTableCell>
-                      <StyledTableCell align="left" width={100}>
+                      <StyledTableCell
+                        align="left"
+                        width={100}
+                        isDarkMode={isDarkMode}>
                         {s?.name || "NA"}
                       </StyledTableCell>
                     </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
-                        Bed Position{" "}
+                    <StyledTableRow isDarkMode={isDarkMode}>
+                      <StyledTableCell
+                        align="left"
+                        sx={{ fontWeight: "bold" }}
+                        isDarkMode={isDarkMode}>
+                        Bed Position
                       </StyledTableCell>
-                      <StyledTableCell align="left" width={100}>
+                      <StyledTableCell
+                        align="left"
+                        width={100}
+                        isDarkMode={isDarkMode}>
                         {s?.position || "NA"}
                       </StyledTableCell>
                     </StyledTableRow>
-                    <StyledTableRow>
+                    <StyledTableRow isDarkMode={isDarkMode}>
                       <StyledTableCell
                         align="left"
-                        sx={{ fontWeight: 600, width: "200px" }}>
+                        sx={{ fontWeight: 600, width: "200px" }}
+                        isDarkMode={isDarkMode}>
                         Bed Allocated
                       </StyledTableCell>
-                      <StyledTableCell align="left" width={100}>
+                      <StyledTableCell
+                        align="left"
+                        width={100}
+                        isDarkMode={isDarkMode}>
                         {s?.allocated ? "Yes" : "No"}
                       </StyledTableCell>
                     </StyledTableRow>
@@ -115,19 +149,25 @@ export default function RoomAndBedViewDialog({
                 ))}
               </StyledTableCell>
             </StyledTableRow>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 Note
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {tableData?.note}
               </StyledTableCell>
             </StyledTableRow>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
+            <StyledTableRow isDarkMode={isDarkMode}>
+              <StyledTableCell
+                align="left"
+                sx={{ fontWeight: "bold" }}
+                isDarkMode={isDarkMode}>
                 Created
               </StyledTableCell>
-              <StyledTableCell align="left" width={100}>
+              <StyledTableCell align="left" width={100} isDarkMode={isDarkMode}>
                 {tableData?.createdAt}
               </StyledTableCell>
             </StyledTableRow>

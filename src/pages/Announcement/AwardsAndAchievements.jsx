@@ -44,7 +44,7 @@ export default function AwardsAndAchievements() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);

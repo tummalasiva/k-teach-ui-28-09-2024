@@ -365,7 +365,7 @@ export default function StudentCheckout() {
             <FormSelect
               name="relationship"
               formik={entryFormik}
-              label="Select Relation With Student"
+              label="Relation With Student"
               options={Relation_With_Student}
             />
           </Grid>

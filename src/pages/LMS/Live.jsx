@@ -439,7 +439,7 @@ export default function Live() {
         );
       }
     }
-  }, [selectedPartcipatType]);
+  }, [selectedPartcipatType, selectedSetting]);
   const handleFilter = (e) => {
     setSelectedParticipatType(e.target.value);
   };
@@ -463,8 +463,6 @@ export default function Live() {
       console.error(error);
     }
   };
-
-  console.log(data, "0000000");
 
   return (
     <>

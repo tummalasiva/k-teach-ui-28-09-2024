@@ -14,6 +14,7 @@ import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import FileSelect from "../../forms/FileSelect";
+import dayjs from "dayjs";
 
 export default function Fuel() {
   const { selectedSetting } = useContext(SettingContext);
@@ -33,8 +34,8 @@ export default function Fuel() {
           search: {
             vehicle: values.vehicle,
             firm: values.firm,
-            fromDate: values.fromDate,
-            toDate: values.toDate,
+            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           },
         },
       });
@@ -63,7 +64,7 @@ export default function Fuel() {
       formData.append("schoolId", selectedSetting._id);
       formData.append("vehicle", values.vehicle);
       formData.append("firm", values.firm);
-      formData.append("date", values.date);
+      formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
       formData.append("billNo", values.billNo);
       formData.append("fuelQuantity", values.fuelQuantity);
       formData.append("rate", values.rate);
@@ -99,8 +100,8 @@ export default function Fuel() {
     initialValues: {
       vehicle: "",
       firm: "",
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: getData,
   });
@@ -145,7 +146,7 @@ export default function Fuel() {
   useEffect(() => {
     getVehicle();
     getFirm();
-  }, []);
+  }, [selectedSetting]);
 
   const entryFormik = useFormik({
     initialValues: {
@@ -249,7 +250,7 @@ export default function Fuel() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" variant="contained">
+              <Button size="small" type="submit" variant="contained">
                 Find
               </Button>
               <Button size="small" variant="contained">

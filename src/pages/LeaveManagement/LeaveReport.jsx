@@ -13,6 +13,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
+import dayjs from "dayjs";
 
 const Type_Options = [
   {
@@ -189,8 +190,8 @@ export default function LeaveReport() {
       const getPdf = await get(PRIVATE_URLS.leaveApplication.downloadPdf, {
         params: {
           schoolId: selectedSetting._id,
-          fromDate: values.fromDate,
-          toDate: values.toDate,
+          fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+          toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
           userType: values.userType,
           academicYearId: values.academicYear,
         },
@@ -246,8 +247,8 @@ export default function LeaveReport() {
   const formik = useFormik({
     initialValues: {
       academicYear: "",
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
       type: "",
       userType: "",
       class: "",

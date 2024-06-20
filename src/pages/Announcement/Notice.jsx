@@ -63,7 +63,7 @@ export default function Notice() {
 
   useEffect(() => {
     getRoles();
-  }, []);
+  }, [selectedSetting]);
 
   const handleClose = () => {
     setOpen(false);

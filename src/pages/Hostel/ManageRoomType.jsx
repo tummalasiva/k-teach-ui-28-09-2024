@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
@@ -11,8 +11,10 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import AddForm from "../../forms/AddForm";
 import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
+import SettingContext from "../../context/SettingsContext";
 
 export default function ManageRoomType() {
+  const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ export default function ManageRoomType() {
 
   useEffect(() => {
     getRoomTypes();
-  }, []);
+  }, [selectedSetting]);
 
   const handleSubmit = async (values) => {
     try {

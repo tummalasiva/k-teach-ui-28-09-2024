@@ -19,9 +19,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import CustomInput from "../../forms/CustomInput";
 import RoomAndBedViewDialog from "./RoomAndBedViewDialog";
 import SettingContext from "../../context/SettingsContext";
+import ThemeModeContext from "../../context/ThemeModeContext";
 
 export default function ManageRoomAndBed() {
   const { selectedSetting } = useContext(SettingContext);
+  const { isDarkMode } = useContext(ThemeModeContext);
   const [data, setData] = useState([]);
   const [roomType, setRoomType] = useState([]);
   const [hostels, setHostels] = useState([]);
@@ -76,7 +78,7 @@ export default function ManageRoomAndBed() {
     getRoomList();
     getRoomTypeList();
     getHostelList();
-  }, []);
+  }, [selectedSetting]);
 
   // Add/Update event handle
   const handleSubmit = async (values) => {
@@ -296,7 +298,7 @@ export default function ManageRoomAndBed() {
                 key={i}
                 gap={1}
                 sx={{
-                  backgroundColor: "#F0F8FF",
+                  backgroundColor: isDarkMode ? "transparent" : "#F0F8FF",
                   borderRadius: "5px",
                   padding: "20px 15px 30px 15px",
                   border: "1px solid lightgrey",
