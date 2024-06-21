@@ -170,7 +170,7 @@ import BulkPhoto from "../pages/Student/BulkPhoto";
 // exlnt_70471681
 // 9538063455
 
-const drawerWidth = 300;
+const drawerWidth = 250;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -337,7 +337,6 @@ export default function NavDrawer() {
     // setUser(null);
     navigate("/");
   };
-  console.log(selectedSetting, "0000000");
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -518,6 +517,16 @@ export default function NavDrawer() {
                     }}>
                     <ListItemButton
                       onClick={() => setSelectedMenu(index)}
+                      sx={{
+                        "& .MuiListItemText-root": {
+                          whiteSpace: "normal",
+                          wordBreak: "break-word",
+                        },
+                        "& .MuiListItemIcon-root": {
+                          minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
+                          marginRight: "15px", // Adjust this value to decrease the space
+                        },
+                      }}
                       selected={
                         selectedMenu === index ||
                         window.location.pathname === m.path
@@ -537,6 +546,16 @@ export default function NavDrawer() {
                       selectedMenu === index ||
                       window.location.pathname === m.path
                     }
+                    sx={{
+                      "& .MuiListItemText-root": {
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                      },
+                      "& .MuiListItemIcon-root": {
+                        minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
+                        marginRight: "15px", // Adjust this value to decrease the space
+                      },
+                    }}
                     onClick={() => handleToggleMenuOpen(index)}>
                     <ListItemIcon>{m.icon}</ListItemIcon>
                     <ListItemText primary={m.name} />
@@ -558,9 +577,20 @@ export default function NavDrawer() {
                             textDecoration: "none",
                             display: "flex",
                             flex: 1,
+                            color: "red",
                           }}>
                           <ListItemButton
                             onClick={() => setSelectedSubMenu(sub.path)}
+                            sx={{
+                              "& .MuiListItemText-root": {
+                                whiteSpace: "normal",
+                                wordBreak: "break-word",
+                              },
+                              "& .MuiListItemIcon-root": {
+                                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
+                                marginRight: "15px", // Adjust this value to decrease the space
+                              },
+                            }}
                             selected={
                               selecteSubMenu === sub.path ||
                               window.location.pathname === sub.path
@@ -580,7 +610,18 @@ export default function NavDrawer() {
         </List>
         <Divider />
         <ListItem disablePadding>
-          <ListItemButton sx={{ paddingLeft: 0 }}>
+          <ListItemButton
+            sx={{
+              paddingLeft: 0,
+              "& .MuiListItemText-root": {
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+              },
+              "& .MuiListItemIcon-root": {
+                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
+                marginRight: "15px", // Adjust this value to decrease the space
+              },
+            }}>
             <Switch
               sx={{ marginRight: "15px" }}
               checked={isDarkMode}
@@ -605,7 +646,18 @@ export default function NavDrawer() {
               </Link>
             </ListItem> */}
             <ListItem disablePadding>
-              <ListItemButton onClick={handleLogout}>
+              <ListItemButton
+                sx={{
+                  "& .MuiListItemText-root": {
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
+                  },
+                  "& .MuiListItemIcon-root": {
+                    minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
+                    marginRight: "15px", // Adjust this value to decrease the space
+                  },
+                }}
+                onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" color="primary" />
                 </ListItemIcon>
