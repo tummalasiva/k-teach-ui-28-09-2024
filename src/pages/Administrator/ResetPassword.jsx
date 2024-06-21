@@ -17,14 +17,13 @@ export default function ResetPassword() {
   const getRoles = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
-
-      setRoles(
-        data.result.map((r) => ({
-          ...r,
+      const roles = data.result
+        .filter((r) => r.name?.toLowerCase() !== "student")
+        .map((r) => ({
           label: r.name,
           value: r._id,
-        }))
-      );
+        }));
+      setRoles(roles);
     } catch (error) {
       console.error(error);
     }
@@ -35,7 +34,7 @@ export default function ResetPassword() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            role: entryFormik.values.usertType,
+            role: entryFormik.values.userType,
           },
         },
       });
@@ -51,58 +50,86 @@ export default function ResetPassword() {
       console.log(error);
     }
   };
+
+  const handleCreateOrUpdate = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+        employeeId: values.employeeId,
+        password: values.password,
+      };
+
+      console.log(payload, "jjjjjjjjjjjj");
+
+      const { data } = await post(
+        PRIVATE_URLS.account.changePasswordForUser,
+        payload
+      );
+      console.log(data, "ooooooo");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
-      usertType: "",
-      employee: "",
+      userType: "",
+      employeeId: "",
       password: "",
     },
-    onSubmit: console.log("data"),
+    onSubmit: handleCreateOrUpdate,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
     getRoles();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
-    if (entryFormik.values.usertType) {
+    if (entryFormik.values.userType) {
       getEmployees();
     }
-  }, [entryFormik.values.usertType, selectedSetting._id]);
+  }, [entryFormik.values.userType, selectedSetting._id]);
 
   return (
     <>
       <PageHeader title="User Password Reset" />
       <Paper sx={{ padding: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={4} item>
-            <FormSelect
-              required={true}
-              name="usertType"
-              formik={entryFormik}
-              label="User Type"
-              options={roles}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={4} item>
-            <FormSelect
-              required={true}
-              name="employee"
-              formik={entryFormik}
-              label="Employees"
-              options={employees}
-            />
-          </Grid>
+        <form onSubmit={entryFormik.handleSubmit}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={6} lg={4} item>
+              <FormSelect
+                required={true}
+                name="userType"
+                formik={entryFormik}
+                label="User Type"
+                options={roles}
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={4} item>
+              <FormSelect
+                required={true}
+                name="employeeId"
+                formik={entryFormik}
+                label="Employees"
+                options={employees}
+              />
+            </Grid>
 
-          <Grid xs={12} sm={6} md={6} lg={4} item>
-            <FormInput formik={entryFormik} label="Password" name="password" />
+            <Grid xs={12} sm={6} md={6} lg={4} item>
+              <FormInput
+                formik={entryFormik}
+                label="Password"
+                name="password"
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" type="submit" variant="contained">
+                Change Password
+              </Button>
+            </Grid>
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Change Password
-            </Button>
-          </Grid>
-        </Grid>
+        </form>
       </Paper>
     </>
   );

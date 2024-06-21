@@ -16,6 +16,9 @@ export const PRIVATE_URLS = {
     delete: "/academicYear/delete",
     toggleActiveStatus: "/academicYear/toggleActiveStatus",
   },
+  account: {
+    changePasswordForUser: "/account/changePasswordForUser",
+  },
   role: {
     list: "/role/list",
     create: "/role/create",
@@ -171,12 +174,11 @@ export const PRIVATE_URLS = {
     resuffle: "/student/resuffle",
     updateTransportMember: "/student/updateTransportMember",
     removeTransportMember: "/student/removeTransportMember",
-
     updateLibraryMember: "/student/updateLibraryMember",
     removeLibraryMember: "/student/removeLibraryMember",
-
     updateHostelMember: "/student/updateHostelMember",
     removeHostelMember: "/student/removeHostelMember",
+    getDashboardStudentDetails: "/student/getDashboardStudentDetails",
   },
   studentActivity: {
     list: "/studentActivity/list",
