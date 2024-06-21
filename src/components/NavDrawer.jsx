@@ -517,16 +517,6 @@ export default function NavDrawer() {
                     }}>
                     <ListItemButton
                       onClick={() => setSelectedMenu(index)}
-                      sx={{
-                        "& .MuiListItemText-root": {
-                          whiteSpace: "normal",
-                          wordBreak: "break-word",
-                        },
-                        "& .MuiListItemIcon-root": {
-                          minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                          marginRight: "20px", // Adjust this value to decrease the space
-                        },
-                      }}
                       selected={
                         selectedMenu === index ||
                         window.location.pathname === m.path
@@ -546,16 +536,6 @@ export default function NavDrawer() {
                       selectedMenu === index ||
                       window.location.pathname === m.path
                     }
-                    sx={{
-                      "& .MuiListItemText-root": {
-                        whiteSpace: "normal",
-                        wordBreak: "break-word",
-                      },
-                      "& .MuiListItemIcon-root": {
-                        minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                        marginRight: "20px", // Adjust this value to decrease the space
-                      },
-                    }}
                     onClick={() => handleToggleMenuOpen(index)}>
                     <ListItemIcon>{m.icon}</ListItemIcon>
                     <ListItemText primary={m.name} />
@@ -584,11 +564,11 @@ export default function NavDrawer() {
                             sx={{
                               "& .MuiListItemText-root": {
                                 whiteSpace: "normal",
-                                wordBreak: "break-word",
+                                wordWrap: "wrap",
                               },
                               "& .MuiListItemIcon-root": {
-                                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                                marginRight: "20px", // Adjust this value to decrease the space
+                                // This ensures the ListItemIcon doesn't use the default minimum width
+                                // Adjust this value to decrease the space
                               },
                             }}
                             selected={
@@ -615,11 +595,11 @@ export default function NavDrawer() {
               paddingLeft: 0,
               "& .MuiListItemText-root": {
                 whiteSpace: "normal",
-                wordBreak: "break-word",
+                wordWrap: "wrap",
               },
               "& .MuiListItemIcon-root": {
-                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                marginRight: "20px", // Adjust this value to decrease the space
+                // This ensures the ListItemIcon doesn't use the default minimum width
+                // Adjust this value to decrease the space
               },
             }}>
             <Switch
@@ -650,11 +630,11 @@ export default function NavDrawer() {
                 sx={{
                   "& .MuiListItemText-root": {
                     whiteSpace: "normal",
-                    wordBreak: "break-word",
+                    wordWrap: "wrap",
                   },
                   "& .MuiListItemIcon-root": {
-                    minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                    marginRight: "20px", // Adjust this value to decrease the space
+                    // This ensures the ListItemIcon doesn't use the default minimum width
+                    // Adjust this value to decrease the space
                   },
                 }}
                 onClick={handleLogout}>
