@@ -103,6 +103,7 @@ export default function Exams() {
       const { data } = await get(
         PRIVATE_URLS.preadmissionExam.delete + "/" + _id
       );
+
       getExamList();
       entryFormik.handleSubmit();
     } catch (error) {
