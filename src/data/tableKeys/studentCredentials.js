@@ -1,3 +1,5 @@
+/** @format */
+
 export const studentCrendentialsTableKeys = [
   {
     name: "Name",
@@ -10,6 +12,7 @@ export const studentCrendentialsTableKeys = [
   {
     name: "Roll No",
     key: "rollNumber",
+    path: "rollNumber",
   },
   {
     name: "Father Name",

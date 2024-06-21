@@ -31,8 +31,6 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
       setHostel(
         data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
       );
-
-      console.log(data.result, "vvbvbbbbv vbfv vhvbfvvc");
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +38,14 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
 
   const getRoom = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.room.list);
+      const { data } = await get(PRIVATE_URLS.room.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            hostel: entryFormik.values.hostel,
+          },
+        },
+      });
 
       setRoom(
         data.result.map((s) => ({
@@ -49,8 +54,6 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
           value: s._id,
         }))
       );
-
-      console.log(data.result, "9999999999999");
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +61,6 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
 
   useEffect(() => {
     getHostel();
-    getRoom();
   }, [selectedSetting]);
 
   const handleClickOpen = () => {
@@ -101,6 +103,11 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
     },
     onSubmit: addMember,
   });
+  useEffect(() => {
+    if (entryFormik.values.hostel) {
+      getRoom();
+    }
+  }, [entryFormik.values.hostel, selectedSetting]);
 
   return (
     <>
@@ -255,6 +262,8 @@ export default function HostelMember() {
           },
         });
 
+        console.log(data.result, "=================");
+
         const filteredDataMember = data.result
           .filter((s) => s?.otherInfo?.hostelMember)
           .map((s) => ({
@@ -340,7 +349,7 @@ export default function HostelMember() {
     if (entryFormik.values.class || formik.values.class) {
       getSections();
     }
-  }, [entryFormik.values.class, formik.values.class]);
+  }, [entryFormik.values.class, formik.values.class, selectedSetting]);
 
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 

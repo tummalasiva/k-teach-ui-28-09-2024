@@ -377,6 +377,10 @@ export const ROLE_PERMISSIONS = [
         module: "Employee Library Member",
         permissions: [],
       },
+      {
+        module: "Issue and Returns",
+        permissions: [],
+      },
     ],
   },
 

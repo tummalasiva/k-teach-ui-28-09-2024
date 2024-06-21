@@ -213,8 +213,8 @@ export default function TeacherActivity() {
       class: "",
       section: "",
       subject: "",
-      fromDate: null,
-      toDate: null,
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
     },
     onSubmit: getData,
   });

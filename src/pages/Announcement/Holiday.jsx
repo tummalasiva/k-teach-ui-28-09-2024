@@ -161,7 +161,7 @@ export default function Holiday() {
     if (entryFormik.values.class) {
       getSections();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting]);
 
   return (
     <>

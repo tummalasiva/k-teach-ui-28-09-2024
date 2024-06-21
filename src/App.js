@@ -138,6 +138,10 @@ function App() {
       },
       MuiButton: {
         styleOverrides: {
+          containedPrimary: {},
+          sizeSmall: {
+            fontSize: "12px",
+          },
           root: {
             boxShadow: "none",
             borderRadius: 5,
@@ -147,8 +151,6 @@ function App() {
       MuiListItemButton: {
         styleOverrides: {
           root: {
-            borderRadius: 5,
-
             "&.Mui-selected": {
               backgroundColor: isDarkMode ? "#4f4f4f" : "#e8eaed",
             },

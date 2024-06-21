@@ -67,7 +67,7 @@ export default function ManageHostel() {
   useEffect(() => {
     getData();
     getWarden();
-  }, []);
+  }, [selectedSetting]);
 
   const handleSubmit = async (values) => {
     try {

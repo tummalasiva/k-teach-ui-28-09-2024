@@ -332,7 +332,7 @@ export default function TransportMember() {
     if (formik1.values.class || formik2.values.class) {
       getSections();
     }
-  }, [formik2.values.class, formik1.values.class]);
+  }, [formik2.values.class, formik1.values.class, selectedSetting._id]);
 
   useEffect(() => {
     getAcademicYear();
