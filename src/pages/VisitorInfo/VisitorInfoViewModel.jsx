@@ -17,13 +17,15 @@ import {
 
 // icons
 import { Close } from "@mui/icons-material";
+import themeData from "../../data/themeData";
 import ThemeModeContext from "../../context/ThemeModeContext";
 
 const StyledTableRow = styled(TableRow)(({ theme, isDarkMode }) => ({
   width: "200px",
   color: isDarkMode ? "#fff" : "#000",
   "&:nth-of-type(odd)": {
-    backgroundColor: isDarkMode ? "transparent" : "#F0F8FF",
+    backgroundColor:
+      theme.palette.mode === "dark" ? "rgb(81 81 81)" : "#F0F8FF",
   },
 }));
 
@@ -89,11 +91,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   School Name
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.school?.name}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.school?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -104,11 +103,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Name
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.name}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -119,11 +115,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Phone
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.phone}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.phone || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -134,11 +127,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Coming From
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.comingForm}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.comingForm || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -149,11 +139,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   User Type
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.toMeetUserType?.name}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.toMeetUserType?.name || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
 
@@ -164,11 +151,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   To Meet
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.toMeetUserName}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.toMeetUserName || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow isDarkMode={isDarkMode}>
@@ -193,11 +177,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Check In
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.checkIn}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.checkIn || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow isDarkMode={isDarkMode}>
@@ -207,11 +188,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Check Out
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.checkOut}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.checkOut || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
               <StyledTableRow isDarkMode={isDarkMode}>
@@ -221,11 +199,8 @@ export default function VisitorInfoViewModel({
                   isDarkMode={isDarkMode}>
                   Note
                 </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  width={100}
-                  isDarkMode={isDarkMode}>
-                  {tableData?.note}
+                <StyledTableCell align="left" width={100}>
+                  {tableData?.note || "NA"}
                 </StyledTableCell>
               </StyledTableRow>
             </TableBody>

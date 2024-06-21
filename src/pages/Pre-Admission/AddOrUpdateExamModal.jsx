@@ -21,12 +21,13 @@ import AddIcon from "@mui/icons-material/Add";
 
 import React, { useContext, useEffect, useState } from "react";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get } from "../../services/apiMethods";
+import { get, post } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { useTheme } from "@mui/material";
 import QuizQuestion from "./QuizQuestion";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
 
 export default function AddOrUpdateExamModal({
   open = false,
@@ -36,11 +37,11 @@ export default function AddOrUpdateExamModal({
   const theme = useTheme();
   const { selectedSetting } = useContext(SettingContext);
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
   const [academicYears, setAcademicYears] = useState([]);
   const [classes, setClasses] = useState([]);
   const [addForm, setAddForm] = useState({});
-
+  const [markForm, setMarkForm] = useState({});
+  const [submiload, setSubmitload] = useState(false);
   const [quizData, setQuizData] = useState([
     {
       question: "",
@@ -106,6 +107,73 @@ export default function AddOrUpdateExamModal({
     setAdditionalInstructions(updatedInstructions);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const quiz = quizData.map((q, index) => {
+        return {
+          question: q.question,
+          options: [
+            { value: q.options[0] },
+            { value: q.options[1] },
+            { value: q.options[2] },
+            { value: q.options[3] },
+          ],
+
+          correctOption: q.correctOption,
+        };
+      });
+      if (quiz.filter((q) => !q.question || !q.options).length)
+        return toast.error("Question cannot be empty");
+      if (quiz.some((q) => q.options.some((option) => option.name === "")))
+        return toast.error("Option cannot be empty");
+
+      if (quiz.filter((q) => !q.correctOption).length)
+        return toast.error("Please select a correct option");
+      setSubmitload(true);
+      let playload = {
+        academicYear: addForm.academicYear,
+        classId: addForm.schoolClass,
+        examName: markForm.examName,
+        passingPercentage: markForm.passingMark,
+        quiz: quiz,
+        negativeMarking: negativeMarking,
+        negativeMarkingPerQuestion: markForm.negativeMark,
+        marksPerQuestion: markForm.mark,
+        additionalInstructions: additionalInstructions.map((add) => ({
+          point: add,
+        })),
+      };
+      const { data } = await post(
+        PRIVATE_URLS.preadmissionEnqiry.create,
+        playload
+      );
+      console.log(data, "fadadasa");
+      handleClose();
+    } catch (error) {
+      console.log(error);
+      handleClose();
+      // handleEditClose();
+    }
+    setSubmitload(false);
+  };
+
+  const handleClose = () => {
+    // setEditId(null);
+    // setOpen(false);
+    setQuizData([
+      {
+        question: "",
+        options: ["", "", "", ""],
+        correctOption: "",
+      },
+    ]);
+    setAddForm({});
+    setMarkForm({});
+    setNegativeMarking(false);
+    setAdditionalInstructions([]);
+  };
+
   return (
     <Dialog
       open={open}
@@ -114,7 +182,7 @@ export default function AddOrUpdateExamModal({
       maxWidth="md"
       fullWidth
       aria-labelledby="responsive-dialog-title">
-      <Box component="form" sx={{ padding: 2 }}>
+      <Box component="form" sx={{ padding: 2 }} onSubmit={handleSubmit}>
         <Grid
           container
           spacing={2}
@@ -389,7 +457,7 @@ export default function AddOrUpdateExamModal({
             </Button>
 
             <LoadingButton
-              //   loading={submiload}
+              loading={submiload}
               variant="contained"
               type="submit"
               size="small"

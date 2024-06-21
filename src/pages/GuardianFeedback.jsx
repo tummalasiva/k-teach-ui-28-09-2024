@@ -136,11 +136,13 @@ export default function GuardianFeedback() {
           {["pending", "approved", "rejected"].map((status) => (
             <Button
               key={status}
+              variant="outlined"
               sx={{
                 background:
                   selectedStatus === status
-                    ? themeData.darkPalette.primary.main
+                    ? themeData.lightPalette.primary.main
                     : "",
+
                 ":hover": {
                   background:
                     selectedStatus === status
@@ -151,7 +153,7 @@ export default function GuardianFeedback() {
                   selectedStatus === status
                     ? "#fff"
                     : (theme) =>
-                        theme.palette.mode === "dark" ? "#fff" : "#000",
+                        theme.palette.mode === "dark" ? "#fff" : "#18488",
               }}
               onClick={() => {
                 setSelectedStatus(status);
@@ -171,12 +173,17 @@ export default function GuardianFeedback() {
         onUpdate={getFeebacks}
         onViewClick={handleClickOpenView}
       />
+      {/* ==== view feedback ==== */}
       <ViewModel
         title="Guardian Feedback"
         open={modalData?.open}
         tableData={modalData?.contents}
         onClose={onCloseViewModel}>
-        <Box sx={{ minWidth: 300 }}>
+        <Box
+          sx={{
+            minWidth: 300,
+            p: 1,
+          }}>
           <Typography
             id="modal-modal-description"
             sx={{ wordBreak: "break-word" }}>

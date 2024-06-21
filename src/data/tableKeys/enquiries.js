@@ -14,8 +14,8 @@ export const enquriesTableKeys = [
     key: "submittedOn",
     isDate: true,
   },
-  {
-    name: "Approval Status",
-    key: "status",
-  },
+  // {
+  //   name: "Approval Status",
+  //   key: "status",
+  // },
 ];

@@ -433,7 +433,8 @@ export const PRIVATE_URLS = {
   preadmissionEnqiry: {
     list: "/preadmissionEnqiry/list",
     create: "/preadmissionEnqiry/create",
-    update: "/preadmissionEnqiry/update",
+    update: "/preadmissionEnqiry/updateStatus",
+    // update: "/preadmissionEnqiry/update",
     delete: "/preadmissionEnqiry/delete",
   },
   preadmissionExam: {

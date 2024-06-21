@@ -17,7 +17,7 @@ import { PRIVATE_URLS } from "../services/urlConstants";
 import { get, post, put } from "../services/apiMethods";
 import AddOrUpdateFiles from "../forms/AddOrUpdateFiles";
 import FileSelect from "../forms/FileSelect";
-import { Clear } from "@mui/icons-material";
+import { Clear, Close } from "@mui/icons-material";
 
 export default function Gallery() {
   const { selectedSetting } = useContext(SettingContext);
@@ -80,7 +80,6 @@ export default function Gallery() {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
-
     formData.append("isPublic", values.isPublic ? true : false);
     formData.append("note", values.note);
     selectImg.forEach((file) => formData.append("file", file));
@@ -110,6 +109,7 @@ export default function Gallery() {
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
+    setDataToEdit(null);
   };
 
   const entryFormik = useFormik({
@@ -149,6 +149,15 @@ export default function Gallery() {
     }
   }, [value]);
 
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.delete + "/" + _id);
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Gallery" />
@@ -167,6 +176,7 @@ export default function Gallery() {
           bodyData={data}
           onEditClick={handleEditClick}
           tableKeys={galleryListTableKeys}
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -213,7 +223,63 @@ export default function Gallery() {
             <Grid xs={12} md={12} lg={12} item>
               <FormInput name="note" formik={entryFormik} label="Note" />
             </Grid>
-            {dataToEdit?.images.map((galleryImg, i) => (
+
+            <Grid container spacing={2}>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={12}
+                m={2}
+                gap={2}
+                sx={{
+                  display: "flex",
+                  overflowX: "auto",
+                }}>
+                {dataToEdit?.images?.map((image, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      justifyContent: "center",
+                      backgroundSize: "cover",
+                      "&:hover": {
+                        position: "relative",
+                        display: "inline-block",
+                      },
+                    }}>
+                    <img
+                      src={image}
+                      alt={"image"}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "5px",
+                        boxShadow: "0px 0px 2px 0px gray",
+                        objectFit: "center",
+                      }}
+                    />
+
+                    <IconButton
+                      color="error"
+                      aria-label="delete"
+                      onClick={() => handleRemoveImg(image)}
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        borderRadius: "50px",
+                        padding: "2px",
+                        cursor: "pointer",
+                        background: "#DEE0E2",
+                      }}>
+                      <Close color="error" />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Grid>
+            </Grid>
+
+            {/* {dataToEdit?.images.map((galleryImg, i) => (
               <Grid
                 xs={6}
                 sm={6}
@@ -245,7 +311,7 @@ export default function Gallery() {
                   <Clear color="error" fontSize="small" />
                 </IconButton>
               </Grid>
-            ))}
+            ))} */}
 
             <Grid
               xs={12}
@@ -253,7 +319,11 @@ export default function Gallery() {
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
               item>
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
               <Button
