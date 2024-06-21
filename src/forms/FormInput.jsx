@@ -18,7 +18,7 @@ export default function FormInput({
   const handleInputChange = (e) => {
     const { value } = e.target;
     const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    formik.setFieldValue(name, capitalizedValue);
+    formik.setFieldValue(name, value);
   };
 
   return (
