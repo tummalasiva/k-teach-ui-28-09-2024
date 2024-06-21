@@ -22,7 +22,6 @@ import ThemeModeContext from "../../context/ThemeModeContext";
 
 const StyledTableRow = styled(TableRow)(({ theme, isDarkMode }) => ({
   width: "200px",
-  color: isDarkMode ? "#fff" : "#000",
   "&:nth-of-type(odd)": {
     backgroundColor:
       theme.palette.mode === "dark" ? "rgb(81 81 81)" : "#F0F8FF",
@@ -32,10 +31,8 @@ const StyledTableRow = styled(TableRow)(({ theme, isDarkMode }) => ({
 const StyledTableCell = styled(TableCell)(({ theme, isDarkMode }) => ({
   width: "200px",
   border: "1px solid gray",
-  color: isDarkMode ? "#fff" : "#000",
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: isDarkMode ? "transparent" : "blue",
-    color: isDarkMode ? "#fff" : "#000",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 15,
