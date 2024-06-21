@@ -16,6 +16,8 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -107,6 +109,20 @@ export default function AddOrUpdateExamModal({
     setAdditionalInstructions(updatedInstructions);
   };
 
+  const hanleMarkChange = (e) => {
+    const { name, value } = e.target;
+    setMarkForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckboxChange = (event) => {
+    setNegativeMarking(event.target.value);
+  };
+
+  console.log(markForm, "markForm");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -132,35 +148,35 @@ export default function AddOrUpdateExamModal({
         return toast.error("Please select a correct option");
       setSubmitload(true);
       let playload = {
+        schoolId: selectedSetting._id,
         academicYear: addForm.academicYear,
         classId: addForm.schoolClass,
-        examName: markForm.examName,
+        examName: addForm.examName,
         passingPercentage: markForm.passingMark,
         quiz: quiz,
         negativeMarking: negativeMarking,
-        negativeMarkingPerQuestion: markForm.negativeMark,
+        negativeMarkingPerQuestion: markForm.negativeMarking,
         marksPerQuestion: markForm.mark,
         additionalInstructions: additionalInstructions.map((add) => ({
           point: add,
         })),
       };
+      console.log(playload, "fadadasa");
+
       const { data } = await post(
-        PRIVATE_URLS.preadmissionEnqiry.create,
+        PRIVATE_URLS.preadmissionExam.create,
         playload
       );
-      console.log(data, "fadadasa");
-      handleClose();
-    } catch (error) {
-      console.log(error);
       handleClose();
       // handleEditClose();
+    } catch (error) {
+      console.error(error);
     }
     setSubmitload(false);
   };
 
   const handleClose = () => {
     // setEditId(null);
-    // setOpen(false);
     setQuizData([
       {
         question: "",
@@ -172,7 +188,10 @@ export default function AddOrUpdateExamModal({
     setMarkForm({});
     setNegativeMarking(false);
     setAdditionalInstructions([]);
+    onClose();
   };
+
+  console.log(typeof negativeMarking, "negativeMarking");
 
   return (
     <Dialog
@@ -357,9 +376,32 @@ export default function AddOrUpdateExamModal({
                 display: "flex",
                 justifyContent: "flex-start",
                 alignItems: "center",
-                gap: "2px",
+                gap: "4px",
               }}>
               <Typography sx={{ fontSize: "16px" }}>
+                Negative Marking:{" "}
+              </Typography>
+
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                value={negativeMarking}
+                onChange={handleCheckboxChange}
+                sx={{ mt: 1 }}>
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="No"
+                />
+              </RadioGroup>
+
+              {/* <Typography sx={{ fontSize: "16px" }}>
                 Negative Marking:{" "}
               </Typography>
               <Box>
@@ -367,8 +409,8 @@ export default function AddOrUpdateExamModal({
                   control={
                     <Checkbox
                       fontSize="small"
-                      //   checked={negativeMarking}
-                      //   onChange={handleCheckboxChange}
+                      checked={negativeMarking}
+                      onChange={handleCheckboxChange}
                     />
                   }
                   label={
@@ -379,20 +421,20 @@ export default function AddOrUpdateExamModal({
                   control={
                     <Checkbox
                       fontSize="small"
-                      //   checked={!negativeMarking}
-                      //   onChange={(event) =>
-                      //     setNegativeMarking(!event.target.checked)
-                      //   }
+                      checked={negativeMarking}
+                      onChange={(event) =>
+                        setNegativeMarking(event.target.checked)
+                      }
                     />
                   }
                   label={
                     <Typography style={{ fontSize: "15px" }}>No</Typography>
                   }
                 />
-              </Box>
+              </Box> */}
             </Box>
           </Grid>
-          {negativeMarking === true ? (
+          {negativeMarking === "true" && (
             <Grid item xs={12} md={12} lg={4}>
               <TextField
                 fullWidth
@@ -401,14 +443,12 @@ export default function AddOrUpdateExamModal({
                 required
                 label="Negative Marks Per Question"
                 type="number"
-                name="negativeMark"
-                // value={markForm.negativeMark}
-                // onChange={hanleMarkChange}
+                name="negativeMarking"
+                value={markForm.negativeMarking || ""}
+                onChange={hanleMarkChange}
                 InputLabelProps={{ style: { fontSize: 12 } }}
               />
             </Grid>
-          ) : (
-            ""
           )}
           <Grid item xs={12} md={12} lg={4}>
             <TextField
@@ -419,8 +459,8 @@ export default function AddOrUpdateExamModal({
               label="Marks Per Question"
               type="number"
               name="mark"
-              //   value={markForm.mark}
-              //   onChange={hanleMarkChange}
+              value={markForm.mark || ""}
+              onChange={hanleMarkChange}
               InputLabelProps={{ style: { fontSize: 12 } }}
             />
           </Grid>
@@ -433,8 +473,8 @@ export default function AddOrUpdateExamModal({
               required
               type="number"
               name="passingMark"
-              //   value={markForm.passingMark}
-              //   onChange={hanleMarkChange}
+              value={markForm.passingMark || ""}
+              onChange={hanleMarkChange}
               InputLabelProps={{ style: { fontSize: 12 } }}
             />
           </Grid>
@@ -451,8 +491,7 @@ export default function AddOrUpdateExamModal({
               size="small"
               variant="contained"
               color="error"
-              //   onClick={handl}
-            >
+              onClick={handleClose}>
               Cancel
             </Button>
 
