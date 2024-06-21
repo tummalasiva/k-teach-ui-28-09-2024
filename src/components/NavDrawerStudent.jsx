@@ -269,14 +269,13 @@ export default function NavDrawerStudent() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              spacing={2}
+              spacing={1}
               direction="row">
               <Tooltip title="Notification">
                 <Link to="/sch/notifications">
                   <IconButton>
                     <NotificationsIcon
-                      fontSize="large"
-                      sx={{ color: "#BDBDBD" }}
+                      sx={{ color: "#BDBDBD", width: 26, height: 26 }}
                     />
                   </IconButton>
                 </Link>
@@ -289,7 +288,7 @@ export default function NavDrawerStudent() {
                   aria-controls={openProfile ? "account-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={openProfile ? "true" : undefined}>
-                  <Avatar sx={{ width: 30, height: 30 }} />
+                  <Avatar sx={{ width: 26, height: 26 }} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="websites">
@@ -298,7 +297,7 @@ export default function NavDrawerStudent() {
                     <Avatar
                       src="/world-wide-web.png"
                       alt="loading..."
-                      sx={{ width: 30, height: 30 }}
+                      sx={{ width: 26, height: 26 }}
                     />
                   </IconButton>
 
@@ -378,7 +377,15 @@ export default function NavDrawerStudent() {
       </Menu>
 
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ justifyContent: "space-between" }}>
+        <DrawerHeader
+          sx={{
+            justifyContent: "space-between",
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: isDarkMode ? "#000" : "#fff",
+            overflow: "hidden",
+          }}>
           <Box></Box>
           <img
             style={{ height: "60px", width: "150px", objectFit: "contain" }}
