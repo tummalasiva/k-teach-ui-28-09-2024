@@ -524,7 +524,7 @@ export default function NavDrawer() {
                         },
                         "& .MuiListItemIcon-root": {
                           minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                          marginRight: "15px", // Adjust this value to decrease the space
+                          marginRight: "20px", // Adjust this value to decrease the space
                         },
                       }}
                       selected={
@@ -553,7 +553,7 @@ export default function NavDrawer() {
                       },
                       "& .MuiListItemIcon-root": {
                         minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                        marginRight: "15px", // Adjust this value to decrease the space
+                        marginRight: "20px", // Adjust this value to decrease the space
                       },
                     }}
                     onClick={() => handleToggleMenuOpen(index)}>
@@ -588,7 +588,7 @@ export default function NavDrawer() {
                               },
                               "& .MuiListItemIcon-root": {
                                 minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                                marginRight: "15px", // Adjust this value to decrease the space
+                                marginRight: "20px", // Adjust this value to decrease the space
                               },
                             }}
                             selected={
@@ -619,11 +619,11 @@ export default function NavDrawer() {
               },
               "& .MuiListItemIcon-root": {
                 minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                marginRight: "15px", // Adjust this value to decrease the space
+                marginRight: "20px", // Adjust this value to decrease the space
               },
             }}>
             <Switch
-              sx={{ marginRight: "15px" }}
+              sx={{ marginRight: "20px" }}
               checked={isDarkMode}
               onChange={handleModeChange}
             />
@@ -654,7 +654,7 @@ export default function NavDrawer() {
                   },
                   "& .MuiListItemIcon-root": {
                     minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                    marginRight: "15px", // Adjust this value to decrease the space
+                    marginRight: "20px", // Adjust this value to decrease the space
                   },
                 }}
                 onClick={handleLogout}>
