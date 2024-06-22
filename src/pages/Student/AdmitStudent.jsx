@@ -213,26 +213,20 @@ export default function AdmitStudent() {
   const handleGetDownloadPdf = async () => {
     console.log("pdfffff");
     try {
-      const getStudentCheckoutPdf = await get(
+      const getStudentPdf = await get(
         PRIVATE_URLS.student.donwloadStudentsPdf,
         {
           params: {
             schoolId: selectedSetting._id,
-
             academicYearId: entryFormik.values.academicYear,
             classId: entryFormik.values.class,
-
             active: entryFormik.values.active,
           },
           responseType: "blob",
         }
       );
 
-      downloadFile(
-        "application/pdf",
-        getStudentCheckoutPdf.data,
-        "student-list.pdf"
-      );
+      downloadFile("application/pdf", getStudentPdf.data, "student-list.pdf");
     } catch (error) {
       console.log(error);
     }
