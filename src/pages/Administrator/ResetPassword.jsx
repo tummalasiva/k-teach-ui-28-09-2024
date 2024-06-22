@@ -6,7 +6,7 @@ import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
 import PageHeader from "../../components/PageHeader";
-import { get, post, put } from "../../services/apiMethods";
+import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
