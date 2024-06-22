@@ -186,10 +186,10 @@ export default function AdmitStudent() {
   const handleGetDownloadExcel = async () => {
     console.log("sfdghjkjll");
     try {
-      const getExcel = await get(PRIVATE_URLS.student.donwloadStudentsExcel, {
+      console.log("sfdghjkjll99999");
+      const getExcel = await get(PRIVATE_URLS.student.downloadStudentsExcel, {
         params: {
           schoolId: selectedSetting._id,
-
           academicYearId: entryFormik.values.academicYear,
           classId: entryFormik.values.class,
           sectionId: entryFormik.values.section,
@@ -203,7 +203,35 @@ export default function AdmitStudent() {
       downloadFile(
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         getExcel.data,
-        "student.xlsx"
+        "students.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetDownloadPdf = async () => {
+    console.log("pdfffff");
+    try {
+      const getStudentCheckoutPdf = await get(
+        PRIVATE_URLS.student.donwloadStudentsPdf,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+
+            academicYearId: entryFormik.values.academicYear,
+            classId: entryFormik.values.class,
+
+            active: entryFormik.values.active,
+          },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile(
+        "application/pdf",
+        getStudentCheckoutPdf.data,
+        "student-list.pdf"
       );
     } catch (error) {
       console.log(error);
@@ -282,7 +310,7 @@ export default function AdmitStudent() {
               </IconButton>
             </Tooltip>
             <Tooltip title="Print">
-              <IconButton>
+              <IconButton onClick={handleGetDownloadPdf}>
                 <PrintSharp />
               </IconButton>
             </Tooltip>

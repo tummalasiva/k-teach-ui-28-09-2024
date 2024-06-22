@@ -180,7 +180,9 @@ export const PRIVATE_URLS = {
     removeHostelMember: "/student/removeHostelMember",
     getDashboardStudentDetails: "/student/getDashboardStudentDetails",
     downloadAllStudentsExcel: "/student/downloadAllStudentsExcel",
-    donwloadStudentsExcel: "/student/donwloadStudentsExcel",
+    downloadStudentsExcel: "/student/downloadStudentsExcel",
+    donwloadStudentsPdf: "/student/donwloadStudentsPdf",
+    updatePhoto: "/student/updatePhoto",
   },
   studentActivity: {
     list: "/studentActivity/list",
