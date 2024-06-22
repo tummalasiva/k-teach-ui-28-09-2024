@@ -183,6 +183,8 @@ export const PRIVATE_URLS = {
     downloadStudentsExcel: "/student/downloadStudentsExcel",
     donwloadStudentsPdf: "/student/downloadStudentsPdf",
     updatePhoto: "/student/updatePhoto",
+    bulkUpdateSheet: "/student/bulkUpdateSheet",
+    bulkUpdate: "/student/bulkUpdate",
   },
   studentActivity: {
     list: "/studentActivity/list",
