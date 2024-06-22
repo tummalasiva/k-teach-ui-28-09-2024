@@ -181,7 +181,7 @@ export const PRIVATE_URLS = {
     getDashboardStudentDetails: "/student/getDashboardStudentDetails",
     downloadAllStudentsExcel: "/student/downloadAllStudentsExcel",
     downloadStudentsExcel: "/student/downloadStudentsExcel",
-    donwloadStudentsPdf: "/student/donwloadStudentsPdf",
+    donwloadStudentsPdf: "/student/downloadStudentsPdf",
     updatePhoto: "/student/updatePhoto",
   },
   studentActivity: {

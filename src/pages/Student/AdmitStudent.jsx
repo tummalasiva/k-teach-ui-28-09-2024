@@ -184,9 +184,7 @@ export default function AdmitStudent() {
   };
 
   const handleGetDownloadExcel = async () => {
-    console.log("sfdghjkjll");
     try {
-      console.log("sfdghjkjll99999");
       const getExcel = await get(PRIVATE_URLS.student.downloadStudentsExcel, {
         params: {
           schoolId: selectedSetting._id,
@@ -197,8 +195,6 @@ export default function AdmitStudent() {
         },
         responseType: "blob",
       });
-
-      console.log(getExcel, "0000000000");
 
       downloadFile(
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -211,7 +207,6 @@ export default function AdmitStudent() {
   };
 
   const handleGetDownloadPdf = async () => {
-    console.log("pdfffff");
     try {
       const getStudentCheckoutPdf = await get(
         PRIVATE_URLS.student.donwloadStudentsPdf,
