@@ -209,7 +209,7 @@ export default function AdmitStudent() {
   const handleGetDownloadPdf = async () => {
     try {
       const getStudentPdf = await get(
-        PRIVATE_URLS.student.donwloadStudentsPdf,
+        PRIVATE_URLS.student.downloadStudentsPdf,
         {
           params: {
             schoolId: selectedSetting._id,
