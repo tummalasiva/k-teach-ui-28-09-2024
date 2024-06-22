@@ -388,7 +388,7 @@ export default function NavDrawerStudent() {
           }}>
           <Box></Box>
           <img
-            style={{ height: "60px", width: "150px", objectFit: "contain" }}
+            style={{ height: "50px", width: "80px", objectFit: "contain" }}
             src={selectedSetting?.logo}
           />
           <IconButton onClick={handleDrawerClose}>
