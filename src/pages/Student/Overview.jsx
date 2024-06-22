@@ -4,9 +4,11 @@ import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import {
   Box,
+  Button,
   Divider,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   Paper,
   Select,
@@ -16,6 +18,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   styled,
 } from "@mui/material";
 import StudentCount from "../../components/Student/StudentCount";
@@ -23,6 +26,8 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import CustomSelect from "../../forms/CustomSelect";
 import SettingContext from "../../context/SettingsContext";
+import { downloadFile } from "../../utils";
+import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
 
 const TableHeader = styled(TableCell)(({ theme }) => ({
   borderRight: "1px solid grey",
@@ -92,6 +97,31 @@ export default function Overview() {
     academicYearChanged();
   }, [selectAcademicYear, selectedSetting]);
 
+  const handleGetDownloadExcel = async () => {
+    try {
+      const getExcel = await get(
+        PRIVATE_URLS.student.downloadAllStudentsExcel,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            academicYearId: selectAcademicYear,
+          },
+          responseType: "blob",
+        }
+      );
+
+      console.log(getExcel, "0000000000");
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "student.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Overview" />
@@ -107,6 +137,13 @@ export default function Overview() {
               label="Select Academic Year"
               options={academicYear}
             />
+          </Grid>
+          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+            <Tooltip title="Download">
+              <IconButton onClick={handleGetDownloadExcel}>
+                <DownloadForOfflineSharpIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </Paper>

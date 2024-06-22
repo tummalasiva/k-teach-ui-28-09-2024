@@ -69,6 +69,7 @@ export default function QuickAdmit() {
           class: values.class,
           section: values.section,
           rollNumber: values.rollNumber,
+          admissionNumber: values.admissionNumber,
         },
         contactNumber: values.contactNumber,
         academicYear: values.academicYear,
@@ -93,6 +94,7 @@ export default function QuickAdmit() {
     initialValues: {
       academicYear: "",
       name: "",
+      admissionNumber: "",
       admissionDate: null,
       dob: null,
       gender: "",
@@ -138,7 +140,7 @@ export default function QuickAdmit() {
   useEffect(() => {
     getAcademicYear();
     getClass();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
@@ -191,6 +193,16 @@ export default function QuickAdmit() {
               name="name"
               formik={entryFormik}
               label="Name"
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={3} item>
+            <FormInput
+              required={true}
+              name="admissionNumber"
+              formik={entryFormik}
+              label="Admission No."
+              disabled={selectedSetting?.admissionNo !== "Manual"}
             />
           </Grid>
 
@@ -314,7 +326,8 @@ export default function QuickAdmit() {
               required={true}
               name="rollNumber"
               formik={entryFormik}
-              label="Select Roll No"
+              label="Roll No"
+              disabled={selectedSetting?.rollNumberType !== "manual"}
             />
           </Grid>
 

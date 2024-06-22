@@ -38,10 +38,16 @@ const ChartBar = () => {
         }
       );
 
-      console.log(data.result, "---------");
-      setClasses(data.result);
+      const transformedData = data.result.map((classItem) => {
+        const transformedItem = { className: classItem.className };
+        Object.keys(classItem.sections).forEach((section) => {
+          transformedItem[section] = classItem.sections[section];
+        });
+        return transformedItem;
+      });
 
-      // Extract unique section names
+      setClasses(transformedData);
+
       const sections = new Set();
       data.result.forEach((classItem) => {
         Object.keys(classItem.sections).forEach((section) => {
@@ -57,15 +63,15 @@ const ChartBar = () => {
 
   useEffect(() => {
     getData();
-  }, [selectedSetting._id]);
+  }, [selectedSetting]);
 
   return (
     <Box sx={{ display: "flex", flex: 1 }} ref={ref}>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height="100%">
         <Paper sx={{ width: "100%", height: "100%" }}>
           <BarChart
             width={width ? width - 10 : 700}
-            height={300}
+            height={350}
             data={classes}
             margin={{ top: 20, right: 5, left: 5, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -76,7 +82,7 @@ const ChartBar = () => {
             {uniqueSections.map((sectionName) => (
               <Bar
                 key={sectionName}
-                dataKey={`sections.${sectionName}`}
+                dataKey={sectionName}
                 fill={getRandomColor()}
                 stackId="stack"
               />

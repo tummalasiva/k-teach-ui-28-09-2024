@@ -22,6 +22,7 @@ import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
 import { del, get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import { downloadFile } from "../../utils";
 
 const Status_Options = [
   { label: "Active", value: true },
@@ -182,6 +183,33 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleGetDownloadExcel = async () => {
+    console.log("sfdghjkjll");
+    try {
+      const getExcel = await get(PRIVATE_URLS.student.donwloadStudentsExcel, {
+        params: {
+          schoolId: selectedSetting._id,
+
+          academicYearId: entryFormik.values.academicYear,
+          classId: entryFormik.values.class,
+          sectionId: entryFormik.values.section,
+          active: entryFormik.values.active,
+        },
+        responseType: "blob",
+      });
+
+      console.log(getExcel, "0000000000");
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "student.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Students" />
@@ -249,7 +277,7 @@ export default function AdmitStudent() {
           }}>
           <Stack direction="row">
             <Tooltip title="Download">
-              <IconButton>
+              <IconButton onClick={handleGetDownloadExcel}>
                 <DownloadForOfflineSharpIcon />
               </IconButton>
             </Tooltip>

@@ -85,15 +85,15 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const RollNumber_Options = [
   {
     label: "Manual",
-    value: "Manual",
+    value: "manual",
   },
   {
     label: "Auto ascending name",
-    value: "Auto ascending name",
+    value: "autoAscendingName",
   },
   {
     label: "Auto ascending name female",
-    value: "Auto ascending name female",
+    value: "autoAscendingNameFemale",
   },
 ];
 const Attendence_Type = [

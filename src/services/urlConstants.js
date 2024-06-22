@@ -179,6 +179,8 @@ export const PRIVATE_URLS = {
     updateHostelMember: "/student/updateHostelMember",
     removeHostelMember: "/student/removeHostelMember",
     getDashboardStudentDetails: "/student/getDashboardStudentDetails",
+    downloadAllStudentsExcel: "/student/downloadAllStudentsExcel",
+    donwloadStudentsExcel: "/student/donwloadStudentsExcel",
   },
   studentActivity: {
     list: "/studentActivity/list",

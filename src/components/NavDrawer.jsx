@@ -499,8 +499,8 @@ export default function NavDrawer() {
           <Box></Box>
           <img
             style={{
-              height: "60px",
-              width: "100px",
+              height: "50px",
+              width: "80px",
 
               objectFit: "contain",
             }}
