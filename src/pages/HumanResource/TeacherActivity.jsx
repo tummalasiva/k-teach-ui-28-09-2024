@@ -113,26 +113,26 @@ export default function TeacherActivity() {
         params: { schoolId: selectedSetting._id },
       });
       setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("class", data.result[0]?._id);
-      formik.setFieldValue("class", data.result[0]?._id);
+      // entryFormik.setFieldValue("class", data.result[0]?._id);
+      // formik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getSections = async () => {
+  const getSections = async (classId) => {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            class: entryFormik.values.class || formik.values.class,
+            class: classId,
           },
         },
       });
       setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("section", data.result[0]?._id);
-      formik.setFieldValue("section", data.result[0]?._id);
+      // entryFormik.setFieldValue("section", data.result[0]?._id);
+      // formik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.error(error);
     }
@@ -150,8 +150,8 @@ export default function TeacherActivity() {
       });
 
       setSubjects(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("subject", data.result[0]._id);
-      formik.setFieldValue("subject", data.result[0]._id);
+      // entryFormik.setFieldValue("subject", data.result[0]._id);
+      // formik.setFieldValue("subject", data.result[0]._id);
     } catch (error) {
       console.error(error);
     }
@@ -220,11 +220,20 @@ export default function TeacherActivity() {
   });
 
   useEffect(() => {
-    if (entryFormik.values.class || formik.values.class) {
-      getSections();
+    if (entryFormik.values.class) {
+      getSections(entryFormik.values.class);
       getSubject();
+      formik.resetForm();
     }
-  }, [entryFormik.values.class, formik.values.class]);
+  }, [entryFormik.values.class]);
+
+  useEffect(() => {
+    if (formik.values.class) {
+      getSections(formik.values.class);
+      getSubject();
+      entryFormik.resetForm();
+    }
+  }, [formik.values.class]);
 
   const handleDelete = async (id) => {
     try {
