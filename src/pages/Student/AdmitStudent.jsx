@@ -9,38 +9,70 @@ import FormSelect from "../../forms/FormSelect";
 import {
   Box,
   Button,
+  Dialog,
   Grid,
   IconButton,
   Paper,
   Stack,
   Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
 import { Link, useNavigate } from "react-router-dom";
 import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
-import { del, get } from "../../services/apiMethods";
+import { del, get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
+import DownloadIcon from "@mui/icons-material/Download";
+import FileSelect from "../../forms/FileSelect";
 
 const Status_Options = [
   { label: "Active", value: true },
   { label: "In-Active", value: false },
 ];
 
+const style = {
+  bgcolor: "background.paper",
+  height: "auto",
+  p: 2,
+};
+
 export default function AdmitStudent() {
   const { selectedSetting } = useContext(SettingContext);
   const navigation = useNavigate();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [data, setData] = useState([]);
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalAdmit, setOpenModalAdmit] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [loadingFind, setLoadingFind] = useState(false);
+
   const [loader, setLoader] = useState(false);
+
+  const [file, setFile] = useState([]);
+
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setFile(fileList);
+    } else {
+      console.log("No files selected");
+    }
+  };
 
   const handelAddStudent = (e) => {
     navigation("/sch/student/add-student");
@@ -64,7 +96,6 @@ export default function AdmitStudent() {
 
   const getList = async (values) => {
     try {
-      setLoadingFind(true);
       if (values.section === "all") {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
@@ -104,10 +135,8 @@ export default function AdmitStudent() {
           }))
         );
       }
-      setLoadingFind(false);
     } catch (error) {
       console.log(error);
-      setLoadingFind(false);
     }
   };
 
@@ -237,6 +266,44 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleSubmitBulkUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+
+      file.forEach((f) => formData.append("file", f));
+      const { data } = await put(PRIVATE_URLS.student.bulkUpdate, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetUpdateSheet = async () => {
+    try {
+      const getExcel = await get(PRIVATE_URLS.student.bulkUpdateSheet, {
+        params: {
+          schoolId: selectedSetting._id,
+          academicYearId: entryFormik.values.academicYear,
+          classId: entryFormik.values.class,
+          sectionId: entryFormik.values.section,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "student_list.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Students" />
@@ -289,13 +356,9 @@ export default function AdmitStudent() {
               lg={12}
               display="flex"
               justifyContent="flex-start">
-              <LoadingButton
-                loading={loadingFind}
-                size="small"
-                variant="contained"
-                type="submit">
+              <Button size="small" variant="contained" type="submit">
                 Find
-              </LoadingButton>
+              </Button>
             </Grid>
           </Grid>
         </form>
@@ -303,9 +366,32 @@ export default function AdmitStudent() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             alignItems: "center",
           }}>
+          {entryFormik.values.academicYear &&
+            entryFormik.values.class &&
+            entryFormik.values.section !== "all" && (
+              <Stack gap={1} direction={{ xs: "column", sm: "row", md: "row" }}>
+                <Tooltip title="Bulk Admit">
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => setOpenModalAdmit(true)}>
+                    BULK ADMIT
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Bulk Update">
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => setOpenModal(true)}>
+                    BULK UPDATE
+                  </Button>
+                </Tooltip>
+              </Stack>
+            )}
+
           <Stack direction="row">
             <Tooltip title="Download">
               <LoadingButton loading={loading} onClick={handleGetDownloadExcel}>
@@ -335,6 +421,123 @@ export default function AdmitStudent() {
       />
       {/* add student */}
       <AddForm title="Add Students" onAddClick={handelAddStudent} />
+
+      <Dialog
+        fullScreen={fullScreen}
+        maxWidth="md"
+        open={openModalAdmit}
+        onClose={() => setOpenModalAdmit(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Typography
+                variant="h6"
+                component="h2"
+                textAlign="center"
+                fontSize="20px"
+                fontWeight="bold">
+                Bulk Admit
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Button variant="contained" endIcon={<DownloadIcon />}>
+                Sample
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              {/* <FileSelect
+             
+                label="Select  File"
+                onChange={(e) => handleChangeFiles(e)}
+                customOnChange={true}
+                selectedFiles={file}
+   
+                multi={false}
+              /> */}
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end">
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Dialog>
+
+      <Dialog
+        fullScreen={fullScreen}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 350 },
+            },
+          },
+        }}>
+        <Box sx={style}>
+          <form onSubmit={handleSubmitBulkUpdate}>
+            {" "}
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  textAlign="center"
+                  fontSize="20px"
+                  fontWeight="bold">
+                  Bulk Update
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Button
+                  variant="contained"
+                  onClick={handleGetUpdateSheet}
+                  endIcon={<DownloadIcon />}>
+                  Download
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <FileSelect
+                  label="Select File"
+                  onChange={(e) => handleChangeFiles(e)}
+                  customOnChange={true}
+                  selectedFiles={file}
+                  multi={false}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end">
+                <Button variant="contained" type="submit">
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Box>
+      </Dialog>
     </>
   );
 }
