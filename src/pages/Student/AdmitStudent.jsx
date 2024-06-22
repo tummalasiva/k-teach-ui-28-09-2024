@@ -23,6 +23,7 @@ import SettingContext from "../../context/SettingsContext";
 import { del, get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { downloadFile } from "../../utils";
+import { LoadingButton } from "@mui/lab";
 
 const Status_Options = [
   { label: "Active", value: true },
@@ -36,6 +37,10 @@ export default function AdmitStudent() {
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [loadingFind, setLoadingFind] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const handelAddStudent = (e) => {
     navigation("/sch/student/add-student");
@@ -59,6 +64,7 @@ export default function AdmitStudent() {
 
   const getList = async (values) => {
     try {
+      setLoadingFind(true);
       if (values.section === "all") {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
@@ -78,8 +84,6 @@ export default function AdmitStudent() {
             rollNumber: s.academicInfo,
           }))
         );
-
-        console.log(data.result, "kkkkkkkkk");
       } else {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
@@ -99,11 +103,11 @@ export default function AdmitStudent() {
             rollNumber: s.academicInfo,
           }))
         );
-
-        console.log(data.result, "kkkkkkkkk");
       }
+      setLoadingFind(false);
     } catch (error) {
       console.log(error);
+      setLoadingFind(false);
     }
   };
 
@@ -185,6 +189,7 @@ export default function AdmitStudent() {
 
   const handleGetDownloadExcel = async () => {
     try {
+      setLoading(true);
       const getExcel = await get(PRIVATE_URLS.student.downloadStudentsExcel, {
         params: {
           schoolId: selectedSetting._id,
@@ -201,13 +206,16 @@ export default function AdmitStudent() {
         getExcel.data,
         "students.xlsx"
       );
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const handleGetDownloadPdf = async () => {
     try {
+      setLoader(true);
       const getStudentPdf = await get(
         PRIVATE_URLS.student.downloadStudentsPdf,
         {
@@ -222,8 +230,10 @@ export default function AdmitStudent() {
       );
 
       downloadFile("application/pdf", getStudentPdf.data, "student-list.pdf");
+      setLoader(false);
     } catch (error) {
       console.log(error);
+      setLoader(false);
     }
   };
 
@@ -279,9 +289,13 @@ export default function AdmitStudent() {
               lg={12}
               display="flex"
               justifyContent="flex-start">
-              <Button size="small" variant="contained" type="submit">
+              <LoadingButton
+                loading={loadingFind}
+                size="small"
+                variant="contained"
+                type="submit">
                 Find
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>
@@ -294,14 +308,14 @@ export default function AdmitStudent() {
           }}>
           <Stack direction="row">
             <Tooltip title="Download">
-              <IconButton onClick={handleGetDownloadExcel}>
-                <DownloadForOfflineSharpIcon />
-              </IconButton>
+              <LoadingButton loading={loading} onClick={handleGetDownloadExcel}>
+                <DownloadForOfflineSharpIcon color="primary" />
+              </LoadingButton>
             </Tooltip>
             <Tooltip title="Print">
-              <IconButton onClick={handleGetDownloadPdf}>
-                <PrintSharp />
-              </IconButton>
+              <LoadingButton loading={loader} onClick={handleGetDownloadPdf}>
+                <PrintSharp color="primary" />
+              </LoadingButton>
             </Tooltip>
             <Link to="/sch/student/bulk-photo">
               <Button size="small" sx={{ p: 1, ml: 1 }} variant="contained">
