@@ -64,6 +64,7 @@ export default function Exams() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getAcademicYear();
     getClasses();
@@ -81,7 +82,8 @@ export default function Exams() {
           },
         },
       });
-      console.log(data, "exam list");
+      // console.log(data.result, "exam list");
+      setData(data.result.map((d) => ({ ...d, class: d.class.name })));
     } catch (error) {
       console.log(error);
     }
@@ -95,6 +97,19 @@ export default function Exams() {
     },
     onSubmit: getExamList,
   });
+
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.preadmissionExam.delete + "/" + _id
+      );
+
+      getExamList();
+      entryFormik.handleSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -141,10 +156,11 @@ export default function Exams() {
       </Paper>
 
       <CustomTable
-        actions={["edit"]}
+        actions={["edit", "delete"]}
         tableKeys={examsTableKeys}
         bodyDataModal="exams"
         bodyData={data}
+        onDeleteClick={handleDelete}
       />
       <AddOrUpdateExamModal
         open={openQuestionModel}

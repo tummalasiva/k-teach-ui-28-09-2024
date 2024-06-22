@@ -1,14 +1,16 @@
+/** @format */
+
 export const examsTableKeys = [
   {
-    name: "Student Name",
-    key: "name",
+    name: "Exam Name",
+    key: "examName",
   },
   {
     name: "Class",
     key: "class",
   },
-  {
-    name: "Question",
-    key: "question",
-  },
+  // {
+  //   name: "Question",
+  //   key: "question",
+  // },
 ];
