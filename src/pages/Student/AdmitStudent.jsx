@@ -24,7 +24,7 @@ import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
 import { Link, useNavigate } from "react-router-dom";
 import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
-import { del, get, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
@@ -59,6 +59,7 @@ export default function AdmitStudent() {
   const [loader, setLoader] = useState(false);
 
   const [file, setFile] = useState([]);
+  const [fileAdmit, setFileAdmit] = useState([]);
 
   const handleChangeFiles = (e, index) => {
     const { files } = e.target;
@@ -69,6 +70,20 @@ export default function AdmitStudent() {
         fileList.push(file);
       }
       setFile(fileList);
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleChangeFilesAdmit = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setFileAdmit(fileList);
     } else {
       console.log("No files selected");
     }
@@ -304,6 +319,46 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleGetAdmitSheet = async () => {
+    try {
+      const getExcel = await get(
+        PRIVATE_URLS.student.getBulkStudentAdmitSheet,
+        {
+          params: { schoolId: selectedSetting._id },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "studentAdmit_list.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleAdmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("academicYearId", entryFormik.values.academicYear);
+      formData.append("classId", entryFormik.values.class);
+      formData.append("sectionId", entryFormik.values.section);
+      formData.append("schoolId", selectedSetting._id);
+      fileAdmit.forEach((f) => formData.append("file", f));
+
+      const { data } = await post(
+        PRIVATE_URLS.student.bulkStudentAdmit,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleNavigate = () => {
     navigation("/sch/student/bulk-photo");
   };
@@ -451,46 +506,51 @@ export default function AdmitStudent() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Typography
-                variant="h6"
-                component="h2"
-                textAlign="center"
-                fontSize="20px"
-                fontWeight="bold">
-                Bulk Admit
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
-              <Button variant="contained" endIcon={<DownloadIcon />}>
-                Sample
-              </Button>
-            </Grid>
+          <form onSubmit={handleAdmit}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  textAlign="center"
+                  fontSize="20px"
+                  fontWeight="bold">
+                  Bulk Admit
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+                <Button
+                  variant="contained"
+                  endIcon={<DownloadIcon />}
+                  onClick={handleGetAdmitSheet}>
+                  Sample
+                </Button>
+              </Grid>
 
-            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
-              <FileSelect
-                label="Select  File"
-                onChange={(e) => handleChangeFiles(e)}
-                customOnChange={true}
-                selectedFiles={file}
-                multi={false}
-              />
-            </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+                <FileSelect
+                  label="Select  File"
+                  onChange={(e) => handleChangeFilesAdmit(e)}
+                  customOnChange={true}
+                  selectedFiles={fileAdmit}
+                  multi={false}
+                />
+              </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end">
-              <Button variant="contained" type="submit">
-                Submit
-              </Button>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end">
+                <Button variant="contained" type="submit">
+                  Submit
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </form>
         </Box>
       </Dialog>
 
