@@ -304,6 +304,10 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleNavigate = () => {
+    navigation("/sch/student/bulk-photo");
+  };
+
   return (
     <>
       <PageHeader title="Students" />
@@ -355,7 +359,7 @@ export default function AdmitStudent() {
               md={12}
               lg={12}
               display="flex"
-              justifyContent="flex-start">
+              justifyContent="flex-end">
               <Button size="small" variant="contained" type="submit">
                 Find
               </Button>
@@ -369,46 +373,63 @@ export default function AdmitStudent() {
             justifyContent: "space-between",
             alignItems: "center",
           }}>
-          {entryFormik.values.academicYear &&
-            entryFormik.values.class &&
-            entryFormik.values.section !== "all" && (
-              <Stack gap={1} direction={{ xs: "column", sm: "row", md: "row" }}>
-                <Tooltip title="Bulk Admit">
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => setOpenModalAdmit(true)}>
-                    BULK ADMIT
-                  </Button>
-                </Tooltip>
-                <Tooltip title="Bulk Update">
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => setOpenModal(true)}>
-                    BULK UPDATE
-                  </Button>
-                </Tooltip>
-              </Stack>
-            )}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}>
+            {entryFormik.values.academicYear &&
+              entryFormik.values.class &&
+              entryFormik.values.section !== "all" && (
+                <Stack
+                  gap={1}
+                  direction={{ xs: "column", sm: "row", md: "row" }}>
+                  <Tooltip title="Bulk Admit">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => setOpenModalAdmit(true)}>
+                      BULK ADMIT
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Bulk Update">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => setOpenModal(true)}>
+                      BULK UPDATE
+                    </Button>
+                  </Tooltip>
+                </Stack>
+              )}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              mt: 1,
+            }}>
+            <Stack direction="row">
+              <Tooltip title="Download">
+                <LoadingButton
+                  loading={loading}
+                  onClick={handleGetDownloadExcel}>
+                  <DownloadForOfflineSharpIcon color="primary" />
+                </LoadingButton>
+              </Tooltip>
+              <Tooltip title="Print">
+                <LoadingButton loading={loader} onClick={handleGetDownloadPdf}>
+                  <PrintSharp color="primary" />
+                </LoadingButton>
+              </Tooltip>
 
-          <Stack direction="row">
-            <Tooltip title="Download">
-              <LoadingButton loading={loading} onClick={handleGetDownloadExcel}>
-                <DownloadForOfflineSharpIcon color="primary" />
-              </LoadingButton>
-            </Tooltip>
-            <Tooltip title="Print">
-              <LoadingButton loading={loader} onClick={handleGetDownloadPdf}>
-                <PrintSharp color="primary" />
-              </LoadingButton>
-            </Tooltip>
-            <Link to="/sch/student/bulk-photo">
-              <Button size="small" sx={{ p: 1, ml: 1 }} variant="contained">
+              <Button size="small" variant="contained" onClick={handleNavigate}>
                 Bulk Photo
               </Button>
-            </Link>
-          </Stack>
+            </Stack>
+          </Box>
         </Box>
       </Paper>
       <CustomTable
@@ -441,22 +462,20 @@ export default function AdmitStudent() {
                 Bulk Admit
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
               <Button variant="contained" endIcon={<DownloadIcon />}>
                 Sample
               </Button>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              {/* <FileSelect
-             
+            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+              <FileSelect
                 label="Select  File"
                 onChange={(e) => handleChangeFiles(e)}
                 customOnChange={true}
                 selectedFiles={file}
-   
                 multi={false}
-              /> */}
+              />
             </Grid>
 
             <Grid
@@ -480,15 +499,7 @@ export default function AdmitStudent() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        sx={{
-          "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-              width: "100%",
-              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 350 },
-            },
-          },
-        }}>
+        aria-describedby="modal-modal-description">
         <Box sx={style}>
           <form onSubmit={handleSubmitBulkUpdate}>
             {" "}
@@ -503,7 +514,7 @@ export default function AdmitStudent() {
                   Bulk Update
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <Button
                   variant="contained"
                   onClick={handleGetUpdateSheet}
@@ -512,7 +523,7 @@ export default function AdmitStudent() {
                 </Button>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <FileSelect
                   label="Select File"
                   onChange={(e) => handleChangeFiles(e)}

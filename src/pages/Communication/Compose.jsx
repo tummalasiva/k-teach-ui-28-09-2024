@@ -9,7 +9,6 @@ import {
   Card,
   Checkbox,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   LinearProgress,
@@ -18,6 +17,8 @@ import {
   MenuItem,
   Select,
   styled,
+  Switch,
+  TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
@@ -550,15 +551,19 @@ export default function Compose() {
 
           {entryFormik.values.receiverType === "file" && (
             <>
-              <Grid item xs={12} sm={12} md={6} sx={{ display: "flex" }}>
+              <Grid item xs={12} sm={3} md={1.2} alignSelf={"center"}>
                 {" "}
                 <Button size="small" variant="contained">
                   Sample File
                 </Button>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                {" "}
                 <FileSelect
                   name="file"
                   onChange={(e) => handleChangeFiles(e)}
                   customOnChange={true}
+                  label="Select File"
                   selectedFiles={selectFile}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                 />
@@ -582,23 +587,45 @@ export default function Compose() {
             <FormInput name="subject" formik={entryFormik} label="Subject" />
           </Grid>
         </Grid>
-      </Card>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={12}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <span>Dynamic Tag: </span>
-
-            <div>
-              [name],[school_name] - wil get autoreplaced,
-              <span style={{ color: "red" }}>
-                replace - {"{{var}}"} with your content, variable fields may
-                vary in length. Space consumed for 1 variable is 30 char and
-                avoid double space.
-              </span>
-            </div>
-          </div>
+        <Grid container spacing={2} padding={1}>
+          <Grid item xs={12} md={12} lg={12}>
+            <Typography component={"span"}>Dynamic Tag: </Typography>
+            [name],[school_name] - wil get autoreplaced,
+            <Typography component={"span"} color="error">
+              replace - {"{{var}}"} with your content, variable fields may vary
+              in length. Space consumed for 1 variable is 30 char and avoid
+              double space.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={12} lg={12}>
+            <TextareaAutosize
+              maxRows={4}
+              aria-label="maximum height"
+              placeholder="Text Message"
+              style={{
+                width: "100%",
+                height: "120px",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+              name="sms"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={12} lg={12}>
+            <Typography component={"span"}>
+              Click here to Notify Via SMS
+            </Typography>
+            <Switch />
+          </Grid>
         </Grid>
-      </Grid>
+      </Card>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+        {" "}
+        <Button size="small" variant="contained">
+          submit
+        </Button>
+      </Box>
     </>
   );
 }
