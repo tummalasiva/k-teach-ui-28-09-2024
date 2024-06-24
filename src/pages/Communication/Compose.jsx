@@ -156,7 +156,10 @@ export default function Compose() {
   const [roles, setRoles] = useState([]);
   const [selectRoles, setSelectRoles] = useState([]);
   const [selectClasses, setSelectClasses] = useState([]);
+  const [selectSection, setSelectSection] = useState([]);
+  const [selectStudent, setSelectStudent] = useState([]);
   const [employees, setEmployee] = useState([]);
+  const [selectFile, setSelectFile] = useState([]);
   const entryFormik = useFormik({
     initialValues: {
       receiverType: "",
@@ -184,7 +187,19 @@ export default function Compose() {
     setSelectClasses(typeof value === "string" ? value.split(",") : value);
   };
 
-  const [selectFile, setSelectFile] = useState([]);
+  const handleSelectSectionChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectSection(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleSelectStudentChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectStudent(typeof value === "string" ? value.split(",") : value);
+  };
 
   const getClasses = async () => {
     try {
@@ -471,22 +486,74 @@ export default function Compose() {
               </Grid>
 
               <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="section"
-                  formik={entryFormik}
-                  label="Select Section"
-                  options={sections}
-                />
+                <FormControl
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  sx={{ borderRadius: 20 }}
+                  fullWidth>
+                  <InputLabel sx={{ fontSize: 12 }}>Section</InputLabel>
+                  <Select
+                    label="Section"
+                    labelId="demo-multiple-section-label"
+                    id="demo-multiple-section"
+                    value={selectSection}
+                    onChange={handleSelectSectionChange}
+                    multiple
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}>
+                    {sections &&
+                      sections.map((sec, index) => (
+                        <MenuItem
+                          key={sec._id}
+                          value={sec.name}
+                          sx={{ fontSize: 12, fontWeight: 500 }}>
+                          <Checkbox
+                            checked={selectSection.indexOf(sec.name) > -1}
+                          />
+                          <ListItemText primary={sec.name} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="student"
-                  formik={entryFormik}
-                  label="Select Student"
-                  options={students}
-                />
+                <FormControl
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  sx={{ borderRadius: 20 }}
+                  fullWidth>
+                  <InputLabel sx={{ fontSize: 12 }}>Students</InputLabel>
+                  <Select
+                    label="Student"
+                    value={selectStudent}
+                    onChange={handleSelectStudentChange}
+                    multiple
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}>
+                    {students &&
+                      students.map((stu, index) => (
+                        <MenuItem
+                          key={stu._id}
+                          value={stu.basicInfo.name}
+                          sx={{ fontSize: 12, fontWeight: 500 }}>
+                          <Checkbox
+                            checked={
+                              selectStudent.indexOf(stu.basicInfo.name) > -1
+                            }
+                          />
+                          <ListItemText primary={stu.basicInfo.name} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </>
           )}
