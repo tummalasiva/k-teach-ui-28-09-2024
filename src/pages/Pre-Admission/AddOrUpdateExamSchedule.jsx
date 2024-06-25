@@ -1,30 +1,26 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import PageHeader from "../../components/PageHeader";
-import CustomTable from "../../components/Tables/CustomTable";
-import { examSchedulesTableKeys } from "../../data/tableKeys/examSchedules";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import dayjs from "dayjs";
+import { Grid } from "@mui/material";
+import FormModal from "../../forms/FormModal";
+import FormInput from "../../forms/FormInput";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
-import dayjs from "dayjs";
-import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { useContext } from "react";
-import AddForm from "../../forms/AddForm";
-import FormModal from "../../forms/FormModal";
-import AddOrUpdateExamSchedule from "./AddOrUpdateExamSchedule";
 
-export default function ExamSchedules() {
-  const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
+export default function AddOrUpdateExamSchedule({
+  open,
+  selectedSetting,
+  handleClose = () => {},
+}) {
+  const [dataToEdit, setDataToEdit] = useState();
+  const [loading, setLoading] = useState(false);
   const [academicYear, setAcademicYear] = useState([]);
   const [classes, setClasses] = useState([]);
   const [exams, setExams] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
 
   // get years
   const getAcademicYear = async () => {
@@ -85,36 +81,31 @@ export default function ExamSchedules() {
     }
   };
 
-  // get exam list
-  const getExamSchedules = async (values) => {
-    console.log(values, "exam values");
-
+  const handleCreateOrUpdate = async (values) => {
     try {
+      const payload = {
+        ...values,
+        schoolId: selectedSetting._id,
+        dateOfExam: dayjs(values.dateOfExam).format("YYYY/MM/DD"),
+      };
       setLoading(true);
-      const { data } = await get(PRIVATE_URLS.preadmissionExamSchedule.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: {
-            academicYear: values.academicYear,
-            class: values.class,
-            exam: values.exam,
-            fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
-            toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
-          },
-        },
-      });
-      console.log(data.result, "exam list");
-      // setData(data.result.map((d) => ({ ...d, class: d.class.name })));
+      if (dataToEdit) {
+        const { data } = await put(
+          PRIVATE_URLS.preadmissionExamSchedule.update + "/" + dataToEdit._id,
+          payload
+        );
+      } else {
+        const { data } = await post(
+          PRIVATE_URLS.preadmissionExamSchedule.create,
+          payload
+        );
+      }
+      handleClose();
     } catch (error) {
       console.log(error);
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    getAcademicYear();
-    getClasses();
-  }, [selectedSetting._id]);
 
   const entryFormik = useFormik({
     initialValues: {
@@ -124,8 +115,13 @@ export default function ExamSchedules() {
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: getExamSchedules,
+    onSubmit: handleCreateOrUpdate,
   });
+
+  useEffect(() => {
+    getAcademicYear();
+    getClasses();
+  }, [selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik?.values.academicYear && entryFormik?.values.class) {
@@ -137,29 +133,17 @@ export default function ExamSchedules() {
     selectedSetting,
   ]);
 
-  const AddExamSchedules = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    // setDataToEdit(null);
-  };
-
   return (
     <>
-      <PageHeader title="Exam Schedules" />
-
-      <AddForm title="Add Exam Schedules" onAddClick={AddExamSchedules} />
-
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid
-          rowSpacing={1}
-          columnSpacing={2}
-          container
-          component="form"
-          onSubmit={entryFormik.handleSubmit}>
-          <Grid xs={12} md={6} lg={3} item>
+      <FormModal
+        open={open}
+        formik={entryFormik}
+        formTitle={dataToEdit ? "Update Exam Schedules" : "Add Exam Schedules"}
+        onClose={handleClose}
+        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        adding={loading}>
+        <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               required={true}
               name="academicYear"
@@ -168,7 +152,7 @@ export default function ExamSchedules() {
               options={academicYear}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               required={true}
               name="class"
@@ -177,7 +161,7 @@ export default function ExamSchedules() {
               options={classes}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               required={true}
               name="exam"
@@ -186,42 +170,44 @@ export default function ExamSchedules() {
               options={exams}
             />
           </Grid>
-
-          <Grid xs={12} sm={6} md={6} lg={3} item>
+          <Grid xs={12} sm={6} md={6} item>
             <FormDatePicker
+              required={true}
               formik={entryFormik}
-              label="From Date"
-              name="fromDate"
+              name="dateOfExam"
+              label="Date of Exam"
             />
           </Grid>
-          <Grid xs={12} sm={6} md={6} lg={3} item>
-            <FormDatePicker
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              required={true}
               formik={entryFormik}
-              label="To Date"
-              name="toDate"
+              type="time"
+              name="startTime"
+              label="Start Time"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained" type="submit">
-              Find
-            </Button>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              required={true}
+              formik={entryFormik}
+              type="time"
+              name="endTime"
+              label="End Time"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput
+              formik={entryFormik}
+              name="roomNumber"
+              label="Room No."
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormInput formik={entryFormik} name="address" label="Address" />
           </Grid>
         </Grid>
-      </Paper>
-
-      <CustomTable
-        actions={["edit"]}
-        tableKeys={examSchedulesTableKeys}
-        bodyDataModal="exam schedules"
-        bodyData={data}
-      />
-
-      {/* ==== add/edit exam schedules ======== */}
-      <AddOrUpdateExamSchedule
-        open={open}
-        handleClose={handleClose}
-        selectedSetting={selectedSetting}
-      />
+      </FormModal>
     </>
   );
 }

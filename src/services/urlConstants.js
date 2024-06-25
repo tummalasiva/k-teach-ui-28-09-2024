@@ -443,6 +443,12 @@ export const PRIVATE_URLS = {
     update: "/preadmissionExam/update",
     delete: "/preadmissionExam/delete",
   },
+  preadmissionExamSchedule: {
+    list: "/preadmissionExamSchedule/list",
+    create: "/preadmissionExamSchedule/create",
+    update: "/preadmissionExamSchedule/update",
+    delete: "/preadmissionExamSchedule/delete",
+  },
   employeeAttendance: {
     list: "/employeeAttendance/list",
     update: "/employeeAttendance/update",

@@ -67,6 +67,7 @@ export default function Result() {
     getAcademicYear();
     getClasses();
   }, [selectedSetting._id]);
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -78,7 +79,12 @@ export default function Result() {
     <>
       <PageHeader title="Result" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
+        <Grid
+          rowSpacing={1}
+          columnSpacing={2}
+          container
+          component="form"
+          onSubmit={entryFormik.handleSubmit}>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -99,7 +105,7 @@ export default function Result() {
           </Grid>
 
           <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
+            <Button size="small" variant="contained" type="submit">
               Find
             </Button>
           </Grid>
