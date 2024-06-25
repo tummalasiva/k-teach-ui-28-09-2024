@@ -338,7 +338,8 @@ export default function AdmitStudent() {
       console.log(error);
     }
   };
-  const handleAdmit = async () => {
+  const handleAdmit = async (e) => {
+    e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("academicYearId", entryFormik.values.academicYear);
@@ -347,13 +348,9 @@ export default function AdmitStudent() {
       formData.append("schoolId", selectedSetting._id);
       fileAdmit.forEach((f) => formData.append("file", f));
 
-      const { data } = await post(
-        PRIVATE_URLS.student.bulkStudentAdmit,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      await post(PRIVATE_URLS.student.bulkStudentAdmit, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } catch (error) {
       console.log(error);
     }

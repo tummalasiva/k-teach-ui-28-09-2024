@@ -7,6 +7,7 @@ import MainNav from "../theme-one/components/Navbar/MainNav";
 import Footer from "../theme-one/components/Footer";
 
 import AwardsDetails from "../theme-one/components/AwardsAndAchievment/AwardsDetails";
+import Assignment from "../theme-one/components/Navbar/navbar/Assignment";
 
 // ===== code splitting ===================================
 const Home = React.lazy(() => import("../theme-one/page/HomePage"));
@@ -91,6 +92,8 @@ const WebsiteTheme1 = () => {
         <Route path="/home-gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/results" element={<Result />} />
+
+        <Route path="/assignment" element={<Assignment />} />
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
         <Route path="/awardsDetails/:id" element={<AwardsDetails />} />

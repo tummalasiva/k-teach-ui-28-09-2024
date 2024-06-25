@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import {
   Grid,
@@ -117,8 +119,7 @@ const Events = ({ card }) => {
           paddingBottom: "20px",
           display: "flex",
           justifyContent: "center",
-        }}
-      >
+        }}>
         <Grid item xs={12} md={5}>
           <CardImageWrapper>
             <Arc>
@@ -129,8 +130,7 @@ const Events = ({ card }) => {
                   textAlign: "start",
                   fontSize: "25px",
                   lineHeight: "1",
-                }}
-              >
+                }}>
                 {specificDate}
               </Typography>
               <Date> {specificMonth}</Date>
@@ -161,8 +161,7 @@ const Events = ({ card }) => {
                   fontSize: "25px",
                   color: "black",
                 }}
-                gutterBottom
-              >
+                gutterBottom>
                 {card.title}
               </Typography>
             </Random>
@@ -171,7 +170,7 @@ const Events = ({ card }) => {
               <Time>{specificTime}</Time>
             </Times>
 
-            <Para>{card?.content?.substring(0, 150) + "....."}</Para>
+            <Para>{card?.shortEvent?.substring(0, 150) + "....."}</Para>
           </Box>
           <CardActions>
             <Random>
