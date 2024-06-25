@@ -61,7 +61,7 @@ export default function AdmitStudent() {
   const [file, setFile] = useState([]);
   const [fileAdmit, setFileAdmit] = useState([]);
 
-  const handleChangeFiles = (e, index) => {
+  const handleChangeFiles = (e, type) => {
     const { files } = e.target;
     let fileList = [];
     if (files.length > 0) {
@@ -69,24 +69,24 @@ export default function AdmitStudent() {
         const file = files[i];
         fileList.push(file);
       }
-      setFile(fileList);
+      if (type === "admitFile") {
+        setFileAdmit(fileList);
+      } else if (type === "updateFile") {
+        setFile(fileList);
+      }
     } else {
       console.log("No files selected");
     }
   };
 
-  const handleChangeFilesAdmit = (e, index) => {
-    const { files } = e.target;
-    let fileList = [];
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        fileList.push(file);
-      }
-      setFileAdmit(fileList);
-    } else {
-      console.log("No files selected");
-    }
+  const handleCloseUpdateModal = () => {
+    setOpenModal(false);
+    setFile([]);
+  };
+
+  const handleCloseAdmitModal = () => {
+    setOpenModalAdmit(false);
+    setFileAdmit([]);
   };
 
   const handelAddStudent = (e) => {
@@ -501,7 +501,15 @@ export default function AdmitStudent() {
         open={openModalAdmit}
         onClose={() => setOpenModalAdmit(false)}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 400 },
+            },
+          },
+        }}>
         <Box sx={style}>
           <form onSubmit={handleAdmit}>
             <Grid container spacing={1}>
@@ -518,6 +526,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <Button
                   variant="contained"
+                  size="small"
                   endIcon={<DownloadIcon />}
                   onClick={handleGetAdmitSheet}>
                   Sample
@@ -527,7 +536,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <FileSelect
                   label="Select  File"
-                  onChange={(e) => handleChangeFilesAdmit(e)}
+                  onChange={(e) => handleChangeFiles(e, "admitFile")}
                   customOnChange={true}
                   selectedFiles={fileAdmit}
                   multi={false}
@@ -541,8 +550,16 @@ export default function AdmitStudent() {
                 md={12}
                 lg={12}
                 display="flex"
-                justifyContent="flex-end">
-                <Button variant="contained" type="submit">
+                justifyContent="flex-end"
+                gap={1}>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleCloseAdmitModal}>
+                  Cancel
+                </Button>
+                <Button size="small" variant="contained" type="submit">
                   Submit
                 </Button>
               </Grid>
@@ -556,7 +573,15 @@ export default function AdmitStudent() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 400 },
+            },
+          },
+        }}>
         <Box sx={style}>
           <form onSubmit={handleSubmitBulkUpdate}>
             {" "}
@@ -574,6 +599,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <Button
                   variant="contained"
+                  size="small"
                   onClick={handleGetUpdateSheet}
                   endIcon={<DownloadIcon />}>
                   Download
@@ -583,7 +609,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <FileSelect
                   label="Select File"
-                  onChange={(e) => handleChangeFiles(e)}
+                  onChange={(e) => handleChangeFiles(e, "updateFile")}
                   customOnChange={true}
                   selectedFiles={file}
                   multi={false}
@@ -597,8 +623,16 @@ export default function AdmitStudent() {
                 md={12}
                 lg={12}
                 display="flex"
-                justifyContent="flex-end">
-                <Button variant="contained" type="submit">
+                justifyContent="flex-end"
+                gap={1}>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleCloseUpdateModal}>
+                  Cancel
+                </Button>
+                <Button variant="contained" size="small" type="submit">
                   Submit
                 </Button>
               </Grid>
