@@ -115,7 +115,7 @@ export default function Credentials() {
     initialValues: {
       userType: [],
       user: "",
-      reasonToMeet: "",
+
       class: "",
       section: "",
       roleName: "",
