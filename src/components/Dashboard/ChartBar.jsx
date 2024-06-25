@@ -1,8 +1,9 @@
-import React, { PureComponent, useEffect, useState, useContext } from "react";
+/** @format */
+
+import React, { useEffect, useState, useContext } from "react";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,54 +12,79 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Box, Paper } from "@mui/material";
-
 import useResizeObserver from "use-resize-observer";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
 
-const sectionNames = ["Section A", "Section B", "Section C"];
-const studentDetails = [
-  { name: " 1", "Section A": 50, "Section B": 60, "Section C": 70 },
-  { name: " 2", "Section A": 70, "Section B": 80, "Section C": 90 },
-  { name: " 3", "Section A": 70, "Section B": 80, "Section C": 90 },
-];
-
-const ChartBar = ({}) => {
-  const { ref, width, height } = useResizeObserver();
+const ChartBar = () => {
+  const { selectedSetting } = useContext(SettingContext);
+  const [classes, setClasses] = useState([]);
+  const [uniqueSections, setUniqueSections] = useState([]);
+  const { ref, width } = useResizeObserver();
 
   const getRandomColor = () => {
     return "#" + Math.floor(Math.random() * 16777215).toString(16);
   };
 
+  const getData = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.student.getDashboardStudentDetails,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+          },
+        }
+      );
+
+      const transformedData = data.result.map((classItem) => {
+        const transformedItem = { className: classItem.className };
+        Object.keys(classItem.sections).forEach((section) => {
+          transformedItem[section] = classItem.sections[section];
+        });
+        return transformedItem;
+      });
+
+      setClasses(transformedData);
+
+      const sections = new Set();
+      data.result.forEach((classItem) => {
+        Object.keys(classItem.sections).forEach((section) => {
+          sections.add(section);
+        });
+      });
+
+      setUniqueSections([...sections]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
   return (
     <Box sx={{ display: "flex", flex: 1 }} ref={ref}>
       <ResponsiveContainer width="100%" height="100%">
-        <Paper
-          sx={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
+        <Paper sx={{ width: "100%", height: "100%" }}>
           <BarChart
             width={width ? width - 10 : 700}
             height={350}
-            data={studentDetails}
-            margin={{
-              top: 20,
-              right: 5,
-              left: 5,
-              bottom: 5,
-            }}
-          >
+            data={classes}
+            margin={{ top: 20, right: 5, left: 5, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="className" />
             <YAxis />
             <Tooltip />
             <Legend />
-            {sectionNames.map((sectionName) => (
+            {uniqueSections.map((sectionName) => (
               <Bar
                 key={sectionName}
-                dataKey={`${sectionName}`}
-                fill={`${getRandomColor()}`}
-                stackId="a"
+                dataKey={sectionName}
+                fill={getRandomColor()}
+                stackId="stack"
               />
             ))}
           </BarChart>
@@ -67,4 +93,5 @@ const ChartBar = ({}) => {
     </Box>
   );
 };
+
 export default ChartBar;

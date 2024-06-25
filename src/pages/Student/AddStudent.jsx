@@ -409,6 +409,8 @@ export default function AddStudent() {
     }
   };
 
+  console.log(selectedSetting, "sssssssssssss");
+
   return (
     <>
       <PageHeader title="Admit Student" />
@@ -464,6 +466,7 @@ export default function AddStudent() {
                   name="admissionNumber"
                   formik={entryFormik}
                   label="Admission No."
+                  disabled={selectedSetting?.admissionNo !== "Manual"}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -654,6 +657,7 @@ export default function AddStudent() {
                   name="rollNumber"
                   formik={entryFormik}
                   label="Roll No"
+                  disabled={selectedSetting?.rollNumberType !== "manual"}
                 />
               </Grid>
             </Grid>

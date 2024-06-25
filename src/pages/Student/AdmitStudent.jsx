@@ -22,6 +22,7 @@ import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
 import { del, get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import { downloadFile } from "../../utils";
 
 const Status_Options = [
   { label: "Active", value: true },
@@ -182,6 +183,56 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleGetDownloadExcel = async () => {
+    try {
+      const getExcel = await get(PRIVATE_URLS.student.downloadStudentsExcel, {
+        params: {
+          schoolId: selectedSetting._id,
+          academicYearId: entryFormik.values.academicYear,
+          classId: entryFormik.values.class,
+          sectionId: entryFormik.values.section,
+          active: entryFormik.values.active,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "students.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetDownloadPdf = async () => {
+    try {
+      const getStudentCheckoutPdf = await get(
+        PRIVATE_URLS.student.donwloadStudentsPdf,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+
+            academicYearId: entryFormik.values.academicYear,
+            classId: entryFormik.values.class,
+
+            active: entryFormik.values.active,
+          },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile(
+        "application/pdf",
+        getStudentCheckoutPdf.data,
+        "student-list.pdf"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Students" />
@@ -249,12 +300,12 @@ export default function AdmitStudent() {
           }}>
           <Stack direction="row">
             <Tooltip title="Download">
-              <IconButton>
+              <IconButton onClick={handleGetDownloadExcel}>
                 <DownloadForOfflineSharpIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="Print">
-              <IconButton>
+              <IconButton onClick={handleGetDownloadPdf}>
                 <PrintSharp />
               </IconButton>
             </Tooltip>

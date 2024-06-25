@@ -379,14 +379,13 @@ export default function NavDrawer() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              spacing={2}
+              spacing={1}
               direction="row">
               <Tooltip title="Notification">
                 <Link to="/sch/notifications">
                   <IconButton>
                     <NotificationsIcon
-                      fontSize="large"
-                      sx={{ color: "#BDBDBD" }}
+                      sx={{ width: 26, height: 26, color: "#BDBDBD" }}
                     />
                   </IconButton>
                 </Link>
@@ -399,7 +398,7 @@ export default function NavDrawer() {
                   aria-controls={openProfile ? "account-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={openProfile ? "true" : undefined}>
-                  <Avatar sx={{ width: 30, height: 30 }} />
+                  <Avatar sx={{ width: 26, height: 26 }} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="websites">
@@ -408,7 +407,7 @@ export default function NavDrawer() {
                     <Avatar
                       src="/world-wide-web.png"
                       alt="loading..."
-                      sx={{ width: 30, height: 30 }}
+                      sx={{ width: 26, height: 26 }}
                     />
                   </IconButton>
 
@@ -488,10 +487,23 @@ export default function NavDrawer() {
       </Menu>
 
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ justifyContent: "space-between" }}>
+        <DrawerHeader
+          sx={{
+            justifyContent: "space-between",
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: isDarkMode ? "#000" : "#fff",
+            overflow: "hidden",
+          }}>
           <Box></Box>
           <img
-            style={{ height: "60px", width: "100px", objectFit: "contain" }}
+            style={{
+              height: "50px",
+              width: "80px",
+
+              objectFit: "contain",
+            }}
             src={selectedSetting?.logo}
           />
           <IconButton onClick={handleDrawerClose}>
@@ -517,16 +529,6 @@ export default function NavDrawer() {
                     }}>
                     <ListItemButton
                       onClick={() => setSelectedMenu(index)}
-                      sx={{
-                        "& .MuiListItemText-root": {
-                          whiteSpace: "normal",
-                          wordBreak: "break-word",
-                        },
-                        "& .MuiListItemIcon-root": {
-                          minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                          marginRight: "15px", // Adjust this value to decrease the space
-                        },
-                      }}
                       selected={
                         selectedMenu === index ||
                         window.location.pathname === m.path
@@ -546,16 +548,6 @@ export default function NavDrawer() {
                       selectedMenu === index ||
                       window.location.pathname === m.path
                     }
-                    sx={{
-                      "& .MuiListItemText-root": {
-                        whiteSpace: "normal",
-                        wordBreak: "break-word",
-                      },
-                      "& .MuiListItemIcon-root": {
-                        minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                        marginRight: "15px", // Adjust this value to decrease the space
-                      },
-                    }}
                     onClick={() => handleToggleMenuOpen(index)}>
                     <ListItemIcon>{m.icon}</ListItemIcon>
                     <ListItemText primary={m.name} />
@@ -584,11 +576,11 @@ export default function NavDrawer() {
                             sx={{
                               "& .MuiListItemText-root": {
                                 whiteSpace: "normal",
-                                wordBreak: "break-word",
+                                wordWrap: "wrap",
                               },
                               "& .MuiListItemIcon-root": {
-                                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                                marginRight: "15px", // Adjust this value to decrease the space
+                                // This ensures the ListItemIcon doesn't use the default minimum width
+                                // Adjust this value to decrease the space
                               },
                             }}
                             selected={
@@ -615,15 +607,15 @@ export default function NavDrawer() {
               paddingLeft: 0,
               "& .MuiListItemText-root": {
                 whiteSpace: "normal",
-                wordBreak: "break-word",
+                wordWrap: "wrap",
               },
               "& .MuiListItemIcon-root": {
-                minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                marginRight: "15px", // Adjust this value to decrease the space
+                // This ensures the ListItemIcon doesn't use the default minimum width
+                // Adjust this value to decrease the space
               },
             }}>
             <Switch
-              sx={{ marginRight: "15px" }}
+              sx={{ marginRight: "20px" }}
               checked={isDarkMode}
               onChange={handleModeChange}
             />
@@ -650,11 +642,11 @@ export default function NavDrawer() {
                 sx={{
                   "& .MuiListItemText-root": {
                     whiteSpace: "normal",
-                    wordBreak: "break-word",
+                    wordWrap: "wrap",
                   },
                   "& .MuiListItemIcon-root": {
-                    minWidth: "unset", // This ensures the ListItemIcon doesn't use the default minimum width
-                    marginRight: "15px", // Adjust this value to decrease the space
+                    // This ensures the ListItemIcon doesn't use the default minimum width
+                    // Adjust this value to decrease the space
                   },
                 }}
                 onClick={handleLogout}>
