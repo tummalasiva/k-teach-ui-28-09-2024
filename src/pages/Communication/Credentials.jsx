@@ -18,7 +18,6 @@ export default function Credentials() {
   const [students, setStudents] = useState([]);
   const [employees, setEmployees] = useState([]);
 
-  // get Roles
   const getRoles = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
