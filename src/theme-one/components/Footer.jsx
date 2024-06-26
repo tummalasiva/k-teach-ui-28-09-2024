@@ -1,4 +1,6 @@
-import React from "react";
+/** @format */
+
+import React, { useContext } from "react";
 import logo from "../../theme-one/assets/Images/eCampusstreet.png";
 import { styled, Grid, Box, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
@@ -9,6 +11,7 @@ import themeData from "../../data/themeData";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import GoogleIcon from "@mui/icons-material/Google";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import SettingContext from "../../context/SettingsContext";
 
 const FooterNav = styled(Typography)(({ theme }) => ({
   color: "white",
@@ -47,7 +50,7 @@ const UseFullLinks = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
-  gap: "1rem",
+  gap: "1.2rem",
   textAlign: "start",
 }));
 
@@ -74,6 +77,7 @@ const AddressBox = styled(Box)(({ theme }) => ({
 }));
 
 const Footer = () => {
+  const { selectedSetting } = useContext(SettingContext);
   return (
     <>
       <Box sx={{ backgroundColor: "black", padding: "20px 30px" }}>
@@ -118,28 +122,30 @@ const Footer = () => {
 
             <LogoBox sx={{ paddingBottom: "20px" }}>
               {" "}
-              <StyledLink to="" target="_blank">
+              <StyledLink to={selectedSetting?.facebookUrl} target="_blank">
                 {" "}
                 <FacebookIcon size={20} />{" "}
               </StyledLink>
-              <StyledLink to="" target="_blank">
+              <StyledLink to={selectedSetting?.twitterUrl} target="_blank">
                 <TwitterIcon size={20} />
               </StyledLink>
-              <StyledLink to="" target="_blank">
+              <StyledLink to={selectedSetting?.instagramUrl} target="_blank">
                 <InstagramIcon size={25} />{" "}
               </StyledLink>
             </LogoBox>
 
             <LogoBox>
-              <StyledLink to="" target="_blank">
+              <StyledLink
+                to={selectedSetting?.googleAnalyticsId}
+                target="_blank">
                 <GoogleIcon size={25} />
               </StyledLink>
 
-              <StyledLink to="" target="_blank">
+              <StyledLink to={selectedSetting?.youtubeUrl} target="_blank">
                 <YouTubeIcon size={20} />{" "}
               </StyledLink>
 
-              <StyledLink to="" target="_blank">
+              <StyledLink to={selectedSetting?.linkedinUrl} target="_blank">
                 <LinkedInIcon size={25} />{" "}
               </StyledLink>
             </LogoBox>
@@ -148,15 +154,8 @@ const Footer = () => {
           <Grid item xs={12} lg={3} md={6} sm={6}>
             <FooterSectionTitle textAlign="center">ADDRESS</FooterSectionTitle>
             <AddressBox>
-              <FooterNav textAlign="center">1,3rd Floor, LVR ONE,</FooterNav>
               <FooterNav textAlign="center">
-                17th Cross Rd near Orion Mall
-              </FooterNav>
-              <FooterNav textAlign="center">
-                A Block, Milk Colony, 2nd Stage, Rajajinagar
-              </FooterNav>
-              <FooterNav textAlign="center">
-                Bengaluru, Karnataka, Pin : 560010
+                {selectedSetting?.address}
               </FooterNav>
             </AddressBox>
           </Grid>
@@ -171,10 +170,11 @@ const Footer = () => {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: { xs: "column", sm: "row", md: "row", lg: "row" },
-          }}
-        >
+          }}>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-            <FooterText textAlign="center">webspruce</FooterText>
+            <FooterText textAlign="center">
+              {selectedSetting?.websiteFooter}
+            </FooterText>
           </Grid>
 
           <Grid item xs={12} sm={6} md={6} lg={6}>
