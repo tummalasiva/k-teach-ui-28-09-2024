@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -13,6 +15,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Divider,
+  Button,
 } from "@mui/material";
 import { navbarData } from "../../data/NavbarData";
 import NavbarItem from "./NavbarItem";
@@ -21,15 +24,17 @@ import KayakaLogo from "../../assets/images/kaykalogo.png";
 // icons
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import themeData from "../../../data/themeData";
 
 const MuiUl = styled("ul")(({ theme }) => ({
   "& li": {
     listStyle: "none",
-    padding: "20px 15px",
+    padding: "10px",
     float: "left",
     margin: "0px 10px 0px 0px",
     textAlign: "center",
     cursor: "pointer",
+    alignItems: "center",
   },
 }));
 
@@ -57,7 +62,7 @@ const MainBox = styled(Box)(({ theme }) => ({
   width: "100%",
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-around",
+  justifyContent: "space-between",
   zIndex: 10,
   position: "absolute",
   background: "transparent",
@@ -117,7 +122,7 @@ export default function Navbar() {
       id: "button",
       "aria-haspopup": "true",
       variant: "contained",
-      title: "Home ",
+      title: "Home",
       path: "/",
     },
     {
@@ -127,7 +132,7 @@ export default function Navbar() {
       "aria-expanded": open1 ? "true" : undefined,
       onClick: handleClick1,
       variant: "contained",
-      title: "About +",
+      title: "About",
 
       items: [
         {
@@ -158,7 +163,7 @@ export default function Navbar() {
       id: "button",
       "aria-haspopup": "true",
       variant: "contained",
-      title: "Gallery ",
+      title: "Gallery",
       path: "/discover-gallery",
     },
 
@@ -170,7 +175,7 @@ export default function Navbar() {
       "aria-expanded": open2 ? "true" : undefined,
       onClick: handleClick2,
       variant: "contained",
-      title: "Facilities + ",
+      title: "Facilities",
       items: [
         {
           title: "Food",
@@ -200,7 +205,16 @@ export default function Navbar() {
       id: "button",
       "aria-haspopup": "true",
       variant: "contained",
-      title: "Results ",
+      title: "Assignment",
+      path: "/",
+    },
+
+    {
+      href: "#",
+      id: "button",
+      "aria-haspopup": "true",
+      variant: "contained",
+      title: "Results",
       path: "/results",
     },
 
@@ -216,49 +230,76 @@ export default function Navbar() {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: 250 }}
+      sx={{
+        width: 250,
+        display: { xs: "block", sm: "block", md: "none", lg: "none" },
+      }}
       role="presentation"
       onClick={toggleDrawer(true)}
-      onKeyDown={toggleDrawer(true)}
-    >
+      onKeyDown={toggleDrawer(true)}>
       <List>
         {navbarData.map((data, index) => {
           return (
             <React.Fragment key={index}>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={data.items && <ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>{data.title}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {data.items &&
-                    data.items.map((item, itemIndex) => {
-                      return (
-                        <React.Fragment key={itemIndex}>
-                          <MenuItem>
-                            <Typography
-                              component="div"
-                              onClick={() => handlePath(item.pathName)}
-                              sx={{
-                                color: pathname === item.pathName ? "red" : "",
-                              }}
-                            >
-                              {item.title}
-                            </Typography>
-                          </MenuItem>
-                        </React.Fragment>
-                      );
-                    })}
-                </AccordionDetails>
-              </Accordion>
+              {data.title != "Facilities" && data.title != "About" && (
+                <MenuItem sx={{ mt: 1 }} onClick={() => handlePath(data.path)}>
+                  <Typography
+                    component="div"
+                    sx={{
+                      color:
+                        pathname === data.path
+                          ? themeData.darkPalette.primary.main
+                          : "",
+                    }}>
+                    {data.title}
+                  </Typography>
+                </MenuItem>
+              )}
+
+              {data.items && (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={data.items && <ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
+                    <Typography>{data.title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {data.items &&
+                      data.items.map((item, itemIndex) => {
+                        return (
+                          <React.Fragment key={itemIndex}>
+                            <MenuItem onClick={() => handlePath(item.pathName)}>
+                              <Typography
+                                component="div"
+                                sx={{
+                                  color:
+                                    pathname === item.pathName ? "red" : "",
+                                }}>
+                                {item.title}
+                              </Typography>
+                            </MenuItem>
+                          </React.Fragment>
+                        );
+                      })}
+                  </AccordionDetails>
+                </Accordion>
+              )}
             </React.Fragment>
           );
         })}
       </List>
-      <Divider />
+      {/* <Divider /> */}
+
+      <Link to="/login">
+        <Button
+          fullWidth
+          variant="contained"
+          size="small"
+          style={{ margin: "10px", maxWidth: 230 }}>
+          Log In
+        </Button>
+      </Link>
     </Box>
   );
 
@@ -270,12 +311,17 @@ export default function Navbar() {
             height={100}
             width={120}
             src={selectedSetting?.logo?.link || KayakaLogo}
+            style={{
+              paddingLeft: { xs: "10px", sm: "10px", md: "10px", lg: "80px" },
+            }}
           />
         </Link>
 
         <NavContainer
-          sx={{ display: { xs: "none", sm: "none", md: "block", lg: "block" } }}
-        >
+          sx={{
+            display: { xs: "none", sm: "none", md: "block", lg: "block" },
+            marginRight: { xs: 0, sm: 0, md: 0, lg: "80px" },
+          }}>
           <MuiUl variant="ul">
             {navbarData &&
               navbarData.map((data, i) => {
@@ -294,6 +340,12 @@ export default function Navbar() {
                 );
               })}
 
+            <Link to="/login">
+              <Button variant="contained" size="small" sx={{ mt: "8px" }}>
+                Log In
+              </Button>
+            </Link>
+
             <Menu
               id="about"
               anchorEl={about}
@@ -303,15 +355,13 @@ export default function Navbar() {
                 marginTop: "4%",
                 Width: "15%",
                 textAlign: "center",
-              }}
-            >
+              }}>
               <Link to="/about/overview" style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
                       pathname == "/about/overview" ? "orangered" : "black",
-                  }}
-                >
+                  }}>
                   Overview
                 </MenuItem>
               </Link>
@@ -319,23 +369,20 @@ export default function Navbar() {
                 <MenuItem
                   style={{
                     color: pathname == "/about/founder" ? "orangered" : "black",
-                  }}
-                >
+                  }}>
                   About Founder
                 </MenuItem>
               </Link>
               <Link
                 to="/about/vision-and-mission"
-                style={{ textDecoration: "none" }}
-              >
+                style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
                       pathname == "/about/vision-and-mission"
                         ? "orangered"
                         : "black",
-                  }}
-                >
+                  }}>
                   Vision & Mission
                 </MenuItem>
               </Link>
@@ -351,15 +398,13 @@ export default function Navbar() {
                 marginTop: "4%",
                 Width: "15%",
                 textAlign: "center",
-              }}
-            >
+              }}>
               <NavLink to="/facilities/food" style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
                       pathname == "/facilities/food" ? "orangered" : "black",
-                  }}
-                >
+                  }}>
                   Food
                 </MenuItem>
               </NavLink>
@@ -368,38 +413,33 @@ export default function Navbar() {
                   style={{
                     color:
                       pathname == "/facilities/library" ? "orangered" : "black",
-                  }}
-                >
+                  }}>
                   Library
                 </MenuItem>
               </Link>
               <Link
                 to="/facilities/transport"
-                style={{ textDecoration: "none" }}
-              >
+                style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
                       pathname == "/facilities/transport"
                         ? "orangered"
                         : "black",
-                  }}
-                >
+                  }}>
                   Transport
                 </MenuItem>
               </Link>
               <Link
                 to="/facilities/dance-and-singing"
-                style={{ textDecoration: "none" }}
-              >
+                style={{ textDecoration: "none" }}>
                 <MenuItem
                   style={{
                     color:
                       pathname == "/facilities/dance-and-singing"
                         ? "orangered"
                         : "black",
-                  }}
-                >
+                  }}>
                   Dance And Singing
                 </MenuItem>
               </Link>
@@ -408,14 +448,13 @@ export default function Navbar() {
                   style={{
                     color:
                       pathname == "/facilities/labs" ? "orangered" : "black",
-                  }}
-                >
+                  }}>
                   Lab Facilities
                 </MenuItem>
               </Link>
             </Menu>
-            {/* ================ */}
 
+            {/* ================ */}
             {/* <Menu
               id="achievment"
               anchorEl={achievment}
@@ -462,23 +501,22 @@ export default function Navbar() {
         </NavContainer>
 
         <SideContainer
-          sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
-        >
+          sx={{
+            display: { xs: "block", sm: "block", md: "none", lg: "none" },
+          }}>
           <IconButton
             size="large"
             edge="start"
             color="info"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={toggleDrawer(true)}
-          >
+            onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
           <Drawer
             anchor="right"
             open={state.right}
-            onClose={toggleDrawer(false)}
-          >
+            onClose={toggleDrawer(false)}>
             {list("right")}
           </Drawer>
         </SideContainer>

@@ -4,45 +4,23 @@ import React from "react";
 import SubHeader from "../SubHeader";
 import { useLocation, useParams } from "react-router-dom";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import themeData from "../../../data/themeData";
 import moment from "moment";
-const Title = styled(Box)(() => ({
-  color: themeData.darkPalette.primary.main,
-  fontSize: "2rem",
+const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
+  color: themeData.darkPalette.primary.main,
+  fontSize: "20px",
 }));
 
 const Random = styled(Box)(({ theme }) => ({
-  color: "gray",
-  marginTop: "20px",
-  // width: "40%",
+  color: "black",
+
   [theme.breakpoints.down(900)]: {
     width: "100%",
   },
 }));
 
-const Content = styled(Typography)(() => ({
-  marginTop: "10px",
-  color: "#2c2c2c",
-  lineHeight: "30px",
-}));
-
-const CardImage = styled(CardMedia)(({ theme }) => ({
-  width: "100%",
-  height: "100%",
-  [theme.breakpoints.down("md")]: {
-    width: "100%",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: "100%",
-  },
-}));
 export default function EventDetails() {
-  let { id } = useParams();
-  console.log(id);
-
   const location = useLocation();
   const newEvents = location.state && location.state.events;
 
@@ -64,50 +42,47 @@ export default function EventDetails() {
         leftSideHeader="Home"
         rightSideHeader="Events"
       />
-      <Box m={4}>
-        <Grid container>
-          <Grid item xs={12} sm={12} md={6}>
-            <CardImage
-              component="img"
-              image={newEvents?.image}
-              alt="Live from space album cover"
-              height="100%"
+      <Container sx={{ marginTop: "5px" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <img
+              src={newEvents.image ? newEvents.image : "events.png"}
+              alt="loading..."
+              style={{ width: "100%", borderRadius: "5px" }}
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <CardContent sx={{ marginLeft: "20px" }}>
-              <Typography variant="subtitle1" fontWeight={600}>
-                {specificMonth} - {specificMonthEnd}
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              {specificMonth} - {specificMonthEnd}
+            </Typography>
+            <Title>Event: {newEvents?.title}</Title>
+            <Typography sx={{ color: "black" }}>
+              {newEvents?.shortEvent}
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+              }}>
+              Note:
+              <Typography variant="span"> {newEvents?.shortEvent}</Typography>
+            </Typography>
+            <Random>
+              <Typography variant="subtitle1">
+                Event For:
+                <b style={{ color: "black" }}> {newEvents?.eventFor}</b>
               </Typography>
-              <Title>Event: {newEvents?.title}</Title>
-              <Content>{newEvents?.shortEvent}</Content>
-              <Typography
-                sx={{
-                  color: "#1976D2",
-                  fontSize: "16px",
-                  my: 2,
-                }}>
-                <b>Note:</b>
-                <Typography variant="span"> {newEvents?.shortEvent}</Typography>
+              <Typography variant="subtitle1">
+                Sponsor:
+                <b style={{ color: "black" }}> {newEvents?.hostedBy}</b>
               </Typography>
-              <Random>
-                <Typography variant="subtitle1">
-                  Event For:
-                  <b style={{ color: "black" }}> {newEvents?.eventFor}</b>
-                </Typography>
-                <Typography variant="subtitle1">
-                  Sponsor:
-                  <b style={{ color: "black" }}> {newEvents?.hostedBy}</b>
-                </Typography>
-                <Typography variant="subtitle1">
-                  Event Location:{" "}
-                  <b style={{ color: "black" }}> {newEvents?.location}</b>
-                </Typography>
-              </Random>
-            </CardContent>
+              <Typography variant="subtitle1">
+                Event Location:{" "}
+                <b style={{ color: "black" }}> {newEvents?.location}</b>
+              </Typography>
+            </Random>
           </Grid>
         </Grid>
-      </Box>
+      </Container>
     </>
   );
 }

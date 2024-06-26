@@ -70,6 +70,7 @@ export default function Exams() {
     getClasses();
   }, [selectedSetting._id]);
 
+  // get exam list
   const getExamList = async (values) => {
     try {
       setGettingList(true);

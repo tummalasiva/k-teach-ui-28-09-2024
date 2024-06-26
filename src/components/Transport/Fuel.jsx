@@ -185,6 +185,7 @@ export default function Fuel() {
     setDataToEdit(data);
     setOpen(true);
   };
+
   const handleDelete = async (id) => {
     try {
       const res = await del(PRIVATE_URLS.maintenanceFuel.delete + "/" + id);

@@ -107,7 +107,7 @@ const Events = ({ card }) => {
   let navigate = useNavigate();
 
   let handleNavigate = () => {
-    navigate(`/eventdetails/${card.id}`, { state: { events: card } });
+    navigate(`/eventdetails/${card._id}`, { state: { events: card } });
   };
 
   return (
