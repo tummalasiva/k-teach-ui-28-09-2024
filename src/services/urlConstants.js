@@ -185,6 +185,8 @@ export const PRIVATE_URLS = {
     updatePhoto: "/student/updatePhoto",
     bulkUpdateSheet: "/student/bulkUpdateSheet",
     bulkUpdate: "/student/bulkUpdate",
+    getBulkStudentAdmitSheet: "/student/getBulkStudentAdmitSheet",
+    bulkStudentAdmit: "/student/bulkStudentAdmit",
   },
   studentActivity: {
     list: "/studentActivity/list",
