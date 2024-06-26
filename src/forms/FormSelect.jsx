@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   FormControl,
@@ -47,17 +49,17 @@ const FormSelect = ({
     const { value } = event.target;
     setFieldValue(name, value);
   };
-  const { isDarkMode } = useContext(ThemeModeContext);
-  const labelColor =
-    disabled && !isDarkMode
-      ? "gray"
-      : !disabled && isDarkMode
-      ? "white"
-      : !disabled && !isDarkMode
-      ? "black"
-      : disabled && isDarkMode
-      ? "gray"
-      : "inherit";
+  // const { isDarkMode } = useContext(ThemeModeContext);
+  // const labelColor =
+  //   disabled && !isDarkMode
+  //     ? "gray"
+  //     : !disabled && isDarkMode
+  //     ? "white"
+  //     : !disabled && !isDarkMode
+  //     ? "black"
+  //     : disabled && isDarkMode
+  //     ? "gray"
+  //     : "inherit";
 
   return (
     <FormControl
@@ -66,8 +68,7 @@ const FormSelect = ({
       variant="outlined"
       size="small"
       sx={{ borderRadius: 20 }}
-      fullWidth
-    >
+      fullWidth>
       <InputLabel required={required} shrink={true} id={name}>
         {label}
       </InputLabel>
@@ -86,8 +87,7 @@ const FormSelect = ({
         onAnimationEnd={() => inputRef?.current?.focus()}
         MenuProps={{ autoFocus: false }}
         onBlur={() => setBlurred(!blurred)}
-        {...rest}
-      >
+        {...rest}>
         {showSearch && (
           <ListSubheader>
             <TextField
