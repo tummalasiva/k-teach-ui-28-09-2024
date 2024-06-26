@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useState } from "react";
 import {
   Paper,
   Button,
@@ -15,8 +17,81 @@ import SubHeader from "../../SubHeader";
 import CustomTable from "../../../../components/Tables/CustomTable";
 import { examResultHomePageTableKeys } from "../../../../data/tableKeys/examResultsHomePageData";
 
+import { LoadingButton } from "@mui/lab";
+import { PRIVATE_URLS } from "../../../../services/urlConstants";
+import { get } from "../../../../services/apiMethods";
+import SettingContext from "../../../../context/SettingsContext";
+
 export default function Result({ show }) {
+  const { selectedSetting } = useContext(SettingContext);
+
   const [data, setData] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [academicYear, setAcademicYear] = useState([]);
+  const [exams, setExams] = useState([]);
+
+  //get academic year
+  const getAcademicYear = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.academicYear.list);
+
+      setAcademicYear(
+        data.result.map((d) => ({
+          ...d,
+          label: `${d.from}-${d.to}`,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("academicYear", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // get class
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get section
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
+      entryFormik.setFieldValue("section", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getExams = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.examTerm.list, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setExams(data.result.map((e) => ({ label: e.title, value: e._id })));
+      entryFormik.setFieldValue("exam", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -26,6 +101,19 @@ export default function Result({ show }) {
     },
     onSubmit: console.log("nnnn"),
   });
+
+  useEffect(() => {
+    getClasses();
+    getAcademicYear();
+    getExams();
+  }, [selectedSetting._id]);
+
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSections();
+    }
+  }, [entryFormik.values.class, selectedSetting._id]);
+
   return (
     <>
       <SubHeader
@@ -45,7 +133,7 @@ export default function Result({ show }) {
                 name="academicYear"
                 formik={entryFormik}
                 label="Select Academic Year"
-                // options={""}
+                options={academicYear}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -54,7 +142,7 @@ export default function Result({ show }) {
                 name="class"
                 formik={entryFormik}
                 label="Select Class"
-                // options={""}
+                options={classes}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -63,7 +151,7 @@ export default function Result({ show }) {
                 name="section"
                 formik={entryFormik}
                 label="Select Section"
-                // options={""}
+                options={sections}
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
@@ -72,7 +160,7 @@ export default function Result({ show }) {
                 name="exam"
                 formik={entryFormik}
                 label="Select Exam"
-                // options={""}
+                options={exams}
               />
             </Grid>
 
@@ -88,8 +176,7 @@ export default function Result({ show }) {
             display="flex"
             justifyContent="flex-end"
             alignItems="center"
-            gap={1}
-          >
+            gap={1}>
             {" "}
             <IconButton>
               <DownloadForOffline />

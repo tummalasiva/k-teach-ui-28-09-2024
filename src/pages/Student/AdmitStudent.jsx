@@ -24,7 +24,7 @@ import { admitStudentTableKeys } from "../../data/tableKeys/admitStudentData";
 import { Link, useNavigate } from "react-router-dom";
 import AddForm from "../../forms/AddForm";
 import SettingContext from "../../context/SettingsContext";
-import { del, get, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
@@ -59,8 +59,9 @@ export default function AdmitStudent() {
   const [loader, setLoader] = useState(false);
 
   const [file, setFile] = useState([]);
+  const [fileAdmit, setFileAdmit] = useState([]);
 
-  const handleChangeFiles = (e, index) => {
+  const handleChangeFiles = (e, type) => {
     const { files } = e.target;
     let fileList = [];
     if (files.length > 0) {
@@ -68,10 +69,24 @@ export default function AdmitStudent() {
         const file = files[i];
         fileList.push(file);
       }
-      setFile(fileList);
+      if (type === "admitFile") {
+        setFileAdmit(fileList);
+      } else if (type === "updateFile") {
+        setFile(fileList);
+      }
     } else {
       console.log("No files selected");
     }
+  };
+
+  const handleCloseUpdateModal = () => {
+    setOpenModal(false);
+    setFile([]);
+  };
+
+  const handleCloseAdmitModal = () => {
+    setOpenModalAdmit(false);
+    setFileAdmit([]);
   };
 
   const handelAddStudent = (e) => {
@@ -304,6 +319,43 @@ export default function AdmitStudent() {
     }
   };
 
+  const handleGetAdmitSheet = async () => {
+    try {
+      const getExcel = await get(
+        PRIVATE_URLS.student.getBulkStudentAdmitSheet,
+        {
+          params: { schoolId: selectedSetting._id },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "studentAdmit_list.xlsx"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleAdmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("academicYearId", entryFormik.values.academicYear);
+      formData.append("classId", entryFormik.values.class);
+      formData.append("sectionId", entryFormik.values.section);
+      formData.append("schoolId", selectedSetting._id);
+      fileAdmit.forEach((f) => formData.append("file", f));
+
+      await post(PRIVATE_URLS.student.bulkStudentAdmit, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleNavigate = () => {
     navigation("/sch/student/bulk-photo");
   };
@@ -449,48 +501,70 @@ export default function AdmitStudent() {
         open={openModalAdmit}
         onClose={() => setOpenModalAdmit(false)}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 400 },
+            },
+          },
+        }}>
         <Box sx={style}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Typography
-                variant="h6"
-                component="h2"
-                textAlign="center"
-                fontSize="20px"
-                fontWeight="bold">
-                Bulk Admit
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
-              <Button variant="contained" endIcon={<DownloadIcon />}>
-                Sample
-              </Button>
-            </Grid>
+          <form onSubmit={handleAdmit}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  textAlign="center"
+                  fontSize="20px"
+                  fontWeight="bold">
+                  Bulk Admit
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  endIcon={<DownloadIcon />}
+                  onClick={handleGetAdmitSheet}>
+                  Sample
+                </Button>
+              </Grid>
 
-            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
-              <FileSelect
-                label="Select  File"
-                onChange={(e) => handleChangeFiles(e)}
-                customOnChange={true}
-                selectedFiles={file}
-                multi={false}
-              />
-            </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+                <FileSelect
+                  label="Select  File"
+                  onChange={(e) => handleChangeFiles(e, "admitFile")}
+                  customOnChange={true}
+                  selectedFiles={fileAdmit}
+                  multi={false}
+                />
+              </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end">
-              <Button variant="contained" type="submit">
-                Submit
-              </Button>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end"
+                gap={1}>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleCloseAdmitModal}>
+                  Cancel
+                </Button>
+                <Button size="small" variant="contained" type="submit">
+                  Submit
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </form>
         </Box>
       </Dialog>
 
@@ -499,7 +573,15 @@ export default function AdmitStudent() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: { xs: "100%", sm: 350, md: 350, lg: 400 },
+            },
+          },
+        }}>
         <Box sx={style}>
           <form onSubmit={handleSubmitBulkUpdate}>
             {" "}
@@ -517,6 +599,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <Button
                   variant="contained"
+                  size="small"
                   onClick={handleGetUpdateSheet}
                   endIcon={<DownloadIcon />}>
                   Download
@@ -526,7 +609,7 @@ export default function AdmitStudent() {
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
                 <FileSelect
                   label="Select File"
-                  onChange={(e) => handleChangeFiles(e)}
+                  onChange={(e) => handleChangeFiles(e, "updateFile")}
                   customOnChange={true}
                   selectedFiles={file}
                   multi={false}
@@ -540,8 +623,16 @@ export default function AdmitStudent() {
                 md={12}
                 lg={12}
                 display="flex"
-                justifyContent="flex-end">
-                <Button variant="contained" type="submit">
+                justifyContent="flex-end"
+                gap={1}>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleCloseUpdateModal}>
+                  Cancel
+                </Button>
+                <Button variant="contained" size="small" type="submit">
                   Submit
                 </Button>
               </Grid>

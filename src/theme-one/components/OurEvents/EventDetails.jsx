@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import SubHeader from "../SubHeader";
 import { useLocation, useParams } from "react-router-dom";
@@ -5,7 +7,7 @@ import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import themeData from "../../../data/themeData";
-
+import moment from "moment";
 const Title = styled(Box)(() => ({
   color: themeData.darkPalette.primary.main,
   fontSize: "2rem",
@@ -48,6 +50,13 @@ export default function EventDetails() {
     window.scrollTo(0, 0);
   }, []);
 
+  let onlyDay = newEvents.fromDate;
+  let EndDay = newEvents.toDate;
+  const date = moment(onlyDay);
+  const End_Day = moment(EndDay);
+  const specificMonth = date.format("Do, MMMM, YYYY");
+  const specificMonthEnd = End_Day.format("Do, MMMM, YYYY");
+
   return (
     <>
       <SubHeader
@@ -67,9 +76,9 @@ export default function EventDetails() {
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
             <CardContent sx={{ marginLeft: "20px" }}>
-              {/* <Typography variant="subtitle1" fontWeight={600}>
+              <Typography variant="subtitle1" fontWeight={600}>
                 {specificMonth} - {specificMonthEnd}
-              </Typography> */}
+              </Typography>
               <Title>Event: {newEvents?.title}</Title>
               <Content>{newEvents?.shortEvent}</Content>
               <Typography
@@ -77,10 +86,9 @@ export default function EventDetails() {
                   color: "#1976D2",
                   fontSize: "16px",
                   my: 2,
-                }}
-              >
+                }}>
                 <b>Note:</b>
-                <Typography variant="span"> {newEvents?.content}</Typography>
+                <Typography variant="span"> {newEvents?.shortEvent}</Typography>
               </Typography>
               <Random>
                 <Typography variant="subtitle1">
