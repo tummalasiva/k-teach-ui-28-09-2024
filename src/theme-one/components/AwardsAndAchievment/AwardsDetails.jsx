@@ -10,6 +10,7 @@ import themeData from "../../../data/themeData";
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   color: themeData.darkPalette.primary.main,
+  fontSize: "20px",
 }));
 
 const AwardsDetails = () => {
@@ -43,30 +44,24 @@ const AwardsDetails = () => {
             sx={{
               order: { xs: 1, sm: 1, md: 2 },
             }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "black", fontWeight: 600 }}>
+              {dayjs(newAwards.date).format("MMM DD, YYYY")}
+            </Typography>
             <Title variant="subtitle1">{newAwards.title}</Title>
-
+            <Typography variant="subtitle1">
+              <b> Hosted By:</b>
+              <span sx={{ color: "black" }}>{newAwards.hostedBy}</span>
+            </Typography>
+            <Typography variant="subtitle1">
+              <b> Location: </b>
+              <span component="span" sx={{ color: "black" }}>
+                {" "}
+                {newAwards.location}
+              </span>
+            </Typography>
             <Typography variant="subtitle1">{newAwards.note}</Typography>
-            <Box>
-              <Typography variant="subtitle1">
-                Hosted By:
-                <Typography component="span" sx={{ color: "black" }}>
-                  {newAwards.hostedBy}
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1">
-                Date:{" "}
-                <Typography component="span" sx={{ color: "black" }}>
-                  {dayjs(newAwards.date).format("MMM DD, YYYY")}
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1">
-                Location:{" "}
-                <Typography component="span" sx={{ color: "black" }}>
-                  {" "}
-                  {newAwards.location}
-                </Typography>
-              </Typography>
-            </Box>
           </Grid>
         </Grid>
       </Container>

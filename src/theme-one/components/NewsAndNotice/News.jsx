@@ -10,6 +10,7 @@ import themeData from "../../../data/themeData";
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   color: themeData.darkPalette.primary.main,
+  fontSize: "20px",
 }));
 
 const News = () => {
@@ -43,23 +44,12 @@ const News = () => {
             sx={{
               order: { xs: 1, sm: 1, md: 2 },
             }}>
+            <Typography sx={{ color: "black", fontWeight: 600 }}>
+              {dayjs(news.date).format("MMM DD, YYYY")}
+            </Typography>
             <Title variant="subtitle1">{news.title}</Title>
-
             <Typography variant="subtitle1">{news.shortNews}</Typography>
-            <Box>
-              <Typography variant="subtitle1">
-                News:
-                <Typography component="span" sx={{ color: "black" }}>
-                  {news.news}
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1">
-                Date:{" "}
-                <Typography component="span" sx={{ color: "black" }}>
-                  {dayjs(news.date).format("MMM DD, YYYY")}
-                </Typography>
-              </Typography>
-            </Box>
+            <Typography variant="subtitle1">{news.news}</Typography>
           </Grid>
         </Grid>
       </Container>
