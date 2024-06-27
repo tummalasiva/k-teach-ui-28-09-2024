@@ -121,8 +121,6 @@ export default function AddOrUpdateExamModal({
     setNegativeMarking(event.target.value);
   };
 
-  console.log(markForm, "markForm");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -161,7 +159,6 @@ export default function AddOrUpdateExamModal({
           point: add,
         })),
       };
-      console.log(playload, "fadadasa");
 
       const { data } = await post(
         PRIVATE_URLS.preadmissionExam.create,
@@ -190,8 +187,6 @@ export default function AddOrUpdateExamModal({
     setAdditionalInstructions([]);
     onClose();
   };
-
-  console.log(typeof negativeMarking, "negativeMarking");
 
   return (
     <Dialog

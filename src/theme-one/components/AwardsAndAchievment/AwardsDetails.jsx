@@ -10,25 +10,16 @@ import themeData from "../../../data/themeData";
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   color: themeData.darkPalette.primary.main,
-  fontSize: "2rem",
+  fontSize: "20px",
 }));
 
 const AwardsDetails = () => {
-  let { id } = useParams();
-  console.log(id);
-
   const location = useLocation();
   const newAwards = location.state && location.state.awards;
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  console.log(newAwards, "kkkkkkkkkkkkkkk");
 
   return (
     <>
@@ -37,46 +28,40 @@ const AwardsDetails = () => {
         leftSideHeader="Home"
         rightSideHeader=" Awards And Achievements"
       />
-      <Container sx={{ marginTop: "25px" }}>
+      <Container sx={{ marginTop: "5px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
-            <Title variant="subtitle1">{newAwards.title}</Title>
-
-            <Typography
-              variant="subtitle1"
-              sx={{
-                marginBottom: "50px",
-              }}>
-              {newAwards.note}
-            </Typography>
-            <Box>
-              <Typography variant="subtitle1">
-                Hosted By:
-                <Typography component="span" style={{ color: "black" }}>
-                  {newAwards.hostedBy}
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1">
-                Date:{" "}
-                <Typography component="span" style={{ color: "black" }}>
-                  {dayjs(newAwards.date).format("MMM DD, YYYY")}
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1">
-                Location:{" "}
-                <Typography component="span" style={{ color: "black" }}>
-                  {" "}
-                  {newAwards.location}
-                </Typography>
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6} sx={{ order: { xs: 1, sm: 1, md: 2 } }}>
             <img
               src={newAwards.image ? newAwards.image : "awards.png"}
               alt="loading..."
               style={{ width: "100%", borderRadius: "5px" }}
             />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              order: { xs: 1, sm: 1, md: 2 },
+            }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "black", fontWeight: 600 }}>
+              {dayjs(newAwards.date).format("MMM DD, YYYY")}
+            </Typography>
+            <Title variant="subtitle1">{newAwards.title}</Title>
+            <Typography variant="subtitle1">
+              <b> Hosted By:</b>
+              <span sx={{ color: "black" }}>{newAwards.hostedBy}</span>
+            </Typography>
+            <Typography variant="subtitle1">
+              <b> Location: </b>
+              <span component="span" sx={{ color: "black" }}>
+                {" "}
+                {newAwards.location}
+              </span>
+            </Typography>
+            <Typography variant="subtitle1">{newAwards.note}</Typography>
           </Grid>
         </Grid>
       </Container>

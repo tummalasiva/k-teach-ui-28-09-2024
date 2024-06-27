@@ -6,9 +6,6 @@ import TopNav from "../theme-one/components/Navbar/TopNav";
 import MainNav from "../theme-one/components/Navbar/MainNav";
 import Footer from "../theme-one/components/Footer";
 
-import AwardsDetails from "../theme-one/components/AwardsAndAchievment/AwardsDetails";
-import Assignment from "../theme-one/components/Navbar/navbar/Assignment";
-
 // ===== code splitting ===================================
 const Home = React.lazy(() => import("../theme-one/page/HomePage"));
 const Overview = React.lazy(() =>
@@ -22,6 +19,18 @@ const VissionMission = React.lazy(() =>
 );
 const Library = React.lazy(() =>
   import("../theme-one/components/Navbar/navbar/facilities/Library")
+);
+
+const Assignment = React.lazy(() =>
+  import("../theme-one/components/Navbar/navbar/Assignment")
+);
+
+const AwardsDetails = React.lazy(() =>
+  import("../theme-one/components/AwardsAndAchievment/AwardsDetails")
+);
+
+const NewsAndNoticeDetails = React.lazy(() =>
+  import("../theme-one/components/NewsAndNotice/NewsAndNoticeDetails")
 );
 
 const Food = React.lazy(() =>
@@ -50,6 +59,11 @@ const Gallery = React.lazy(() =>
 const EventDetails = React.lazy(() =>
   import("../theme-one/components/OurEvents/EventDetails")
 );
+
+const News = React.lazy(() =>
+  import("../theme-one/components/NewsAndNotice/News")
+);
+
 const UniqueFeature = React.lazy(() =>
   import("../theme-one/components/Features/features/UniqueFeature")
 );
@@ -97,6 +111,8 @@ const WebsiteTheme1 = () => {
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
         <Route path="/awardsDetails/:id" element={<AwardsDetails />} />
+
+        <Route path="/news-and-notice-details/:id" element={<News />} />
       </Routes>
       <Footer />
       <Outlet />

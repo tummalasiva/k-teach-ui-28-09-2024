@@ -204,7 +204,6 @@ const MainNav = () => {
 
             <Box
               sx={{
-                paddingLeft: { lg: 5 },
                 display: { xs: "none", md: "block" },
               }}>
               <Button
