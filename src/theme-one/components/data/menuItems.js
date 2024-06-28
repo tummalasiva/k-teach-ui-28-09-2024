@@ -1,3 +1,5 @@
+/** @format */
+
 import { AiFillHome } from "react-icons/ai";
 import { RiInformationFill } from "react-icons/ri";
 import { MdPhoto } from "react-icons/md";
@@ -61,6 +63,12 @@ const menuItems = [
         path: "/facilities/canteen",
       },
     ],
+  },
+
+  {
+    title: "Assignment",
+    path: "/assignment",
+    logo: <HiDocumentSearch />,
   },
   {
     title: "Results",

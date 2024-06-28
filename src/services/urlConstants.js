@@ -181,10 +181,12 @@ export const PRIVATE_URLS = {
     getDashboardStudentDetails: "/student/getDashboardStudentDetails",
     downloadAllStudentsExcel: "/student/downloadAllStudentsExcel",
     downloadStudentsExcel: "/student/downloadStudentsExcel",
-    donwloadStudentsPdf: "/student/downloadStudentsPdf",
+    downloadStudentsPdf: "/student/downloadStudentsPdf",
     updatePhoto: "/student/updatePhoto",
     bulkUpdateSheet: "/student/bulkUpdateSheet",
     bulkUpdate: "/student/bulkUpdate",
+    getBulkStudentAdmitSheet: "/student/getBulkStudentAdmitSheet",
+    bulkStudentAdmit: "/student/bulkStudentAdmit",
   },
   studentActivity: {
     list: "/studentActivity/list",

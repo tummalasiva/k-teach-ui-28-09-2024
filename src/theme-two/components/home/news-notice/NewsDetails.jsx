@@ -1,7 +1,16 @@
 /** @format */
 
 import React from "react";
-import { Box, Container, Grid, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  Grid,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const MainGrid = styled(Grid)(({}) => ({
@@ -56,9 +65,9 @@ export default function NewsDetails({ elem }) {
 
   return (
     <>
-      <Container>
-        <MainGrid container sx={{ display: "flex" }}>
-          <Grid
+      {/* <Container> */}
+      {/* <MainGrid container sx={{ display: "flex" }}> */}
+      {/* <Grid
             item
             md={2}
             xs={12}
@@ -71,8 +80,8 @@ export default function NewsDetails({ elem }) {
               className="image"
               src={elem?.image}
               style={{
-                height: "50px",
-                width: "50px",
+                height: "150px",
+                width: "150px",
                 borderRadius: "50%",
                 border: "2px solid transparent",
               }}
@@ -102,9 +111,48 @@ export default function NewsDetails({ elem }) {
                 Read More
               </Typography>
             </Box>
-          </Grid>
-        </MainGrid>
-      </Container>
+          </Grid> */}
+
+      <Card sx={{ display: "flex", width: 600, my: 1, height: 180 }}>
+        <CardMedia
+          component="img"
+          sx={{ width: 251 }}
+          image={elem?.image}
+          alt="Live from space album cover"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <TypographyTitle className="title">{elem.title}</TypographyTitle>
+          </CardContent>
+          <Box sx={{ display: "flex" }}>
+            <Typography
+              sx={{ display: "inline-flex" }}
+              paragraph
+              fontSize={14}
+              // variant="h6"
+            >
+              {elem.news.substring(0, 80)}...
+            </Typography>
+
+            <Typography
+              className="navigate"
+              sx={{
+                cursor: "pointer",
+                color: "orange",
+              }}
+              fontSize={14}
+              onClick={handleNavigate}>
+              Read More
+            </Typography>
+          </Box>
+        </Box>
+      </Card>
+      {/* </MainGrid> */}
+      {/* </Container> */}
     </>
   );
 }

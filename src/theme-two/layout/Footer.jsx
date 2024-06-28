@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext } from "react";
 import { Box, Grid, Stack, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -106,8 +108,7 @@ export default function Footer() {
         spacing={2}
         sx={{
           px: { xs: 2, sm: 3, md: "100px" },
-        }}
-      >
+        }}>
         <Grid
           item
           xs={12}
@@ -116,17 +117,14 @@ export default function Footer() {
           sx={{
             display: "flex",
             flexDirection: "column",
-          }}
-        >
+          }}>
           <ContentHeading variant="h5">Contact us</ContentHeading>
           <Stack sx={{ display: "flex" }}>
             <Typography sx={{ color: "#CDCDCD", fontSize: 16 }}>
               <b style={{ color: themeData.darkPalette.primary.main }}>
                 Address:&nbsp;
               </b>
-              1,3rd Floor, LVR ONE, 17th Cross Rd, near <br /> Orion Mall, A
-              Block, Milk Colony, 2nd Stage, Rajajinagar, Bengaluru, Karnataka
-              560010
+              {selectedSetting.address}
             </Typography>
           </Stack>
           <Typography variant="body2" color="#fff" fontSize={16}>
@@ -184,8 +182,7 @@ export default function Footer() {
             to="/about/overview"
             style={{
               textDecoration: "none",
-            }}
-          >
+            }}>
             <MuiText variant="span">Overview</MuiText>
           </Link>
           <Typography>
@@ -193,8 +190,7 @@ export default function Footer() {
               to="/about/founder"
               style={{
                 textDecoration: "none",
-              }}
-            >
+              }}>
               <MuiText variant="span">About Founder</MuiText>
             </Link>
           </Typography>
@@ -203,8 +199,7 @@ export default function Footer() {
               to="/results"
               style={{
                 textDecoration: "none",
-              }}
-            >
+              }}>
               <MuiText variant="span">Results</MuiText>
             </Link>
           </Typography>
@@ -213,8 +208,7 @@ export default function Footer() {
               to="/discover-gallery"
               style={{
                 textDecoration: "none",
-              }}
-            >
+              }}>
               <MuiText variant="span">Gallery</MuiText>
             </Link>
           </Typography>
@@ -223,8 +217,7 @@ export default function Footer() {
               to="/about/vision-and-mission"
               style={{
                 textDecoration: "none",
-              }}
-            >
+              }}>
               <MuiText variant="span"> Vision and Mission</MuiText>
             </Link>
           </Typography>
@@ -253,8 +246,7 @@ export default function Footer() {
           justifyContent: { sm: "space-between", xs: "flex-start" },
           alignItems: "center",
           flexDirection: { sm: "row", xs: "column" },
-        }}
-      >
+        }}>
         <Typography>{selectedSetting.websiteFooter}</Typography>
         <Typography sx={{ color: "#fff" }}>Powered by eCampusStreet</Typography>
       </CopyRightContainer>

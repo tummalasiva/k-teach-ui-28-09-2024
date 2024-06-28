@@ -1,8 +1,12 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
 import {
+  Box,
   Button,
+  Dialog,
   Grid,
   Paper,
   Table,
@@ -13,6 +17,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { useFormik } from "formik";
 import SettingContext from "../../context/SettingsContext";
@@ -22,15 +27,26 @@ import { Checkbox } from "@mui/material";
 import { hasAllValues } from "../../utils";
 import StickyBar from "../../components/StickyBar";
 import { LoadingButton } from "@mui/lab";
+import { useTheme } from "@emotion/react";
+import DownloadIcon from "@mui/icons-material/Download";
+import FileSelect from "../../forms/FileSelect";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
+const style = {
+  bgcolor: "background.paper",
+  height: "auto",
+  p: 2,
+};
 
 export default function Reshuffle() {
   const { selectedSetting } = useContext(SettingContext);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
-
+  const [openModalAdmit, setOpenModalAdmit] = useState(false);
+  const [file, setFile] = useState([]);
   const [studentReshuffle, setStudentReshuffle] = useState([]);
   const [checkBox, setCheckBox] = useState([]);
   const [reshuffle, setReshuffle] = useState(false);
@@ -54,6 +70,19 @@ export default function Reshuffle() {
       setCheckBox([...ids]);
     } else {
       setCheckBox([]);
+    }
+  };
+  const handleChangeFiles = (e, index) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      setFile(fileList);
+    } else {
+      console.log("No files selected");
     }
   };
 
@@ -226,12 +255,14 @@ export default function Reshuffle() {
               lg={12}
               display="flex"
               justifyContent="flex-end"
-              gap="10px"
-            >
+              gap="10px">
               <Button size="small" type="submit" variant="contained">
                 Find
               </Button>
-              <Button size="small" variant="contained">
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => setOpenModalAdmit(true)}>
                 Bulk Reshuffle
               </Button>
             </Grid>
@@ -247,8 +278,7 @@ export default function Reshuffle() {
                 theme.palette.mode === "dark"
                   ? theme.palette.primary.dark
                   : theme.palette.primary.light,
-            }}
-          >
+            }}>
             <TableRow>
               <TableCell align="center">S.No</TableCell>
               <TableCell align="center">Name</TableCell>
@@ -297,8 +327,7 @@ export default function Reshuffle() {
           {!studentReshuffle.length && (
             <Typography
               variant="h6"
-              sx={{ textAlign: "center", margin: "5px", padding: "5px" }}
-            >
+              sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
               No data found
             </Typography>
           )}
@@ -335,14 +364,64 @@ export default function Reshuffle() {
                   background: "#1b3779",
                   ":hover": { background: "#1b3779" },
                   color: "#fff",
-                }}
-              >
+                }}>
                 Reshuffle
               </LoadingButton>
             </div>
           }
         />
       )}
+
+      <Dialog
+        fullScreen={fullScreen}
+        maxWidth="md"
+        open={openModalAdmit}
+        onClose={() => setOpenModalAdmit(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Typography
+                variant="h6"
+                component="h2"
+                textAlign="center"
+                fontSize="20px"
+                fontWeight="bold">
+                Bulk Admit
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+              <Button variant="contained" endIcon={<DownloadIcon />}>
+                Get Sample
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"center"}>
+              <FileSelect
+                label="Select File"
+                onChange={(e) => handleChangeFiles(e)}
+                customOnChange={true}
+                selectedFiles={file}
+                multi={false}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end">
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Dialog>
     </>
   );
 }

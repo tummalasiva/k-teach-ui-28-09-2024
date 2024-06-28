@@ -57,7 +57,7 @@ export default function ExamSchedule() {
         },
       });
       setData(data.result.map((s) => ({ ...s, subject: s.subject })));
-      console.log(data.result, "resullttttt");
+      // console.log(data.result, "resullttttt");
     } catch (error) {
       console.log(error);
     }
@@ -218,6 +218,7 @@ export default function ExamSchedule() {
   const handleDelete = async (id) => {
     try {
       const res = await del(PRIVATE_URLS.examSchedule.delete + "/" + id);
+      getData();
       entryFormik.handleSubmit();
     } catch (error) {
       console.error(error);

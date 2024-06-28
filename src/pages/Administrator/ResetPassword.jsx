@@ -6,13 +6,15 @@ import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
 import PageHeader from "../../components/PageHeader";
-import { get, post, put } from "../../services/apiMethods";
+import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 export default function ResetPassword() {
   const { selectedSetting } = useContext(SettingContext);
   const [roles, setRoles] = useState([]);
   const [employees, setEmployee] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getRoles = async () => {
     try {
@@ -51,7 +53,7 @@ export default function ResetPassword() {
     }
   };
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
@@ -59,16 +61,17 @@ export default function ResetPassword() {
         employeeId: values.employeeId,
         password: values.password,
       };
-
-      console.log(payload, "jjjjjjjjjjjj");
+      setLoading(true);
 
       const { data } = await post(
         PRIVATE_URLS.account.changePasswordForUser,
         payload
       );
-      console.log(data, "ooooooo");
+      resetForm();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const entryFormik = useFormik({
@@ -124,9 +127,13 @@ export default function ResetPassword() {
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <Button size="small" type="submit" variant="contained">
+              <LoadingButton
+                loading={loading}
+                size="small"
+                type="submit"
+                variant="contained">
                 Change Password
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>

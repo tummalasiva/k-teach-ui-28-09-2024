@@ -49,17 +49,6 @@ const FormSelect = ({
     const { value } = event.target;
     setFieldValue(name, value);
   };
-  // const { isDarkMode } = useContext(ThemeModeContext);
-  // const labelColor =
-  //   disabled && !isDarkMode
-  //     ? "gray"
-  //     : !disabled && isDarkMode
-  //     ? "white"
-  //     : !disabled && !isDarkMode
-  //     ? "black"
-  //     : disabled && isDarkMode
-  //     ? "gray"
-  //     : "inherit";
 
   return (
     <FormControl

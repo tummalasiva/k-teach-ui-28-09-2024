@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+/** @format */
+
+import React, { useState } from "react";
 import {
   Accordion,
   AppBar,
@@ -12,50 +14,34 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import menuItems from "../data/menuItems";
 import logo from "../../../theme-one/assets/Images/bannback.png";
 import themeData from "../../../data/themeData";
 import { Person } from "@mui/icons-material";
 
-const SideContainer = styled(Box)(({ theme }) => ({
-  display: "none",
-
-  [theme.breakpoints.down("md")]: {
-    display: "none",
-  },
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
-  },
-
-  [theme.breakpoints.down("xs")]: {
-    display: "block",
-  },
-  [theme.breakpoints.between(900, 964)]: {
-    display: "block",
-  },
-}));
-
 const MainMenuContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  // marginRight: "3.5rem",
+  gap: theme.spacing(1),
+
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
 }));
 
-const ManinMenuItems = styled(Button)({
+const MainMenuItems = styled(Typography)({
   textTransform: "none",
-
+  textDecoration: "none",
   fontSize: "16px",
   "&:hover": {
     color: themeData.darkPalette.primary.main,
@@ -69,11 +55,11 @@ const MainMenuChildrenContainer = styled(Box)({
   width: "170px",
   backgroundColor: "#fff",
   zIndex: 1,
-
   boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
   borderTop: `3px solid ${themeData.darkPalette.primary.main}`,
 });
-const MainMenuDropDownItems = styled(Button)({
+
+const MainMenuDropDownItems = styled(Typography)({
   fontSize: "16px",
   textTransform: "none",
 });
@@ -110,6 +96,9 @@ const MainNav = () => {
     navigate(data);
   };
 
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.between(900, 980));
+
   return (
     <React.Fragment>
       <AppBar
@@ -118,25 +107,22 @@ const MainNav = () => {
           backgroundColor: "#fff",
           color: "#333",
           height: "120px",
-
-          px: { xs: 3, sm: 3, md: 3, lg: 12 },
-        }}
-      >
+          px: { xs: 2, sm: 1, md: 1, lg: 10 },
+        }}>
         <Toolbar
           disableGutters
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Link to="/">
             <img
               alt=""
-              width={200}
+              width={matches ? 100 : 200}
               height={120}
               src={logo}
-              style={{ paddingTop: "4px" }}
+              style={{ paddingTop: "4px", objectFit: "contain" }}
             />
           </Link>
 
@@ -147,8 +133,7 @@ const MainNav = () => {
                   <MainMenuDropdownContainer
                     key={item.title}
                     onMouseEnter={() => handleOpenSubMenu(item.title)}
-                    onMouseLeave={handleCloseSubMenu}
-                  >
+                    onMouseLeave={handleCloseSubMenu}>
                     <MainMenuDropDownItems
                       sx={{
                         color:
@@ -156,12 +141,12 @@ const MainNav = () => {
                             ? themeData.darkPalette.primary.main
                             : "black",
                         fontWeight: pathname === item.path ? "bold" : "normal",
+                        mx: 0.5, // Adjust horizontal margin as needed
                       }}
-                      onClick={() => handleChange(item.path)}
-                    >
+                      onClick={() => handleChange(item.path)}>
                       {item.title}
-                      <KeyboardArrowDownIcon />
                     </MainMenuDropDownItems>
+                    <KeyboardArrowDownIcon />
                     {subMenuOpen === item.title && (
                       <MainMenuChildrenContainer>
                         <List component="nav">
@@ -171,8 +156,7 @@ const MainNav = () => {
                               button
                               component={Link}
                               to={subItem.path}
-                              onClick={handleCloseSubMenu}
-                            >
+                              onClick={handleCloseSubMenu}>
                               <ListItemText
                                 sx={{
                                   fontWeight:
@@ -186,6 +170,7 @@ const MainNav = () => {
                                   "&:hover": {
                                     color: themeData.darkPalette.primary.main,
                                   },
+                                  my: 0.5, // Adjust vertical margin as needed
                                 }}
                                 primary={subItem.title}
                               />
@@ -198,7 +183,7 @@ const MainNav = () => {
                 );
               } else {
                 return (
-                  <ManinMenuItems
+                  <MainMenuItems
                     key={item.title}
                     component={Link}
                     to={item.path}
@@ -209,10 +194,10 @@ const MainNav = () => {
                         pathname === item.path
                           ? themeData.darkPalette.primary.main
                           : "inherit",
-                    }}
-                  >
+                      mx: 0.5, // Adjust horizontal margin as needed
+                    }}>
                     {item.title}
-                  </ManinMenuItems>
+                  </MainMenuItems>
                 );
               }
             })}
@@ -221,8 +206,7 @@ const MainNav = () => {
               sx={{
                 paddingLeft: { lg: 5 },
                 display: { xs: "none", md: "block" },
-              }}
-            >
+              }}>
               <Button
                 startIcon={<Person sx={{ color: "#ffff" }} />}
                 variant="contained"
@@ -230,8 +214,7 @@ const MainNav = () => {
                 sx={{
                   backgroundColor: themeData.darkPalette.primary.main,
                 }}
-                onClick={() => navigate("login")}
-              >
+                onClick={() => navigate("login")}>
                 Login
               </Button>
             </Box>
@@ -240,8 +223,7 @@ const MainNav = () => {
           <Box
             sx={{
               display: { xs: "block", sm: "block", md: "none", lg: "none" },
-            }}
-          >
+            }}>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -258,8 +240,7 @@ const MainNav = () => {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
-              }}
-            >
+              }}>
               {menuItems.map((item, i) => {
                 if (item.dropdown) {
                   return (
@@ -268,13 +249,11 @@ const MainNav = () => {
                       sx={{
                         backgroundColor: "transparent",
                         boxShadow: "none",
-                      }}
-                    >
+                      }}>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={`submenu-${item.title}`}
-                        id={`submenu-${item.title}`}
-                      >
+                        id={`submenu-${item.title}`}>
                         <Typography
                           sx={{
                             "&:hover": {
@@ -284,8 +263,7 @@ const MainNav = () => {
                               pathname === item.path
                                 ? themeData.darkPalette.primary.main
                                 : "inherit",
-                          }}
-                        >
+                          }}>
                           {item.title}
                         </Typography>
                       </AccordionSummary>
@@ -302,16 +280,14 @@ const MainNav = () => {
                                     ? themeData.darkPalette.primary.main
                                     : "inherit",
                               }}
-                              onClick={handleCloseNavMenu}
-                            >
+                              onClick={handleCloseNavMenu}>
                               <MenuItem
                                 sx={{
                                   "&:hover": {
                                     color: themeData.darkPalette.primary.main,
                                   },
                                 }}
-                                onClick={handleCloseNavMenu}
-                              >
+                                onClick={handleCloseNavMenu}>
                                 {subItem.title}
                               </MenuItem>
                             </Link>
@@ -326,8 +302,7 @@ const MainNav = () => {
                       key={item.title}
                       to={item.path}
                       style={{ textDecoration: "none", color: "#333" }}
-                      onClick={handleCloseNavMenu}
-                    >
+                      onClick={handleCloseNavMenu}>
                       <MenuItem
                         sx={{
                           "&:hover": {
@@ -339,8 +314,7 @@ const MainNav = () => {
                               ? themeData.darkPalette.primary.main
                               : "inherit",
                         }}
-                        onClick={handleCloseNavMenu}
-                      >
+                        onClick={handleCloseNavMenu}>
                         {item.title}
                       </MenuItem>
                     </Link>
@@ -353,8 +327,7 @@ const MainNav = () => {
               aria-label="menu"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
+              sx={{ display: { xs: "block", md: "none" } }}>
               <MenuIcon />
             </IconButton>
           </Box>
@@ -363,4 +336,5 @@ const MainNav = () => {
     </React.Fragment>
   );
 };
+
 export default MainNav;

@@ -36,11 +36,22 @@ const MuiBox = styled(Box)(({ theme }) => ({
   ...animatedPause,
 }));
 
+const scrollAnimation = keyframes`
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+`;
+
 const AnimatedBox = styled(Box)(({ theme }) => ({
   display: "flex",
-  flexDirection: " column-reverse",
-  animation: "scroll 8s linear infinite",
+  flexDirection: "column-reverse",
+  animation: `${scrollAnimation} 8s linear infinite`,
 }));
+
+// const AnimatedBox = styled(Box)(({ theme }) => ({
+//   display: "flex",
+//   flexDirection: " column-reverse",
+//   animation: "scroll 8s linear infinite",
+// }));
 
 const MuiCard = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -86,10 +97,10 @@ const AnnounceNews = [
 ];
 
 export default function NewsAndNotice() {
-  let [announceNews, setAnounceNews] = useState([]);
   const { selectedSetting } = useContext(SettingContext);
-
+  const [notics, setNotices] = useState([]);
   const [data, setData] = useState([]);
+
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.news.listPublic, {
@@ -97,7 +108,17 @@ export default function NewsAndNotice() {
       });
 
       setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const getNotics = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.notice.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setNotices(data.result);
       console.log(data.result, "ggggfgffgffff");
     } catch (error) {
       console.log(error);
@@ -106,16 +127,16 @@ export default function NewsAndNotice() {
 
   useEffect(() => {
     getData();
+    getNotics();
   }, [selectedSetting]);
   return (
     <>
       <Box mx={7}>
         <MuiCard>
-          <TypographyMain sx={{ mt: 3 }} variant="h3">
+          <TypographyMain sx={{ mt: 3, textAlign: "center" }} variant="h3">
             NEWS & NOTICE
             <Dots />
           </TypographyMain>
-
           <MuiBox>
             {data.length ? (
               <AnimatedBox>

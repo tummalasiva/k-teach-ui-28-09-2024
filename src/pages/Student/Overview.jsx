@@ -28,6 +28,7 @@ import CustomSelect from "../../forms/CustomSelect";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
+import { LoadingButton } from "@mui/lab";
 
 const TableHeader = styled(TableCell)(({ theme }) => ({
   borderRight: "1px solid grey",
@@ -55,6 +56,8 @@ export default function Overview() {
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalMaleStudents, setTotalMaleStudents] = useState(0);
   const [totalFemaleStudents, setTotalFemaleStudents] = useState(0);
+
+  const [loading, setLoading] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -99,6 +102,7 @@ export default function Overview() {
 
   const handleGetDownloadExcel = async () => {
     try {
+      setLoading(true);
       const getExcel = await get(
         PRIVATE_URLS.student.downloadAllStudentsExcel,
         {
@@ -110,14 +114,14 @@ export default function Overview() {
         }
       );
 
-      console.log(getExcel, "0000000000");
-
       downloadFile(
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         getExcel.data,
         "student.xlsx"
       );
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -138,11 +142,15 @@ export default function Overview() {
               options={academicYear}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center", mt: 2 }}>
             <Tooltip title="Download">
-              <IconButton onClick={handleGetDownloadExcel}>
-                <DownloadForOfflineSharpIcon />
-              </IconButton>
+              <LoadingButton
+                loading={loading}
+                size="small"
+                variant="contained"
+                onClick={handleGetDownloadExcel}>
+                Download Students
+              </LoadingButton>
             </Tooltip>
           </Grid>
         </Grid>

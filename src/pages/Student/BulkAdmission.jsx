@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
@@ -6,8 +8,10 @@ import { useFormik } from "formik";
 import DownloadIcon from "@mui/icons-material/Download";
 import FormInput from "../../forms/FormInput";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get } from "../../services/apiMethods";
+import { get, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { downloadFile } from "../../utils";
+import { LoadingButton } from "@mui/lab";
 
 const MuiTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -18,6 +22,7 @@ export default function BulkAdmission() {
   const [academicYearList, setAcademicYearList] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
+  const [file, setFile] = useState(null);
 
   //get academic year
   const getAcademicYear = async () => {
@@ -93,6 +98,45 @@ export default function BulkAdmission() {
     }
   }, [entryFormik.values.class]);
 
+  const downloadBulkAdmissionSheet = async () => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.student.getBulkStudentAdmitSheet,
+        { responseType: "blob", params: { schoolId: selectedSetting._id } }
+      );
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        data,
+        "Bulk Admission Sheet"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadSheet = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("classId", entryFormik.values.class);
+      formData.append("sectionId", entryFormik.values.section);
+      formData.append("academicYearId", entryFormik.values.academicYear);
+      formData.append("schoolId", selectedSetting._id);
+      formData.append("file", file);
+
+      const { data } = await put(
+        PRIVATE_URLS.student.bulkStudentAdmit,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Bulk Admission" />
@@ -127,20 +171,35 @@ export default function BulkAdmission() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="image"
-              formik={entryFormik}
-              label="Select File"
-              type="file"
-            />
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            xs={12}
+            md={6}
+            lg={3}
+            item>
+            <Button size="large" component="label">
+              <input
+                visibility="hidden"
+                type="file"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+              />
+            </Button>
           </Grid>
 
           <Grid xs={12} md={12} lg={12} item>
-            <Button endIcon={<DownloadIcon />} size="small" variant="contained">
+            <LoadingButton
+              onClick={downloadBulkAdmissionSheet}
+              endIcon={<DownloadIcon />}
+              size="small"
+              variant="contained">
               Get Sample
-            </Button>
+            </LoadingButton>
           </Grid>
 
           <Grid xs={12} md={12} lg={12} item>
@@ -164,11 +223,13 @@ export default function BulkAdmission() {
             md={12}
             lg={12}
             display="flex"
-            justifyContent="flex-end"
-          >
-            <Button size="small" variant="contained">
+            justifyContent="flex-end">
+            <LoadingButton
+              onClick={uploadSheet}
+              size="small"
+              variant="contained">
               Submit
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -178,8 +239,7 @@ export default function BulkAdmission() {
           borderRadius: "5px",
           backgroundColor: (theme) =>
             theme.palette.mode === "dark" ? "rgba(32,33,32,1)" : "#FFF9C4",
-        }}
-      >
+        }}>
         <Typography sx={{ fontSize: "22px" }} fontWeight="bold">
           Instruction:
         </Typography>

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Container, Grid, Typography, styled } from "@mui/material";
 import SubHeader from "../../../SubHeader";
@@ -42,7 +44,7 @@ export default function VissionMission() {
         <Grid container>
           <Grid item md={12} sm={12}>
             <Header variant="h6" gutterBottom>
-              Our Vission:
+              Our Vission
             </Header>
             <Typography component="ul">
               <Typography component="li" gutterBottom fontSize={16}>
@@ -65,7 +67,7 @@ export default function VissionMission() {
           </Grid>
           <Grid item md={12} sm={12} mt={2}>
             <Header variant="h6" gutterBottom>
-              Our Mission:
+              Our Mission
             </Header>
             <Typography component="ul">
               {Missionvalues.map((data, i) => {
