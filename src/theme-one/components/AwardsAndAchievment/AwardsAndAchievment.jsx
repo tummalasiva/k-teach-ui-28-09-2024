@@ -11,10 +11,7 @@ import { calculateSlidersData } from "../data/carousal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import image1 from "../../../theme-one/assets/Images/school1.avif";
-import image2 from "../../../theme-one/assets/Images/school-white.avif";
-import image3 from "../../../theme-one/assets/Images/school-green.avif";
-import image4 from "../../../theme-one/assets/Images/school1.avif";
+
 import Awards from "./Awards";
 import Header from "../Header";
 
@@ -44,29 +41,6 @@ const MainContainer = styled(Container)(({ theme }) => ({
   },
 }));
 
-const awards = [
-  {
-    title: "Learning Management System",
-    note: " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    image: image1,
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: image2,
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: image3,
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: image4,
-  },
-];
-
 const AwardsAndAchievment = () => {
   let sliderRef = useRef(null);
 
@@ -80,8 +54,6 @@ const AwardsAndAchievment = () => {
       });
 
       setData(data.result);
-
-      console.log(data.result, "mmmmmmmmmmmmmmmmmm");
     } catch (error) {
       console.log(error);
     }

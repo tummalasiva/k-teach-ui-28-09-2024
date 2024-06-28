@@ -12,6 +12,7 @@ import OurGallery from "../components/OurGallery/OurGallery";
 import ScrollTop from "../components/ScrollTop";
 import AddFeedback from "../components/GuardianFeedback/AddFeedback";
 import GuardianFeedback from "../components/GuardianFeedback/FeedBackSlider";
+import NewsAndNotices from "../components/NewsAndNotice/NewsAndNotices";
 
 export default function HomePage() {
   return (
@@ -22,6 +23,7 @@ export default function HomePage() {
       <Features />
       <BirthdayEvents />
       <GuardianFeedback />
+      <NewsAndNotices />
       <OurEvents />
       <IntroVideo />
       <AwardsAndAchievment />
