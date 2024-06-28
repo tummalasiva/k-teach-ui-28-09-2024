@@ -119,7 +119,7 @@ export default function NewsAndNotice() {
         params: { schoolId: selectedSetting._id },
       });
       setNotices(data.result);
-      console.log(data.result, "ggggfgffgffff");
+      // console.log(data.result, "ggggfgffgffff");
     } catch (error) {
       console.log(error);
     }
@@ -129,6 +129,7 @@ export default function NewsAndNotice() {
     getData();
     getNotics();
   }, [selectedSetting]);
+
   return (
     <>
       <Box mx={7}>
@@ -143,19 +144,49 @@ export default function NewsAndNotice() {
                 {data.map((elem, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <NewsDetails elem={elem} />
+                      <NewsDetails elem={elem} notics={notics} />
                     </React.Fragment>
                   );
                 })}
+                <Card sx={{ display: "flex", width: 600, my: 1, height: 180 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}>
+                    <TypographyMain className="title">hshshsh</TypographyMain>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography
+                        sx={{ display: "inline-flex" }}
+                        paragraph
+                        fontSize={14}
+                        // variant="h6"
+                      >
+                        shshsh...
+                      </Typography>
+
+                      <Typography
+                        className="navigate"
+                        sx={{
+                          cursor: "pointer",
+                          color: "orange",
+                        }}
+                        fontSize={14}>
+                        Read More
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Card>
               </AnimatedBox>
             ) : (
               <Typography
                 sx={{
                   fontSize: "18px",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
+                  color: "lightgrey",
                 }}>
-                No news/events to show at the moment!
+                No news and events are available at this time!
               </Typography>
             )}
             {/* </ScrollContent> */}

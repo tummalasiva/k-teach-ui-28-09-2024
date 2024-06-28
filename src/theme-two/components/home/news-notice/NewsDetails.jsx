@@ -151,6 +151,7 @@ export default function NewsDetails({ elem }) {
           </Box>
         </Box>
       </Card>
+
       {/* </MainGrid> */}
       {/* </Container> */}
     </>
