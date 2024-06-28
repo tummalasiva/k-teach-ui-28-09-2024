@@ -77,7 +77,7 @@ export default function NewsAndNoticeDetails({ news }) {
 
   return (
     <Container>
-      <MainGrid container sx={{ display: "flex" }}>
+      <MainGrid container sx={{ display: "flex" }} onClick={handleNavigate}>
         <Grid
           item
           md={2}
@@ -91,10 +91,9 @@ export default function NewsAndNoticeDetails({ news }) {
           <img
             className="image"
             src={news?.image}
+            height={160}
+            width={200}
             style={{
-              height: "160px",
-              width: "200px",
-
               border: `1px solid ${themeData.darkPalette.primary.main}`,
             }}
             alt="image"
