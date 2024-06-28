@@ -70,6 +70,12 @@ export default function Issue() {
     getItems();
   }, [selectedSetting._id]);
 
+  const handleClose = () => {
+    setValue(0);
+    getItems();
+    setDataToEdit(null);
+  };
+
   return (
     <>
       <PageHeader title="Issue Details" />
@@ -171,7 +177,11 @@ export default function Issue() {
               lg={3}
               style={{ alignSelf: "center", marginTop: "10px" }}
               item>
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
               <Button size="small" variant="contained" sx={{ ml: 2 }}>

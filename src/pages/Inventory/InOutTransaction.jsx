@@ -760,7 +760,11 @@ export default function InOutTransaction() {
               lg={12}
               style={{ alignSelf: "center", marginTop: "10px" }}
               item>
-              <Button size="small" color="error" variant="contained">
+              <Button
+                size="small"
+                color="error"
+                variant="contained"
+                onClick={handleClose}>
                 Cancel
               </Button>
               <Button size="small" variant="contained" sx={{ ml: 2 }}>

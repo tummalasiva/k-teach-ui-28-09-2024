@@ -55,7 +55,7 @@ export default function AwardAndAchivement() {
 
       setData(data.result);
 
-      console.log(data.result, "mmmmmmmmmmmmmmmmmm");
+      // console.log(data.result, "mmmmmmmmmmmmmmmmmm");
     } catch (error) {
       console.log(error);
     }
