@@ -57,6 +57,13 @@ const Notice = () => {
             </Typography>
             <Title variant="subtitle1">{notice.title}</Title>
             <Typography variant="subtitle1">{notice.notice}</Typography>
+            <Typography variant="subtitle1">
+              <b>Notice For: </b>
+              <span component="span" sx={{ color: "black" }}>
+                {" "}
+                {notice.noticeFor}
+              </span>
+            </Typography>
           </Grid>
         </Grid>
       </Container>

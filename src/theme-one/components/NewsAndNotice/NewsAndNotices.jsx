@@ -21,7 +21,7 @@ const NewsContainer = styled(Box)(({ theme }) => ({
 
 const scroll = keyframes`
   0% {
-    transform: translateY(50%);
+    transform: translateY(100%);
   }
   100% {
     transform: translateY(-100%);
@@ -31,7 +31,7 @@ const scroll = keyframes`
 const NewsScroll = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column-reverse",
-  animation: `${scroll} 20s linear infinite`,
+  animation: `${scroll} 12s linear infinite`,
 
   "&:hover": {
     animationPlayState: "paused",
@@ -41,7 +41,6 @@ const NewsScroll = styled(Box)(({ theme }) => ({
 const NewsAndNotices = () => {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
-
   const [notice, setNotice] = useState([]);
 
   useEffect(() => {
@@ -105,12 +104,12 @@ const NewsAndNotices = () => {
               ) : (
                 <Typography
                   sx={{
-                    fontSize: "18px",
+                    fontSize: "15px",
                     fontWeight: "bold",
                     textAlign: "center",
                     maxWidth: "900px",
                   }}>
-                  No News/Events to show at the moment!
+                  No News to show at the moment!
                 </Typography>
               )}
             </NewsContainer>
@@ -138,12 +137,12 @@ const NewsAndNotices = () => {
               ) : (
                 <Typography
                   sx={{
-                    fontSize: "18px",
+                    fontSize: "15px",
                     fontWeight: "bold",
                     textAlign: "center",
                     maxWidth: "900px",
                   }}>
-                  No News/Events to show at the moment!
+                  No Notice to show at the moment!
                 </Typography>
               )}
             </NewsContainer>

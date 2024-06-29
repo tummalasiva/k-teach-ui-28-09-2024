@@ -25,6 +25,7 @@ export default function HomePage() {
       <GuardianFeedback />
       <NewsAndNotices />
       <OurEvents />
+
       <IntroVideo />
       <AwardsAndAchievment />
       <QuickLook />
