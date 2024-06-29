@@ -69,6 +69,8 @@ const NewsAndNotices = () => {
           },
         });
         setNotice(data.result);
+
+        console.log(data.result, "kkkkkkkklllllllppppppp");
       } catch (error) {
         console.log(error.message);
       }
@@ -129,8 +131,8 @@ const NewsAndNotices = () => {
             <NewsContainer>
               {notice.length ? (
                 <NewsScroll>
-                  {notice.map((news, index) => (
-                    <NoticeDetails key={index} news={news} />
+                  {notice.map((notice, index) => (
+                    <NoticeDetails key={index} notice={notice} />
                   ))}
                 </NewsScroll>
               ) : (

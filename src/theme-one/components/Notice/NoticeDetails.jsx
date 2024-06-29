@@ -68,11 +68,11 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export default function NoticeDetails({ news }) {
+export default function NoticeDetails({ notice }) {
   let navigate = useNavigate();
   const handleNavigate = () => {
-    navigate(`/notice-details/${news._id}`, {
-      state: { data: news },
+    navigate(`/notice-details/${notice._id}`, {
+      state: { data: notice },
     });
   };
 
@@ -94,7 +94,7 @@ export default function NoticeDetails({ news }) {
           }}>
           <img
             className="image"
-            src={news?.image}
+            src={notice?.image}
             width={160}
             height={100}
             style={{
@@ -117,11 +117,11 @@ export default function NoticeDetails({ news }) {
             variant="body2"
             fontWeight={600}
             sx={{ color: "#068FFF" }}>
-            {dayjs(news?.date).format("DD, MMM, YYYY")}
+            {dayjs(notice?.date).format("DD, MMM, YYYY")}
           </Typography>
-          <TypographyTitle>{news?.title}</TypographyTitle>
+          <TypographyTitle>{notice?.title}</TypographyTitle>
           <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
-            {news?.news}
+            {notice?.notice}
           </MuiSubtitle>
 
           <ReadButton size="small" onClick={handleNavigate}>

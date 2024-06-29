@@ -22,7 +22,7 @@ const Title = styled(Typography)(({ theme }) => ({
 
 const Notice = () => {
   const location = useLocation();
-  const news = location.state && location.state.data;
+  const notice = location.state && location.state.data;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Notice = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <img
-              src={news.image ? news.image : "awards.png"}
+              src={notice.image ? notice.image : "awards.png"}
               alt="loading..."
               style={{ width: "100%", borderRadius: "5px" }}
             />
@@ -53,11 +53,10 @@ const Notice = () => {
               order: { xs: 1, sm: 1, md: 2 },
             }}>
             <Typography sx={{ color: "black", fontWeight: 600 }}>
-              {dayjs(news.date).format("MMM DD, YYYY")}
+              {dayjs(notice.date).format("MMM DD, YYYY")}
             </Typography>
-            <Title variant="subtitle1">{news.title}</Title>
-            <Typography variant="subtitle1">{news.shortNews}</Typography>
-            <Typography variant="subtitle1">{news.news}</Typography>
+            <Title variant="subtitle1">{notice.title}</Title>
+            <Typography variant="subtitle1">{notice.notice}</Typography>
           </Grid>
         </Grid>
       </Container>

@@ -139,7 +139,7 @@ const images = [
 const BirthdayEvents = () => {
   const sliderSettings = {
     dots: true,
-    dotsClass: "slick-dots", // Custom class name for dots container
+    dotsClass: "slick-dots",
     infinite: true,
     speed: 500,
     slidesToShow: 1,
