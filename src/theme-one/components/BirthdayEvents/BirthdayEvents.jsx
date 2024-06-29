@@ -1,225 +1,20 @@
 /** @format */
 
-// import { Box, Grid, Typography, styled, css, keyframes } from "@mui/material";
-// import React, { useContext, useEffect, useState } from "react";
-// import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
-// import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
-// import dayjs from "dayjs";
-// import RegistrationForm from "./RegistrationForm";
-// import themeData from "../../../data/themeData";
-
-// const MovingTextContainer = styled(Box)(({ theme }) => ({
-//   position: "relative",
-//   height: "470px",
-//   overflow: "hidden",
-//   display: "flex",
-//   justifyContent: "center",
-//   [theme.breakpoints.down("md")]: {
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// }));
-
-// const moveTextAnimation = keyframes`
-//   from {
-//     transform: translateY(100%);
-//   }
-//   to {
-//     transform: translateY(-50%);
-//   }
-//   `;
-
-// const MovingTexts = styled(Box)(({}) => ({
-//   position: "absolute",
-//   bottom: 0,
-//   color: "white",
-//   animation: css`
-//     ${moveTextAnimation} 10s linear infinite
-//   `,
-//   animationPlayState: "running",
-
-//   "&:hover": {
-//     animationPlayState: "paused",
-//   },
-// }));
-
-// const BirthdayBox = styled(Box)(({}) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   position: "relative",
-//   zIndex: 10,
-// }));
-
-// const GridContainerBox = styled(Grid)(
-//   ({}) => css`
-//     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-//       url(https://img.freepik.com/free-vector/gradient-abstract-geometric-background-with-triangles_52683-61899.jpg?size=626&ext=jpg&ga=GA1.1.1434379891.1671263694&semt=ais);
-//     background-attachment: fixed;
-//     background-repeat: no-repeat;
-//     padding: 0px 0px 80px 0px;
-//     max-width: 100%;
-//     background-size: cover;
-//     background-color: #198eeb;
-//     background-position: center;
-//     position: relative;
-//   `
-// );
-
-// const SubHeader1 = styled(Typography)(({}) => ({
-//   fontSize: "16px",
-//   color: themeData.darkPalette.primary.main,
-//   marginTop: "10px",
-//   fontWeight: "bold",
-// }));
-// const SubHeader2 = styled(Typography)(({}) => ({
-//   fontSize: "16px",
-//   color: "#fff",
-//   marginTop: "10px",
-//   fontWeight: "bold",
-// }));
-
-// const LeftTitle = styled(Typography)(({ theme }) => ({
-//   fontWeight: "bold",
-//   color: "white",
-//   textShadow: "3px 3px black",
-// }));
-// const RightTitle = styled(Typography)(({ theme }) => ({
-//   fontWeight: "bold",
-//   color: themeData.darkPalette.primary.main,
-// }));
-
-// const names = [
-//   {
-//     name: "Raju",
-//     class: "10",
-//     section: "A",
-//     rollNo: "6",
-//     dob: "04/08/1999",
-//   },
-//   {
-//     name: "Monika",
-//     class: "10",
-//     section: "C",
-//     rollNo: "3",
-//     dob: "15/05/1998",
-//   },
-//   {
-//     name: "Alia",
-//     class: "8",
-//     section: "A",
-//     rollNo: "9",
-//     dob: "1/05/1994",
-//   },
-//   {
-//     name: "Raina",
-//     class: "9",
-//     section: "D",
-//     rollNo: "8",
-//     dob: "5/01/1908",
-//   },
-// ];
-// const BirthdayEvents = () => {
-//   return (
-//     <GridContainerBox>
-//       <Grid
-//         container
-//         sx={{
-//           display: "flex",
-//           justifyContent: "space-evenly",
-//           paddingTop: { sm: "40px", xs: "20px" },
-//         }}
-//       >
-//         <Grid item>
-//           <BirthdayBox>
-//             <LeftTitle
-//               variant="h4"
-//               sx={{ fontSize: { sm: "50px", xs: "30px" } }}
-//             >
-//               HAPPY{" "}
-//             </LeftTitle>
-//             &nbsp;&nbsp;
-//             <RightTitle
-//               variant="h4"
-//               sx={{ fontSize: { sm: "50px", xs: "30px" } }}
-//             >
-//               BIRTHDAY{" "}
-//             </RightTitle>
-//             &nbsp;
-//             <img
-//               // src="cake-bg3.png"
-//               src={RedImg}
-//               style={{ height: "50px", width: "50px" }}
-//               alt="loading..."
-//             />
-//           </BirthdayBox>
-
-//           {names.length ? (
-//             <MovingTextContainer>
-//               <MovingTexts>
-//                 {names.map((data, i) => (
-//                   <React.Fragment key={i}>
-//                     <img
-//                       src={Balloon}
-//                       alt="loading..."
-//                       style={{
-//                         height: "170px",
-//                         marginTop: "30px",
-//                         objectFit: "contain",
-//                       }}
-//                     />
-//                     <SubHeader1 variant="h6">
-//                       Name:
-//                       <SubHeader2 variant="h6" component="span">
-//                         {data.name}
-//                       </SubHeader2>
-//                     </SubHeader1>
-//                     <SubHeader1 variant="h6">
-//                       Class:
-//                       <SubHeader2 variant="h6" component="span">
-//                         {data.class}
-//                       </SubHeader2>
-//                     </SubHeader1>
-//                     <SubHeader1 variant="h6">
-//                       Roll No:
-//                       <SubHeader2 variant="h6" component="span">
-//                         {data.rollNo}, {data.section}
-//                       </SubHeader2>
-//                     </SubHeader1>
-//                     <SubHeader1 variant="h6">
-//                       DOB:
-//                       <SubHeader2 variant="h6" component="span">
-//                         {data.dob}
-//                       </SubHeader2>
-//                     </SubHeader1>
-//                   </React.Fragment>
-//                 ))}
-//               </MovingTexts>
-//             </MovingTextContainer>
-//           ) : null}
-//         </Grid>
-
-//         <Grid item sx={{ paddingTop: "1rem" }}>
-//           {/* <RegistrationForm /> */}
-//         </Grid>
-//       </Grid>
-//     </GridContainerBox>
-//   );
-// };
-
-// export default BirthdayEvents;
-
+import React from "react";
 import { Box, Grid, Typography, styled, css, keyframes } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
 import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
 import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
-import dayjs from "dayjs";
-import RegistrationForm from "./RegistrationForm";
+import Image1 from "../../../theme-one/assets/Images/happBirthaday.jpg";
+import Image2 from "../../../theme-one/assets/Images/happybirthday2.jpg";
+import Image3 from "../../../theme-one/assets/Images/happyBirthday3.jpg";
 import themeData from "../../../data/themeData";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const MovingTextContainer = styled(Box)(({ theme }) => ({
   position: "relative",
-  height: "470px",
+  height: "400px",
   overflow: "hidden",
   display: "flex",
   justifyContent: "center",
@@ -235,16 +30,18 @@ const moveTextAnimation = keyframes`
     transform: translateY(100%);
   }
   to {
-    transform: translateY(-50%);
+    transform: translateY(-100%);
   }
-  `;
+`;
 
 const MovingTexts = styled(Box)(({}) => ({
   position: "absolute",
   bottom: 0,
   color: "white",
+  top: 0,
+
   animation: css`
-    ${moveTextAnimation} 10s linear infinite
+    ${moveTextAnimation} 15s linear infinite
   `,
   animationPlayState: "running",
 
@@ -256,9 +53,9 @@ const MovingTexts = styled(Box)(({}) => ({
 const BirthdayBox = styled(Box)(({}) => ({
   display: "flex",
   alignItems: "center",
-
   justifyContent: "center",
   zIndex: 10,
+  marginBottom: "20px",
 }));
 
 const GridContainerBox = styled(Grid)(
@@ -267,7 +64,7 @@ const GridContainerBox = styled(Grid)(
       url(https://img.freepik.com/free-vector/gradient-abstract-geometric-background-with-triangles_52683-61899.jpg?size=626&ext=jpg&ga=GA1.1.1434379891.1671263694&semt=ais);
     background-attachment: fixed;
     background-repeat: no-repeat;
-    padding: 0px 0px 80px 0px;
+    padding: 0px;
     max-width: 100%;
     background-size: cover;
     background-color: #198eeb;
@@ -276,12 +73,6 @@ const GridContainerBox = styled(Grid)(
   `
 );
 
-const SubHeader1 = styled(Typography)(({}) => ({
-  fontSize: "16px",
-  color: themeData.darkPalette.primary.main,
-  marginTop: "10px",
-  fontWeight: "bold",
-}));
 const SubHeader2 = styled(Typography)(({}) => ({
   fontSize: "16px",
   color: "#fff",
@@ -289,14 +80,24 @@ const SubHeader2 = styled(Typography)(({}) => ({
   fontWeight: "bold",
 }));
 
-const LeftTitle = styled(Typography)(({ theme }) => ({
+const LeftTitle = styled(Typography)(({}) => ({
   fontWeight: "bold",
   color: "white",
   textShadow: "3px 3px black",
 }));
-const RightTitle = styled(Typography)(({ theme }) => ({
+const RightTitle = styled(Typography)(({}) => ({
   fontWeight: "bold",
   color: themeData.darkPalette.primary.main,
+}));
+
+const SliderFrame = styled(Box)(({ theme }) => ({
+  border: `5px solid ${theme.palette.primary.main}`,
+  borderRadius: "12px",
+  borderBottomLeftRadius: "25px",
+  borderBottomRightRadius: "25px",
+  overflow: "hidden",
+  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+  borderBottomWidth: "30px",
 }));
 
 const names = [
@@ -304,127 +105,134 @@ const names = [
     name: "Raju",
     class: "10",
     section: "A",
-    rollNo: "6",
-    dob: "04/08/1999",
   },
   {
     name: "Monika",
     class: "10",
     section: "C",
-    rollNo: "3",
-    dob: "15/05/1998",
   },
   {
     name: "Alia",
     class: "8",
     section: "A",
-    rollNo: "9",
-    dob: "1/05/1994",
   },
   {
     name: "Raina",
     class: "9",
     section: "D",
-    rollNo: "8",
-    dob: "5/01/1908",
   },
 ];
+
+const images = [
+  { src: Image1, alt: "Image 1" },
+  { src: Image2, alt: "Image 2" },
+  { src: Image3, alt: "Image 3" },
+];
+
 const BirthdayEvents = () => {
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+
   return (
     <GridContainerBox>
-      <Box
+      <Grid
+        container
         sx={{
           display: "flex",
-          justifyContent: "center",
-          flexDirection: "row",
-          alignItems: "center",
+          justifyContent: "space-evenly",
+          padding: "40px",
         }}>
-        {" "}
-        <Box>
+        <Grid item xs={12} md={12}>
           {" "}
-          <img
-            src={Balloon}
-            style={{ height: "100px", width: "100px" }}
-            alt="loading..."
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-          }}>
-          {" "}
-          <LeftTitle variant="h4" sx={{ fontSize: { sm: "50px", xs: "30px" } }}>
-            HAPPY{" "}
-          </LeftTitle>
-          <RightTitle
-            variant="h4"
-            sx={{ fontSize: { sm: "50px", xs: "30px" } }}>
-            BIRTHDAY{" "}
-          </RightTitle>
-        </Box>
-        <Box>
-          {" "}
-          <img
-            src={Balloon}
-            style={{ height: "100px", width: "100px" }}
-            alt="loading..."
-          />
-        </Box>
-      </Box>
+          <BirthdayBox>
+            <LeftTitle
+              variant="h4"
+              sx={{ fontSize: { sm: "40px", xs: "30px" } }}>
+              BIRTHDAY{" "}
+            </LeftTitle>
+            &nbsp;&nbsp;
+            <RightTitle
+              variant="h4"
+              sx={{ fontSize: { sm: "40px", xs: "30px" } }}>
+              Events{" "}
+            </RightTitle>
+            &nbsp;
+            <img
+              src={Balloon}
+              style={{ height: "80px", width: "80px" }}
+              alt="loading..."
+            />
+          </BirthdayBox>
+        </Grid>
 
-      {/* <img
+        <Grid item xs={12} sm={5} md={5} sx={{ paddingTop: "1rem" }}>
+          <SliderFrame>
+            <Slider {...sliderSettings}>
+              {images.map((image, index) => (
+                <Box key={index} sx={{ backgroundColor: "wheat" }}>
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      maxHeight: "400px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Slider>
+          </SliderFrame>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={6}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingTop: { xs: "10px" },
+            }}>
+            {" "}
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: "25px",
+                marginBottom: "10px",
+                textAlign: "center",
+                color: "white",
+              }}>
+              Happy Birthday
+            </Typography>
+            <img
               src={RedImg}
               style={{ height: "50px", width: "50px" }}
               alt="loading..."
-            /> */}
-
-      {/* 
+            />
+          </Box>
           {names.length ? (
             <MovingTextContainer>
               <MovingTexts>
                 {names.map((data, i) => (
                   <React.Fragment key={i}>
-                    <img
-                      src={Balloon}
-                      alt="loading..."
-                      style={{
-                        height: "170px",
-                        marginTop: "30px",
-                        objectFit: "contain",
-                      }}
-                    />
-                    <SubHeader1 variant="h6">
-                      Name:
-                      <SubHeader2 variant="h6" component="span">
-                        {data.name}
-                      </SubHeader2>
-                    </SubHeader1>
-                    <SubHeader1 variant="h6">
-                      Class:
-                      <SubHeader2 variant="h6" component="span">
-                        {data.class}
-                      </SubHeader2>
-                    </SubHeader1>
-                    <SubHeader1 variant="h6">
-                      Roll No:
-                      <SubHeader2 variant="h6" component="span">
-                        {data.rollNo}, {data.section}
-                      </SubHeader2>
-                    </SubHeader1>
-                    <SubHeader1 variant="h6">
-                      DOB:
-                      <SubHeader2 variant="h6" component="span">
-                        {data.dob}
-                      </SubHeader2>
-                    </SubHeader1>
+                    <SubHeader2 variant="h6">
+                      {data.name}- {data.class}({data.section})
+                    </SubHeader2>
                   </React.Fragment>
                 ))}
               </MovingTexts>
             </MovingTextContainer>
-          ) : null} */}
+          ) : null}
+        </Grid>
+      </Grid>
     </GridContainerBox>
   );
 };
