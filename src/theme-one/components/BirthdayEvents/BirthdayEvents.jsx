@@ -98,6 +98,13 @@ const SliderFrame = styled(Box)(({ theme }) => ({
   overflow: "hidden",
   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   borderBottomWidth: "30px",
+
+  ".slick-dots": {
+    bottom: "15px",
+  },
+  ".slick-dots li button:before": {
+    color: "white",
+  },
 }));
 
 const names = [
@@ -132,6 +139,7 @@ const images = [
 const BirthdayEvents = () => {
   const sliderSettings = {
     dots: true,
+    dotsClass: "slick-dots", // Custom class name for dots container
     infinite: true,
     speed: 500,
     slidesToShow: 1,
