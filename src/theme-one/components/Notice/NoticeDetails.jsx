@@ -68,10 +68,10 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export default function NewsAndNoticeDetails({ news }) {
+export default function NoticeDetails({ news }) {
   let navigate = useNavigate();
   const handleNavigate = () => {
-    navigate(`/news-and-notice-details/${news._id}`, {
+    navigate(`/notice-details/${news._id}`, {
       state: { data: news },
     });
   };

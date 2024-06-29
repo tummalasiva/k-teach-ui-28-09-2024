@@ -60,6 +60,10 @@ const News = React.lazy(() =>
   import("../theme-one/components/NewsAndNotice/News")
 );
 
+const Notice = React.lazy(() =>
+  import("../theme-one/components/Notice/Notice")
+);
+
 const UniqueFeature = React.lazy(() =>
   import("../theme-one/components/Features/features/UniqueFeature")
 );
@@ -109,6 +113,8 @@ const WebsiteTheme1 = () => {
         <Route path="/awardsDetails/:id" element={<AwardsDetails />} />
 
         <Route path="/news-and-notice-details/:id" element={<News />} />
+
+        <Route path="/notice-details/:id" element={<Notice />} />
       </Routes>
       <Footer />
       <Outlet />
