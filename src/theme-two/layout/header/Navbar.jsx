@@ -173,7 +173,7 @@ export default function Navbar() {
       "aria-haspopup": "true",
       variant: "contained",
       title: "Gallery",
-      path: "/discover-gallery",
+      path: "/home-gallery",
     },
 
     {
@@ -215,7 +215,7 @@ export default function Navbar() {
       "aria-haspopup": "true",
       variant: "contained",
       title: "Assignment",
-      path: "/",
+      path: "/assignment",
     },
 
     {

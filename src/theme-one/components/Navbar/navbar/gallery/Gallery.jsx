@@ -10,10 +10,13 @@ import { Backdrop, Box, CardMedia, Modal, Typography } from "@mui/material";
 // icons
 import CloseIcon from "@mui/icons-material/Close";
 import themeData from "../../../../../data/themeData";
-
+import image1 from "../../../../../theme-one/assets/Images/school1.avif";
+import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
+import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
+import image4 from "../../../../../theme-one/assets/Images/school1.avif";
+import SettingContext from "../../../../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../../../../services/urlConstants";
 import { get } from "../../../../../services/apiMethods";
-import SettingContext from "../../../../../context/SettingsContext";
 
 const TypographyMain = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -93,8 +96,7 @@ const MuiMainBox = styled(Box)(({}) => ({
 
 export default function Gallery({ show }) {
   const { selectedSetting } = useContext(SettingContext);
-
-  const [data, setData] = useState([]);
+  const [galleryData, setGalleryData] = useState([]);
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
     imageData: [],
@@ -116,7 +118,7 @@ export default function Gallery({ show }) {
         params: { schoolId: selectedSetting._id },
       });
 
-      setData(data.result);
+      setGalleryData(data.result);
 
       console.log(data.result, "ggggfgffgffff");
     } catch (error) {
@@ -144,7 +146,7 @@ export default function Gallery({ show }) {
         </TextBox>
 
         <GridBox>
-          {data.map((item, i) => {
+          {galleryData.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <GallerySubHome data={item} setModalOpen={setModalOpen} />

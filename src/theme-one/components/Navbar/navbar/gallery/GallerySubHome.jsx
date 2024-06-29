@@ -43,6 +43,35 @@ const GallerySubHome = ({ data, setModalOpen }) => {
   return (
     <>
       <Box>
+        <Stack
+          direction="row"
+          sx={{
+            zIndex: 50,
+            position: "relative",
+            bottom: "-20px",
+            left: "10px",
+            gap: "10px",
+          }}>
+          {data.role2 && (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleClick(data.path2)}
+              sx={{
+                bgcolor: "#1779f7",
+                color: "white",
+                border: "solid #1779f7",
+                // bgcolor: "#f55214",
+                "&:hover": {
+                  color: "white",
+                  bgcolor: "#ff4500",
+                  border: "solid #ff4500",
+                },
+              }}>
+              {data.role2}
+            </Button>
+          )}
+        </Stack>
         <Card>
           <Slider
             lazyLoad="progressive"

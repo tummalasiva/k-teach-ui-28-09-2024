@@ -205,7 +205,7 @@ export default function Footer() {
           </Typography>
           <Typography>
             <Link
-              to="/discover-gallery"
+              to="/home-gallery"
               style={{
                 textDecoration: "none",
               }}>
