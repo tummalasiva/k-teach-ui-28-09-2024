@@ -104,6 +104,7 @@ export default function OurGallery() {
   let sliderRef = useRef(null);
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
+
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.gallery.listPublic, {

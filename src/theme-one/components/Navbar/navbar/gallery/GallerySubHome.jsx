@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
@@ -49,8 +51,7 @@ const GallerySubHome = ({ data, setModalOpen }) => {
             bottom: "-20px",
             left: "10px",
             gap: "10px",
-          }}
-        >
+          }}>
           {data.role2 && (
             <Button
               variant="contained"
@@ -66,8 +67,7 @@ const GallerySubHome = ({ data, setModalOpen }) => {
                   bgcolor: "#ff4500",
                   border: "solid #ff4500",
                 },
-              }}
-            >
+              }}>
               {data.role2}
             </Button>
           )}
@@ -77,9 +77,8 @@ const GallerySubHome = ({ data, setModalOpen }) => {
             lazyLoad="progressive"
             dots
             sx={{ backgroundColor: "black" }}
-            {...imageCarousalSettings}
-          >
-            {data.image?.map((image, index) => (
+            {...imageCarousalSettings}>
+            {data.images?.map((image, index) => (
               <CardMedia
                 key={index}
                 component="img"
@@ -89,7 +88,7 @@ const GallerySubHome = ({ data, setModalOpen }) => {
                 onClick={() =>
                   setModalOpen({
                     open: true,
-                    imageData: data.image,
+                    imageData: data.images,
                     viewSingleImg: image,
                   })
                 }

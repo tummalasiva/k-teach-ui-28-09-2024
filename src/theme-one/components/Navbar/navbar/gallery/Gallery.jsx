@@ -1,6 +1,6 @@
 /** @format */
 
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SubHeader from "../../../SubHeader";
 import GallerySubHome from "./GallerySubHome";
 import { styled } from "@mui/material/styles";
@@ -14,6 +14,9 @@ import image1 from "../../../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../../../theme-one/assets/Images/school1.avif";
+import { get } from "../../../../../services/apiMethods";
+import { PRIVATE_URLS } from "../../../../../services/urlConstants";
+import SettingContext from "../../../../../context/SettingsContext";
 
 const awards = [
   {
@@ -115,6 +118,8 @@ const MuiMainBox = styled(Box)(({}) => ({
 }));
 
 export default function Gallery({ show }) {
+  const { selectedSetting } = useContext(SettingContext);
+  const [galleryData, setGalleryData] = useState([]);
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
     imageData: [],
@@ -129,6 +134,24 @@ export default function Gallery({ show }) {
     ...modalOpen.imageData.slice(0, SelectedImageIndex),
     ...modalOpen.imageData.slice(SelectedImageIndex + 1),
   ];
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setGalleryData(data.result);
+
+      console.log(data.result, "ggggfgffgffff");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
 
   return (
     <>
@@ -146,7 +169,7 @@ export default function Gallery({ show }) {
         </TextBox>
 
         <GridBox>
-          {awards.map((item, i) => {
+          {galleryData.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <GallerySubHome data={item} setModalOpen={setModalOpen} />
