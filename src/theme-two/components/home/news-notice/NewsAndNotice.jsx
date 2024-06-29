@@ -36,11 +36,22 @@ const MuiBox = styled(Box)(({ theme }) => ({
   ...animatedPause,
 }));
 
+const scrollAnimation = keyframes`
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+`;
+
 const AnimatedBox = styled(Box)(({ theme }) => ({
   display: "flex",
-  flexDirection: " column-reverse",
-  animation: "scroll 8s linear infinite",
+  flexDirection: "column-reverse",
+  animation: `${scrollAnimation} 8s linear infinite`,
 }));
+
+// const AnimatedBox = styled(Box)(({ theme }) => ({
+//   display: "flex",
+//   flexDirection: " column-reverse",
+//   animation: "scroll 8s linear infinite",
+// }));
 
 const MuiCard = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -86,10 +97,10 @@ const AnnounceNews = [
 ];
 
 export default function NewsAndNotice() {
-  let [announceNews, setAnounceNews] = useState([]);
   const { selectedSetting } = useContext(SettingContext);
-
+  const [notics, setNotices] = useState([]);
   const [data, setData] = useState([]);
+
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.news.listPublic, {
@@ -97,8 +108,18 @@ export default function NewsAndNotice() {
       });
 
       setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      console.log(data.result, "ggggfgffgffff");
+  const getNotics = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.notice.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+      setNotices(data.result);
+      // console.log(data.result, "ggggfgffgffff");
     } catch (error) {
       console.log(error);
     }
@@ -106,35 +127,66 @@ export default function NewsAndNotice() {
 
   useEffect(() => {
     getData();
+    getNotics();
   }, [selectedSetting]);
+
   return (
     <>
       <Box mx={7}>
         <MuiCard>
-          <TypographyMain sx={{ mt: 3 }} variant="h3">
+          <TypographyMain sx={{ mt: 3, textAlign: "center" }} variant="h3">
             NEWS & NOTICE
             <Dots />
           </TypographyMain>
-
           <MuiBox>
             {data.length ? (
               <AnimatedBox>
                 {data.map((elem, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <NewsDetails elem={elem} />
+                      <NewsDetails elem={elem} notics={notics} />
                     </React.Fragment>
                   );
                 })}
+                <Card sx={{ display: "flex", width: 600, my: 1, height: 180 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}>
+                    <TypographyMain className="title">hshshsh</TypographyMain>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography
+                        sx={{ display: "inline-flex" }}
+                        paragraph
+                        fontSize={14}
+                        // variant="h6"
+                      >
+                        shshsh...
+                      </Typography>
+
+                      <Typography
+                        className="navigate"
+                        sx={{
+                          cursor: "pointer",
+                          color: "orange",
+                        }}
+                        fontSize={14}>
+                        Read More
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Card>
               </AnimatedBox>
             ) : (
               <Typography
                 sx={{
                   fontSize: "18px",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
+                  color: "lightgrey",
                 }}>
-                No news/events to show at the moment!
+                No news and events are available at this time!
               </Typography>
             )}
             {/* </ScrollContent> */}

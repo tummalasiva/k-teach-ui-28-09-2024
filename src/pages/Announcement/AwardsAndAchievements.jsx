@@ -100,9 +100,7 @@ export default function AwardsAndAchievements() {
       location: dataToEdit?.location || "",
       hostedBy: dataToEdit?.hostedBy || "",
       headlines: dataToEdit?.headlines || "",
-
       note: dataToEdit?.note || "",
-
       isPublic: dataToEdit?.isPublic || false,
     },
     onSubmit: handleCreateOrUpdate,
@@ -124,14 +122,13 @@ export default function AwardsAndAchievements() {
   };
 
   const handleRemoveFile = (fileName, index) => {
-    console.log(fileName, "gii");
+    // console.log(fileName, "gii");
     setSelectImg(selectImg.filter((img) => img.name != fileName));
   };
 
   const handleEditClick = (data) => {
     console.log(data);
     setDataToEdit(data);
-
     setOpen(true);
   };
 
@@ -144,7 +141,7 @@ export default function AwardsAndAchievements() {
     }
   };
 
-  console.log(dataToEdit, "dataToEdittttt");
+  // console.log(dataToEdit, "dataToEdittttt");
   return (
     <>
       <PageHeader title="Award And Achievements" />
@@ -182,7 +179,6 @@ export default function AwardsAndAchievements() {
               required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -199,7 +195,6 @@ export default function AwardsAndAchievements() {
               label="Date"
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -208,7 +203,6 @@ export default function AwardsAndAchievements() {
               required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
               formik={entryFormik}
@@ -217,7 +211,6 @@ export default function AwardsAndAchievements() {
               required={true}
             />
           </Grid>
-
           <Grid xs={12} sm={6} md={6} item>
             <FileSelect
               multi={false}
@@ -229,7 +222,6 @@ export default function AwardsAndAchievements() {
               onRemove={(fileName) => handleRemoveFile(fileName)}
             />
           </Grid>
-
           <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               name="isPublic"
@@ -241,7 +233,6 @@ export default function AwardsAndAchievements() {
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
-
           <Grid
             xs={12}
             sm={12}

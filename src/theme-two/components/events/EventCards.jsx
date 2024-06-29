@@ -139,14 +139,19 @@ export default function EventCards({
           <ImageScale>
             <CardMedia
               component="img"
-              image={elem?.image}
+              image={
+                elem?.image
+                  ? elem?.image
+                  : "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
               alt="loading..."
+              // width="365"
               height="297"
             />
           </ImageScale>
         </CardImageWrapper>
         <CardContent>
-          <Title onClick={handleReadMoreClick}>{elem.eventTitle}</Title>
+          <Title onClick={handleReadMoreClick}>{elem.title}</Title>
           <Content>{elem.note}</Content>
           {/* <Content>{showFull ? elem.shortEvent : elem.shortEvent}hhsjhsj</Content> */}
         </CardContent>

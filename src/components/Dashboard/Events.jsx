@@ -87,7 +87,7 @@ export default function Events() {
   const { selectedSetting } = useContext(SettingContext);
   const [notice, setNotice] = useState([]);
   const [holidays, setHolidays] = useState([]);
-  console.log(notice.length, "resss");
+  // console.log(notice.length, "resss");
 
   const getNotice = async () => {
     try {

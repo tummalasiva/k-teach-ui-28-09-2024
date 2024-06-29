@@ -138,9 +138,20 @@ export default function Event() {
     getRole();
     getData();
   }, [selectedSetting._id]);
+
   const handleEditClick = (data) => {
     setDataToEdit(data);
     setOpen(true);
+  };
+
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.event.delete + "/" + _id);
+
+      getData();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -152,6 +163,7 @@ export default function Event() {
         bodyData={data}
         tableKeys={eventTableKeys}
         onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
       />
 
       {/* ====== Fab button component =======*/}

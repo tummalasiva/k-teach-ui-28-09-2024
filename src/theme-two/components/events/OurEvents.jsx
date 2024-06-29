@@ -1,4 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+/** @format */
+
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Container, Typography, Box, styled } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
 import Slider from "react-slick";
@@ -10,6 +12,8 @@ import EventCards from "./EventCards";
 import themeData from "../../../data/themeData";
 import { AppSlider } from "../../data/AppSlider";
 import Dots from "../../data/Dots";
+import { PRIVATE_URLS } from "../../../services/urlConstants";
+import { get } from "../../../services/apiMethods";
 
 export const arrData = [
   {
@@ -95,6 +99,23 @@ export default function OurEvents() {
     sliderRef.slickPrev();
   };
 
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.event.list, {
+        params: { schoolId: selectedSetting?._id },
+      });
+
+      setEvents(data.result);
+      // console.log(data.result, "mmmmmmmmmuuusssshhhhammmmmmmmm");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
+
   return (
     <>
       <Container sx={{ marginTop: "8rem" }} maxWidth="xl">
@@ -110,7 +131,7 @@ export default function OurEvents() {
             flexDirection: "column",
           }}
         > */}
-        {arrData.length > 3 && (
+        {events.length > 3 && (
           <Random1 style={{ borderColor: themeData.darkPalette.primary.main }}>
             <ChevronLeftIcon
               onClick={handlePrevClick}
@@ -124,12 +145,11 @@ export default function OurEvents() {
         )}
 
         <AppSlider
-          {...calculateSlidersSetting(arrData.length)}
+          {...calculateSlidersSetting(events.length)}
           ref={(slider) => {
             sliderRef = slider;
-          }}
-        >
-          {arrData.map((elem, i) => (
+          }}>
+          {events.map((elem, i) => (
             <EventCards key={i} elem={elem} hideContent={false} view="View" />
           ))}
         </AppSlider>
