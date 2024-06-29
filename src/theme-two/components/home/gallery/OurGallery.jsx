@@ -74,6 +74,9 @@ const ImagBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function OurGallery() {
+  let sliderRef = useRef(null);
+  const { selectedSetting } = useContext(SettingContext);
+  const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState({
     open: false,
     img: [],
@@ -88,10 +91,6 @@ export default function OurGallery() {
     ...modalOpen.img.slice(selectedIndex),
     ...modalOpen.img.slice(0, selectedIndex),
   ];
-
-  let sliderRef = useRef(null);
-  const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
 
   const getData = async () => {
     try {
@@ -116,9 +115,8 @@ export default function OurGallery() {
         <TypographyMain>OUR GALLERY</TypographyMain>
         <Dots />
       </TextBox>
-
       <Main>
-        <Container style={{ padding: "10px" }}>
+        <Container sx={{ padding: "10px" }}>
           <Gallery
             ref={sliderRef}
             galleryData={data}

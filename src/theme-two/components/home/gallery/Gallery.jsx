@@ -1,14 +1,17 @@
 /** @format */
 
-import React, { forwardRef } from "react";
+import React, { useState } from "react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import {
+  CardMedia,
+  styled,
   Card,
   CardContent,
-  CardMedia,
   Typography,
-  styled,
 } from "@mui/material";
 import Slider from "react-slick";
+import themeData from "../../../../data/themeData";
 import {
   calculateSlidersData,
   imageCarousalSettings,
@@ -21,22 +24,29 @@ const MuiTitle = styled(Typography)(() => ({
   WebkitLineClamp: 1,
   fontWeight: "bold",
   fontSize: "18px",
+  fontFamily: "sans-serif",
+  color: themeData.darkPalette.primary.main,
 }));
 
 const MuiText = styled(Typography)(() => ({
   display: "-webkit-box",
   overflow: "hidden",
+  fontFamily: "sans-serif",
+
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 2,
 }));
 
 const AppSlider = styled(Slider)`
+  // width: 100%;
   .slick-track {
     display: flex;
+    //flex-shrink: 1;
   }
   .slick-slide {
     display: flex;
     justify-content: center;
+    //margin-bottom: 1;
     outline: none;
   }
   .slick-list {
@@ -44,53 +54,66 @@ const AppSlider = styled(Slider)`
   }
 `;
 
-const ImageSliders = ({ galleryImg, setModalOpen }) => (
-  <AppSlider
-    lazyLoad="progressive"
-    dots
-    sx={{ backgroundColor: "black" }}
-    {...imageCarousalSettings}>
-    {galleryImg.images?.map((image, index) => (
-      <CardMedia
-        key={index + image}
-        component="img"
-        image={image}
-        alt="loading..."
-        height="260"
-        onClick={() =>
-          setModalOpen({
-            open: true,
-            img: galleryImg.images,
-            singleImg: image,
-          })
-        }
-      />
-    ))}
-  </AppSlider>
-);
+function ImageSliders({ galleryImg, setModalOpen }) {
+  return (
+    <>
+      <AppSlider
+        lazyLoad="progressive"
+        dots
+        sx={{ backgroundColor: "black" }}
+        {...imageCarousalSettings}>
+        {galleryImg.images?.map((image, index) => (
+          <CardMedia
+            key={index}
+            component="img"
+            image={image}
+            alt="loading..."
+            height="260"
+            onClick={() =>
+              setModalOpen({
+                open: true,
+                img: galleryImg.images,
+                singleImg: image,
+              })
+            }
+          />
+        ))}
+      </AppSlider>
+    </>
+  );
+}
 
-const Gallery = forwardRef(({ galleryData = [], setModalOpen }, ref) => (
-  <AppSlider
-    ref={ref}
-    lazyLoad="progressive"
-    dots
-    {...calculateSlidersData(galleryData?.length)}>
-    {galleryData?.map((galleryImg, index) => (
-      <Card
-        key={index + galleryImg.title + galleryImg.note}
-        sx={{ width: 345, height: 382, mb: 2 }}>
-        <ImageSliders galleryImg={galleryImg} setModalOpen={setModalOpen} />
-        <CardContent>
-          <MuiTitle gutterBottom variant="h5" component="div">
-            {galleryImg.title}
-          </MuiTitle>
-          <MuiText variant="body2" color="text.secondary">
-            {galleryImg.note || "Added new images"}
-          </MuiText>
-        </CardContent>
-      </Card>
-    ))}
-  </AppSlider>
-));
+function Gallery({ galleryData = [], sliderRef, setModalOpen }) {
+  return (
+    <>
+      <AppSlider
+        ref={sliderRef}
+        lazyLoad="progressive"
+        dots
+        {...calculateSlidersData(galleryData?.length)}>
+        {galleryData?.map((galleryImg, index) => (
+          <>
+            <Card
+              key={galleryImg.id + index}
+              sx={{ width: 345, height: 382, mb: 3 }}>
+              <ImageSliders
+                galleryImg={galleryImg}
+                setModalOpen={setModalOpen}
+              />
+              <CardContent sx={{ mt: 1 }}>
+                <MuiTitle gutterBottom variant="h5">
+                  {galleryImg.title}
+                </MuiTitle>
+                <MuiText variant="body2" color="text.secondary">
+                  {galleryImg.note || "Added new images"}
+                </MuiText>
+              </CardContent>
+            </Card>
+          </>
+        ))}
+      </AppSlider>
+    </>
+  );
+}
 
 export default Gallery;
