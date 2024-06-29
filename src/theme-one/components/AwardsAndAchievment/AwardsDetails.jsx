@@ -1,9 +1,17 @@
 /** @format */
 
 import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import SubHeader from "../SubHeader";
-import { Box, Card, Container, Grid, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  Typography,
+  styled,
+} from "@mui/material";
 import dayjs from "dayjs";
 import themeData from "../../../data/themeData";
 
@@ -16,6 +24,7 @@ const Title = styled(Typography)(({ theme }) => ({
 const AwardsDetails = () => {
   const location = useLocation();
   const newAwards = location.state && location.state.awards;
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -65,6 +74,13 @@ const AwardsDetails = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
+        {" "}
+        <Button size="small" variant="outlined" onClick={() => navigate("/")}>
+          Go Back
+        </Button>
+      </Box>
     </>
   );
 };

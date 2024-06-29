@@ -29,10 +29,6 @@ const AwardsDetails = React.lazy(() =>
   import("../theme-one/components/AwardsAndAchievment/AwardsDetails")
 );
 
-const NewsAndNoticeDetails = React.lazy(() =>
-  import("../theme-one/components/NewsAndNotice/NewsAndNoticeDetails")
-);
-
 const Food = React.lazy(() =>
   import("../theme-one/components/Navbar/navbar/facilities/Food")
 );

@@ -1,6 +1,6 @@
 /** @format */
 
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SubHeader from "../../../SubHeader";
 import GallerySubHome from "./GallerySubHome";
 import { styled } from "@mui/material/styles";
@@ -10,33 +10,10 @@ import { Backdrop, Box, CardMedia, Modal, Typography } from "@mui/material";
 // icons
 import CloseIcon from "@mui/icons-material/Close";
 import themeData from "../../../../../data/themeData";
-import image1 from "../../../../../theme-one/assets/Images/school1.avif";
-import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
-import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
-import image4 from "../../../../../theme-one/assets/Images/school1.avif";
 
-const awards = [
-  {
-    title: "Learning Management System",
-    note: " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    image: [image1, image2],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image2, image4],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image3, image1],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image4, image3],
-  },
-];
+import { PRIVATE_URLS } from "../../../../../services/urlConstants";
+import { get } from "../../../../../services/apiMethods";
+import SettingContext from "../../../../../context/SettingsContext";
 
 const TypographyMain = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -115,20 +92,41 @@ const MuiMainBox = styled(Box)(({}) => ({
 }));
 
 export default function Gallery({ show }) {
+  const { selectedSetting } = useContext(SettingContext);
+
+  const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = React.useState({
     open: false,
     imageData: [],
     viewSingleImg: {},
   });
 
-  const SelectedImageIndex = modalOpen.imageData.findIndex(
+  const SelectedImageIndex = modalOpen?.imageData?.findIndex(
     (img) => img._id === modalOpen.viewSingleImg._id
   );
 
   const cutailImages = [
-    ...modalOpen.imageData.slice(0, SelectedImageIndex),
-    ...modalOpen.imageData.slice(SelectedImageIndex + 1),
+    ...modalOpen?.imageData?.slice(0, SelectedImageIndex),
+    ...modalOpen?.imageData?.slice(SelectedImageIndex + 1),
   ];
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.gallery.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+
+      console.log(data.result, "ggggfgffgffff");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedSetting]);
 
   return (
     <>
@@ -146,7 +144,7 @@ export default function Gallery({ show }) {
         </TextBox>
 
         <GridBox>
-          {awards.map((item, i) => {
+          {data.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <GallerySubHome data={item} setModalOpen={setModalOpen} />
