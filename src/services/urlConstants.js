@@ -128,6 +128,7 @@ export const PRIVATE_URLS = {
     create: "/notice/create",
     update: "/notice/update",
     delete: "/notice/delete",
+    listPublic: "/notice/listPublic",
   },
 
   news: {
