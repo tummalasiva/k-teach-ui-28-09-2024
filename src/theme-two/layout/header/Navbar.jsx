@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
@@ -73,6 +73,8 @@ export default function Navbar() {
   let navigate = useNavigate();
   const { pathname } = useLocation();
   const { selectedSetting } = useContext(SettingContext);
+  const [hasAccessToken, setHasAccessToken] = useState(false);
+
   const [showMenuItem, setShowMenuItem] = useState(false);
   const [about, setAbout] = useState(null);
   const open1 = Boolean(about);
@@ -83,6 +85,13 @@ export default function Navbar() {
   const [state, setState] = React.useState({
     right: false,
   });
+
+  useEffect(() => {
+    let accessToken = window.localStorage.getItem("access_token");
+    if (accessToken) {
+      setHasAccessToken(true);
+    }
+  }, []);
 
   const handleMenuItem = () => {
     setShowMenuItem(true);
@@ -291,13 +300,13 @@ export default function Navbar() {
       </List>
       {/* <Divider /> */}
 
-      <Link to="/login">
+      <Link to={hasAccessToken ? "/sch/dashboard" : "/login"}>
         <Button
           fullWidth
           variant="contained"
           size="small"
           style={{ margin: "10px", maxWidth: 230 }}>
-          Log In
+          {hasAccessToken ? "Dashboard" : "Log In"}
         </Button>
       </Link>
     </Box>
@@ -310,7 +319,7 @@ export default function Navbar() {
           <img
             height={100}
             width={120}
-            src={selectedSetting?.logo?.link || KayakaLogo}
+            src={selectedSetting?.logo || KayakaLogo}
             style={{
               paddingLeft: { xs: "10px", sm: "10px", md: "10px", lg: "80px" },
             }}
@@ -340,9 +349,9 @@ export default function Navbar() {
                 );
               })}
 
-            <Link to="/login">
+            <Link to={hasAccessToken ? "/sch/dashboard" : "/login"}>
               <Button variant="contained" size="small" sx={{ mt: "8px" }}>
-                Log In
+                {hasAccessToken ? "Dashboard" : "Log In"}
               </Button>
             </Link>
 
