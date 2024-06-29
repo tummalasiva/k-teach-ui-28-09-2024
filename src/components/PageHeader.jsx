@@ -1,3 +1,5 @@
+/** @format */
+
 import { Box, Paper } from "@mui/material";
 import React, { useContext } from "react";
 import {
@@ -43,15 +45,14 @@ export default function PageHeader({ title = "", showTextField = true }) {
             <Select
               labelId="demo-simpless-select-filled-label"
               id="demo-simple-select-filled-l"
-              value={selectedSetting._id}
+              value={selectedSetting?._id}
               name="setting"
               onChange={handleSettingChange}
               IconComponent={(props) => (
                 <KeyboardArrowDownIcon {...props} fontSize="medium" />
               )}
-              label="Select school"
-            >
-              {settings.map((set) => (
+              label="Select school">
+              {settings?.map((set) => (
                 <MenuItem key={set._id} value={set._id}>
                   {set.name}
                 </MenuItem>

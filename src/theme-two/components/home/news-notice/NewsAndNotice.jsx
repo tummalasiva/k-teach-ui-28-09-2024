@@ -115,9 +115,7 @@ export default function NewsAndNotice() {
 
   const getNotics = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.notice.listPublic, {
-        params: { schoolId: selectedSetting._id },
-      });
+      const { data } = await get(PRIVATE_URLS.notice.listPublic);
       setNotices(data.result);
       // console.log(data.result, "ggggfgffgffff");
     } catch (error) {

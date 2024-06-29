@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext } from "react";
 import Grid from "@mui/material/Grid";
 import {
@@ -12,6 +14,7 @@ import { BsPhoneFill } from "react-icons/bs";
 import { MdMail } from "react-icons/md";
 import { ImLocation } from "react-icons/im";
 import themeData from "../../../../data/themeData";
+import SettingContext from "../../../../context/SettingsContext";
 
 const Header = styled(Typography)(({}) => ({
   fontWeight: "bold",
@@ -89,6 +92,8 @@ let data = [
   },
 ];
 export default function ContactUs() {
+  const { selectedSetting } = useContext(SettingContext);
+
   return (
     <>
       <MuiMainBox sx={{ mx: 4 }}>
@@ -96,17 +101,42 @@ export default function ContactUs() {
           <Header pt={2}>FIND OUR ADDRESS</Header>
 
           <Grid container spacing={2}>
-            {data.map((item) => {
-              return (
-                <React.Fragment key={item.id}>
-                  <Grid item xs={12} md={4} sm={4} lg={4} textAlign="center">
-                    <IconButton>{item.icon}</IconButton>
-                    <Title>{item.title1}</Title>
-                    <Titl2>{item.title2}</Titl2>
-                  </Grid>
-                </React.Fragment>
-              );
-            })}
+            <Grid item xs={12} md={4} sm={4} lg={4} textAlign="center">
+              <IconButton>
+                <BsPhoneFill
+                  style={{
+                    color: themeData.darkPalette.primary.main,
+                    fontSize: "25px",
+                  }}
+                />
+              </IconButton>
+              <Title>CALL US</Title>
+              <Titl2>{selectedSetting.phone}</Titl2>
+            </Grid>
+            <Grid item xs={12} md={4} sm={4} lg={4} textAlign="center">
+              <IconButton>
+                <MdMail
+                  style={{
+                    color: themeData.darkPalette.primary.main,
+                    fontSize: "25px",
+                  }}
+                />
+              </IconButton>
+              <Title>EMAIL</Title>
+              <Titl2>{selectedSetting.email}</Titl2>
+            </Grid>
+            <Grid item xs={12} md={4} sm={4} lg={4} textAlign="center">
+              <IconButton>
+                <ImLocation
+                  style={{
+                    color: themeData.darkPalette.primary.main,
+                    fontSize: "25px",
+                  }}
+                />
+              </IconButton>
+              <Title>ADDRESS</Title>
+              <Titl2>{selectedSetting.address}</Titl2>
+            </Grid>
           </Grid>
           <Box sx={{ mt: 2 }}>
             <Header>FIND OUR LOCATION</Header>

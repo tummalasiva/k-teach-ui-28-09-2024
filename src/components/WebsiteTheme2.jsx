@@ -5,6 +5,7 @@ import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import TopNav from "../theme-one/components/Navbar/TopNav";
 import Navbar from "../theme-two/layout/header/Navbar";
 import Footer from "../theme-two/layout/Footer";
+import AssignmentTheme_two from "../theme-two/components/assignment/AssignmentTheme_two";
 
 // ===== code splitting ===================================
 const HomePage = React.lazy(() => import("../theme-two/page/HomePage"));
@@ -49,10 +50,13 @@ const ContactUs = React.lazy(() =>
 
 const WebsiteTheme2 = () => {
   const location = useLocation();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
+
   if (window.location.pathname.startsWith("/sch")) return null;
+
   return (
     <>
       <TopNav />
@@ -75,9 +79,10 @@ const WebsiteTheme2 = () => {
           />
           <Route path="/facilities/labs" element={<Labs />} />
           <Route path="/pre-admission" element={<AdmissionForm />} />
-          <Route path="/discover-gallery" element={<Gallery />} />
+          <Route path="/home-gallery" element={<Gallery />} />
           <Route path="/results" element={<Results />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/assignment" element={<AssignmentTheme_two />} />
         </Routes>
       </React.Suspense>
       <Footer />

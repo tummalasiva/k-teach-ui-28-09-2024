@@ -1,7 +1,6 @@
 /** @format */
 
-import React, { useContext, useEffect, useRef, useState } from "react";
-import Slider from "react-slick";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import {
   Container,
   Box,
@@ -9,28 +8,21 @@ import {
   styled,
   Modal,
   Backdrop,
-  CardMedia,
   IconButton,
+  CardMedia,
 } from "@mui/material";
-import image from "../../../assets/images/school-white.avif";
-import image1 from "../../../assets/images/school2.jpg";
-import image2 from "../../../assets/images/school-green.avif";
-import image3 from "../../../assets/images/school1.avif";
-import image4 from "../../../assets/images/redImg.png.png";
 import Gallery from "./Gallery";
-import themeData from "../../../../data/themeData";
 import { settings } from "../../../data/Carousal";
-// icons
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Close } from "@mui/icons-material";
-import Dots from "../../../data/Dots";
 import { get } from "../../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../../services/urlConstants";
 import SettingContext from "../../../../context/SettingsContext";
+import Dots from "../../../data/Dots";
+import themeData from "../../../../data/themeData";
+import { Close } from "@mui/icons-material";
+import Slider from "react-slick";
 
 const TextBox = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  // marginTop: "20px",
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
@@ -48,11 +40,7 @@ const TypographyMain = styled(Typography)(({ theme }) => ({
   color: themeData.darkPalette.primary.main,
   fontWeight: "bold",
   textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    // textAlign:"center",
-    // margin:0,
-    // padding:"25px"
-  },
+  [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
     textAlign: "center",
     margin: 0,
@@ -86,7 +74,10 @@ const ImagBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function OurGallery() {
-  const [modalOpen, setModalOpen] = React.useState({
+  let sliderRef = useRef(null);
+  const { selectedSetting } = useContext(SettingContext);
+  const [data, setData] = useState([]);
+  const [modalOpen, setModalOpen] = useState({
     open: false,
     img: [],
     singleImg: {},
@@ -97,13 +88,10 @@ export default function OurGallery() {
   );
 
   const reorderedImages = [
+    ...modalOpen.img.slice(selectedIndex),
     ...modalOpen.img.slice(0, selectedIndex),
-    ...modalOpen.img.slice(selectedIndex + 1),
   ];
 
-  let sliderRef = useRef(null);
-  const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.gallery.listPublic, {
@@ -111,8 +99,6 @@ export default function OurGallery() {
       });
 
       setData(data.result);
-
-      console.log(data.result, "ggggfgffgffff");
     } catch (error) {
       console.log(error);
     }
@@ -129,9 +115,8 @@ export default function OurGallery() {
         <TypographyMain>OUR GALLERY</TypographyMain>
         <Dots />
       </TextBox>
-
       <Main>
-        <Container style={{ padding: "10px" }}>
+        <Container sx={{ padding: "10px" }}>
           <Gallery
             ref={sliderRef}
             galleryData={data}

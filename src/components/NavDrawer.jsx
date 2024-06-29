@@ -362,8 +362,8 @@ export default function NavDrawer() {
             textAlign="center"
             fontSize="18px"
             sx={{ display: { xs: "none", md: "block" } }}>
-            {selectedSetting.name} [{activeYear ? activeYear.from : "-"} -{" "}
-            {activeYear ? activeYear.to : "-"}]
+            {selectedSetting?.name} [{activeYear ? activeYear?.from : "-"} -{" "}
+            {activeYear ? activeYear?.to : "-"}]
           </Typography>
           <Box
             sx={{

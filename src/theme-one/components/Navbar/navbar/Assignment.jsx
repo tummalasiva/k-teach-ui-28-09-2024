@@ -132,7 +132,7 @@ export default function Assignment({ show }) {
       />
 
       <Box sx={{ margin: "15px", px: 4 }}>
-        <PageHeader title="Assignment" showTextField={false} />
+        {/* <PageHeader title="Assignment" showTextField={false} /> */}
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid
             rowSpacing={1}

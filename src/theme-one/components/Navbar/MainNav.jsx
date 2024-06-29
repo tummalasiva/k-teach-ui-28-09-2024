@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Accordion,
   AppBar,
@@ -27,6 +27,7 @@ import menuItems from "../data/menuItems";
 import logo from "../../../theme-one/assets/Images/bannback.png";
 import themeData from "../../../data/themeData";
 import { Person } from "@mui/icons-material";
+import SettingContext from "../../../context/SettingsContext";
 
 const MainMenuContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -71,8 +72,10 @@ const MainMenuDropdownContainer = styled(Box)({
 });
 
 const MainNav = () => {
+  const { selectedSetting } = useContext(SettingContext);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [subMenuOpen, setSubMenuOpen] = useState("");
+  const [hasAccessToken, setHasAccessToken] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -99,6 +102,21 @@ const MainNav = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.between(900, 980));
 
+  useEffect(() => {
+    let accessToken = window.localStorage.getItem("access_token");
+    if (accessToken) {
+      setHasAccessToken(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    if (hasAccessToken) {
+      navigate("/sch/dashboard");
+    } else {
+      navigate("login");
+    }
+  };
+
   return (
     <React.Fragment>
       <AppBar
@@ -121,7 +139,7 @@ const MainNav = () => {
               alt=""
               width={matches ? 100 : 200}
               height={120}
-              src={logo}
+              src={selectedSetting.logo}
               style={{ paddingTop: "4px", objectFit: "contain" }}
             />
           </Link>
@@ -213,8 +231,8 @@ const MainNav = () => {
                 sx={{
                   backgroundColor: themeData.darkPalette.primary.main,
                 }}
-                onClick={() => navigate("login")}>
-                Login
+                onClick={handleLogin}>
+                {hasAccessToken ? "Dashboard" : "Login"}
               </Button>
             </Box>
           </MainMenuContainer>
