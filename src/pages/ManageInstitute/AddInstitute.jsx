@@ -31,6 +31,7 @@ import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
 import CloseIcon from "@mui/icons-material/Close";
 import ThemeModeContext from "../../context/ThemeModeContext";
+import SettingContext from "../../context/SettingsContext";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -116,7 +117,7 @@ const Admission_Options = [
     value: "manual",
   },
   {
-    label: "Auto ascending no",
+    label: "Auto Ascending No.",
     value: "autoAscendingNo",
   },
 ];
@@ -463,7 +464,7 @@ export default function AddInstitute({ initialValue = null }) {
                 <FormSelect
                   name="admissionNo"
                   formik={entryFormik}
-                  label="Admission Numder"
+                  label="Admission Number"
                   options={Admission_Options}
                 />
               </Grid>

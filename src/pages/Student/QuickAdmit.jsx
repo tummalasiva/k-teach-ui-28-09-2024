@@ -30,7 +30,8 @@ const STATUS_OPTIONS = [
 ];
 
 export default function QuickAdmit() {
-  const { selectedSetting } = useContext(SettingContext);
+  const { selectedSetting, setSettings, setSelectedSetting } =
+    useContext(SettingContext);
   const [academicYear, setAcademicYear] = useState([]);
   const [classData, setClassData] = useState([]);
   const [sectionData, setSectionData] = useState([]);
@@ -48,6 +49,7 @@ export default function QuickAdmit() {
   };
 
   const handleCreate = async (values) => {
+    console.log(values.caste, "check error");
     try {
       const payload = {
         basicInfo: {
@@ -73,7 +75,7 @@ export default function QuickAdmit() {
         },
         contactNumber: values.contactNumber,
         academicYear: values.academicYear,
-        schoolId: selectedSetting._id,
+        schoolId: selectedSetting?._id,
         active: values.active || true,
       };
       const formData = new FormData();
@@ -98,7 +100,7 @@ export default function QuickAdmit() {
       admissionDate: null,
       dob: null,
       gender: "",
-      cast: "",
+      caste: "",
       contactNumber: "",
       fatherName: "",
       fatherContactNumber: "",
@@ -116,7 +118,7 @@ export default function QuickAdmit() {
     try {
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
-          schoolId: selectedSetting._id,
+          schoolId: selectedSetting?._id,
           search: { class: entryFormik.values.class },
         },
       });
@@ -147,214 +149,206 @@ export default function QuickAdmit() {
       getSection();
     }
   }, [entryFormik.values.class, selectedSetting]);
+
   return (
     <>
       <PageHeader title="Quick Admit" />
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={12} lg={12} item>
-            <Typography
-              component="span"
-              color="red"
-              fontWeight="bold"
-              sx={{ display: "inline" }}>
-              Note:{" "}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="span"
-              fontWeight="bold"
-              sx={{ display: "inline" }}>
-              Student will be admited to session
-            </Typography>
+      <Box onSubmit={entryFormik.handleSubmit} component="form">
+        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={12} lg={12} item>
+              <Typography
+                component="span"
+                color="red"
+                fontWeight="bold"
+                sx={{ display: "inline" }}>
+                Note:{" "}
+              </Typography>
+              <Typography
+                variant="h6"
+                component="span"
+                fontWeight="bold"
+                sx={{ display: "inline" }}>
+                Student will be admited to session
+              </Typography>
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="academicYear"
+                formik={entryFormik}
+                label="Select Academic Year"
+                options={academicYear}
+              />
+            </Grid>
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="academicYear"
-              formik={entryFormik}
-              label="Select Academic Year"
-              options={academicYear}
-            />
-          </Grid>
-        </Grid>
-      </Paper>
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={12} lg={12} item>
-            <Typography variant="h6" fontWeight="bold">
-              Basic Information
-            </Typography>
-          </Grid>
+        </Paper>
+        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={12} lg={12} item>
+              <Typography variant="h6" fontWeight="bold">
+                Basic Information
+              </Typography>
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="name"
-              formik={entryFormik}
-              label="Name"
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                required={true}
+                name="name"
+                formik={entryFormik}
+                label="Name"
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="admissionNumber"
-              formik={entryFormik}
-              label="Admission No."
-              disabled={selectedSetting?.admissionNo !== "Manual"}
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                required={selectedSetting?.admissionNo === "manual"}
+                name="admissionNumber"
+                formik={entryFormik}
+                label="Admission No."
+                disabled={selectedSetting?.admissionNo != "manual"}
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormDatePicker
-              required={true}
-              name="admissionDate"
-              formik={entryFormik}
-              label="Admission Date"
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormDatePicker
-              required={true}
-              name="dob"
-              formik={entryFormik}
-              label="DOB"
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormDatePicker
+                required={true}
+                name="admissionDate"
+                formik={entryFormik}
+                label="Admission Date"
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormDatePicker
+                required={true}
+                name="dob"
+                formik={entryFormik}
+                label="DOB"
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="gender"
-              formik={entryFormik}
-              label="Select Gender"
-              options={Gender_Options}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="cast"
-              formik={entryFormik}
-              label="Cast"
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="gender"
+                formik={entryFormik}
+                label="Select Gender"
+                options={Gender_Options}
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput name="caste" formik={entryFormik} label="Caste" />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="contactNumber"
-              formik={entryFormik}
-              label="Contact Number"
-            />
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                required={true}
+                name="contactNumber"
+                formik={entryFormik}
+                label="Contact Number"
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={12} lg={12} item>
-            <Typography variant="h6" fontWeight="bold">
-              Parent Information
-            </Typography>
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="fatherName"
-              formik={entryFormik}
-              label="Father Name"
-            />
-          </Grid>
+        </Paper>
+        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={12} lg={12} item>
+              <Typography variant="h6" fontWeight="bold">
+                Parent Information
+              </Typography>
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                name="fatherName"
+                formik={entryFormik}
+                label="Father Name"
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="fatherContactNumber"
-              formik={entryFormik}
-              label="Father Phone Number"
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="motherName"
-              formik={entryFormik}
-              label="Mother Name"
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                name="fatherContactNumber"
+                formik={entryFormik}
+                label="Father Phone Number"
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                name="motherName"
+                formik={entryFormik}
+                label="Mother Name"
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="motherContactNumber"
-              formik={entryFormik}
-              label="Mother Phone Number"
-            />
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                name="motherContactNumber"
+                formik={entryFormik}
+                label="Mother Phone Number"
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
 
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={12} lg={12} item>
-            <Typography variant="h6" fontWeight="bold">
-              Academic Information
-            </Typography>
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="class"
-              formik={entryFormik}
-              label="Select Class"
-              options={classData}
-            />
-          </Grid>
+        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={12} lg={12} item>
+              <Typography variant="h6" fontWeight="bold">
+                Academic Information
+              </Typography>
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="class"
+                formik={entryFormik}
+                label="Select Class"
+                options={classData}
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="section"
-              formik={entryFormik}
-              label="Select Section"
-              options={sectionData}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormInput
-              required={true}
-              name="rollNumber"
-              formik={entryFormik}
-              label="Roll No"
-              disabled={selectedSetting?.rollNumberType !== "manual"}
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="section"
+                formik={entryFormik}
+                label="Select Section"
+                options={sectionData}
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormInput
+                name="rollNumber"
+                formik={entryFormik}
+                label="Roll No"
+                disabled={selectedSetting?.rollNumberType !== "manual"}
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="active"
-              formik={entryFormik}
-              label="Select active status"
-              options={STATUS_OPTIONS}
-            />
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                name="active"
+                formik={entryFormik}
+                label="Select Active Status"
+                options={STATUS_OPTIONS}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}>
-        <LoadingButton
-          loading={loading}
-          onClick={entryFormik.handleSubmit}
-          size="small"
-          variant="contained">
-          Submit
-        </LoadingButton>
+        </Paper>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}>
+          <LoadingButton
+            loading={loading}
+            size="small"
+            variant="contained"
+            type="submit">
+            Submit
+          </LoadingButton>
+        </Box>
       </Box>
     </>
   );

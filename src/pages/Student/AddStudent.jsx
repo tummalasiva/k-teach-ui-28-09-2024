@@ -466,7 +466,7 @@ export default function AddStudent() {
                   name="admissionNumber"
                   formik={entryFormik}
                   label="Admission No."
-                  disabled={selectedSetting?.admissionNo !== "Manual"}
+                  disabled={selectedSetting?.admissionNo !== "manual"}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>

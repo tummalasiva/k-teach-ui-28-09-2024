@@ -121,6 +121,7 @@ export default function ResetPassword() {
 
             <Grid xs={12} sm={6} md={6} lg={4} item>
               <FormInput
+                required={true}
                 formik={entryFormik}
                 label="Password"
                 name="password"
