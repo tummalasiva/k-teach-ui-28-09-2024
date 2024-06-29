@@ -112,28 +112,26 @@ const names = [
     name: "Raju",
     class: "10",
     section: "A",
+    image: Image1,
   },
   {
     name: "Monika",
     class: "10",
     section: "C",
+    image: Image2,
   },
   {
     name: "Alia",
     class: "8",
     section: "A",
+    image: Image3,
   },
   {
     name: "Raina",
     class: "9",
     section: "D",
+    image: Image1,
   },
-];
-
-const images = [
-  { src: Image1, alt: "Image 1" },
-  { src: Image2, alt: "Image 2" },
-  { src: Image3, alt: "Image 3" },
 ];
 
 const BirthdayEvents = () => {
@@ -183,11 +181,11 @@ const BirthdayEvents = () => {
         <Grid item xs={12} sm={5} md={5} sx={{ paddingTop: "1rem" }}>
           <SliderFrame>
             <Slider {...sliderSettings}>
-              {images.map((image, index) => (
+              {names.map((image, index) => (
                 <Box key={index} sx={{ backgroundColor: "wheat" }}>
                   <img
-                    src={image.src}
-                    alt={image.alt}
+                    src={image.image}
+                    alt={"image"}
                     style={{
                       width: "100%",
                       height: "auto",
