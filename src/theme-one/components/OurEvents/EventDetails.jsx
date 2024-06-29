@@ -2,8 +2,15 @@
 
 import React from "react";
 import SubHeader from "../SubHeader";
-import { useLocation } from "react-router-dom";
-import { Box, Container, Grid, Typography, styled } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  styled,
+} from "@mui/material";
 import themeData from "../../../data/themeData";
 import moment from "moment";
 
@@ -29,6 +36,7 @@ const DetailItem = ({ label, value }) => (
 export default function EventDetails() {
   const location = useLocation();
   const newEvents = location.state && location.state.events;
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -75,6 +83,12 @@ export default function EventDetails() {
           </Grid>
         </Grid>
       </Container>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
+        {" "}
+        <Button size="small" variant="outlined" onClick={() => navigate("/")}>
+          Go Back
+        </Button>
+      </Box>
     </>
   );
 }

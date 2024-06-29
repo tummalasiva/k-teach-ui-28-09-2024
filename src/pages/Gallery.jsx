@@ -15,9 +15,8 @@ import FormInput from "../forms/FormInput";
 import SettingContext from "../context/SettingsContext";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import { get, post, put } from "../services/apiMethods";
-import AddOrUpdateFiles from "../forms/AddOrUpdateFiles";
 import FileSelect from "../forms/FileSelect";
-import { Clear, Close } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 
 export default function Gallery() {
   const { selectedSetting } = useContext(SettingContext);
@@ -278,40 +277,6 @@ export default function Gallery() {
                 ))}
               </Grid>
             </Grid>
-
-            {/* {dataToEdit?.images.map((galleryImg, i) => (
-              <Grid
-                xs={6}
-                sm={6}
-                md={2}
-                lg={2}
-                item
-                sx={{
-                  display: "flex",
-                  position: "relative",
-                }}
-                key={i}>
-                <img
-                  src={galleryImg}
-                  alt="loading..."
-                  width={70}
-                  height={70}
-                  style={{ objectFit: "contain", borderRadius: "10px" }}
-                />
-                <IconButton
-                  size="small"
-                  color="error"
-                  sx={{
-                    position: "absolute",
-                    top: "40%",
-                    right: 0,
-                    transform: "translateY(-50%)",
-                  }}
-                  onClick={() => handleRemoveImg(galleryImg)}>
-                  <Clear color="error" fontSize="small" />
-                </IconButton>
-              </Grid>
-            ))} */}
 
             <Grid
               xs={12}

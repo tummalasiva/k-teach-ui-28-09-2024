@@ -158,7 +158,7 @@ const Events = ({ card }) => {
                 variant="body1"
                 sx={{
                   fontWeight: "bold",
-                  fontSize: "25px",
+                  fontSize: "20px",
                   color: "black",
                 }}
                 gutterBottom>

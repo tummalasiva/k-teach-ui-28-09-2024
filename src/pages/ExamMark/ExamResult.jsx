@@ -10,6 +10,7 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function ExamResult() {
   const [data, setData] = useState([]);
@@ -49,13 +50,29 @@ export default function ExamResult() {
       console.log(error);
     }
   };
+
+  const getResult = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.studentMarks.getExamResult, {
+        params: {
+          schoolId: selectedSetting._id,
+          classId: values.class,
+          sectionId: values.section,
+          examId: values.exam,
+        },
+      });
+      console.log(data, "data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       class: "",
       section: "",
       exam: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getResult,
   });
 
   // get exam list
@@ -117,9 +134,12 @@ export default function ExamResult() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>

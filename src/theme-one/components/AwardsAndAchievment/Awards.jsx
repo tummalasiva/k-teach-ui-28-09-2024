@@ -32,6 +32,7 @@ const Note = styled(Typography)(({ theme }) => ({
   fontFamily: "sans-serif",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 2,
+  height: "40px",
 }));
 
 const Awards = ({ awardsDetails }) => {
@@ -72,7 +73,10 @@ const Awards = ({ awardsDetails }) => {
         <CardActions>
           <Button
             onClick={handleNavigate}
-            sx={{ color: themeData.darkPalette.secondary.main }}
+            sx={{
+              color: themeData.darkPalette.secondary.main,
+              fontWeight: 600,
+            }}
             size="small">
             View Details
           </Button>

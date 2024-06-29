@@ -14,32 +14,9 @@ import image1 from "../../../../../theme-one/assets/Images/school1.avif";
 import image2 from "../../../../../theme-one/assets/Images/school-white.avif";
 import image3 from "../../../../../theme-one/assets/Images/school-green.avif";
 import image4 from "../../../../../theme-one/assets/Images/school1.avif";
-import { get } from "../../../../../services/apiMethods";
-import { PRIVATE_URLS } from "../../../../../services/urlConstants";
 import SettingContext from "../../../../../context/SettingsContext";
-
-const awards = [
-  {
-    title: "Learning Management System",
-    note: " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum corrupti unde dolor aliquam commodi cum aut magnam a cumque, veritatis repellat facere eos tempora quas! Esse quas praesentium numquam minus dicta",
-    image: [image1, image2],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image2, image4],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image3, image1],
-  },
-  {
-    title: "Marketing and Management ",
-    note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat, voluptate.",
-    image: [image4, image3],
-  },
-];
+import { PRIVATE_URLS } from "../../../../../services/urlConstants";
+import { get } from "../../../../../services/apiMethods";
 
 const TypographyMain = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -126,13 +103,13 @@ export default function Gallery({ show }) {
     viewSingleImg: {},
   });
 
-  const SelectedImageIndex = modalOpen.imageData.findIndex(
+  const SelectedImageIndex = modalOpen?.imageData?.findIndex(
     (img) => img._id === modalOpen.viewSingleImg._id
   );
 
   const cutailImages = [
-    ...modalOpen.imageData.slice(0, SelectedImageIndex),
-    ...modalOpen.imageData.slice(SelectedImageIndex + 1),
+    ...modalOpen?.imageData?.slice(0, SelectedImageIndex),
+    ...modalOpen?.imageData?.slice(SelectedImageIndex + 1),
   ];
 
   const getData = async () => {
