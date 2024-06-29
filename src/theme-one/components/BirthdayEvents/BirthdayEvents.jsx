@@ -41,7 +41,7 @@ const MovingTexts = styled(Box)(({}) => ({
   top: 0,
 
   animation: css`
-    ${moveTextAnimation} 15s linear infinite
+    ${moveTextAnimation} 13s linear infinite
   `,
   animationPlayState: "running",
 
