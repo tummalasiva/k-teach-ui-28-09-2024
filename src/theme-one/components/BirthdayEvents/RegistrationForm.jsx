@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Box,
   Button,
@@ -12,9 +14,10 @@ import React, { useState } from "react";
 import themeData from "../../../data/themeData";
 
 const Wrapper = styled(Box)(() => ({
-  // position: "relative",
-  // maxWidth: "480px",
-  // width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
 }));
 
 const Header = styled(Typography)(() => ({
@@ -58,10 +61,12 @@ export default function RegistrationForm() {
       <Box
         sx={{
           backgroundColor: "#fff",
-          // borderRadius: theme.shape.borderRadius,
-          padding: "34px",
-        }}
-      >
+          padding: "20px",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}>
         <Header textAlign="start" mb={4}>
           Registration Form
         </Header>

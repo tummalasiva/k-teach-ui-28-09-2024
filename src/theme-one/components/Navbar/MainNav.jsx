@@ -134,13 +134,17 @@ const MainNav = () => {
             justifyContent: "space-between",
             alignItems: "center",
           }}>
-          <Link to="/">
+          <Link to="/" style={{ display: "flex", alignItems: "center" }}>
             <img
-              alt=""
-              width={matches ? 100 : 200}
-              height={120}
+              alt="logo"
+              width={matches ? 100 : 150}
+              height={100}
               src={selectedSetting.logo}
-              style={{ paddingTop: "4px", objectFit: "contain" }}
+              style={{
+                objectFit: "contain",
+                textAlign: "center",
+                padding: "10px 0",
+              }}
             />
           </Link>
 
