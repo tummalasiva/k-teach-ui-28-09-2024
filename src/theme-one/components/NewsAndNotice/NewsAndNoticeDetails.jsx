@@ -27,6 +27,7 @@ const ReadButton = styled(Button)(() => ({
   fontWeight: "bold",
   fontSize: "12px",
   cursor: "pointer",
+  paddingTop: "0px",
   color: themeData.darkPalette.primary.main,
   "&:hover": {},
 }));
@@ -36,7 +37,8 @@ const MuiSubtitle = styled(Typography)(({}) => ({
   display: "-webkit-box",
   overflow: "hidden",
   WebkitBoxOrient: "vertical",
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 1,
+  height: "20px",
 }));
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({
@@ -109,7 +111,7 @@ export default function NewsAndNoticeDetails({ news }) {
           sm={10}
           xs={12}
           sx={{
-            padding: "10px 10px",
+            padding: "5px 5px",
             border: "1px solid #99999933",
             backgroundColor: "white",
           }}>

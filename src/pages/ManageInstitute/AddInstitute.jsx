@@ -249,6 +249,7 @@ export default function AddInstitute({ initialValue = null }) {
       youtubeUrl: dataToEdit?.youtubeUrl || "",
       instagramUrl: dataToEdit?.instagramUrl || "",
       pinterestUrl: dataToEdit?.pinterestUrl || "",
+      location: dataToEdit?.location || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -368,6 +369,13 @@ export default function AddInstitute({ initialValue = null }) {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput name="fax" formik={entryFormik} label="Fax" />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="location"
+                  formik={entryFormik}
+                  label="Location"
+                />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput

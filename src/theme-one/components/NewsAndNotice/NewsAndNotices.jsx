@@ -13,7 +13,7 @@ const NewsContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   display: "flex",
   flexDirection: "column",
-  height: "250px",
+  height: "200px",
   overflowY: "auto",
   justifyContent: "center",
   position: "relative",
@@ -31,7 +31,7 @@ const scroll = keyframes`
 const NewsScroll = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column-reverse",
-  animation: `${scroll} 12s linear infinite`,
+  animation: `${scroll} 18s linear infinite`,
 
   "&:hover": {
     animationPlayState: "paused",
@@ -89,7 +89,7 @@ const NewsAndNotices = () => {
               display: "flex",
 
               border: "2px solid #ffffff",
-              boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+              // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
               borderRadius: "10px",
 
               margin: "30px",
@@ -123,7 +123,7 @@ const NewsAndNotices = () => {
               display: "flex",
 
               border: "2px solid #ffffff",
-              boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+              // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
               borderRadius: "10px",
               margin: "30px",
             }}>
