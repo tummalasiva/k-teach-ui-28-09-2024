@@ -17,6 +17,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import StudentAttendanceTable from "./StudentAttendanceTable";
 
 export default function StudentAttendance() {
   const { selectedSetting } = useContext(SettingContext);
@@ -25,26 +26,71 @@ export default function StudentAttendance() {
   const [academicYearList, setAcademicYearList] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
+  const [fetchingAttendanceData, setFetchingAttendanceData] = useState(false);
+  const [attendanceData, setAttendanceData] = useState([]);
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
+  };
+
+  const handleFindClick = async (values) => {
+    try {
+      setFetchingAttendanceData(true);
+      const { data } = await get(PRIVATE_URLS.studentAttendance.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          classId: values.class,
+          sectionId: values.section,
+          date: values.date,
+        },
+      });
+      console.log(data);
+      setAttendanceData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+    setFetchingAttendanceData(false);
   };
 
   const attendanceFormik = useFormik({
     initialValues: {
       class: "",
       section: "",
-      date: dayjs(new Date()),
+      date: dayjs(new Date()).format("YYYY/MM/DD"),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleFindClick,
   });
+
+  const getStudentAttendanceOverview = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.studentAttendance.getAttendanceOverview,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            date: values.date,
+            classId: values.class,
+          },
+        }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const overviewFormik = useFormik({
     initialValues: {
       class: "",
-      date: dayjs(new Date()),
+      date: dayjs(new Date()).format("YYYY/MM/DD"),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getStudentAttendanceOverview,
   });
+
+  useEffect(() => {
+    if (overviewFormik.values.class && overviewFormik.values.date) {
+      overviewFormik.handleSubmit();
+    }
+  }, [overviewFormik.values]);
 
   const reportFormik = useFormik({
     initialValues: {
@@ -53,7 +99,7 @@ export default function StudentAttendance() {
       section: "",
       month: null,
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: console.log,
     enableReinitialize: true,
   });
 
@@ -111,9 +157,6 @@ export default function StudentAttendance() {
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-
-      attendanceFormik.setFieldValue("section", data.result[0]?._id);
-      reportFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -138,6 +181,12 @@ export default function StudentAttendance() {
     getAcademicYear();
     getClasses();
   }, [selectedSetting._id]);
+
+  useEffect(() => {
+    attendanceFormik.resetForm();
+    reportFormik.resetForm();
+    overviewFormik.resetForm();
+  }, [value]);
 
   return (
     <>
@@ -204,17 +253,21 @@ export default function StudentAttendance() {
               />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton size="small" variant="contained">
+              <LoadingButton
+                loading={fetchingAttendanceData}
+                onClick={attendanceFormik.handleSubmit}
+                size="small"
+                variant="contained">
                 Find
               </LoadingButton>
             </Grid>
           </Grid>
         </Paper>
-        <CustomTable
-          actions={[]}
-          bodyDataModal="attendance"
-          bodyData={data}
-          tableKeys={studentAttendanceTableKeys}
+        <StudentAttendanceTable
+          date={attendanceFormik.values.date}
+          bodyData={attendanceData}
+          setBodyData={setAttendanceData}
+          classId={attendanceFormik.values.class}
         />
       </TabPanel>
       <TabPanel index={2} value={value}>

@@ -466,6 +466,12 @@ export const PRIVATE_URLS = {
     update: "/employeeAttendance/update",
     getAttendanceReport: "/employeeAttendance/getAttendanceReport",
   },
+  studentAttendance: {
+    list: "/studentAttendance/list",
+    update: "/studentAttendance/update",
+    getAttendanceReport: "/studentAttendance/getAttendanceReport",
+    getAttendanceOverview: "/studentAttendance/getAttendanceOverview",
+  },
   report: {
     groupedLibraryData: "/report/groupedLibraryData",
   },
