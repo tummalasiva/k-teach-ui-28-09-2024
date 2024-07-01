@@ -8,6 +8,7 @@ import {
   Button,
   Container,
   Grid,
+  Paper,
   Typography,
   styled,
 } from "@mui/material";
@@ -20,7 +21,7 @@ const Title = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
 }));
 
-const News = () => {
+const News = ({ show }) => {
   const location = useLocation();
   const news = location.state && location.state.data;
   const navigate = useNavigate();
@@ -32,11 +33,12 @@ const News = () => {
   return (
     <>
       <SubHeader
+        show={show}
         title="News And Notice"
         leftSideHeader="Home"
         rightSideHeader="News And Notice"
       />
-      <Container sx={{ marginTop: "5px" }}>
+      <Paper sx={{ marginTop: "5px", m: 2, p: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <img
@@ -52,21 +54,27 @@ const News = () => {
             sx={{
               order: { xs: 1, sm: 1, md: 2 },
             }}>
+            <Title variant="h4" mb={1}>
+              News:{" "}
+            </Title>
+
             <Typography sx={{ color: "black", fontWeight: 600 }}>
               {dayjs(news.date).format("MMM DD, YYYY")}
             </Typography>
             <Title variant="subtitle1">{news.title}</Title>
             <Typography variant="subtitle1">{news.shortNews}</Typography>
             <Typography variant="subtitle1">{news.news}</Typography>
+            <Box sx={{ mt: 1 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => navigate("/")}>
+                Go Back
+              </Button>
+            </Box>
           </Grid>
         </Grid>
-      </Container>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
-        {" "}
-        <Button size="small" variant="outlined" onClick={() => navigate("/")}>
-          Go Back
-        </Button>
-      </Box>
+      </Paper>
     </>
   );
 };

@@ -1,7 +1,16 @@
 /** @format */
 
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Card, Typography, css, keyframes, styled } from "@mui/material";
+import {
+  Box,
+  Card,
+  Divider,
+  Stack,
+  Typography,
+  css,
+  keyframes,
+  styled,
+} from "@mui/material";
 import themeData from "../../../../data/themeData";
 import NewsDetails from "./NewsDetails";
 import image from "../../../assets/images/school-white.avif";
@@ -9,6 +18,7 @@ import Dots from "../../../data/Dots";
 import { get } from "../../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../../services/urlConstants";
 import SettingContext from "../../../../context/SettingsContext";
+import NoticeDetailsTheme_two from "./NoticeDetailsTheme_two";
 
 const bubbleAnimation = keyframes`
   0% {
@@ -26,13 +36,13 @@ const animatedPause = css`
 `;
 
 const MuiBox = styled(Box)(({ theme }) => ({
-  width: "100%",
+  // width: "100%",
   display: "flex",
   flexDirection: "column",
   overflowY: "auto",
   justifyContent: "center",
   position: "relative",
-  backgroundColor: "red",
+  // backgroundColor: "red",
   ...animatedPause,
 }));
 
@@ -48,26 +58,23 @@ const scrollAnimation = keyframes`
 const AnimatedBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column-reverse",
-  animation: `${scrollAnimation} 8s linear infinite`,
+  transition: "transform 0.3s ease",
+  animation: `${scrollAnimation} 20s linear infinite`,
   "&:hover": {
     animationPlayState: "paused",
   },
 }));
 
-// const AnimatedBox = styled(Box)(({ theme }) => ({
-//   display: "flex",
-//   flexDirection: " column-reverse",
-//   animation: "scroll 8s linear infinite",
-// }));
-
 const MuiCard = styled(Card)(({ theme }) => ({
   display: "flex",
-  height: 300,
+  height: 400,
   flexDirection: "column",
   alignItems: "center",
-  marginTop: "40px",
-  boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
-  borderRadius: "12px",
+  marginTop: "20px",
+  background: "#33415c",
+  // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+  boxShadow: "none",
+  borderRadius: "5px",
 }));
 
 const TypographyMain = styled(Typography)(({ theme }) => ({
@@ -137,37 +144,71 @@ export default function NewsAndNotice() {
 
   return (
     <>
-      <Box mx={7}>
-        <MuiCard>
-          <TypographyMain sx={{ mt: 3, textAlign: "center" }} variant="h3">
+      <Box sx={{ mx: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <TypographyMain variant="h3">
             NEWS & NOTICE
             <Dots />
           </TypographyMain>
-          <MuiBox>
-            {data.length ? (
-              <AnimatedBox>
-                {data.map((elem, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <NewsDetails elem={elem} notics={notics} />
-                    </React.Fragment>
-                  );
-                })}
-              </AnimatedBox>
-            ) : (
-              <Typography
-                sx={{
-                  fontSize: "18px",
-                  // fontWeight: "bold",
-                  textAlign: "center",
-                  color: "lightgrey",
-                }}>
-                No news and events are available at this time!
-              </Typography>
-            )}
-            {/* </ScrollContent> */}
-            {/* </ContainerWithScroll> */}
-          </MuiBox>
+        </Box>
+
+        <MuiCard>
+          <Stack
+            direction="row"
+            divider={
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ background: "#fff", width: "3px" }}
+              />
+            }
+            spacing={2}
+            sx={{ mx: 1 }}>
+            <MuiBox>
+              {data.length ? (
+                <AnimatedBox>
+                  {data.map((elem, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <NewsDetails elem={elem} notics={notics} />
+                      </React.Fragment>
+                    );
+                  })}
+                </AnimatedBox>
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    textAlign: "center",
+                    color: "lightgrey",
+                  }}>
+                  No news and events are available at this time!
+                </Typography>
+              )}
+            </MuiBox>
+            <MuiBox>
+              {notics.length ? (
+                <AnimatedBox>
+                  {notics.map((elem, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <NoticeDetailsTheme_two elem={elem} />
+                      </React.Fragment>
+                    );
+                  })}
+                </AnimatedBox>
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    textAlign: "center",
+                    color: "lightgrey",
+                  }}>
+                  No Notics are available at this time!
+                </Typography>
+              )}
+            </MuiBox>
+          </Stack>
         </MuiCard>
       </Box>
     </>

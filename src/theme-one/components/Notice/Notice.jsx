@@ -8,11 +8,13 @@ import {
   Button,
   Container,
   Grid,
+  Paper,
   Typography,
   styled,
 } from "@mui/material";
 import dayjs from "dayjs";
 import themeData from "../../../data/themeData";
+import NoticeDetailsTheme_two from "../../../theme-two/components/home/news-notice/NoticeDetailsTheme_two";
 //
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
@@ -20,7 +22,7 @@ const Title = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
 }));
 
-const Notice = () => {
+const Notice = ({ show }) => {
   const location = useLocation();
   const notice = location.state && location.state.data;
   const navigate = useNavigate();
@@ -32,19 +34,17 @@ const Notice = () => {
   return (
     <>
       <SubHeader
+        show={show}
         title="News And Notice"
         leftSideHeader="Home"
         rightSideHeader="News And Notice"
       />
-      <Container sx={{ marginTop: "5px" }}>
+      <Paper sx={{ marginTop: "5px", m: 2, p: 2 }}>
+        <Title variant="h4" mb={1}>
+          Notice:{" "}
+        </Title>
+
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
-            <img
-              src={notice.image ? notice.image : "awards.png"}
-              alt="loading..."
-              style={{ width: "100%", borderRadius: "5px" }}
-            />
-          </Grid>
           <Grid
             item
             xs={12}
@@ -60,19 +60,17 @@ const Notice = () => {
             <Typography variant="subtitle1">
               <b>Notice For: </b>
               <span component="span" sx={{ color: "black" }}>
-                {" "}
                 {notice.noticeFor}
               </span>
             </Typography>
           </Grid>
         </Grid>
-      </Container>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
-        {" "}
-        <Button size="small" variant="outlined" onClick={() => navigate("/")}>
-          Go Back
-        </Button>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
+          <Button size="small" variant="outlined" onClick={() => navigate("/")}>
+            Go Back
+          </Button>
+        </Box>
+      </Paper>
     </>
   );
 };

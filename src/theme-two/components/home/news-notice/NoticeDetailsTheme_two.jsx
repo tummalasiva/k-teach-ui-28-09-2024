@@ -1,9 +1,10 @@
 /** @format */
 
 import React from "react";
-import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -13,28 +14,19 @@ import {
   keyframes,
   styled,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import themeData from "../../../../data/themeData";
+import dayjs from "dayjs";
 // icons
 import EastIcon from "@mui/icons-material/East";
 
-const moveRight = keyframes`
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(5px);
-  }
-`;
-
 const TypographyTitle = styled(Typography)(({ theme }) => ({
-  fontWeight: 600,
+  fontWeight: "bolder",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   width: "max-content",
+  marginTop: "10px",
   fontSize: "18px",
-  color: themeData.darkPalette.primary.main,
   "&:hover": { color: "#f86f03" },
 
   [`&::after`]: {
@@ -55,57 +47,70 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
     fontSize: "15px",
   },
 }));
+const MuiTypographyDate = styled(Typography)(() => ({
+  fontWeight: "bold",
+  fontSize: "22px",
+}));
 
-export default function NewsDetails({ elem }) {
+const moveRight = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+`;
+
+export default function NoticeDetailsTheme_two({ elem }) {
   let navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/news-details/${elem._id}`, {
+    navigate(`/notice-details/${elem._id}`, {
       state: { data: elem },
     });
   };
+
   const capitalizeFirstLetter = (string) => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
+  console.log(elem, "ellele");
   return (
     <>
-      <Card sx={{ display: "flex", width: 600, my: 1, height: 170 }}>
-        <CardMedia
-          component="img"
-          sx={{ width: 200 }}
-          image={elem?.image}
-          alt="Live from space album cover"
-        />
-        <Box sx={{ m: 2 }}>
-          <Typography
-            variant="body2"
-            fontWeight={600}
-            sx={{ color: "#068FFF" }}>
-            {dayjs(elem?.date).format("DD, MMM, YYYY")}
-          </Typography>
-          <TypographyTitle>
+      <Card sx={{ display: "flex", width: 600, my: 1, height: 150 }}>
+        <Box
+          sx={{
+            bgcolor: "#f57c00",
+            color: "#fff",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <MuiTypographyDate variant="h3">
+            {dayjs(elem?.date).format("DD")}
+          </MuiTypographyDate>
+          <MuiTypographyDate variant="h6" component="div">
+            {dayjs(elem?.date).format("MMM")}
+          </MuiTypographyDate>
+        </Box>
+        <Box
+          sx={{
+            padding: "16px",
+          }}>
+          <TypographyTitle variant="h6" component="div" color="#f57c00">
             {capitalizeFirstLetter(elem?.title)}
           </TypographyTitle>
-          <Typography
-            sx={{
-              display: "-webkit-box",
-              overflow: "hidden",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
-              textOverflow: "ellipsis",
-            }}
-            paragraph
-            fontSize={14}>
-            {elem?.news}
+          <Typography sx={{ display: "inline-flex" }} paragraph fontSize={14}>
+            {elem.notice?.substring(0, 80)}...
           </Typography>
-
           <Typography
             className="navigate"
             sx={{
               display: "flex",
-              fontWeight: 600,
+              fontWeight: "bold",
               alignItems: "center",
               fontSize: "14px",
               color: themeData.darkPalette.primary.main,
