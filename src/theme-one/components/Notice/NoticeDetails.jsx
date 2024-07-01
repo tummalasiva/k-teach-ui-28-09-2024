@@ -36,7 +36,8 @@ const MuiSubtitle = styled(Typography)(({}) => ({
   display: "-webkit-box",
   overflow: "hidden",
   WebkitBoxOrient: "vertical",
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 1,
+  height: "20px",
 }));
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({
