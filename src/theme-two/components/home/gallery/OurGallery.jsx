@@ -116,13 +116,14 @@ export default function OurGallery() {
         <Dots />
       </TextBox>
       <Main>
-        <Container sx={{ padding: "10px" }}>
+        <Box sx={{ paddingLeft: "4rem", paddingRight: "4rem" }}>
           <Gallery
             ref={sliderRef}
             galleryData={data}
             setModalOpen={setModalOpen}
           />
-        </Container>
+        </Box>
+        {/* == show gallery img model =======  */}
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"

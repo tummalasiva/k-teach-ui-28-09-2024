@@ -37,14 +37,21 @@ const MuiBox = styled(Box)(({ theme }) => ({
 }));
 
 const scrollAnimation = keyframes`
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
 `;
 
 const AnimatedBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column-reverse",
   animation: `${scrollAnimation} 8s linear infinite`,
+  "&:hover": {
+    animationPlayState: "paused",
+  },
 }));
 
 // const AnimatedBox = styled(Box)(({ theme }) => ({
@@ -146,35 +153,6 @@ export default function NewsAndNotice() {
                     </React.Fragment>
                   );
                 })}
-                <Card sx={{ display: "flex", width: 600, my: 1, height: 180 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}>
-                    <TypographyMain className="title">hshshsh</TypographyMain>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography
-                        sx={{ display: "inline-flex" }}
-                        paragraph
-                        fontSize={14}
-                        // variant="h6"
-                      >
-                        shshsh...
-                      </Typography>
-
-                      <Typography
-                        className="navigate"
-                        sx={{
-                          cursor: "pointer",
-                          color: "orange",
-                        }}
-                        fontSize={14}>
-                        Read More
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Card>
               </AnimatedBox>
             ) : (
               <Typography

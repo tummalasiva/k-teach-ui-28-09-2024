@@ -20,6 +20,7 @@ const Title = styled(Box)(() => ({
   fontWeight: "bold",
   display: "-webkit-box",
   overflow: "hidden",
+  fontFamily: "Roboto ,sans-serif",
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: 1,
   "&:hover": {
@@ -29,19 +30,20 @@ const Title = styled(Box)(() => ({
 }));
 
 const Content = styled(Typography)(() => ({
-  fontSize: "18px",
-  color: themeData.darkPalette.secondary.main,
+  fontSize: "16px",
   fontFamily: "Muli",
   height: "50px",
   display: "-webkit-box",
   overflow: "hidden",
   WebkitBoxOrient: "vertical",
+  fontFamily: "Roboto,sans-serif",
   WebkitLineClamp: 2,
+  color: "grey",
 }));
 
 const AnchorBox = styled(Box)({
   color: themeData.darkPalette.secondary.main,
-  fontFamily: "sans-serif",
+  fontFamily: "Roboto,sans-serif",
   "&::after": {
     content: '""',
     height: "3px",
@@ -106,21 +108,14 @@ export default function EventCards({
   }, []);
 
   const handleReadMoreClick = () => {
-    navigate(`/`);
-    // navigate(`/home/events/`);
-    // navigate(`/home/events/${elem._id}`, { state: elem });
-    if (showFull) {
-      navigate("/");
-    } else {
-      setShowFull(!showFull);
-    }
+    navigate(`/award-details/${elem?._id}`, { state: { awards: elem } });
   };
 
   return (
     <>
       <Card
         sx={{
-          maxWidth: 365,
+          maxWidth: 335,
           alignSelf: "center",
           margin: { xs: "5px", sm: "10px", md: "20px" },
         }}>
