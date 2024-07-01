@@ -69,7 +69,7 @@ const NewsAndNotices = () => {
         });
         setNotice(data.result);
 
-        console.log(data.result, "kkkkkkkklllllllppppppp");
+        // console.log(data.result, "kkkkkkkklllllllppppppp");
       } catch (error) {
         console.log(error.message);
       }

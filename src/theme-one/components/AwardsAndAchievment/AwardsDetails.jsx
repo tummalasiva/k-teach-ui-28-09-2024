@@ -31,7 +31,6 @@ const AwardsDetails = ({ show }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  console.log(newAwards, "hhhhh");
   return (
     <>
       <SubHeader
@@ -87,11 +86,10 @@ const AwardsDetails = ({ show }) => {
             <Typography variant="subtitle1" mt={1}>
               {newAwards?.note}
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
+            <Box sx={{ mt: 1 }}>
               <Button
                 size="small"
                 variant="outlined"
-                color="warning"
                 onClick={() => navigate("/")}>
                 Go Back
               </Button>
