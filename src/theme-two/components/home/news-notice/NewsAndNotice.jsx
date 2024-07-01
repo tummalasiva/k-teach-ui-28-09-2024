@@ -154,7 +154,7 @@ export default function NewsAndNotice() {
 
         <MuiCard>
           <Stack
-            direction="row"
+            direction={{ xs: "column", sm: "column", md: "row" }}
             divider={
               <Divider
                 orientation="vertical"
