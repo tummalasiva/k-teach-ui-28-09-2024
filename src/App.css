@@ -1,3 +1,5 @@
+/** @format */
+
 .sideContent {
   color: #fff;
 }
@@ -21,7 +23,7 @@
   font-weight: 600px;
 
   letter-spacing: 0.2rem;
-  font-family: "Roboto Slab", serif;
+  font-family: "Roboto, Helvetica, Arial, sans-serif";
 }
 
 .circle {

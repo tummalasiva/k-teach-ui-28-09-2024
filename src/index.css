@@ -1,3 +1,5 @@
+/** @format */
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -5,8 +7,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: "Roboto, Helvetica, Arial, sans-serif, monospace";
 }
 
 .slick-arrow-icon-left,
@@ -14,7 +15,7 @@ code {
   position: absolute;
   display: block;
   cursor: pointer;
-  background: rgb(6, 143, 255);
+  background: #184880;
   color: white;
   border-radius: 50px;
   top: 50%;

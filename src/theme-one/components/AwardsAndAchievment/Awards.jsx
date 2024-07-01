@@ -39,7 +39,7 @@ const Awards = ({ awardsDetails }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/awardsDetails/${awardsDetails._id}`, {
+    navigate(`/award-details/${awardsDetails._id}`, {
       state: { awards: awardsDetails },
     });
   };

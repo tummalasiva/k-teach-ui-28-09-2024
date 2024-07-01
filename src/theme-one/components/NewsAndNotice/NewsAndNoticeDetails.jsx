@@ -118,17 +118,7 @@ export default function NewsAndNoticeDetails({ news }) {
             </Typography>
             <TypographyTitle>{news?.title}</TypographyTitle>
             <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
-              {news?.news}Promoting national integrity and feeling of oneness
-              among students. Empowering our kids to be compassionate and
-              responsive to our culture and heritage. promoting scientific
-              attitude and temper. We take pride in educating thousands of
-              bright kids in last several years and being part of their success
-              stories.We are glad to be part of the nation building exercise in
-              a noble and humble way. kids in last several years and being part
-              of their success stories.We are glad to be part of the nation
-              building exercise in a noble and humble way. kids in last several
-              years and being part of their success stories.We are glad to be
-              part of the nation building exercise in a noble and humble way.
+              {news?.news}
             </MuiSubtitle>
 
             <ReadButton onClick={handleNavigate}>
