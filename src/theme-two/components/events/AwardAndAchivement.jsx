@@ -29,7 +29,7 @@ const Random1 = styled(Box)(({ theme }) => ({
   justifyContent: "flex-end",
   gap: "20px",
   marginBottom: "15px",
-  marginRight: "15px",
+  marginRight: "50px",
   ".MuiSvgIcon-root": {
     cursor: "pointer",
     border: `1px solid ${themeData.darkPalette.primary.main}`,
@@ -74,32 +74,25 @@ export default function AwardAndAchivement() {
 
   return (
     <>
-      <Container sx={{ marginTop: "8rem" }} maxWidth="xl">
+      <Container sx={{ marginTop: "8rem", my: 3 }} maxWidth="xl">
         <TypographyMain variant="h5" my={6}>
           OUR AWARDS AND ACHIVEMENTS
           <Dots />
         </TypographyMain>
-        <Box
-          sx={{
-            padding: { xs: 0, sm: 0, md: "40px" },
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}>
-          {data?.length > 3 && (
-            <Random1
-              style={{ borderColor: themeData.darkPalette.primary.main }}>
-              <ChevronLeftIcon
-                onClick={handlePrevClick}
-                sx={{ color: themeData.darkPalette.primary.main }}
-              />
-              <ChevronRightIcon
-                onClick={handleNextClick}
-                sx={{ color: themeData.darkPalette.primary.main }}
-              />
-            </Random1>
-          )}
 
+        {data?.length > 3 && (
+          <Random1 style={{ borderColor: themeData.darkPalette.primary.main }}>
+            <ChevronLeftIcon
+              onClick={handlePrevClick}
+              sx={{ color: themeData.darkPalette.primary.main }}
+            />
+            <ChevronRightIcon
+              onClick={handleNextClick}
+              sx={{ color: themeData.darkPalette.primary.main }}
+            />
+          </Random1>
+        )}
+        <Box sx={{ paddingLeft: "2rem", paddingRight: "2rem" }}>
           <AppSlider
             {...calculateSlidersSetting(data.length)}
             ref={(slider) => {

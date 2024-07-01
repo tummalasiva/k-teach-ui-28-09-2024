@@ -110,7 +110,7 @@ const WebsiteTheme1 = () => {
         <Route path="/assignment" element={<Assignment />} />
         <Route path="/pre-admission" element={<PreAdmission />} />
         <Route path="/eventDetails/:id" element={<EventDetails />} />
-        <Route path="/awardsDetails/:id" element={<AwardsDetails />} />
+        <Route path="/award-details/:id" element={<AwardsDetails />} />
 
         <Route path="/news-and-notice-details/:id" element={<News />} />
 

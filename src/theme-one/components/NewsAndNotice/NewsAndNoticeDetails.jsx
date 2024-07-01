@@ -115,20 +115,22 @@ export default function NewsAndNoticeDetails({ news }) {
             border: "1px solid #99999933",
             backgroundColor: "white",
           }}>
-          <Typography
-            variant="body2"
-            fontWeight={600}
-            sx={{ color: "#068FFF" }}>
-            {dayjs(news?.date).format("DD, MMM, YYYY")}
-          </Typography>
-          <TypographyTitle>{news?.title}</TypographyTitle>
-          <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
-            {news?.news}
-          </MuiSubtitle>
+          <Box>
+            <Typography
+              variant="body2"
+              fontWeight={600}
+              sx={{ color: "#068FFF" }}>
+              {dayjs(news?.date).format("DD, MMM, YYYY")}
+            </Typography>
+            <TypographyTitle>{news?.title}</TypographyTitle>
+            <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
+              {news?.news}
+            </MuiSubtitle>
 
-          <ReadButton size="small" onClick={handleNavigate}>
-            Read More <ChevronRightIcon fontSize="small" fontWeight={600} />
-          </ReadButton>
+            <ReadButton size="small" onClick={handleNavigate}>
+              Read More <ChevronRightIcon fontSize="small" fontWeight={600} />
+            </ReadButton>
+          </Box>
         </Grid>
       </MainGrid>
     </Container>

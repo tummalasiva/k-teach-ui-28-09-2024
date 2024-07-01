@@ -4,9 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Container, Typography, Box, styled } from "@mui/material";
 import SettingContext from "../../../context/SettingsContext";
 import Slider from "react-slick";
-// icons
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import { calculateSlidersSetting } from "../../data/Carousal";
 import EventCards from "./EventCards";
 import themeData from "../../../data/themeData";
@@ -14,7 +12,9 @@ import { AppSlider } from "../../data/AppSlider";
 import Dots from "../../data/Dots";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
 import { get } from "../../../services/apiMethods";
-
+// icons
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 export const arrData = [
   {
     id: "1",
@@ -75,6 +75,7 @@ const Random1 = styled(Box)(({ theme }) => ({
   gap: "20px",
   marginBottom: "15px",
   marginRight: "15px",
+
   ".MuiSvgIcon-root": {
     cursor: "pointer",
     border: `1px solid ${themeData.darkPalette.primary.main}`,
@@ -123,14 +124,7 @@ export default function OurEvents() {
           OUR EVENTS
           <Dots />
         </TypographyMain>
-        {/* <Box
-          sx={{
-            padding: { xs: 0, sm: 0, md: "40px" },
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        > */}
+
         {events.length > 3 && (
           <Random1 style={{ borderColor: themeData.darkPalette.primary.main }}>
             <ChevronLeftIcon
@@ -153,7 +147,6 @@ export default function OurEvents() {
             <EventCards key={i} elem={elem} hideContent={false} view="View" />
           ))}
         </AppSlider>
-        {/* </Box> */}
       </Container>
     </>
   );

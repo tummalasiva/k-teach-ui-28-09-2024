@@ -9,6 +9,7 @@ import {
   Card,
   Container,
   Grid,
+  Paper,
   Typography,
   styled,
 } from "@mui/material";
@@ -21,9 +22,9 @@ const Title = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
 }));
 
-const AwardsDetails = () => {
+const AwardsDetails = ({ show }) => {
   const location = useLocation();
-  const newAwards = location.state && location.state.awards;
+  const newAwards = location.state && location.state?.awards;
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -33,15 +34,17 @@ const AwardsDetails = () => {
   return (
     <>
       <SubHeader
+        show={show}
         title="Awards And Achievements"
         leftSideHeader="Home"
         rightSideHeader=" Awards And Achievements"
       />
-      <Container sx={{ marginTop: "5px" }}>
+      <Paper sx={{ p: "15px", my: 2 }}>
+        {/* <Container sx={{ marginTop: "5px" }}> */}
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <img
-              src={newAwards.image ? newAwards.image : "awards.png"}
+              src={newAwards?.image ? newAwards?.image : "awards.png"}
               alt="loading..."
               style={{ width: "100%", borderRadius: "5px" }}
             />
@@ -53,34 +56,48 @@ const AwardsDetails = () => {
             sx={{
               order: { xs: 1, sm: 1, md: 2 },
             }}>
-            <Typography
-              variant="subtitle1"
-              sx={{ color: "black", fontWeight: 600 }}>
-              {dayjs(newAwards.date).format("MMM DD, YYYY")}
-            </Typography>
-            <Title variant="subtitle1">{newAwards.title}</Title>
+            {newAwards?.date ? (
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "black", fontWeight: 600 }}>
+                {dayjs(newAwards?.fromDate).format("MMM DD, YYYY")}
+              </Typography>
+            ) : (
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "black", fontWeight: 600 }}>
+                Event Date{" "}
+                {`${dayjs(newAwards?.fromDate).format("DD MMM, YYYY")} -
+                ${dayjs(newAwards?.toDate).format("DD MMM, YYYY")}`}
+              </Typography>
+            )}
+            <Title variant="subtitle1">{newAwards?.title}</Title>
             <Typography variant="subtitle1">
-              <b> Hosted By:</b>
-              <span sx={{ color: "black" }}>{newAwards.hostedBy}</span>
+              <b> Hosted By: </b>
+              <span sx={{ color: "black" }}>{newAwards?.hostedBy}</span>
             </Typography>
             <Typography variant="subtitle1">
               <b> Location: </b>
               <span component="span" sx={{ color: "black" }}>
-                {" "}
-                {newAwards.location}
+                {newAwards?.location}
               </span>
             </Typography>
-            <Typography variant="subtitle1">{newAwards.note}</Typography>
+            <Typography variant="subtitle1">{newAwards?.shortEvent}</Typography>
+            <Typography variant="subtitle1" mt={1}>
+              {newAwards?.note}
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => navigate("/")}>
+                Go Back
+              </Button>
+            </Box>
           </Grid>
         </Grid>
-      </Container>
-
-      <Box sx={{ display: "flex", justifyContent: "flex-end", m: 1 }}>
-        {" "}
-        <Button size="small" variant="outlined" onClick={() => navigate("/")}>
-          Go Back
-        </Button>
-      </Box>
+        {/* </Container> */}
+      </Paper>
     </>
   );
 };

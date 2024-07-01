@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -214,7 +216,7 @@ export const calculateSlidersData = (length) => {
 
 export const calculateSlidersSetting = (length) => {
   return {
-    slidesToShow: length >= 4 ? 3 : length,
+    slidesToShow: length >= 5 ? 4 : length,
     dots: false,
     infinite: true,
     speed: 500,
@@ -238,28 +240,28 @@ export const calculateSlidersSetting = (length) => {
       {
         breakpoint: 1034,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: length >= 2 ? 2 : length,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 900,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: length >= 1 ? 1 : length,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: length >= 1 ? 1 : length,
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 300,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: length >= 1 ? 1 : length,
           slidesToScroll: 1,
         },
       },
