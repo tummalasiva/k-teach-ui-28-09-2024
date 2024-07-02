@@ -79,6 +79,15 @@ const MovingTextContainer = styled(Box)(({ theme }) => ({
     top: "40%",
   },
 }));
+// const MovingTextContainer = styled(Box)(({ theme }) => ({
+//   position: "absolute",
+//   top: "40%",
+//   left: "6%",
+
+//   display: "flex",
+//   flexDirection: "column",
+//   alignItems: "flex-start",
+// }));
 
 const FirstMovingText = styled(MovingText)(({ theme }) => ({
   zIndex: 20,
