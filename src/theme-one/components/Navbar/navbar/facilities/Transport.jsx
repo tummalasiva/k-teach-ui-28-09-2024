@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import SubHeader from "../../../SubHeader";
@@ -41,7 +43,12 @@ export default function Transport() {
           </Typography>
         </Box>
         <Grid container>
-          <Grid item lg={8} md={8} sm={12}>
+          <Grid
+            item
+            lg={8}
+            md={8}
+            sm={12}
+            sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <Box>
               <Box>
                 <Header>Bus Routes and Timings:</Header>
@@ -165,8 +172,8 @@ export default function Transport() {
             padding="10px"
             sx={{
               textAlign: { xs: "center", sm: "center" },
-            }}
-          >
+              order: { xs: 1, sm: 1, md: 2 },
+            }}>
             <img src={image} alt="" style={{ maxWidth: "100%" }} />
           </Grid>
         </Grid>
