@@ -164,7 +164,7 @@
 
   .printContainer p {
     page-break-inside: avoid !important;
-    font-size: 18px !important;
+    /* font-size: 18px !important; */
   }
 
   .no-print {
