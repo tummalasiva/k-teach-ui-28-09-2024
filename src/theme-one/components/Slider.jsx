@@ -83,7 +83,7 @@ const SecondMovingText = styled(MovingText)(({ theme }) => ({
   color: "white",
   fontSize: "60px",
   display: "inline-block",
-  marginTop: "10px",
+  marginTop: "15px",
   fontFamily: "Roboto ,sans-serif",
   fontWeight: "bold",
   [theme.breakpoints.down("md")]: {
@@ -228,7 +228,7 @@ const Slider = ({}) => {
               timing="ease-in"
               iteration="1"
               fillMode="none">
-              To Knowledge with us
+              To Knowledge With Us
             </ThirdMovingText>
           </>
         )}
