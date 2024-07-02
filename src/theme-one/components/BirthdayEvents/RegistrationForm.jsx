@@ -66,6 +66,7 @@ export default function RegistrationForm() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          borderRadius: "5px",
         }}>
         <Header textAlign="start" mb={4}>
           Registration Form
