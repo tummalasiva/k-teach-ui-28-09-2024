@@ -87,20 +87,16 @@ export default function RelievingLetter() {
       relievingLetter:
         dataToEdit?.relievingLetter ||
         `<p>Webpruce Company</p>
-      <p>Rajajingar, Banglore, Karnataka</p>
-      <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
-      <p>Contact: +91 876xxxxxxxxx</p>
-      <p>E Mail: ajxxxxx@gmail.com</p>
-      <p>Date: DD, MM, YY	</p>
-      <br/>
-      <p>Dear Ashish,</p>
-      <br/>
-      <p>This is in continuation to our meeting, I am delighted to offer you the position of Project Head at xxx organization. In this role, you would be reporting to the Senior Delivery Head and would be responsible for delivering global projects for high end clients.</p>
-      <br/>
-      <p>The terms of employment have been attached with this offer letter. We hope you will enjoy your role and make significant contributions to the success of the business. Your employment will commence on DD, MM, YY. You will be based at Bangalore location but may be required to work at other locations as well, as reasonably determined by the needs of the business.</p>
-      <br/>
-      <p>Regards</p>
-      <p>HR, Manager</p>
+        <p>Rajajingar, Banglore, Karnataka</p>
+        <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
+        <p>Contact: +91 876xxxxxxxxx</p>
+        <p>E Mail: ajxxxxx@gmail.com</p>
+        <p>Date: DD, MM, YY	</p>
+        <p>Dear Ashish,</p>
+        <p>This is in continuation to our meeting, I am delighted to offer you the position of Project Head at xxx organization. In this role, you would be reporting to the Senior Delivery Head and would be responsible for delivering global projects for high end clients.</p>
+        <p>The terms of employment have been attached with this offer letter. We hope you will enjoy your role and make significant contributions to the success of the business. Your employment will commence on DD, MM, YY. You will be based at Bangalore location but may be required to work at other locations as well, as reasonably determined by the needs of the business.</p>
+        <p>Regards</p>
+        <p>HR, Manager</p>
       `,
     },
     onSubmit: handleCreateOrUpdate,

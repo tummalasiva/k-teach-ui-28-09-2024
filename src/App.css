@@ -148,3 +148,26 @@
     opacity: 0;
   }
 }
+
+/* for print css */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .printContainer {
+    padding-left: 20px !important;
+    padding-right: 10px !important;
+  }
+
+  .printContainer p {
+    page-break-inside: avoid !important;
+    font-size: 18px !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

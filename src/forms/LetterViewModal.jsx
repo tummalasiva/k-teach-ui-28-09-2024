@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useRef } from "react";
 import {
   Dialog,
@@ -25,9 +27,10 @@ export default function LetterViewModal({
     <Dialog
       onClose={onClose}
       aria-labelledby="customized-dialog-title"
-      open={open}
-    >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+      open={open}>
+      <DialogTitle
+        sx={{ m: 0, p: 2, fontWeight: 600 }}
+        id="customized-dialog-title">
         {title}
       </DialogTitle>
       <IconButton
@@ -37,16 +40,15 @@ export default function LetterViewModal({
           position: "absolute",
           right: 8,
           top: 8,
-        }}
-      >
+        }}>
         <CloseIcon />
       </IconButton>
       <DialogContent>
         <Typography gutterBottom>
           <div
+            class="printContainer"
             ref={contentRef}
-            dangerouslySetInnerHTML={{ __html: content }}
-          ></div>
+            dangerouslySetInnerHTML={{ __html: content }}></div>
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -60,8 +62,7 @@ export default function LetterViewModal({
                 ":hover": { background: "#1b3779" },
               }}
               onClick={onPrintClick}
-              startIcon={<PrintIcon />}
-            >
+              startIcon={<PrintIcon />}>
               Print
             </Button>
           )}
