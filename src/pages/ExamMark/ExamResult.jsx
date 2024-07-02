@@ -11,6 +11,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import ExamResultViewModel from "./ExamResultViewModel";
 
 export default function ExamResult() {
   const [data, setData] = useState([]);
@@ -18,6 +19,11 @@ export default function ExamResult() {
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
   const [exams, setExams] = useState([]);
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: "",
+    action: () => {},
+  });
 
   const getClass = async () => {
     try {
@@ -61,11 +67,20 @@ export default function ExamResult() {
           examId: values.exam,
         },
       });
-      console.log(data, "data");
+      setData(
+        data.result.map((d) => ({
+          ...d,
+          name: d.student.basicInfo?.name,
+          roleNumber: d.student.academicInfo?.rollNumber,
+          image: d.student?.photo,
+        }))
+      );
     } catch (error) {
       console.log(error);
     }
   };
+  // console.log(data, "bbb");
+
   const entryFormik = useFormik({
     initialValues: {
       class: "",
@@ -99,6 +114,19 @@ export default function ExamResult() {
       getSection();
     }
   }, [entryFormik.values.class, selectedSetting]);
+
+  const handleClickOpenView = (data) => {
+    // console.log(data?.subjects, "vvvvvb");
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data?.subjects,
+    });
+  };
+
+  const onCloseViewModel = (e) => {
+    setModalData({ ...modalData, open: false });
+  };
 
   return (
     <>
@@ -144,10 +172,19 @@ export default function ExamResult() {
         </Grid>
       </Paper>
       <CustomTable
-        actions={[]}
+        actions={["view", "download"]}
         bodyDataModal="exam result"
         bodyData={data}
         tableKeys={examResultTableKeys}
+        onViewClick={handleClickOpenView}
+      />
+
+      {/* view exam result ============= */}
+      <ExamResultViewModel
+        title="Exam Result Information"
+        open={modalData?.open}
+        tableData={modalData?.tableData}
+        onClose={onCloseViewModel}
       />
     </>
   );
