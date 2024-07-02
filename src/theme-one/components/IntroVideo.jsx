@@ -12,7 +12,7 @@ const OuterContainer = styled(Box)(
     background-image: url(${image});
     background-attachment: fixed;
     background-repeat: no-repeat;
-    padding: 80px 30px;
+    padding: 60px 30px;
     max-width: 100%;
     background-size: cover;
     background-position: center;
@@ -42,19 +42,19 @@ const IntroVideo = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "100%",
           }}>
-          <iframe
-            style={{
-              height: "100%",
+          <Box
+            component="iframe"
+            sx={{
               width: "100%",
+              height: { xs: "300px", sm: "400px", md: "500px", lg: "500px" },
               borderRadius: "5px",
               overflow: "hidden",
             }}
             src="https://www.youtube.com/embed/ZCKYz6cgiRs"
             title="YouTube video player"
             frameBorder="0"
-            allowFullScreen="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            allowFullScreen="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></Box>
         </Grid>
 
         <Grid
@@ -67,7 +67,6 @@ const IntroVideo = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "100%",
           }}>
           <RegistrationForm />
         </Grid>
