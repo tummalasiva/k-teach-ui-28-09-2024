@@ -36,6 +36,8 @@ const getRandomAnimation = () => {
 const CarouselContainer = styled(Box)(({ theme }) => ({
   height: "75vh",
   width: "100%",
+  position: "relative",
+  overflow: "hidden",
 }));
 
 const DataContainer = styled(Box)(({ theme }) => ({
@@ -50,34 +52,10 @@ const MovingTextContainer = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "6%",
+  transform: "translateY(-50%)",
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-
-  [theme.breakpoints.down("md")]: {
-    top: "45%",
-  },
-  [theme.breakpoints.down("sm")]: {
-    top: "40%",
-  },
-  [theme.breakpoints.between(911, 913)]: {
-    top: "30%",
-  },
-  [theme.breakpoints.between(819, 821)]: {
-    top: "30%",
-  },
-  [theme.breakpoints.between(767, 769)]: {
-    top: "38%",
-  },
-  [theme.breakpoints.between(411, 415)]: {
-    top: "35%",
-  },
-  [theme.breakpoints.between(392, 394)]: {
-    top: "35%",
-  },
-  [theme.breakpoints.between(279, 281)]: {
-    top: "40%",
-  },
 }));
 
 const FirstMovingText = styled(MovingText)(({ theme }) => ({
@@ -105,14 +83,15 @@ const SecondMovingText = styled(MovingText)(({ theme }) => ({
   color: "white",
   fontSize: "60px",
   display: "inline-block",
-  marginTop: "10px",
+  marginTop: "15px",
   fontFamily: "Roboto ,sans-serif",
   fontWeight: "bold",
   [theme.breakpoints.down("md")]: {
-    fontSize: "30px",
+    fontSize: "40px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "20px",
+
     paddingLeft: "60px",
   },
   [theme.breakpoints.between(279, 281)]: {
@@ -130,7 +109,7 @@ const ThirdMovingText = styled(MovingText)(({ theme }) => ({
   display: "inline-block",
 
   [theme.breakpoints.down("md")]: {
-    fontSize: "30px",
+    fontSize: "40px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "20px",
@@ -204,9 +183,7 @@ const Slider = ({}) => {
               <img
                 ref={ref}
                 src={slideimages}
-                style={{ objectFit: "cover", maxHeight: "75vh" }}
-                width="100%"
-                height="auto"
+                style={{ objectFit: "cover", width: "100%", maxHeight: "75vh" }}
               />
             </DataContainer>
           </Box>
@@ -251,7 +228,7 @@ const Slider = ({}) => {
               timing="ease-in"
               iteration="1"
               fillMode="none">
-              To Knowledge with us
+              To Knowledge With Us
             </ThirdMovingText>
           </>
         )}

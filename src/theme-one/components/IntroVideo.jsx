@@ -12,8 +12,9 @@ const OuterContainer = styled(Box)(
     background-image: url(${image});
     background-attachment: fixed;
     background-repeat: no-repeat;
-    padding: 80px 30px;
+    padding: 60px 30px;
     max-width: 100%;
+
     background-size: cover;
     background-position: center;
     position: relative;
@@ -22,57 +23,59 @@ const OuterContainer = styled(Box)(
 
 const IntroVideo = () => {
   return (
-    <OuterContainer>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "stretch",
-          flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
-        }}>
+    <Box sx={{ mt: 6 }}>
+      {" "}
+      <OuterContainer>
         <Grid
-          item
-          xs={12}
-          sm={12}
-          md={6}
-          lg={7}
+          container
+          spacing={2}
           sx={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100%",
+            justifyContent: "space-evenly",
+            alignItems: "stretch",
+            flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
           }}>
-          <iframe
-            style={{
-              height: "100%",
-              width: "100%",
-              borderRadius: "5px",
-              overflow: "hidden",
-            }}
-            src="https://www.youtube.com/embed/ZCKYz6cgiRs"
-            title="YouTube video player"
-            frameBorder="0"
-            allowFullScreen="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
-        </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={7}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            <Box
+              component="iframe"
+              sx={{
+                width: "100%",
+                height: { xs: "300px", sm: "400px", md: "500px", lg: "500px" },
+                borderRadius: "5px",
+                overflow: "hidden",
+              }}
+              src="https://www.youtube.com/embed/ZCKYz6cgiRs"
+              title="YouTube video player"
+              frameBorder="0"
+              allowFullScreen="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></Box>
+          </Grid>
 
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={6}
-          lg={4}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100%",
-          }}>
-          <RegistrationForm />
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={4}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            <RegistrationForm />
+          </Grid>
         </Grid>
-      </Grid>
-    </OuterContainer>
+      </OuterContainer>
+    </Box>
   );
 };
 

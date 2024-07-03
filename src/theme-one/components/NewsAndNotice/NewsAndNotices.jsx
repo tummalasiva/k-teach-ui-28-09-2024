@@ -1,25 +1,52 @@
 /** @format */
 
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Card, Grid, Typography, keyframes, styled } from "@mui/material";
-import SettingContext from "../../../context/SettingsContext";
+import {
+  Box,
+  Card,
+  Divider,
+  Stack,
+  Typography,
+  css,
+  keyframes,
+  styled,
+} from "@mui/material";
+import themeData from "../../../data/themeData";
+
 import { get } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
+import SettingContext from "../../../context/SettingsContext";
 import NewsAndNoticeDetails from "./NewsAndNoticeDetails";
 import Header from "../Header";
 import NoticeDetails from "../Notice/NoticeDetails";
 
-const NewsContainer = styled(Box)(({ theme }) => ({
-  width: "100%",
+const bubbleAnimation = keyframes`
+  0% {
+    transform: translateY(1000%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+`;
+
+const animatedPause = css`
+  animation-play-state: paused;
+`;
+
+const MuiBox = styled(Box)(({ theme }) => ({
+  // width: "100%",
   display: "flex",
   flexDirection: "column",
-  height: "200px",
   overflowY: "auto",
   justifyContent: "center",
   position: "relative",
+  // backgroundColor: "red",
+  ...animatedPause,
 }));
 
-const scroll = keyframes`
+const scrollAnimation = keyframes`
   0% {
     transform: translateY(100%);
   }
@@ -28,129 +55,149 @@ const scroll = keyframes`
   }
 `;
 
-const NewsScroll = styled(Box)(({ theme }) => ({
+const AnimatedBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column-reverse",
-  animation: `${scroll} 18s linear infinite`,
-
+  transition: "transform 0.3s ease",
+  animation: `${scrollAnimation} 20s linear infinite`,
   "&:hover": {
     animationPlayState: "paused",
   },
 }));
 
-const NewsAndNotices = () => {
+const MuiCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  height: 400,
+  flexDirection: "column",
+  alignItems: "center",
+  marginTop: "20px",
+  background: "#33415c",
+  // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+  boxShadow: "none",
+  borderRadius: "5px",
+}));
+
+const TypographyMain = styled(Typography)(({ theme }) => ({
+  fontSize: "40px",
+  width: "max-content",
+  fontWeight: 700,
+  color: themeData.darkPalette.primary.main,
+  textShadow: "10px 8px 8px #969c96",
+  [theme.breakpoints.down("md")]: {
+    fontSize: "30px",
+  },
+
+  [theme.breakpoints.down("sm")]: {
+    textAlign: "center",
+    margin: 0,
+    padding: "0",
+  },
+  [theme.breakpoints.down(600)]: {
+    fontSize: "20px",
+  },
+  [theme.breakpoints.down(500)]: {
+    fontSize: "15px",
+  },
+}));
+
+export default function NewsAndNotices() {
   const { selectedSetting } = useContext(SettingContext);
+  const [notics, setNotices] = useState([]);
   const [data, setData] = useState([]);
-  const [notice, setNotice] = useState([]);
+
+  const getData = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.news.listPublic, {
+        params: { schoolId: selectedSetting._id },
+      });
+
+      setData(data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getNotics = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.notice.listPublic);
+      setNotices(data.result);
+      // console.log(data.result, "ggggfgffgffff");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const getAllNews = async () => {
-      try {
-        const { data } = await get(PRIVATE_URLS.news.list, {
-          params: {
-            schoolId: selectedSetting._id,
-          },
-        });
-        setData(data.result);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getAllNews();
+    getData();
+    getNotics();
   }, [selectedSetting]);
 
-  useEffect(() => {
-    const getAllNotice = async () => {
-      try {
-        const { data } = await get(PRIVATE_URLS.notice.list, {
-          params: {
-            schoolId: selectedSetting._id,
-          },
-        });
-        setNotice(data.result);
-
-        // console.log(data.result, "kkkkkkkklllllllppppppp");
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getAllNotice();
-  }, [selectedSetting]);
   return (
     <>
-      <Box pt={3}>
-        <Header title1="News &" title2="Notice" />
+      <Box sx={{ mx: 1 }}>
+        <Box pt={3}>
+          <Header title1="News &" title2="Notice" />{" "}
+        </Box>
+
+        <MuiCard>
+          <Stack
+            direction={{ xs: "column", sm: "column", md: "row" }}
+            divider={
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ background: "#fff", width: "3px" }}
+              />
+            }
+            spacing={2}
+            sx={{ mx: 1 }}>
+            <MuiBox>
+              {data?.length ? (
+                <AnimatedBox>
+                  {data.map((news, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <NewsAndNoticeDetails key={index} news={news} />
+                      </React.Fragment>
+                    );
+                  })}
+                </AnimatedBox>
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    textAlign: "center",
+                    color: "lightgrey",
+                  }}>
+                  No news and events are available at this time!
+                </Typography>
+              )}
+            </MuiBox>
+            <MuiBox>
+              {notics?.length ? (
+                <AnimatedBox>
+                  {notics.map((notice, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <NoticeDetails key={index} notice={notice} />
+                      </React.Fragment>
+                    );
+                  })}
+                </AnimatedBox>
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    textAlign: "center",
+                    color: "lightgrey",
+                  }}>
+                  No Notics are available at this time!
+                </Typography>
+              )}
+            </MuiBox>
+          </Stack>
+        </MuiCard>
       </Box>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={6}>
-          <Card
-            elevation={0}
-            sx={{
-              display: "flex",
-
-              border: "2px solid #ffffff",
-              // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
-              borderRadius: "10px",
-
-              margin: "30px",
-            }}>
-            <NewsContainer>
-              {data.length ? (
-                <NewsScroll>
-                  {data.map((news, index) => (
-                    <NewsAndNoticeDetails key={index} news={news} />
-                  ))}
-                </NewsScroll>
-              ) : (
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    maxWidth: "900px",
-                  }}>
-                  No News to show at the moment!
-                </Typography>
-              )}
-            </NewsContainer>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={6}>
-          <Card
-            elevation={0}
-            sx={{
-              display: "flex",
-
-              border: "2px solid #ffffff",
-              // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
-              borderRadius: "10px",
-              margin: "30px",
-            }}>
-            <NewsContainer>
-              {notice.length ? (
-                <NewsScroll>
-                  {notice.map((notice, index) => (
-                    <NoticeDetails key={index} notice={notice} />
-                  ))}
-                </NewsScroll>
-              ) : (
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    maxWidth: "900px",
-                  }}>
-                  No Notice to show at the moment!
-                </Typography>
-              )}
-            </NewsContainer>
-          </Card>
-        </Grid>
-      </Grid>
     </>
   );
-};
-
-export default NewsAndNotices;
+}

@@ -1,45 +1,31 @@
 /** @format */
 
 import React from "react";
+import dayjs from "dayjs";
 import {
   Box,
-  Button,
+  Card,
+  CardContent,
+  CardMedia,
   Container,
   Grid,
   Typography,
+  keyframes,
   styled,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import EastIcon from "@mui/icons-material/East";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import themeData from "../../../data/themeData";
+// icons
+import EastIcon from "@mui/icons-material/East";
 
-const MainGrid = styled(Grid)(({}) => ({
-  display: "flex",
-  cursor: "pointer",
-  "&:hover .image": {
-    border: `2px solid ${themeData.darkPalette.primary.main}`,
-  },
-}));
-
-const ReadButton = styled(Button)(() => ({
-  fontWeight: "bold",
-  fontSize: "12px",
-  cursor: "pointer",
-  paddingTop: "0px",
-  color: themeData.darkPalette.primary.main,
-  "&:hover": {},
-}));
-
-const MuiSubtitle = styled(Typography)(({}) => ({
-  display: "inline-flex",
-  display: "-webkit-box",
-  overflow: "hidden",
-  WebkitBoxOrient: "vertical",
-  WebkitLineClamp: 1,
-  height: "20px",
-}));
+const moveRight = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+`;
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
@@ -47,18 +33,18 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   width: "max-content",
-  textTransform: "capitalize",
-  color: "black",
-  fontSize: "20px",
-  "&:hover": { color: themeData.darkPalette.primary.main },
+  fontSize: "18px",
+  color: themeData.darkPalette.primary.main,
+  "&:hover": { color: "#f86f03" },
+
   [`&::after`]: {
     content: "''",
     width: "0%",
     height: "2px",
-    backgroundColor: themeData.darkPalette.primary.main,
+    backgroundColor: "red",
     display: "block",
     transition: "0.5s",
-    fontWeight: 600,
+    fontWeight: "bold",
     fontSize: "1rem",
     color: "red",
   },
@@ -70,69 +56,75 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export default function NewsAndNoticeDetails({ news }) {
+export default function NewsDetails({ news }) {
   let navigate = useNavigate();
+
   const handleNavigate = () => {
     navigate(`/news-and-notice-details/${news._id}`, {
       state: { data: news },
     });
   };
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   return (
-    <Container>
-      <MainGrid
-        container
-        sx={{ display: "flex", padding: "10px" }}
-        onClick={handleNavigate}>
-        <Grid
-          item
-          md={2}
-          xs={12}
-          sm={2}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-          <img
-            className="image"
-            src={news?.image}
-            width={160}
-            height={100}
-            style={{
-              border: `1px solid ${themeData.darkPalette.primary.main}`,
+    <>
+      <Card sx={{ display: "flex", width: 600, my: 1, height: 170 }}>
+        <CardMedia
+          component="img"
+          sx={{ width: 200 }}
+          image={news?.image}
+          alt="Live from space album cover"
+        />
+        <Box sx={{ m: 2 }}>
+          <Typography
+            variant="body2"
+            fontWeight={600}
+            sx={{ color: "#068FFF" }}>
+            {dayjs(news?.date).format("DD, MMM, YYYY")}
+          </Typography>
+          <TypographyTitle>
+            {capitalizeFirstLetter(news?.title)}
+          </TypographyTitle>
+          <Typography
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+              textOverflow: "ellipsis",
             }}
-            alt="image"
-          />
-        </Grid>
-        <Grid
-          item
-          md={10}
-          sm={10}
-          xs={12}
-          sx={{
-            padding: "5px 5px",
-            border: "1px solid #99999933",
-            backgroundColor: "white",
-          }}>
-          <Box>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              sx={{ color: "#068FFF" }}>
-              {dayjs(news?.date).format("DD, MMM, YYYY")}
-            </Typography>
-            <TypographyTitle>{news?.title}</TypographyTitle>
-            <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
-              {news?.news}
-            </MuiSubtitle>
+            paragraph
+            fontSize={14}>
+            {news?.news}
+          </Typography>
 
-            <ReadButton size="small" onClick={handleNavigate}>
-              Read More <ChevronRightIcon fontSize="small" fontWeight={600} />
-            </ReadButton>
-          </Box>
-        </Grid>
-      </MainGrid>
-    </Container>
+          <Typography
+            className="navigate"
+            sx={{
+              display: "flex",
+              fontWeight: 600,
+              alignItems: "center",
+              fontSize: "14px",
+              color: themeData.darkPalette.primary.main,
+              cursor: "pointer",
+            }}
+            fontSize={14}
+            onClick={handleNavigate}>
+            Read More{" "}
+            <EastIcon
+              fontSize="small"
+              fontWeight={600}
+              sx={{
+                transition: "transform 0.3s ease",
+                animation: `${moveRight} 1s infinite`,
+              }}
+            />
+          </Typography>
+        </Box>
+      </Card>
+    </>
   );
 }

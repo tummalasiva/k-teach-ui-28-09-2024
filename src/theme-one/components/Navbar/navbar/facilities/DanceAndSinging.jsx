@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import SubHeader from "../../../SubHeader";
 
@@ -39,7 +41,12 @@ export default function DanceAndSinging() {
           </Typography>
         </Box>
         <Grid container>
-          <Grid item lg={8} md={8} sm={12}>
+          <Grid
+            item
+            lg={8}
+            md={8}
+            sm={12}
+            sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <Box>
               <Header>Classical Dance Programs:</Header>
               <Typography component="ul">
@@ -177,8 +184,8 @@ export default function DanceAndSinging() {
             padding="10px"
             sx={{
               textAlign: { xs: "center", sm: "center" },
-            }}
-          >
+              order: { xs: 1, sm: 1, md: 2 },
+            }}>
             <img src={image} alt="" style={{ width: "100%" }} />
           </Grid>
         </Grid>

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
 import image from "../../../../../theme-one/assets/Images/food.gif";
@@ -40,7 +42,7 @@ export default function Food() {
           </Typography>
         </Box>
         <Grid container>
-          <Grid lg={8} md={8} sm={12}>
+          <Grid lg={8} md={8} sm={12} sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <Box>
               <Header>Nutritious Meal Options:</Header>
               <Typography component="ul">
@@ -125,8 +127,8 @@ export default function Food() {
             padding="10px"
             sx={{
               textAlign: { xs: "center", sm: "center" },
-            }}
-          >
+              order: { xs: 1, sm: 1, md: 2 },
+            }}>
             <img src={image} alt="" style={{ maxWidth: "100%" }} />
           </Grid>
         </Grid>

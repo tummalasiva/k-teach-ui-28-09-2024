@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import SubHeader from "../../../SubHeader";
 import { Box, Container, Grid, Typography, styled } from "@mui/material";
@@ -41,7 +43,12 @@ export default function Library() {
           </Typography>
         </Box>
         <Grid container>
-          <Grid item lg={8} md={8} sm={12}>
+          <Grid
+            item
+            lg={8}
+            md={8}
+            sm={12}
+            sx={{ order: { xs: 2, sm: 2, md: 1 } }}>
             <Box>
               <Header variant="h6" gutterBottom>
                 Library Collection:
@@ -175,8 +182,8 @@ export default function Library() {
             padding="10px"
             sx={{
               textAlign: { xs: "center", sm: "center" },
-            }}
-          >
+              order: { xs: 1, sm: 1, md: 2 },
+            }}>
             <img src={image} alt="" style={{ maxWidth: "100%" }} />
           </Grid>
         </Grid>

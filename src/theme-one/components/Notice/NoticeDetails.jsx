@@ -1,63 +1,42 @@
 /** @format */
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardMedia,
   Container,
   Grid,
   Typography,
+  keyframes,
   styled,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import EastIcon from "@mui/icons-material/East";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import themeData from "../../../data/themeData";
-
-const MainGrid = styled(Grid)(({}) => ({
-  display: "flex",
-  cursor: "pointer",
-  "&:hover .image": {
-    border: `2px solid ${themeData.darkPalette.primary.main}`,
-  },
-}));
-
-const ReadButton = styled(Button)(() => ({
-  fontWeight: "bold",
-  fontSize: "12px",
-  cursor: "pointer",
-  color: themeData.darkPalette.primary.main,
-  "&:hover": {},
-}));
-
-const MuiSubtitle = styled(Typography)(({}) => ({
-  display: "inline-flex",
-  display: "-webkit-box",
-  overflow: "hidden",
-  WebkitBoxOrient: "vertical",
-  WebkitLineClamp: 1,
-  height: "20px",
-}));
+import dayjs from "dayjs";
+// icons
+import EastIcon from "@mui/icons-material/East";
 
 const TypographyTitle = styled(Typography)(({ theme }) => ({
-  fontWeight: 600,
+  fontWeight: "bolder",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   width: "max-content",
-  textTransform: "capitalize",
-  color: "black",
-  fontSize: "20px",
-  "&:hover": { color: themeData.darkPalette.primary.main },
+  marginTop: "10px",
+  fontSize: "18px",
+  "&:hover": { color: "#f86f03" },
+
   [`&::after`]: {
     content: "''",
     width: "0%",
     height: "2px",
-    backgroundColor: themeData.darkPalette.primary.main,
+    backgroundColor: "red",
     display: "block",
     transition: "0.5s",
-    fontWeight: 600,
+    fontWeight: "bold",
     fontSize: "1rem",
     color: "red",
   },
@@ -68,68 +47,89 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
     fontSize: "15px",
   },
 }));
+const MuiTypographyDate = styled(Typography)(() => ({
+  fontWeight: "bold",
+  fontSize: "22px",
+}));
 
-export default function NoticeDetails({ notice }) {
+const moveRight = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+`;
+
+export default function NoticeDetailsTheme_two({ notice }) {
   let navigate = useNavigate();
+
   const handleNavigate = () => {
     navigate(`/notice-details/${notice._id}`, {
       state: { data: notice },
     });
   };
 
-  return (
-    <Container>
-      <MainGrid
-        container
-        sx={{ display: "flex", padding: "10px" }}
-        onClick={handleNavigate}>
-        <Grid
-          item
-          md={2}
-          xs={12}
-          sm={2}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-          <img
-            className="image"
-            src={notice?.image}
-            width={160}
-            height={100}
-            style={{
-              border: `1px solid ${themeData.darkPalette.primary.main}`,
-            }}
-            alt="image"
-          />
-        </Grid>
-        <Grid
-          item
-          md={10}
-          sm={10}
-          xs={12}
-          sx={{
-            padding: "10px 10px",
-            border: "1px solid #99999933",
-            backgroundColor: "white",
-          }}>
-          <Typography
-            variant="body2"
-            fontWeight={600}
-            sx={{ color: "#068FFF" }}>
-            {dayjs(notice?.date).format("DD, MMM, YYYY")}
-          </Typography>
-          <TypographyTitle>{notice?.title}</TypographyTitle>
-          <MuiSubtitle paragraph fontSize={14} variant="subtitle1">
-            {notice?.notice}
-          </MuiSubtitle>
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
-          <ReadButton size="small" onClick={handleNavigate}>
-            Read More <ChevronRightIcon fontSize="small" fontWeight={600} />
-          </ReadButton>
-        </Grid>
-      </MainGrid>
-    </Container>
+  console.log(notice, "ellele");
+  return (
+    <>
+      <Card sx={{ display: "flex", width: 600, my: 1, height: 150 }}>
+        <Box
+          sx={{
+            bgcolor: "#f57c00",
+            color: "#fff",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <MuiTypographyDate variant="h3">
+            {dayjs(notice?.date).format("DD")}
+          </MuiTypographyDate>
+          <MuiTypographyDate variant="h6" component="div">
+            {dayjs(notice?.date).format("MMM")}
+          </MuiTypographyDate>
+        </Box>
+        <Box
+          sx={{
+            padding: "16px",
+          }}>
+          <TypographyTitle variant="h6" component="div" color="#f57c00">
+            {capitalizeFirstLetter(notice?.title)}
+          </TypographyTitle>
+          <Typography sx={{ display: "inline-flex" }} paragraph fontSize={14}>
+            {notice.notice?.substring(0, 80)}...
+          </Typography>
+          <Typography
+            className="navigate"
+            sx={{
+              display: "flex",
+              fontWeight: "bold",
+              alignItems: "center",
+              fontSize: "14px",
+              color: themeData.darkPalette.primary.main,
+              cursor: "pointer",
+            }}
+            fontSize={14}
+            onClick={handleNavigate}>
+            Read More{" "}
+            <EastIcon
+              fontSize="small"
+              fontWeight={600}
+              sx={{
+                transition: "transform 0.3s ease",
+                animation: `${moveRight} 1s infinite`,
+              }}
+            />
+          </Typography>
+        </Box>
+      </Card>
+    </>
   );
 }
