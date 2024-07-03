@@ -70,8 +70,6 @@ const OurGallery = () => {
       });
 
       setData(data.result);
-
-      console.log(data.result, "ggggfgffgffff");
     } catch (error) {
       console.log(error);
     }
