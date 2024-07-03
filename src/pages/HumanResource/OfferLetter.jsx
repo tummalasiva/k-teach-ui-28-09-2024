@@ -85,21 +85,29 @@ export default function OfferLetter() {
         : null,
       offerLetter:
         dataToEdit?.offerLetter ||
-        `<p>Webpruce Company</p>
-      <p>Rajajingar, Banglore, Karnataka</p>
-      <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
-      <p>Contact: +91 876xxxxxxxxx</p>
-      <p>E Mail: ajxxxxx@gmail.com</p>
-      <p>Date: DD, MM, YY	</p>
-      <br/>
-      <p>Dear Ashish,</p>
-      <br/>
-      <p>This is in continuation to our meeting, I am delighted to offer you the position of Project Head at xxx organization. In this role, you would be reporting to the Senior Delivery Head and would be responsible for delivering global projects for high end clients.</p>
-      <br/>
-      <p>The terms of employment have been attached with this offer letter. We hope you will enjoy your role and make significant contributions to the success of the business. Your employment will commence on DD, MM, YY. You will be based at Bangalore location but may be required to work at other locations as well, as reasonably determined by the needs of the business.</p>
-      <br/>
-      <p>Regards</p>
-      <p>HR, Manager</p>
+        ` <strong>Congratulations! You've Been Selected for the Role of [Job Title]</strong>
+          <p>[Company Name]</p>
+          <p>[Address eg. Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103]</p>
+          <p>[City, State, ZIP Code]</p>
+          <p>Date: [DD, MM, YY]</p>
+          <strong>Dear [Candidate's Full Name],</strong>
+          <p>We are thrilled to offer you the position of [Job Title] at [Company Name]. After careful consideration, we believe your skills, experience, and vision make you the perfect fit for our team.</p>
+          <strong>Position Details:</strong>
+            <p><strong>- Job Title:</strong> [Job Title]</p>
+            <p><strong>- Department:</strong> [Department]</p>
+            <p><strong>- Supervisor:</strong> [Supervisor/Manager Name]</p>
+            <p><strong>- Start Date:</strong> [Start Date]</p>
+            <p><strong>- Compensation:</strong> [Salary or Compensation Details]</p>
+        <strong>Work Hours:</strong>
+        <p>[Regular work hours, any flexible schedule options, etc.]</p>
+        <p>We believe that [Company Name] is a place where you can grow and thrive. Your role as [Job Title] will be pivotal in driving our company's success and we look forward to the innovative contributions you will bring to our team.</p>
+        <p>Please indicate your acceptance of this offer by signing and returning a copy of this letter by <strong>[Acceptance Deadline]</strong>. Should you have any questions or need further clarification, feel free to reach out to <strong>[HR Contact Name]</strong> at <strong>[HR Contact Email]</strong> or <strong>[HR Contact Phone Number]</strong>.</p>
+        <p>We eagerly await your positive response and look forward to welcoming you to the [Company Name] family.</p>
+        <p>Warm Regards,</p>
+        <p>[HR, Manager Name]</p>
+        <p>[Contact Information]</p>
+        <br/>
+        <p style="text-align:"center;">&copy; [Year] [Company Name]. All rights reserved.</p>
       `,
     },
     onSubmit: handleCreateOrUpdate,
@@ -118,7 +126,7 @@ export default function OfferLetter() {
   };
 
   const handleEditClick = (data) => {
-    console.log(data);
+    // console.log(data);
     setDataToEdit(data);
     setSelectValue(2);
   };

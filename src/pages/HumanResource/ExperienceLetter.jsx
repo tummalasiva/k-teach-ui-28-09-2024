@@ -86,22 +86,25 @@ export default function ExperienceLetter() {
         : null,
       experienceLetter:
         dataToEdit?.experienceLetter ||
-        `<p>Webpruce Company</p>
-      <p>Rajajingar, Banglore, Karnataka</p>
-      <p>From: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
-      <p>Contact: +91 876xxxxxxxxx</p>
-      <p>E Mail: ajxxxxx@gmail.com</p>
-      <p>Date: DD, MM, YY	</p>
-      <br/>
-      <p>Dear Ashish,</p>
-      <br/>
-      <p>This is in continuation to our meeting, I am delighted to offer you the position of Project Head at xxx organization. In this role, you would be reporting to the Senior Delivery Head and would be responsible for delivering global projects for high end clients.</p>
-      <br/>
-      <p>The terms of employment have been attached with this offer letter. We hope you will enjoy your role and make significant contributions to the success of the business. Your employment will commence on DD, MM, YY. You will be based at Bangalore location but may be required to work at other locations as well, as reasonably determined by the needs of the business.</p>
-      <br/>
-      <p>Regards</p>
-      <p>HR, Manager</p>
-      `,
+        ` <strong>Experience Letter</strong>
+          <p>Webpruce Company</p>
+          <p>Date: 12, January 2024</p>
+          <p>Place: Excellent English Medium Primary & High School Ittangihal road, Vijaypur, Karnataka 586103</p>
+          <p>To Whom It May Concern,</p>
+          <p>This is to certify that <strong>[Employee's Full Name]</strong> was employed with us as a <strong>[Job Title]</strong> in the <strong>[Department]</strong> department from <strong>[Start Date]</strong> to <strong>[End Date]</strong>.</p>
+          <p>During their tenure with us, [Employee's Full Name] was responsible for:</p>
+          <p>- Key Responsibility 1</p>
+          <p>- Key Responsibility 2</p>
+          <p>We found [Employee's Full Name] to be a dedicated and reliable employee who consistently showed a high level of professionalism. They are leaving us due to [reason for leaving, if appropriate], and we wish them all the best in their future endeavors.</p>
+          <p>We highly recommend [Employee's Full Name] for any future employment opportunities and are confident that they will be an asset to any organization they join.</p>
+          <p>If you require any further information, please do not hesitate to contact us.</p>
+          <p>Warm Regards,</p>
+          <p><strong>[Your Name]</strong></p>
+          <p><strong>[Your Job Title]</strong></p>
+          <p><strong>[Contact Information]</strong></p>
+          <br/>
+          <p>&copy; [Year] [Company Name]. All rights reserved.</p>
+        `,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
