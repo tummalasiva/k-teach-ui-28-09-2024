@@ -140,6 +140,7 @@ export const PRIVATE_URLS = {
   },
   event: {
     list: "/event/list",
+    listPublic: "/event/listPublic",
     create: "/event/create",
     update: "/event/update",
     delete: "/event/delete",
@@ -159,6 +160,7 @@ export const PRIVATE_URLS = {
   },
   splashNews: {
     list: "/splashNews/list",
+    listPublic: "/splashNews/listPublic",
     create: "/splashNews/create",
     update: "/splashNews/update",
     delete: "/splashNews/delete",

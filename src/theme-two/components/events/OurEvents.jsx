@@ -102,12 +102,11 @@ export default function OurEvents() {
 
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.event.list, {
+      const { data } = await get(PRIVATE_URLS.event.listPublic, {
         params: { schoolId: selectedSetting?._id },
       });
 
       setEvents(data.result);
-      // console.log(data.result, "mmmmmmmmmuuusssshhhhammmmmmmmm");
     } catch (error) {
       console.log(error);
     }

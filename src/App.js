@@ -55,7 +55,7 @@ function App() {
 
   const getSplashNews = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.splashNews.list, {
+      const { data } = await get(PRIVATE_URLS.splashNews.listPublic, {
         params: {
           schoolId: selectedSetting._id,
         },
