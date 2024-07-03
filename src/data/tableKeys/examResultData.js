@@ -1,11 +1,13 @@
+/** @format */
+
 export const examResultTableKeys = [
-  {
-    name: "Roll No",
-    key: "roleNumber",
-  },
   {
     name: "Name",
     key: "name",
+  },
+  {
+    name: "Roll No",
+    key: "roleNumber",
   },
   {
     name: "Photo",
@@ -13,22 +15,22 @@ export const examResultTableKeys = [
   },
   {
     name: "Exam Mark",
-    key: "mark",
+    key: "totalMarks",
   },
   {
     name: "Obtained Mark",
-    key: "obtainedMark",
+    key: "obtainedMarks",
   },
   {
     name: "Percentage",
-    key: "contactNumber",
+    key: "percentage",
   },
   {
     name: "Grade",
-    key: "grade",
+    key: "overallGrade",
   },
   {
-    name: "View",
+    name: "action",
     key: "true",
   },
 ];
