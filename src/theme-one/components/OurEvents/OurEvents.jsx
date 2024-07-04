@@ -43,10 +43,9 @@ const OurEvents = () => {
 
   const getData = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.event.list, {
+      const { data } = await get(PRIVATE_URLS.event.listPublic, {
         params: { schoolId: selectedSetting._id },
       });
-      console.log(data.result, "event");
       setData(data.result);
     } catch (error) {
       console.log(error);
