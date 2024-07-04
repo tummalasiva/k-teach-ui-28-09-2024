@@ -2,7 +2,15 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  Paper,
+} from "@mui/material";
 import { examResultTableKeys } from "../../data/tableKeys/examResultData";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
@@ -19,6 +27,11 @@ export default function ExamResult() {
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
   const [exams, setExams] = useState([]);
+  const [uploadLoader, setUploadLoader] = useState(false);
+  const [downloadLoader, setDownloadLoader] = useState(false);
+  const [allDownloadLoading, setAllDownloadLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openBulk, setOpenBulk] = useState(false);
   const [modalData, setModalData] = useState({
     open: false,
     tableData: "",
@@ -130,6 +143,10 @@ export default function ExamResult() {
     setModalData({ ...modalData, open: false });
   };
 
+  const onClose = () => {
+    setOpenBulk(false);
+  };
+
   return (
     <>
       <PageHeader title="Exam Result" />
@@ -171,7 +188,7 @@ export default function ExamResult() {
               Find
             </LoadingButton>
             <LoadingButton
-              // onClick={entryFormik.handleSubmit}
+              onClick={() => setOpenBulk(true)}
               size="small"
               variant="contained"
               sx={{ ml: 1 }}>
@@ -195,6 +212,51 @@ export default function ExamResult() {
         tableData={modalData?.tableData || []}
         onClose={onCloseViewModel}
       />
+
+      {/* Bulk upload model ============= */}
+      {/* <Dialog
+        open={openBulk}
+        onClose={onClose}
+        PaperProps={{
+          sx: {
+            width: "100%",
+            maxWidth: 650,
+          },
+          component: "form",
+        }}>
+        <DialogTitle sx={{ fontWeight: 600 }}>Bulk Upload</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <LoadingButton
+            size="small"
+            loading={uploadLoader}
+            variant="contained"
+            type="submit">
+            Upload
+          </LoadingButton>
+          <LoadingButton
+            size="small"
+            loading={downloadLoader}
+            variant="contained"
+            type="submit">
+            Download
+          </LoadingButton>
+          <LoadingButton
+            size="small"
+            loading={allDownloadLoading}
+            variant="contained"
+            type="submit">
+            Download All Student
+          </LoadingButton>
+          <LoadingButton
+            size="small"
+            loading={loading}
+            variant="contained"
+            type="submit">
+            Submit
+          </LoadingButton>
+        </DialogContent>
+      </Dialog> */}
     </>
   );
 }

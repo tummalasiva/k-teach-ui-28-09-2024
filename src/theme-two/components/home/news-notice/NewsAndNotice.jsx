@@ -165,7 +165,7 @@ export default function NewsAndNotice() {
             spacing={2}
             sx={{ mx: 1 }}>
             <MuiBox>
-              {data.length ? (
+              {data?.length ? (
                 <AnimatedBox>
                   {data.map((elem, index) => {
                     return (
