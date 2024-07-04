@@ -115,12 +115,14 @@ export default function ExamResult() {
     }
   }, [entryFormik.values.class, selectedSetting]);
 
+  console.log(data, "bvd");
+
   const handleClickOpenView = (data) => {
-    // console.log(data?.subjects, "vvvvvb");
+    console.log(data, "vvvvvb");
     setModalData({
       ...modalData,
       open: true,
-      tableData: data?.subjects,
+      tableData: data,
     });
   };
 
@@ -161,12 +163,19 @@ export default function ExamResult() {
               options={exams}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+          <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
             <LoadingButton
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
+            </LoadingButton>
+            <LoadingButton
+              // onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained"
+              sx={{ ml: 1 }}>
+              Bulk Upload
             </LoadingButton>
           </Grid>
         </Grid>
