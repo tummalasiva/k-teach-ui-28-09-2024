@@ -144,7 +144,6 @@ const Credentails = () => {
     const sectionIds = val.map((section) => section._id);
     const sectionNames = val.map((section) => section.name);
     const classNames = val.map((section) => section.class.name);
-    const classIds = val.map((schclass) => schclass.class._id);
 
     setSectionAutoSelect(val);
     setSelectSection(
@@ -155,12 +154,11 @@ const Credentails = () => {
 
     try {
       if (val.length) {
-        const { data } = await post(PRIVATE_URLS.student.list, {
+        const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
             schoolId: selectedSetting._id,
             search: {
               "academicInfo.section": sectionIds,
-              "academicInfo.class": classIds,
             },
           },
         });
