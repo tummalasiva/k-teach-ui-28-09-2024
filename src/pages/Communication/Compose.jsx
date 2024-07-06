@@ -23,6 +23,7 @@ import {
   InputBase,
   Popper,
   InputAdornment,
+  Typography,
 } from "@mui/material";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
@@ -116,7 +117,7 @@ const Compose = () => {
   const [classAutoSelect, setClassAutoSelect] = useState([]);
   const [sectionAutoSelect, setSectionAutoSelect] = useState([]);
   const [contactsAutoSelect, setContactsAutoSelect] = useState([]);
-  const [selectFile, setSelectFile] = useState(null);
+  const [selectFile, setSelectFile] = useState([]);
   const [employeeListPopper, setEmployeeListPopper] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployeeCount, setSelectedEmployeeCount] = useState(0);
@@ -324,36 +325,43 @@ const Compose = () => {
       <PageHeader title="Compose" />
 
       <form>
-        <Card sx={{ padding: "10px" }}>
-          <div
-            style={{
+        <Card sx={{ padding: "10px", mb: 1 }}>
+          <Box
+            sx={{
               paddingLeft: "1rem",
               display: "flex",
               gap: "5px",
             }}>
-            <div>
-              Total SMS : <span style={{ fontWeight: "bold" }}>79875</span>
-            </div>
-            <div>
+            <Box>
+              Total SMS :{" "}
+              <Typography component={"span"} fontWeight={"bold"}>
+                79875
+              </Typography>
+            </Box>
+            <Box>
               Consumed SMS :{" "}
-              <span style={{ fontWeight: "bold" }}>{79875 - balance}</span>
-            </div>
-            <div>
+              <Typography component={"span"} fontWeight={"bold"}>
+                {79875 - balance}
+              </Typography>
+            </Box>
+            <Box>
               Balance SMS :{" "}
-              <span style={{ fontWeight: "bold" }}>{balance}</span>
-            </div>
-          </div>
-          <div
-            style={{
+              <Typography component={"span"} fontWeight={"bold"}>
+                {balance}
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            sx={{
               padding: "1rem",
             }}>
             <BorderLinearProgress
               variant="determinate"
               value={((79875 - balance) * 100) / 79875}
             />
-          </div>
+          </Box>
         </Card>
-        <Card sx={{ padding: "10px" }}>
+        <Card sx={{ padding: "10px", mb: 1 }}>
           <Box sx={{ flexFlow: 1 }}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={12} md={3} lg={3}>
@@ -398,14 +406,19 @@ const Compose = () => {
               </Grid>
               {receiverType === "file" && (
                 <>
-                  <Grid item xs={12} sm={3} md={1.2} alignSelf={"center"}>
-                    {" "}
+                  <Grid
+                    item
+                    xs={12}
+                    md={8}
+                    sx={{
+                      alignSelf: "center",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                    }}>
                     <Button size="small" variant="contained">
                       Sample File
                     </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    {" "}
+
                     <FileSelect
                       name="file"
                       onChange={(e) => handleChangeFiles(e)}
@@ -740,7 +753,7 @@ const Compose = () => {
             </Grid>
           </Box>
         </Card>
-        <Card sx={{ padding: "10px" }}>
+        <Card sx={{ padding: "10px", mb: 1 }}>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} lg={4}>
               <FormControl required={true} size="small" fullWidth>
@@ -842,18 +855,18 @@ const Compose = () => {
             </Grid>
 
             <Grid item xs={12} md={12} lg={12}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <span>Dynamic Tag: </span>
+              <Box style={{ display: "flex", justifyContent: "flex-start" }}>
+                <Typography component={"span"}>Dynamic Tag: </Typography>
 
-                <div>
+                <Box>
                   [name],[school_name] - wil get autoreplaced,
-                  <span style={{ color: "red" }}>
+                  <Typography component={"span"} color="error">
                     replace - {"{{var}}"} with your content, variable fields may
                     vary in length. Space consumed for 1 variable is 30 char and
                     avoid double space.
-                  </span>
-                </div>
-              </div>
+                  </Typography>
+                </Box>
+              </Box>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <TextareaAutosize
@@ -878,7 +891,7 @@ const Compose = () => {
             </Grid>
           </Grid>
         </Card>
-        <Card sx={{ padding: "10px" }}>
+        <Card sx={{ padding: "10px", mb: 1 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid
