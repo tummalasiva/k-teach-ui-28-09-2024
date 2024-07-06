@@ -1,19 +1,22 @@
+/** @format */
+
 export const libraryReportTableKeys = [
   {
     name: "Group By Data",
     key: "groupByData",
+    isDate: true,
   },
   {
     name: "Issue Total",
-    key: "issueTotal",
+    key: "totalIssues",
   },
   {
     name: "Return Total",
-    key: "returnTotal",
+    key: "totalReturns",
   },
 
-  {
-    name: "Remain Total",
-    key: "remainTotal",
-  },
+  // {
+  //   name: "Remain Total",
+  //   key: "remainTotal",
+  // },
 ];

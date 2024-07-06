@@ -67,10 +67,9 @@ const OurEvents = () => {
   return (
     <Container maxWidth="xl">
       <Box pt={3}>
-        {" "}
         <Header title1="Our" title2="Events" />
       </Box>
-      {data.length >= 4 && !showAll && (
+      {data?.length >= 4 && !showAll && (
         <ViewAllButton handleClick={handleViewAllClick} />
       )}
 
@@ -81,8 +80,7 @@ const OurEvents = () => {
           flexDirection: "column",
           alignItems: "center",
         }}>
-        {" "}
-        {data.slice(0, showAll ? data.length : 3).map((card, index) => (
+        {data?.slice(0, showAll ? data?.length : 3).map((card, index) => (
           <React.Fragment key={index}>
             <Events card={card} />
           </React.Fragment>

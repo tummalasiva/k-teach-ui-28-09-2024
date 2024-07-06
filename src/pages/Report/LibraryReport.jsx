@@ -17,6 +17,8 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 
 import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
+import themeData from "../../data/themeData";
+import { downloadFile } from "../../utils";
 
 const graphData = [
   { name: "Issue", value: 400 },
@@ -92,12 +94,13 @@ export default function LibraryReport() {
         params: {
           schoolId: selectedSetting._id,
           groupByData: values.groupByData,
-          fromDate: dayjs(values.fromDate),
-          toDate: dayjs(values.toDate),
+          fromDate: dayjs(values.fromDate).format("YYYY/MM/DD"),
+          toDate: dayjs(values.toDate).format("YYYY/MM/DD"),
         },
       });
+      setData(data.result);
 
-      console.log(data, "data=======");
+      console.log(data.result, "data999999999999999999=======");
     } catch (error) {}
   };
   const entryFormik = useFormik({
@@ -120,6 +123,27 @@ export default function LibraryReport() {
   });
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 
+  const handleGetPrintPdf = async () => {
+    try {
+      const getPdf = await get(PRIVATE_URLS.report.downloadGroupedLibraryData, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            academicYear: entryFormik.values.academicYear,
+
+            groupByData: entryFormik.values.groupByData,
+            fromDate: dayjs(entryFormik.values.fromDate).format("YYYY/MM/DD"),
+            toDate: dayjs(entryFormik.values.toDate).format("YYYY/MM/DD"),
+          },
+        },
+      });
+
+      downloadFile("application/pdf", getPdf.data, "libraryReport.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAcademicYear();
   }, [selectedSetting]);
@@ -133,65 +157,69 @@ export default function LibraryReport() {
       />
       <TabPanel index={0} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="academicYear"
-                formik={entryFormik}
-                label="Select Academic Year"
-                options={academicYear}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="groupByData"
-                formik={entryFormik}
-                label="Select Group By Data"
-                options={GroupBYData_Options}
-              />
-            </Grid>
+          <form onSubmit={entryFormik.handleSubmit}>
+            {" "}
+            <Grid rowSpacing={1} columnSpacing={2} container>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="academicYear"
+                  formik={entryFormik}
+                  label="Select Academic Year"
+                  options={academicYear}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="groupByData"
+                  formik={entryFormik}
+                  label="Select Group By Data"
+                  options={GroupBYData_Options}
+                />
+              </Grid>
 
-            <Grid xs={12} sm={6} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="From Date"
-                name="fromDate"
-              />
+              <Grid xs={12} sm={6} md={6} lg={3} item>
+                <FormDatePicker
+                  formik={entryFormik}
+                  label="From Date"
+                  name="fromDate"
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={6} lg={3} item>
+                <FormDatePicker
+                  formik={entryFormik}
+                  label="To Date"
+                  name="toDate"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end"
+                alignSelf="center"
+                gap={1}
+                item>
+                <Button type="submit" size="small" variant="contained">
+                  Find
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleGetPrintPdf}>
+                  Print
+                </Button>
+              </Grid>
             </Grid>
-            <Grid xs={12} sm={6} md={6} lg={3} item>
-              <FormDatePicker
-                formik={entryFormik}
-                label="To Date"
-                name="toDate"
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end"
-              alignSelf="center"
-              gap={1}
-              item>
-              <Button
-                onClick={entryFormik.handleSubmit}
-                size="small"
-                variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
-            </Grid>
-          </Grid>
+          </form>
         </Paper>
         <CustomTable
           tableKeys={libraryReportTableKeys}
           bodyData={data}
           bodyDataModal="library report"
+          actions={[]}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -239,7 +267,7 @@ export default function LibraryReport() {
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <Paper sx={{ padding: 2, mt: 2 }}>
               <img
-                src=""
+                src={selectedSetting.logo}
                 height={60}
                 width={60}
                 style={{
@@ -248,16 +276,18 @@ export default function LibraryReport() {
                 }}
               />
 
-              <Typography gutterBottom fontSize={18} textAlign="center">
-                Kayaka School
+              <Typography fontSize={18} textAlign="center">
+                {selectedSetting.name}
               </Typography>
-              <Typography gutterBottom textAlign="center">
-                Vijaya Nagara
+              <Typography gutterBottom fontSize={12} textAlign="center">
+                {selectedSetting.address}
               </Typography>
 
               <DataContainer>
                 {" "}
-                <AssessmentIcon sx={{ color: "#196838" }} />
+                <AssessmentIcon
+                  sx={{ color: themeData.darkPalette.primary.main }}
+                />
                 <Typography textAlign="center" color="error">
                   Libary Report
                 </Typography>

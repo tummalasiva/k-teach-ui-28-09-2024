@@ -21,6 +21,7 @@ import { ResponsiveContainer } from "recharts";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import themeData from "../../data/themeData";
 
 const GroupBYData_Options = [
   {
@@ -197,7 +198,7 @@ export default function StudentReport() {
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <Paper sx={{ padding: 2, mt: 2 }}>
               <img
-                src=""
+                src={selectedSetting.logo}
                 height={60}
                 width={60}
                 style={{
@@ -206,16 +207,18 @@ export default function StudentReport() {
                 }}
               />
 
-              <Typography gutterBottom fontSize={18} textAlign="center">
-                Kayaka School
+              <Typography fontSize={18} textAlign="center">
+                {selectedSetting.name}
               </Typography>
-              <Typography gutterBottom textAlign="center">
-                Vijaya Nagara
+              <Typography gutterBottom fontSize={12} textAlign="center">
+                {selectedSetting.address}
               </Typography>
 
               <DataContainer>
                 {" "}
-                <AssessmentIcon sx={{ color: "#196838" }} />
+                <AssessmentIcon
+                  sx={{ color: themeData.darkPalette.primary.main }}
+                />
                 <Typography textAlign="center" color="error">
                   Student Report
                 </Typography>

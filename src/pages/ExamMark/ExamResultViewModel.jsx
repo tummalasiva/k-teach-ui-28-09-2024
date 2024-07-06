@@ -24,11 +24,11 @@ import ThemeModeContext from "../../context/ThemeModeContext";
 export default function ExamResultViewModel({
   title = "",
   open = false,
-  tableData = [],
+  tableData,
   onClose = () => {},
 }) {
   const { isDarkMode } = useContext(ThemeModeContext);
-  console.log(tableData, "jjj");
+
   return (
     <>
       <Dialog
@@ -72,13 +72,13 @@ export default function ExamResultViewModel({
               <TableRow>
                 <TableCell align="center">S.No</TableCell>
                 <TableCell align="center">Subject</TableCell>
-                <TableCell align="center">Max Marks</TableCell>
+                <TableCell align="center">Total Marks</TableCell>
                 <TableCell align="center">Obtained Marks</TableCell>
                 <TableCell align="center">Grade</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData?.map((d, i) => (
+              {tableData?.subjects?.map((d, i) => (
                 <TableRow>
                   <TableCell align="center">{i + 1}</TableCell>
                   <TableCell align="center">{d?.subject?.name}</TableCell>
@@ -89,20 +89,21 @@ export default function ExamResultViewModel({
               ))}
             </TableBody>
           </Table>
-          {/* <Box>
+          <Box mt={1}>
             <Typography variant="subtitle1">
-              Total Subject: {d.subject?.length}
+              <b>Total Subject:</b> {tableData.subjects?.length}
             </Typography>
             <Typography variant="subtitle1">
-              Max Marks: {d.totalMarks}
+              <b>Max Marks:</b> {tableData.totalMarks}
             </Typography>
             <Typography variant="subtitle1">
-              Obtained Marks: {d.obtainedMarks}
+              <b>Obtained Marks:</b> {tableData.obtainedMarks}
             </Typography>
             <Typography variant="subtitle1">
-              Percentage: {d.percentage}%
+              <b>Percentage: </b>
+              {tableData.percentage ? tableData.percentage.toFixed(2) : "0.00"}%
             </Typography>
-          </Box> */}
+          </Box>
         </DialogContent>
       </Dialog>
     </>
