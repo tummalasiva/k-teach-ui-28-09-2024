@@ -1,3 +1,5 @@
+/** @format */
+
 export const studentAttendanceReportTableKeys = [
   {
     name: "Student",
@@ -5,15 +7,15 @@ export const studentAttendanceReportTableKeys = [
   },
   {
     name: "Working Days",
-    key: "workingDay",
+    key: "workingDays",
   },
   {
     name: "Present Days",
-    key: "presentDay",
+    key: "presentDays",
   },
 
   {
     name: "Percentage",
-    key: "percentage",
+    key: "percentagePresent",
   },
 ];

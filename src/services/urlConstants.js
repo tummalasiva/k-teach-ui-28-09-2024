@@ -473,6 +473,7 @@ export const PRIVATE_URLS = {
     update: "/studentAttendance/update",
     getAttendanceReport: "/studentAttendance/getAttendanceReport",
     getAttendanceOverview: "/studentAttendance/getAttendanceOverview",
+    donwloadAbsentReport: "/studentAttendance/donwloadAbsentReport",
   },
   report: {
     groupedLibraryData: "/report/groupedLibraryData",
