@@ -187,9 +187,9 @@ export default function StudentAttendance() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      overviewFormik.setFieldValue("class", data.result[0]._id);
-      attendanceFormik.setFieldValue("class", data.result[0]._id);
-      reportFormik.setFieldValue("class", data.result[0]._id);
+      overviewFormik.setFieldValue("class", data.result[0]?._id);
+      attendanceFormik.setFieldValue("class", data.result[0]?._id);
+      reportFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -213,6 +213,9 @@ export default function StudentAttendance() {
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+
+      attendanceFormik.setFieldValue("section", data.result[0]?._id);
+      reportFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }

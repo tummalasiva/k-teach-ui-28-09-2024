@@ -208,9 +208,7 @@ const Credentails = () => {
         },
       });
       setEmployees(data.result);
-    } catch (error) {
-      toast.error(error.message);
-    }
+    } catch (error) {}
   };
 
   const handleEmployeeAuto = (event, val) => {
