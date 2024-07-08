@@ -49,6 +49,21 @@ const ExamVenue = () => {
   const { id } = useParams();
   const { selectedSetting } = useContext(SettingContext);
 
+  const [venulist, setVenueList] = useState(null);
+  useEffect(() => {
+    const getVenu = async () => {
+      try {
+        const { data } = await get(
+          `${PRIVATE_URLS.preadmissionExamSchedule.getVenueDetails}${id}`
+        );
+        setVenueList(data.result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getVenu();
+  }, []);
+
   return (
     <>
       <Grid
@@ -78,12 +93,13 @@ const ExamVenue = () => {
                 <DataBox>
                   {" "}
                   <Typography sx={{ fontWeight: "18px", fontWeight: 300 }}>
-                    Academic Year :
+                    Academic Year :{venulist?.academicYear?.academicYearFrom}-
+                    {venulist?.academicYear?.academicYearTo}
                   </Typography>
                 </DataBox>
                 <DataBox>
                   <Typography sx={{ fontWeight: "18px", fontWeight: 300 }}>
-                    Class :
+                    Class :{venulist?.class?.name}
                   </Typography>
                 </DataBox>
 
@@ -105,15 +121,31 @@ const ExamVenue = () => {
                             justifyContent: "center",
                             flexDirection: "column",
                           }}>
-                          <Typography sx={{ mb: 0.5 }}> </Typography>
+                          <Typography sx={{ mb: 0.5 }}>
+                            {" "}
+                            {dayjs(venulist?.dateOfExam).format(
+                              "DD-MM-YYYY"
+                            )}{" "}
+                          </Typography>
                         </Box>
                         <Box>
-                          <Typography>Start Time -</Typography>
-                          <Typography>End Time -</Typography>
+                          <Typography>
+                            {" "}
+                            Start Time - {venulist?.startTime}
+                          </Typography>
+                          <Typography>
+                            End Time - {venulist?.endTime}
+                          </Typography>
                         </Box>
                       </TableData>
-                      <TableData align="center"></TableData>
-                      <TableData align="center"></TableData>
+                      <TableData align="center">
+                        {" "}
+                        {venulist?.venue?.roomNumber}
+                      </TableData>
+                      <TableData align="center">
+                        {" "}
+                        {venulist?.venue?.address}
+                      </TableData>
                     </TableRow>
                   </TableBody>
                 </Table>

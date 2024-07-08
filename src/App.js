@@ -22,6 +22,7 @@ import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHo
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
 import UserTypeContext from "./context/UserTypeContext";
 import ExamQuestion from "./components/ExamConduct/ExamQuestion";
+import ExamVenue from "./components/ExamConduct/ExamVenue";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -369,6 +370,10 @@ function App() {
               <Route
                 path="/pre-admission/exam-conduct/:id"
                 element={<ExamQuestion />}
+              />
+              <Route
+                path="/details/pre-admission/:id"
+                element={<ExamVenue />}
               />
             </Routes>
           </ThemeProvider>

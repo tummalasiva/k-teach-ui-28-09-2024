@@ -348,10 +348,10 @@ const ExamQuestion = () => {
   useEffect(() => {
     const getExamDetails = async () => {
       try {
-        const res = await get(
-          `${PRIVATE_URLS.preExamSchedules.getExamDetails}/${id}`
+        const { data } = await get(
+          `${PRIVATE_URLS.preadmissionExamSchedule.getExamDetails}/${id}`
         );
-        setList(res.data.data);
+        setList(data.result);
       } catch (error) {
         console.log(error);
       }
@@ -366,24 +366,24 @@ const ExamQuestion = () => {
     setCheckboxChecked(event.target.checked);
   };
 
-  const handleExam = async () => {
-    try {
-      setStartingExam(true);
-      const data = await get(
-        PRIVATE_URLS.preAdmission.checkValidityOfAdmitCardId + enquiryId,
-        {
-          params: {
-            examScheduleId: id,
-          },
-        }
-      );
-      setStartingExam(false);
-      return setInstructionViewed(true);
-    } catch (error) {
-      console.log(error);
-    }
-    setStartingExam(false);
-  };
+  //   const handleExam = async () => {
+  //     try {
+  //       setStartingExam(true);
+  //       const data = await get(
+  //         PRIVATE_URLS.preAdmission.checkValidityOfAdmitCardId + enquiryId,
+  //         {
+  //           params: {
+  //             examScheduleId: id,
+  //           },
+  //         }
+  //       );
+  //       setStartingExam(false);
+  //       return setInstructionViewed(true);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //     setStartingExam(false);
+  //   };
 
   const startDate = new Date(list?.dateOfExam);
   const startTimeParts = list?.startTime?.split(":");
@@ -600,7 +600,7 @@ const ExamQuestion = () => {
               color="success"
               variant="contained"
               disabled={!checkboxChecked || !enquiryId}
-              onClick={handleExam}
+              //   onClick={handleExam}
               size="small">
               Start Exam
             </LoadingButton>
