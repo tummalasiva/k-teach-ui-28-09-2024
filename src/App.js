@@ -21,6 +21,7 @@ import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
 import UserTypeContext from "./context/UserTypeContext";
+import ExamQuestion from "./components/ExamConduct/ExamQuestion";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -365,6 +366,10 @@ function App() {
               />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/login" element={<Login />} />
+              <Route
+                path="/pre-admission/exam-conduct/:id"
+                element={<ExamQuestion />}
+              />
             </Routes>
           </ThemeProvider>
 
