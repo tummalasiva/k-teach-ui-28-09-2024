@@ -14,10 +14,12 @@ function FormDatePicker({
   inputFormat = "DD-MM-YYYY",
   views = ["year", "month", "day"],
   disabled = false,
+  disableFutureDates = false,
 }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
+        disableFuture={disableFutureDates}
         sx={{
           "& .MuiInputBase-input": {
             // Target the input element

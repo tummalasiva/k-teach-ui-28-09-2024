@@ -18,6 +18,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import StudentAttendanceTable from "./StudentAttendanceTable";
+import { downloadFile } from "../../utils";
 
 export default function StudentAttendance() {
   const { selectedSetting } = useContext(SettingContext);
@@ -28,8 +29,27 @@ export default function StudentAttendance() {
   const [sections, setSections] = useState([]);
   const [fetchingAttendanceData, setFetchingAttendanceData] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
+  const [downloadingAbsent, setDownloadingAbsent] = useState(false);
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
+  };
+
+  const downloadAbsentStudentsReport = async (data) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.studentAttendance.donwloadAbsentReport,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            date: data.date,
+            classId: data.classId,
+            sectionId: data.sectionId,
+          },
+        }
+      );
+
+      downloadFile("application/pdf", data, "Absent Report");
+    } catch (error) {}
   };
 
   const handleFindClick = async (values) => {
@@ -40,7 +60,7 @@ export default function StudentAttendance() {
           schoolId: selectedSetting._id,
           classId: values.class,
           sectionId: values.section,
-          date: values.date,
+          date: dayjs(values.date).format("YYYY-MM-DD"),
         },
       });
       console.log(data);
@@ -60,6 +80,10 @@ export default function StudentAttendance() {
     onSubmit: handleFindClick,
   });
 
+  useEffect(() => {
+    setAttendanceData([]);
+  }, [attendanceFormik.values]);
+
   const getStudentAttendanceOverview = async (values) => {
     try {
       const { data } = await get(
@@ -67,7 +91,7 @@ export default function StudentAttendance() {
         {
           params: {
             schoolId: selectedSetting._id,
-            date: values.date,
+            date: dayjs(values.date).format("YYYY/MM/DD"),
             classId: values.class,
           },
         }
@@ -90,7 +114,28 @@ export default function StudentAttendance() {
     if (overviewFormik.values.class && overviewFormik.values.date) {
       overviewFormik.handleSubmit();
     }
-  }, [overviewFormik.values]);
+  }, [overviewFormik.values.class, overviewFormik.values.date]);
+
+  const getAttendanceReport = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.studentAttendance.getAttendanceReport,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            academicYearId: values.academicYear,
+            classId: values.class,
+            sectionId: values.section,
+            month: dayjs(new Date(values.month)).get("month") + 1,
+            year: dayjs(new Date(values.month)).get("year"),
+          },
+        }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const reportFormik = useFormik({
     initialValues: {
@@ -99,7 +144,7 @@ export default function StudentAttendance() {
       section: "",
       month: null,
     },
-    onSubmit: console.log,
+    onSubmit: getAttendanceReport,
     enableReinitialize: true,
   });
 
@@ -171,9 +216,9 @@ export default function StudentAttendance() {
       getSections();
     }
   }, [
-    overviewFormik.values.class ||
-      attendanceFormik.values.class ||
-      reportFormik.values.class,
+    overviewFormik.values.class,
+    attendanceFormik.values.class,
+    reportFormik.values.class,
     selectedSetting._id,
   ]);
 
@@ -210,6 +255,7 @@ export default function StudentAttendance() {
             </Grid>
             <Grid xs={12} sm={6} md={6} lg={4} item>
               <FormDatePicker
+                disableFutureDates={true}
                 formik={overviewFormik}
                 label="Date"
                 name="date"
@@ -247,6 +293,7 @@ export default function StudentAttendance() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
+                disableFutureDates={true}
                 formik={attendanceFormik}
                 label="Date"
                 name="date"
@@ -302,6 +349,7 @@ export default function StudentAttendance() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
+                disableFutureDates={true}
                 formik={reportFormik}
                 label="Month"
                 name="month"
@@ -318,7 +366,10 @@ export default function StudentAttendance() {
               item
               display={"flex"}
               justifyContent={"flex-end"}>
-              <LoadingButton size="small" variant="contained">
+              <LoadingButton
+                onClick={reportFormik.handleSubmit}
+                size="small"
+                variant="contained">
                 Find
               </LoadingButton>
             </Grid>
