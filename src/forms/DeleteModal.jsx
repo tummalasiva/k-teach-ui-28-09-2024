@@ -16,13 +16,13 @@ const style = {
   p: 2,
 };
 export default function DeleteModal(props) {
+  console.log(props, "llkprops");
   return (
     <>
-      {" "}
       <Modal
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        open={props.deleteModal === props.id}
+        open={props.deleteModal}
         onClose={() => props.setDeleteModal(false)}>
         <Box sx={style}>
           <Box sx={{ textAlign: "center", margin: "10px auto" }}>

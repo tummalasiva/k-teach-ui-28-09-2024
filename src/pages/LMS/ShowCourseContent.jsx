@@ -13,9 +13,11 @@ import QuizDialog from "./CourseDialogs/QuizDialog";
 import FlashcardDialog from "./CourseDialogs/FlashcardDialog";
 import MaterialsDialog from "./CourseDialogs/MaterialsDialog";
 import CodePracticeDialog from "./CourseDialogs/CodePracticeDialog";
-import { get } from "../../services/apiMethods";
+import { del, get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import AddChapterDialog from "./CourseDialogs/AddChapterDialog";
+import DeleteModal from "../../forms/DeleteModal";
 
 const Contents = [
   {
@@ -49,7 +51,8 @@ export default function ShowCourseContent({
   chapter,
   course,
   courseId,
-  getDetails,
+  submitDetails = () => {},
+  handleEditChapter = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
   const [dataToEdit, setDataToEdit] = useState(null);
@@ -58,8 +61,10 @@ export default function ShowCourseContent({
   const [openFlashcard, setOpenFlashcard] = useState(false);
   const [openMaterial, setOpenMaterial] = useState(false);
   const [openCodepractice, setOpenCodepractice] = useState(false);
+  const [openDeleteModel, setOpenDeleteModel] = useState(false);
 
-  // console.log(course, courseId, "cour");
+  console.log(openDeleteModel, "openDeleteModel");
+  console.log(courseId, "courseId");
 
   const entryFormik = useFormik({
     initialValues: {
@@ -83,12 +88,38 @@ export default function ShowCourseContent({
   }, [entryFormik.values.contents, selectedSetting._id]);
 
   const handleEditClick = (data) => {
-    console.log(data, "upd");
+    // console.log(data, "upd");
     let type = Contents.find((c) => c.label === data?.type);
-    console.log(type, "oooo");
+    // console.log(type, "oooo");
     entryFormik.setFieldValue("contents", type?.value);
     setDataToEdit(data);
   };
+
+  const handelOpenDelModel = () => {
+    setOpenDeleteModel(true);
+  };
+
+  const handleDeleteChapter = async (_id) => {
+    let payload = {
+      ..._id,
+      chapterId: _id,
+    };
+
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.courseContent.deleteChapter + "/" + courseId,
+        payload
+      );
+      submitDetails();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const handleSubmit = () => {
+  //   onDeleteClick(selectedItem._id);
+  //   setOpen(false);
+  // };
 
   return (
     <>
@@ -127,11 +158,12 @@ export default function ShowCourseContent({
               display="flex"
               alignItems="center">
               <Tooltip title="Delete Chapter">
-                <IconButton
-                  //   onClick={handleClickOpen}
-                  size="small"
-                  color="error">
-                  <DeleteIcon fontSize="small" color="error" />
+                <IconButton size="small" color="error">
+                  <DeleteIcon
+                    fontSize="small"
+                    color="error"
+                    onClick={handelOpenDelModel}
+                  />
                 </IconButton>
               </Tooltip>
               <Tooltip
@@ -140,7 +172,7 @@ export default function ShowCourseContent({
                   color: "#1b3779",
                 }}>
                 <IconButton size="small">
-                  <EditIcon fontSize="small" onClick={handleEditClick} />
+                  <EditIcon fontSize="small" onClick={handleEditChapter} />
                 </IconButton>
               </Tooltip>
               Chapter: {chapter?.title}
@@ -160,10 +192,21 @@ export default function ShowCourseContent({
               chapter={chapter}
               courseId={courseId}
               onEditClick={handleEditClick}
+              handelOpenDelModel={handelOpenDelModel}
+              // handleDeleteChapter={handleDeleteChapter}
             />
           </Grid>
         </Grid>
       </Box>
+
+      {/* delete model ======== */}
+      <DeleteModal
+        deleteModal={openDeleteModel}
+        handleDelete={handleDeleteChapter}
+        id={chapter?._id}
+        setDeleteModal={setOpenDeleteModel}
+      />
+
       {/* open video model ============= */}
       <VideoDialog
         title="Video for Course"
@@ -172,7 +215,7 @@ export default function ShowCourseContent({
         Formik={entryFormik}
         setOpenVideo={setOpenVideo}
         chapter={chapter}
-        onUpdate={getDetails}
+        onUpdate={submitDetails}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />
@@ -185,7 +228,7 @@ export default function ShowCourseContent({
         Formik={entryFormik}
         setOpenQuiz={setOpenQuiz}
         chapter={chapter}
-        onUpdate={getDetails}
+        onUpdate={submitDetails}
       />
 
       {/* open flashcard model ========== */}
@@ -196,7 +239,7 @@ export default function ShowCourseContent({
         courseId={courseId}
         Formik={entryFormik}
         setOpenFlashcard={setOpenFlashcard}
-        onUpdate={getDetails}
+        onUpdate={submitDetails}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />
@@ -209,7 +252,7 @@ export default function ShowCourseContent({
         chapter={chapter}
         courseId={courseId}
         setOpenMaterial={setOpenMaterial}
-        onUpdate={getDetails}
+        onUpdate={submitDetails}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />

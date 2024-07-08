@@ -21,6 +21,7 @@ import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
 import UserTypeContext from "./context/UserTypeContext";
+import CourseContext from "./context/CourseContext";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
@@ -35,6 +36,7 @@ function App() {
   const [userType, setUserType] = useState("employee");
 
   const [settings, setSettings] = useState([]);
+  const [selectedCourseDetails, setSelectedCourseDetails] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({
     name: "ABC School",
   });
@@ -367,25 +369,27 @@ function App() {
               <Route path="/login" element={<Login />} />
             </Routes>
           </ThemeProvider>
-
-          <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
-            <ThemeProvider theme={theme}>
-              <Routes>
-                <Route
-                  path="/sch/*"
-                  element={
-                    <React.Suspense fallback={<Loader />}>
-                      {userType === "employee" ? (
-                        <EmployeeDashBoard />
-                      ) : (
-                        <StudentDashBoard />
-                      )}
-                    </React.Suspense>
-                  }
-                />
-              </Routes>
-            </ThemeProvider>
-          </ThemeModeContext.Provider>
+          <CourseContext.Provider
+            value={{ selectedCourseDetails, setSelectedCourseDetails }}>
+            <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+              <ThemeProvider theme={theme}>
+                <Routes>
+                  <Route
+                    path="/sch/*"
+                    element={
+                      <React.Suspense fallback={<Loader />}>
+                        {userType === "employee" ? (
+                          <EmployeeDashBoard />
+                        ) : (
+                          <StudentDashBoard />
+                        )}
+                      </React.Suspense>
+                    }
+                  />
+                </Routes>
+              </ThemeProvider>
+            </ThemeModeContext.Provider>
+          </CourseContext.Provider>
         </WebsiteThemeContext.Provider>
         <ToastContainer />
       </UserTypeContext.Provider>
