@@ -1,15 +1,18 @@
+/** @format */
+
 export const studentAttendanceOverviewTableKeys = [
   {
     name: "Section",
-    key: "section",
+    key: "name",
+    path: "section",
   },
   {
     name: "Present",
-    key: "present",
+    key: "totalPresent",
   },
   {
     name: "Absent",
-    key: "absent",
+    key: "totalAbsent",
   },
 
   {

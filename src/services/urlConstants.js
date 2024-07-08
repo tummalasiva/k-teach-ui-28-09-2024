@@ -477,6 +477,7 @@ export const PRIVATE_URLS = {
   },
   report: {
     groupedLibraryData: "/report/groupedLibraryData",
+    downloadGroupedLibraryData: "/report/downloadGroupedLibraryData",
   },
   certificate: {
     getStudyCertificate: "/certificate/getStudyCertificate",

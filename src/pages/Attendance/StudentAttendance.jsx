@@ -10,7 +10,6 @@ import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { studentAttendanceOverviewTableKeys } from "../../data/tableKeys/studentAttendanceOverviewData";
-import { studentAttendanceTableKeys } from "../../data/tableKeys/studentAttendanceData";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { studentAttendanceReportTableKeys } from "../../data/tableKeys/studentAttendanceReportData";
 import { PRIVATE_URLS } from "../../services/urlConstants";
@@ -22,7 +21,8 @@ import { downloadFile } from "../../utils";
 
 export default function StudentAttendance() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
+  const [reportData, setReportData] = useState([]);
+  const [overViewData, setOverViewData] = useState([]);
   const [value, setSelectValue] = useState(0);
   const [academicYearList, setAcademicYearList] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -30,26 +30,31 @@ export default function StudentAttendance() {
   const [fetchingAttendanceData, setFetchingAttendanceData] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
   const [downloadingAbsent, setDownloadingAbsent] = useState(false);
+  const [fetchingreport, setFetchingReport] = useState(false);
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
   };
 
-  const downloadAbsentStudentsReport = async (data) => {
+  const downloadAbsentStudentsReport = async () => {
     try {
+      setDownloadingAbsent(true);
       const { data } = await get(
         PRIVATE_URLS.studentAttendance.donwloadAbsentReport,
         {
           params: {
             schoolId: selectedSetting._id,
-            date: data.date,
-            classId: data.classId,
-            sectionId: data.sectionId,
+            date: dayjs(attendanceFormik.values.date).format("YYYY-MM-DD"),
+            classId: attendanceFormik.values.class,
+            sectionId: attendanceFormik.values.section,
           },
         }
       );
 
-      downloadFile("application/pdf", data, "Absent Report");
-    } catch (error) {}
+      downloadFile("application/pdf", data, "student-absent-list");
+      setDownloadingAbsent(false);
+    } catch (error) {
+      setDownloadingAbsent(false);
+    }
   };
 
   const handleFindClick = async (values) => {
@@ -96,7 +101,10 @@ export default function StudentAttendance() {
           },
         }
       );
-      console.log(data);
+      setOverViewData(
+        data.result.map((s) => ({ ...s, section: s.sectionInfo }))
+      );
+      console.log(data, "1111111111");
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +126,7 @@ export default function StudentAttendance() {
 
   const getAttendanceReport = async (values) => {
     try {
+      setFetchingReport(true);
       const { data } = await get(
         PRIVATE_URLS.studentAttendance.getAttendanceReport,
         {
@@ -131,9 +140,11 @@ export default function StudentAttendance() {
           },
         }
       );
-      console.log(data);
+      setReportData(data.result);
+      setFetchingReport(false);
     } catch (error) {
       console.log(error);
+      setFetchingReport(false);
     }
   };
 
@@ -176,9 +187,9 @@ export default function StudentAttendance() {
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      overviewFormik.setFieldValue("class", data.result[0]._id);
-      attendanceFormik.setFieldValue("class", data.result[0]._id);
-      reportFormik.setFieldValue("class", data.result[0]._id);
+      overviewFormik.setFieldValue("class", data.result[0]?._id);
+      attendanceFormik.setFieldValue("class", data.result[0]?._id);
+      reportFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -202,6 +213,9 @@ export default function StudentAttendance() {
       setSections(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
+
+      attendanceFormik.setFieldValue("section", data.result[0]?._id);
+      reportFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -266,7 +280,7 @@ export default function StudentAttendance() {
         <CustomTable
           actions={[]}
           bodyDataModal="overview"
-          bodyData={data}
+          bodyData={overViewData}
           tableKeys={studentAttendanceOverviewTableKeys}
         />
       </TabPanel>
@@ -299,13 +313,27 @@ export default function StudentAttendance() {
                 name="date"
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+            <Grid
+              xs={12}
+              md={12}
+              lg={12}
+              item
+              display={"flex"}
+              gap={1}
+              justifyContent={"flex-end"}>
               <LoadingButton
                 loading={fetchingAttendanceData}
                 onClick={attendanceFormik.handleSubmit}
                 size="small"
                 variant="contained">
                 Find
+              </LoadingButton>
+              <LoadingButton
+                loading={downloadingAbsent}
+                onClick={downloadAbsentStudentsReport}
+                size="small"
+                variant="contained">
+                Print
               </LoadingButton>
             </Grid>
           </Grid>
@@ -365,8 +393,10 @@ export default function StudentAttendance() {
               lg={12}
               item
               display={"flex"}
+              gap={1}
               justifyContent={"flex-end"}>
               <LoadingButton
+                loading={fetchingreport}
                 onClick={reportFormik.handleSubmit}
                 size="small"
                 variant="contained">
@@ -378,7 +408,7 @@ export default function StudentAttendance() {
         <CustomTable
           actions={[]}
           bodyDataModal="reports"
-          bodyData={data}
+          bodyData={reportData}
           tableKeys={studentAttendanceReportTableKeys}
         />
       </TabPanel>
