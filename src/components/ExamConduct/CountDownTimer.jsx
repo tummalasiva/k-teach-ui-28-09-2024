@@ -53,8 +53,6 @@ const CountDownTimer = ({ endTime, disableSubmission = () => {} }) => {
             fontWeight: "bold",
             color: "red",
             fontSize: "20px",
-
-            // paddingRight: "5px",
           }}>
           {timeLeft.minutes}
         </Typography>{" "}
