@@ -57,11 +57,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const CustomActionComponent = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
-  console.log(data.status, "kka");
   const updateStatus = async (status) => {
     try {
       setLoading(true);
-      await put(PRIVATE_URLS.preadmissionExam.update + "/" + data._id, {
+      await put(PRIVATE_URLS.preadmissionEnqiry.update + "/" + data._id, {
         status,
       });
       setLoading(false);
