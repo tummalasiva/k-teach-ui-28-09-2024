@@ -462,6 +462,11 @@ export const PRIVATE_URLS = {
     create: "/preadmissionExamSchedule/create",
     update: "/preadmissionExamSchedule/update",
     delete: "/preadmissionExamSchedule/delete",
+    enableExamLink: "/preadmissionExamSchedule/enableExamLink",
+    getVenueDetails: "/preadmissionExamSchedule/getVenueDetails",
+    getExamDetails: "/preadmissionExamSchedule/getExamDetails",
+    sendVenueDetailsToStudents:
+      "/preadmissionExamSchedule/sendVenueDetailsToStudents",
   },
   employeeAttendance: {
     list: "/employeeAttendance/list",

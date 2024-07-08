@@ -55,7 +55,7 @@ export default function AddOrUpdateExamSchedule({
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      entryFormik.setFieldValue("class", data.result[0]._id);
+      entryFormik.setFieldValue("classId", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -69,13 +69,13 @@ export default function AddOrUpdateExamSchedule({
           schoolId: selectedSetting._id,
           search: {
             academicYear: entryFormik?.values.academicYear,
-            class: entryFormik?.values.class,
+            class: entryFormik?.values.classId,
           },
         },
       });
       // console.log(data.result, "exam list");
       setExams(data.result.map((d) => ({ label: d.examName, value: d._id })));
-      entryFormik.setFieldValue("exam", data.result[0]._id);
+      entryFormik.setFieldValue("examId", data.result[0]._id);
     } catch (error) {
       console.log(error);
     }
@@ -89,6 +89,8 @@ export default function AddOrUpdateExamSchedule({
         dateOfExam: dayjs(values.dateOfExam).format("YYYY/MM/DD"),
       };
       setLoading(true);
+
+      console.log(payload, "ppppppp");
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.preadmissionExamSchedule.update + "/" + dataToEdit._id,
@@ -110,8 +112,11 @@ export default function AddOrUpdateExamSchedule({
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
-      class: "",
-      exam: "",
+      classId: "",
+      examId: "",
+      startTime: "",
+      endTime: "",
+      roomNumber: "",
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
@@ -124,12 +129,12 @@ export default function AddOrUpdateExamSchedule({
   }, [selectedSetting._id]);
 
   useEffect(() => {
-    if (entryFormik?.values.academicYear && entryFormik?.values.class) {
+    if (entryFormik?.values.academicYear && entryFormik?.values.classId) {
       getExamList();
     }
   }, [
     entryFormik?.values.academicYear,
-    entryFormik?.values.class,
+    entryFormik?.values.classId,
     selectedSetting,
   ]);
 
@@ -155,7 +160,7 @@ export default function AddOrUpdateExamSchedule({
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               required={true}
-              name="class"
+              name="classId"
               formik={entryFormik}
               label="Select Class"
               options={classes}
@@ -164,7 +169,7 @@ export default function AddOrUpdateExamSchedule({
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               required={true}
-              name="exam"
+              name="examId"
               formik={entryFormik}
               label="Select Exam"
               options={exams}

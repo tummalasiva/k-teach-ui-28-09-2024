@@ -337,7 +337,7 @@ export default function Enquiries() {
         tableKeys={enquriesTableKeys}
         bodyDataModal="enquiries"
         bodyData={filteredData}
-        onUpdate={getEnquiries}
+        onUpdate={entryFormik.handleSubmit}
         CustomAction={CustomActionComponent}
         onViewClick={handleClickOpenView}
         onDeleteClick={handleDelete}

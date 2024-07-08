@@ -2,20 +2,40 @@
 
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
-import CustomTable from "../../components/Tables/CustomTable";
-import { examSchedulesTableKeys } from "../../data/tableKeys/examSchedules";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Paper,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import FormSelect from "../../forms/FormSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useContext } from "react";
 import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import AddOrUpdateExamSchedule from "./AddOrUpdateExamSchedule";
+import EditIcon from "@mui/icons-material/Edit";
+import copy from "clipboard-copy";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { toast } from "react-toastify";
+import { Delete } from "@mui/icons-material";
+import DeleteModal from "../../forms/DeleteModal";
 
 export default function ExamSchedules() {
   const { selectedSetting } = useContext(SettingContext);
@@ -25,6 +45,20 @@ export default function ExamSchedules() {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = React.useState(false);
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter pagination==========
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   // get years
   const getAcademicYear = async () => {
@@ -104,7 +138,7 @@ export default function ExamSchedules() {
         },
       });
       console.log(data.result, "exam list");
-      // setData(data.result.map((d) => ({ ...d, class: d.class.name })));
+      setData(data.result.map((d) => ({ ...d, class: d.class.name })));
     } catch (error) {
       console.log(error);
     }
@@ -144,6 +178,43 @@ export default function ExamSchedules() {
   const handleClose = () => {
     setOpen(false);
     // setDataToEdit(null);
+  };
+
+  const handleCopyLink = (copylink) => {
+    console.log(copylink, "copylink");
+    copy(`${copylink}`);
+    toast.success("Exam Link Copied successfully");
+  };
+
+  const handleUpdateLink = async (id) => {
+    try {
+      const res = await put(
+        `${PRIVATE_URLS.preadmissionExamSchedule.enableExamLink}${id}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmitNotify = async (e, id) => {
+    e.preventDefault();
+    try {
+      const res = await post(
+        `${PRIVATE_URLS.preadmissionExamSchedule.sendVenueDetailsToStudents}/${id}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(
+        PRIVATE_URLS.preadmissionExamSchedule.delete + "/" + id
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -209,11 +280,127 @@ export default function ExamSchedules() {
         </Grid>
       </Paper>
 
-      <CustomTable
-        actions={["edit"]}
-        tableKeys={examSchedulesTableKeys}
-        bodyDataModal="exam schedules"
-        bodyData={data}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light,
+            }}>
+            <TableRow>
+              <TableCell align="center">SL</TableCell>
+              <TableCell align="center">Academic Year</TableCell>
+
+              <TableCell align="center">Class</TableCell>
+              <TableCell align="center">Exam</TableCell>
+              <TableCell align="center">Exam Link</TableCell>
+              <TableCell align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          {data.map((data, index) => (
+            <TableRow>
+              <TableCell align="center">
+                {page * rowsPerPage + index + 1}
+              </TableCell>
+              <TableCell align="center">
+                {data.academicYear.academicYearFrom}-
+                {data.academicYear.academicYearTo}
+              </TableCell>
+
+              <TableCell align="center">{data.class.name}</TableCell>
+              <TableCell align="center">{data.exam?.examName}</TableCell>
+              <TableCell align="center">
+                <Tooltip
+                  title={`${
+                    data.examLinkEnabled === true ? "Enable" : "Disable"
+                  }`}>
+                  <Switch
+                    key={data._id}
+                    onClick={() => handleUpdateLink(data._id)}
+                    defaultChecked={data.examLinkEnabled ? true : false}
+                  />
+                </Tooltip>
+
+                <Tooltip title="Copy Link">
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={() => handleCopyLink(data?.examLink)}>
+                    <ContentCopyIcon fontSize="small" color="primary" />
+                  </IconButton>
+                </Tooltip>
+              </TableCell>
+
+              <TableCell>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 2,
+                  }}>
+                  <Tooltip title="Update">
+                    <IconButton
+                      style={{
+                        color: "#1b3779",
+                      }}
+                      size="small">
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete">
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => setDeleteModal(data._id)}>
+                      <Delete color="error" fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <DeleteModal
+                    deleteModal={deleteModal}
+                    handleDelete={handleDelete}
+                    id={data._id}
+                    setDeleteModal={setDeleteModal}
+                  />
+
+                  <Button
+                    size="small"
+                    onClick={(e) => handleSubmitNotify(e, data._id)}
+                    disabled={data.notified === true}
+                    variant="contained">
+                    {data.notified === true ? "Notified" : "Notify"}
+                  </Button>
+                </Box>
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+        {!data.length && (
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
+            No data found
+          </Typography>
+        )}
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          my: 1,
+        }}
       />
 
       {/* ==== add/edit exam schedules ======== */}
