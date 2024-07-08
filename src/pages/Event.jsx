@@ -56,8 +56,8 @@ export default function Event() {
   const handleChangeFiles = (e) => {
     const { files } = e.target;
     let fileList = [];
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
+    if (files?.length > 0) {
+      for (let i = 0; i < files?.length; i++) {
         const file = files[i];
         fileList.push(file);
       }

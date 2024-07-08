@@ -87,7 +87,7 @@ export default function Events() {
   const { selectedSetting } = useContext(SettingContext);
   const [notice, setNotice] = useState([]);
   const [holidays, setHolidays] = useState([]);
-  // console.log(notice.length, "resss");
+  // console.log(notice?.length, "resss");
 
   const getNotice = async () => {
     try {
@@ -138,7 +138,7 @@ export default function Events() {
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Card sx={{ minHeight: "200px", padding: "15px" }}>
               <Collapsible open={true}>
-                <BoldTrigger>{`Notices: (${notice.length})`}</BoldTrigger>
+                <BoldTrigger>{`Notices: (${notice?.length})`}</BoldTrigger>
                 <Divider sx={{ width: "100%", mt: 1 }} />
                 <Box
                   sx={{
@@ -148,13 +148,13 @@ export default function Events() {
                   }}>
                   <DashboardScorlText elevation={0}>
                     <ScrollContainer>
-                      {notice.map((data, index) => (
+                      {notice?.map((data, index) => (
                         <DashboardNewsConent key={index}>
                           <NoticeItem component="li">{data.notice}</NoticeItem>
                         </DashboardNewsConent>
                       ))}
                     </ScrollContainer>
-                    {!notice.length && (
+                    {!notice?.length && (
                       <NoDataFound variant="h6">No data found</NoDataFound>
                     )}
                   </DashboardScorlText>
@@ -165,7 +165,7 @@ export default function Events() {
             <Card
               sx={{ minHeight: "200px", padding: "15px", marginTop: "10px" }}>
               <Collapsible open={true}>
-                <BoldTrigger>{`Holidays: (${holidays.length})`}</BoldTrigger>
+                <BoldTrigger>{`Holidays: (${holidays?.length})`}</BoldTrigger>
                 <Divider sx={{ width: "100%", mt: 1 }} />
                 <Box
                   sx={{
@@ -175,13 +175,13 @@ export default function Events() {
                   }}>
                   <DashboardScorlText elevation={0}>
                     <ScrollContainer>
-                      {holidays.map((data, index) => (
+                      {holidays?.map((data, index) => (
                         <DashboardNewsConent key={index}>
                           <NoticeItem component="li">{data.title}</NoticeItem>
                         </DashboardNewsConent>
                       ))}
                     </ScrollContainer>
-                    {!holidays.length && (
+                    {!holidays?.length && (
                       <NoDataFound variant="h6">No data found</NoDataFound>
                     )}
                   </DashboardScorlText>

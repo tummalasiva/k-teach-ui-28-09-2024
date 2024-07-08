@@ -75,7 +75,7 @@ export default function NoticeDetailsTheme_two({ elem }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  console.log(elem, "ellele");
+  // console.log(elem, "ellele");
   return (
     <>
       <Card sx={{ display: "flex", width: 600, my: 1, height: 150 }}>

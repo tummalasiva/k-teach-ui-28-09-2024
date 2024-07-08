@@ -35,6 +35,8 @@ export default function CourseContentTable({
   chapter,
   courseId,
   onEditClick = () => {},
+  handelOpenDelModel = () => {},
+  handleDeleteChapter = () => {},
 }) {
   console.log(chapter, "gau");
   return (
@@ -56,7 +58,7 @@ export default function CourseContentTable({
             {chapter.contents?.map((item, index) => (
               <TableRow>
                 <TableCell align="center">
-                  <Typography sx={{ pr: "10px" }}>1</Typography>
+                  <Typography sx={{ pr: "10px" }}>{index + 1}</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Box
@@ -104,10 +106,7 @@ export default function CourseContentTable({
                   <IconButton onClick={() => onEditClick(item)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton
-                    color="error"
-                    // onClick={() => handleOpenDeleteModal(item)}
-                  >
+                  <IconButton color="error" onClick={handelOpenDelModel}>
                     <DeleteIcon color="error" fontSize="small" />
                   </IconButton>
                 </TableCell>

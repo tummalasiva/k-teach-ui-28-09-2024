@@ -94,7 +94,7 @@ export default function AwardAndAchivement() {
         )}
         <Box sx={{ paddingLeft: "2rem", paddingRight: "2rem" }}>
           <AppSlider
-            {...calculateSlidersSetting(data.length)}
+            {...calculateSlidersSetting(data?.length)}
             ref={(slider) => {
               sliderRef = slider;
             }}>

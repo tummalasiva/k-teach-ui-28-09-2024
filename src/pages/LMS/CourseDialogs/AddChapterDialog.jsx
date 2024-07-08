@@ -15,10 +15,11 @@ export default function AddChapterDialog({
   title,
   open,
   setOpenChaper = () => {},
+  setChapterData = () => {},
   courseId,
+  chapterData,
 }) {
   const { selectedSetting } = useContext(SettingContext);
-  const [dataToEdit, setDataToEdit] = useState(null);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,9 +35,11 @@ export default function AddChapterDialog({
 
     try {
       setLoading(true);
-      if (dataToEdit) {
+      if (chapterData) {
         const { data } = await put(
-          PRIVATE_URLS.courseContent.updateChapterDetails + "/" + dataToEdit.id,
+          PRIVATE_URLS.courseContent.updateChapterDetails +
+            "/" +
+            chapterData?._id,
           formData,
           { headerd: { "Content-Type": "multipart/form-data" } }
         );
@@ -74,7 +77,7 @@ export default function AddChapterDialog({
 
   const entryFormik = useFormik({
     initialValues: {
-      title: dataToEdit?.title || "",
+      title: chapterData?.title || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -82,7 +85,8 @@ export default function AddChapterDialog({
 
   const handleClose = () => {
     setOpenChaper(false);
-    setDataToEdit(null);
+    setChapterData([]);
+    entryFormik.resetForm();
   };
 
   return (
@@ -90,9 +94,11 @@ export default function AddChapterDialog({
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={dataToEdit ? `Update ${title}` : `Add ${title}`}
+        formTitle={
+          chapterData?.length != 0 ? `Update ${title}` : `Add ${title}`
+        }
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        submitButtonTitle={chapterData ? "Update" : "Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>

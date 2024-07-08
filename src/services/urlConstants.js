@@ -262,12 +262,12 @@ export const PRIVATE_URLS = {
     list: "/courseContent/list",
     create: "/courseContent/create",
     update: "/courseContent/updateChapterDetails",
-    delete: "/courseContent/deleteChapter",
+    deleteChapter: "/courseContent/deleteChapter",
     // create content
     addContentToChapter: "/courseContent/addContentToChapter",
     updateContent: "/courseContent/updateContent",
-    deleteContent: "/courseContent/deleteContent",
     getDetailsTeachers: "courseContent/getDetailsTeachers",
+    deleteContent: "courseContent/deleteContent",
   },
   roomType: {
     list: "/roomType/list",

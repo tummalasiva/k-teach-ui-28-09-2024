@@ -28,11 +28,13 @@ const OuterGrid = styled(Grid)(() => ({
 
 export default function CourseContent() {
   const { selectedSetting } = useContext(SettingContext);
+
   const [courses, setCourses] = useState([]);
   const [openChapter, setOpenChaper] = useState(false);
   const [courseDetails, setCourseDetails] = useState({ chapters: [] });
+  const [chapterData, setChapterData] = useState([]);
 
-  console.log(courses, "courses");
+  // console.log(chapterData, "chapterData");
   // console.log(courseDetails, "courseDetails");
   // get course list
   const getCourse = async () => {
@@ -86,12 +88,15 @@ export default function CourseContent() {
     }
   }, [courses, entryFormik.values.courseId]);
 
-  // const handleEditClick = (data) => {
-  //   console.log(data, "upd");
-  //   let type = Contents.find((c) => c.label === data?.type);
-  //   console.log(type, "oooo");
-  //   entryFormik.setFieldValue("contents", type?.value);
-  // };
+  const handelOpenChapter = (data) => {
+    setOpenChaper(true);
+  };
+
+  const handleEditChapter = (data) => {
+    // console.log(data, "upd");
+    setOpenChaper(true);
+    setChapterData(data);
+  };
 
   return (
     <>
@@ -124,7 +129,7 @@ export default function CourseContent() {
             startIcon={<AddIcon />}
             sx={{ mt: 1 }}
             multi={false}
-            onClick={() => setOpenChaper(true)}>
+            onClick={handelOpenChapter}>
             Chapter
           </Button>
         </Grid>
@@ -138,9 +143,8 @@ export default function CourseContent() {
           chapter={chapter}
           courseId={entryFormik.values.courseId}
           course={courseDetails}
-          getDetails={() => entryFormik.handleSubmit()}
-          // setDataToEdit={setDataToEdit}
-          // dataToEdit={dataToEdit}
+          submitDetails={() => entryFormik.handleSubmit()}
+          handleEditChapter={() => handleEditChapter(chapter)}
         />
       ))}
 
@@ -150,6 +154,8 @@ export default function CourseContent() {
         open={openChapter}
         setOpenChaper={setOpenChaper}
         courseId={entryFormik.values.courseId}
+        chapterData={chapterData}
+        setChapterData={setChapterData}
       />
     </>
   );

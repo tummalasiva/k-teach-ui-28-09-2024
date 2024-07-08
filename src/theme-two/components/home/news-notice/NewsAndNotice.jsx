@@ -187,7 +187,7 @@ export default function NewsAndNotice() {
               )}
             </MuiBox>
             <MuiBox>
-              {notics.length ? (
+              {notics?.length ? (
                 <AnimatedBox>
                   {notics.map((elem, index) => {
                     return (

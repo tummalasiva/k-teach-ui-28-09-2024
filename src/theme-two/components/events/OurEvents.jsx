@@ -106,6 +106,8 @@ export default function OurEvents() {
         params: { schoolId: selectedSetting?._id },
       });
 
+      console.log(data, "gggafa");
+
       setEvents(data.result);
     } catch (error) {
       console.log(error);
@@ -124,7 +126,7 @@ export default function OurEvents() {
           <Dots />
         </TypographyMain>
 
-        {events.length > 3 && (
+        {events?.length > 3 && (
           <Random1 style={{ borderColor: themeData.darkPalette.primary.main }}>
             <ChevronLeftIcon
               onClick={handlePrevClick}
@@ -138,7 +140,7 @@ export default function OurEvents() {
         )}
 
         <AppSlider
-          {...calculateSlidersSetting(events.length)}
+          {...calculateSlidersSetting(events?.length)}
           ref={(slider) => {
             sliderRef = slider;
           }}>

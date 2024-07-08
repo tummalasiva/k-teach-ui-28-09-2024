@@ -99,8 +99,7 @@ export default function QuizDialog({ title, open, Formik, setOpenQuiz }) {
               rowSpacing={2}
               key={i}
               sx={{
-                marginTop: "20px",
-                marginBottom: "40px",
+                margin: "20px",
                 backgroundColor: "#F0F8FF",
                 borderRadius: "5px",
                 padding: "0 15px 20px 15px",
