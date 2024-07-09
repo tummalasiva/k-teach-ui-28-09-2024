@@ -22,6 +22,8 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import themeData from "../../data/themeData";
+import CustomTable from "../../components/Tables/CustomTable";
+import { studentReportsTableKeys } from "../../data/tableKeys/studentReportData";
 
 const GroupBYData_Options = [
   {
@@ -34,7 +36,7 @@ const GroupBYData_Options = [
   },
   {
     label: "Library",
-    value: "llbrary",
+    value: "library",
   },
   {
     label: "Hostel",
@@ -88,12 +90,28 @@ export default function StudentReport() {
       console.log(error);
     }
   };
+
+  const handleGetStudentReport = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.report.getStudentReport, {
+        params: {
+          schoolId: selectedSetting._id,
+          groupBy: values.groupByData,
+          academicYearId: values.academicYear,
+        },
+      });
+      setData(data.result);
+
+      console.log(data.result, "data999999999999999999=======");
+    } catch (error) {}
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       groupByData: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetStudentReport,
   });
   const formik = useFormik({
     initialValues: {
@@ -116,43 +134,53 @@ export default function StudentReport() {
       />
       <TabPanel index={0} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="academicYear"
-                formik={entryFormik}
-                label="Select Academic Year"
-                options={academicYear}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="groupByData"
-                formik={entryFormik}
-                label="Select Group By Data"
-                options={GroupBYData_Options}
-              />
-            </Grid>
+          <form onSubmit={entryFormik.handleSubmit}>
+            {" "}
+            <Grid rowSpacing={1} columnSpacing={2} container>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="academicYear"
+                  formik={entryFormik}
+                  label="Select Academic Year"
+                  options={academicYear}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="groupByData"
+                  formik={entryFormik}
+                  label="Select Group By Data"
+                  options={GroupBYData_Options}
+                />
+              </Grid>
 
-            <Grid
-              xs={12}
-              md={6}
-              lg={3}
-              alignSelf="center"
-              display="flex"
-              gap={1}
-              item>
-              <Button size="small" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <Grid
+                xs={12}
+                md={6}
+                lg={3}
+                alignSelf="center"
+                display="flex"
+                gap={1}
+                item>
+                <Button size="small" variant="contained" type="submit">
+                  Find
+                </Button>
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </form>
         </Paper>
+
+        <CustomTable
+          actions={[]}
+          tableKeys={studentReportsTableKeys}
+          bodyDataModal="student report"
+          bodyData={data}
+        />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
