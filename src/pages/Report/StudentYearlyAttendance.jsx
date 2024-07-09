@@ -113,6 +113,24 @@ export default function StudentYearlyAttendance() {
     }
   };
 
+  const handleGetReport = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.report.getStudentAttendanceReport,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            academicYearId: values.academicYear,
+            studentId: values.student,
+          },
+        }
+      );
+      console.log(data, "data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -121,7 +139,7 @@ export default function StudentYearlyAttendance() {
 
       student: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetReport,
   });
 
   useEffect(() => {
@@ -208,7 +226,10 @@ export default function StudentYearlyAttendance() {
             item
             display="flex"
             justifyContent="flex-end">
-            <Button size="small" variant="contained">
+            <Button
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
             </Button>
           </Grid>
