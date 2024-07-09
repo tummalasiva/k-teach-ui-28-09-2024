@@ -85,8 +85,6 @@ export default function StudentActivityReport() {
         },
       });
       setData(data.result);
-
-      console.log(data.result, "data999999999999999999=======");
     } catch (error) {}
   };
 
