@@ -486,6 +486,9 @@ export const PRIVATE_URLS = {
     getStudentActivityReport: "/report/getStudentActivityReport",
     getStudentActivityReportPdf: "/report/getStudentActivityReportPdf",
     getStudentReport: "/report/getStudentReport",
+    getAllEmployeesAttendanceReportForParticularMonth:
+      "/report/getAllEmployeesAttendanceReportForParticularMonth",
+    getEmployeeAttendanceReport: "/report/getEmployeeAttendanceReport",
   },
   certificate: {
     getStudyCertificate: "/certificate/getStudyCertificate",

@@ -49,12 +49,32 @@ export default function EmployeeAttendance() {
       console.log(error);
     }
   };
+
+  const handleFetchReport = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.report.getAllEmployeesAttendanceReportForParticularMonth,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            month: new Date(entryFormik.values.month).getMonth() + 1,
+            year: new Date(entryFormik.values.month).getFullYear(),
+            academicYearId: entryFormik.values.academicYear,
+          },
+        }
+      );
+
+      console.log(data, "data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       month: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleFetchReport,
   });
 
   useEffect(() => {
@@ -95,7 +115,10 @@ export default function EmployeeAttendance() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item alignSelf="center">
-            <Button size="small" variant="contained">
+            <Button
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
             </Button>
           </Grid>
