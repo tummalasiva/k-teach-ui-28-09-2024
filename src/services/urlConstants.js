@@ -472,6 +472,8 @@ export const PRIVATE_URLS = {
     list: "/employeeAttendance/list",
     update: "/employeeAttendance/update",
     getAttendanceReport: "/employeeAttendance/getAttendanceReport",
+    getEmployeeAttendanceSummaryForToday:
+      "/employeeAttendance/getEmployeeAttendanceSummaryForToday",
   },
   studentAttendance: {
     list: "/studentAttendance/list",
@@ -479,6 +481,8 @@ export const PRIVATE_URLS = {
     getAttendanceReport: "/studentAttendance/getAttendanceReport",
     getAttendanceOverview: "/studentAttendance/getAttendanceOverview",
     donwloadAbsentReport: "/studentAttendance/donwloadAbsentReport",
+    getAttendanceSummaryForToday:
+      "/studentAttendance/getAttendanceSummaryForToday",
   },
   report: {
     groupedLibraryData: "/report/groupedLibraryData",
