@@ -87,6 +87,28 @@ export default function StudentAttendance() {
     }
   };
 
+  const handleFetchReport = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.report.getAllStudentsAttendanceReportForParticularMonth,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            month: new Date(entryFormik.values.month).getMonth() + 1,
+            year: new Date(entryFormik.values.month).getFullYear(),
+            academicYearId: entryFormik.values.academicYear,
+            classId: entryFormik.values.class,
+            sectionId: entryFormik.values.section,
+          },
+        }
+      );
+
+      console.log(data, "student attendance data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -95,7 +117,7 @@ export default function StudentAttendance() {
 
       month: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleFetchReport,
   });
 
   useEffect(() => {
@@ -168,7 +190,10 @@ export default function StudentAttendance() {
             item
             display="flex"
             justifyContent="flex-end">
-            <Button size="small" variant="contained">
+            <Button
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
             </Button>
           </Grid>
