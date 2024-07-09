@@ -78,7 +78,9 @@ export default function Attendance() {
 
       console.log(studentData.data?.result, "student attendance data");
       console.log(employeeData?.data?.result, "employee attendance data");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
