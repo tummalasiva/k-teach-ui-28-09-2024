@@ -2,10 +2,6 @@
 
 export const studentActivityReportTableKeys = [
   {
-    name: "Academic Year",
-    key: "academicYear",
-  },
-  {
     name: "Student",
     key: "studentName",
   },
