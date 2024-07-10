@@ -55,78 +55,83 @@ export default function CourseContentTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {chapter.contents?.map((item, index) => (
-              <TableRow>
-                <TableCell align="center">
-                  <Typography sx={{ pr: "10px" }}>{index + 1}</Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      columnGap: "5px",
-                    }}>
-                    {item.type === "Video" ? (
-                      <YouTubeIcon fontSize="small" color="error" />
-                    ) : null}
-                    {item.type === "Quiz" ? (
-                      <QuizIcon fontSize="small" color="success" />
-                    ) : null}
-                    {item.type === "FlashCard" ? (
-                      <ViewAgendaIcon fontSize="small" color="warning" />
-                    ) : null}
-                    {item.type === "Material" ? (
-                      <InsertDriveFileIcon fontSize="small" color="info" />
-                    ) : null}
-                    {item.type === "CodePractice" ? (
-                      <QuestionAnswerIcon
-                        fontSize="small"
-                        sx={{ color: "#1b3779" }}
-                      />
-                    ) : null}
-                  </Box>
-                </TableCell>
+            {chapter.contents?.map(
+              (item, index) => (
+                console.log(item, "ttete"),
+                (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography sx={{ pr: "10px" }}>{index + 1}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          columnGap: "5px",
+                        }}>
+                        {item.type === "Video" ? (
+                          <YouTubeIcon fontSize="small" color="error" />
+                        ) : null}
+                        {item.type === "Quiz" ? (
+                          <QuizIcon fontSize="small" color="success" />
+                        ) : null}
+                        {item.type === "FlashCard" ? (
+                          <ViewAgendaIcon fontSize="small" color="warning" />
+                        ) : null}
+                        {item.type === "Material" ? (
+                          <InsertDriveFileIcon fontSize="small" color="info" />
+                        ) : null}
+                        {item.type === "CodePractice" ? (
+                          <QuestionAnswerIcon
+                            fontSize="small"
+                            sx={{ color: "#1b3779" }}
+                          />
+                        ) : null}
+                      </Box>
+                    </TableCell>
 
-                <TableCell align="center">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}>
-                    <Typography variant="inherit">
-                      {item.title?.substring(0, 80)}
-                    </Typography>
-                  </Box>
-                </TableCell>
+                    <TableCell align="center">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}>
+                        <Typography variant="inherit">
+                          {item.title?.substring(0, 80)}
+                        </Typography>
+                      </Box>
+                    </TableCell>
 
-                <TableCell align="center">
-                  <IconButton onClick={() => onEditClick(item)}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton color="error" onClick={handelOpenDelModel}>
-                    <DeleteIcon color="error" fontSize="small" />
-                  </IconButton>
-                </TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => onEditClick(item)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton color="error" onClick={handelOpenDelModel}>
+                        <DeleteIcon color="error" fontSize="small" />
+                      </IconButton>
+                    </TableCell>
 
-                <TableCell align="center">
-                  {index === chapter.contents.length - 1 ? null : (
-                    <IconButton>
-                      {/*<IconButton onClick={() => sortContent(item._id, "down")}> */}
-                      <ArrowDownward />
-                    </IconButton>
-                  )}
-                  {index === 0 ? null : (
-                    <IconButton>
-                      {/* <IconButton onClick={() => sortContent(item._id, "up")}> */}
-                      <ArrowUpward />
-                    </IconButton>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                    <TableCell align="center">
+                      {index === chapter.contents.length - 1 ? null : (
+                        <IconButton>
+                          {/*<IconButton onClick={() => sortContent(item._id, "down")}> */}
+                          <ArrowDownward />
+                        </IconButton>
+                      )}
+                      {index === 0 ? null : (
+                        <IconButton>
+                          {/* <IconButton onClick={() => sortContent(item._id, "up")}> */}
+                          <ArrowUpward />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

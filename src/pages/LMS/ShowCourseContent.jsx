@@ -18,6 +18,8 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import AddChapterDialog from "./CourseDialogs/AddChapterDialog";
 import DeleteModal from "../../forms/DeleteModal";
+import ContentContext from "../../context/ContentContext";
+import CourseContext from "../../context/CourseContext";
 
 const Contents = [
   {
@@ -48,13 +50,16 @@ const Contents = [
 ];
 
 export default function ShowCourseContent({
-  chapter,
+  // chapter,
   course,
-  courseId,
-  submitDetails = () => {},
+  // courseId,
+  // onUpdate = () => {},
   handleEditChapter = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
+  const { chapter } = useContext(ContentContext);
+  const { courseId, onUpdate } = useContext(CourseContext);
+
   const [dataToEdit, setDataToEdit] = useState(null);
   const [openVideo, setOpenVideo] = useState(false);
   const [openQuiz, setOpenQuiz] = useState(false);
@@ -64,7 +69,7 @@ export default function ShowCourseContent({
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
 
   console.log(openDeleteModel, "openDeleteModel");
-  console.log(courseId, "courseId");
+  console.log(chapter, "chapter");
 
   const entryFormik = useFormik({
     initialValues: {
@@ -110,7 +115,7 @@ export default function ShowCourseContent({
         PRIVATE_URLS.courseContent.deleteChapter + "/" + courseId,
         payload
       );
-      submitDetails();
+      onUpdate();
     } catch (error) {
       console.error(error);
     }
@@ -215,7 +220,7 @@ export default function ShowCourseContent({
         Formik={entryFormik}
         setOpenVideo={setOpenVideo}
         chapter={chapter}
-        onUpdate={submitDetails}
+        onUpdate={onUpdate}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />
@@ -228,7 +233,7 @@ export default function ShowCourseContent({
         Formik={entryFormik}
         setOpenQuiz={setOpenQuiz}
         chapter={chapter}
-        onUpdate={submitDetails}
+        onUpdate={onUpdate}
       />
 
       {/* open flashcard model ========== */}
@@ -239,7 +244,7 @@ export default function ShowCourseContent({
         courseId={courseId}
         Formik={entryFormik}
         setOpenFlashcard={setOpenFlashcard}
-        onUpdate={submitDetails}
+        onUpdate={onUpdate}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />
@@ -252,7 +257,7 @@ export default function ShowCourseContent({
         chapter={chapter}
         courseId={courseId}
         setOpenMaterial={setOpenMaterial}
-        onUpdate={submitDetails}
+        onUpdate={onUpdate}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />

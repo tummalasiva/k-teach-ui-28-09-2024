@@ -10,40 +10,47 @@ import { PRIVATE_URLS } from "../../../services/urlConstants";
 import { post, put } from "../../../services/apiMethods";
 import { toast } from "react-toastify";
 import FileSelect from "../../../forms/FileSelect";
+import CourseContent from "../CourseContent";
+import CourseContext from "../../../context/CourseContext";
 
 export default function AddChapterDialog({
   title,
   open,
   setOpenChaper = () => {},
   setChapterData = () => {},
-  courseId,
+  // onUpdate = () => {},
+  // courseId,
   chapterData,
 }) {
   const { selectedSetting } = useContext(SettingContext);
+  const { courseId, onUpdate } = useContext(CourseContext);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  console.log(chapterData, "gaua");
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
-    const formData = new FormData();
-
-    const body = { title: values.title };
-    formData.append("body", JSON.stringify(body));
-    selectFile.forEach((file) => formData.append("file", file));
-    formData.append("schoolId", selectedSetting._id);
-    // formData.append("courseId", courseId);
-
     try {
       setLoading(true);
       if (chapterData) {
+        const formData = new FormData();
+
+        selectFile.forEach((file) => formData.append("file", file));
+        formData.append("schoolId", selectedSetting._id);
+        formData.append("chapterId", chapterData?._id);
+        formData.append("title", values.title);
+
         const { data } = await put(
-          PRIVATE_URLS.courseContent.updateChapterDetails +
-            "/" +
-            chapterData?._id,
+          PRIVATE_URLS.courseContent.updateChapterDetails + "/" + courseId,
           formData,
-          { headerd: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
+        const formData = new FormData();
+        const body = { title: values.title };
+        formData.append("body", JSON.stringify(body));
+        selectFile.forEach((file) => formData.append("file", file));
+        formData.append("schoolId", selectedSetting._id);
+        console.log(courseId, "courseId");
         const { data } = await post(
           PRIVATE_URLS.courseContent.create + "/" + courseId,
           formData,
@@ -85,8 +92,9 @@ export default function AddChapterDialog({
 
   const handleClose = () => {
     setOpenChaper(false);
-    setChapterData([]);
+    setChapterData(null);
     entryFormik.resetForm();
+    onUpdate();
   };
 
   return (
@@ -94,9 +102,7 @@ export default function AddChapterDialog({
       <FormModal
         open={open}
         formik={entryFormik}
-        formTitle={
-          chapterData?.length != 0 ? `Update ${title}` : `Add ${title}`
-        }
+        formTitle={chapterData ? `Update ${title}` : `Add ${title}`}
         onClose={handleClose}
         submitButtonTitle={chapterData ? "Update" : "Submit"}
         adding={loading}>

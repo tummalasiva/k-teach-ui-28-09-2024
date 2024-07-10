@@ -261,7 +261,7 @@ export const PRIVATE_URLS = {
   courseContent: {
     list: "/courseContent/list",
     create: "/courseContent/create",
-    update: "/courseContent/updateChapterDetails",
+    updateChapterDetails: "/courseContent/updateChapterDetails",
     deleteChapter: "/courseContent/deleteChapter",
     // create content
     addContentToChapter: "/courseContent/addContentToChapter",

@@ -38,7 +38,6 @@ function App() {
   const [userType, setUserType] = useState("employee");
 
   const [settings, setSettings] = useState([]);
-  const [selectedCourseDetails, setSelectedCourseDetails] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState({
     name: "ABC School",
   });
@@ -379,27 +378,25 @@ function App() {
               />
             </Routes>
           </ThemeProvider>
-          <CourseContext.Provider
-            value={{ selectedCourseDetails, setSelectedCourseDetails }}>
-            <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
-              <ThemeProvider theme={theme}>
-                <Routes>
-                  <Route
-                    path="/sch/*"
-                    element={
-                      <React.Suspense fallback={<Loader />}>
-                        {userType === "employee" ? (
-                          <EmployeeDashBoard />
-                        ) : (
-                          <StudentDashBoard />
-                        )}
-                      </React.Suspense>
-                    }
-                  />
-                </Routes>
-              </ThemeProvider>
-            </ThemeModeContext.Provider>
-          </CourseContext.Provider>
+
+          <ThemeModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+            <ThemeProvider theme={theme}>
+              <Routes>
+                <Route
+                  path="/sch/*"
+                  element={
+                    <React.Suspense fallback={<Loader />}>
+                      {userType === "employee" ? (
+                        <EmployeeDashBoard />
+                      ) : (
+                        <StudentDashBoard />
+                      )}
+                    </React.Suspense>
+                  }
+                />
+              </Routes>
+            </ThemeProvider>
+          </ThemeModeContext.Provider>
         </WebsiteThemeContext.Provider>
         <ToastContainer />
       </UserTypeContext.Provider>
