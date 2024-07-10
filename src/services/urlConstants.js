@@ -3,6 +3,7 @@
 export const PUBLIC_URLS = {
   account: {
     login: "/account/login",
+    checkIfLoggedIn: "/account/checkIfLoggedIn",
   },
   school: {
     getSchools: "/school/listPublic",

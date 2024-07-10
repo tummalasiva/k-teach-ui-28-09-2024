@@ -25,6 +25,8 @@ import KayakaLogo from "../../assets/images/kaykalogo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import themeData from "../../../data/themeData";
+import { PUBLIC_URLS } from "../../../services/urlConstants";
+import { get } from "../../../services/apiMethods";
 
 const MuiUl = styled("ul")(({ theme }) => ({
   "& li": {
@@ -86,10 +88,22 @@ export default function Navbar() {
     right: false,
   });
 
+  const checkLogin = async () => {
+    try {
+      const { data } = await get(PUBLIC_URLS.account.checkIfLoggedIn);
+      setHasAccessToken(true);
+    } catch (error) {
+      window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("current_ecs_user");
+      window.localStorage.removeItem("refresh_token");
+      window.localStorage.removeItem("userType");
+    }
+  };
+
   useEffect(() => {
     let accessToken = window.localStorage.getItem("access_token");
     if (accessToken) {
-      setHasAccessToken(true);
+      checkLogin();
     }
   }, []);
 

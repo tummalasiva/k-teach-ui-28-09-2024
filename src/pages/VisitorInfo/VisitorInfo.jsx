@@ -97,6 +97,11 @@ export default function VisitorInfo() {
     }
   };
 
+  useEffect(() => {
+    getClasses();
+    getData();
+  }, [selectedSetting]);
+
   // get section
   const getSections = async () => {
     try {
@@ -176,9 +181,11 @@ export default function VisitorInfo() {
           PRIVATE_URLS.visitorInfo.update + "/" + dataToEdit._id,
           payload
         );
+        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.visitorInfo.create, payload);
       }
+      getData();
       handleClose();
     } catch (error) {
       console.log(error);
@@ -219,9 +226,7 @@ export default function VisitorInfo() {
 
   useEffect(() => {
     getRoles();
-    getClasses();
-    getData();
-  }, [selectedSetting]);
+  }, []);
 
   useEffect(() => {
     if (entryFormik.values.class) {
