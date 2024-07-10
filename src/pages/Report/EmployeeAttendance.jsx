@@ -27,6 +27,7 @@ export default function EmployeeAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [academicYear, setAcademicYear] = useState([]);
+  const [selectedMonthYear, setSelectedMonthYear] = useState("");
 
   const getAcademicYear = async () => {
     try {
@@ -60,6 +61,7 @@ export default function EmployeeAttendance() {
         }
       );
       setAttendanceData(data.result);
+      setSelectedMonthYear(dayjs(entryFormik.values.month).format("YYYY-MM"));
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -88,15 +90,17 @@ export default function EmployeeAttendance() {
     );
   }
 
-  const getAttendanceStatus = (attendance) => {
-    if (attendance === "present") return "P";
-    if (attendance === "absent") return "A";
-    return "-";
-  };
-
   const getAttendanceForDay = (attendance, yearMonth, day) => {
     const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
-    return getAttendanceStatus(attendance[dayKey]);
+    const status = attendance[dayKey];
+
+    if (status === "present") {
+      return "P";
+    } else if (status === "absent") {
+      return "A";
+    } else {
+      return "-";
+    }
   };
 
   return (
@@ -167,7 +171,7 @@ export default function EmployeeAttendance() {
                 <TableCell key={num.key} align="center">
                   {getAttendanceForDay(
                     employee.attendance,
-                    dayjs(entryFormik.values.month).format("YYYY-MM"),
+                    selectedMonthYear,
                     num.key
                   )}
                 </TableCell>

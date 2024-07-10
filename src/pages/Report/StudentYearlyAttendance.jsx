@@ -174,15 +174,17 @@ export default function StudentYearlyAttendance() {
     );
   }
 
-  const getAttendanceStatus = (attendance) => {
-    if (attendance === "present") return "P";
-    if (attendance === "absent") return "A";
-    return "-";
-  };
-
   const getAttendanceForDay = (attendance, yearMonth, day) => {
     const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
-    return getAttendanceStatus(attendance[dayKey]);
+    const status = attendance[dayKey];
+
+    if (status === "present") {
+      return "P";
+    } else if (status === "absent") {
+      return "A";
+    } else {
+      return "-";
+    }
   };
 
   return (

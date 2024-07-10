@@ -3,8 +3,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
-  Box,
-  Button,
   Grid,
   Paper,
   Table,
@@ -27,6 +25,7 @@ export default function StudentAttendance() {
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
   const [attendanceData, setAttendanceData] = useState([]);
+  const [selectedMonthYear, setSelectedMonthYear] = useState("");
 
   const [academicYear, setAcademicYear] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -83,6 +82,7 @@ export default function StudentAttendance() {
 
   const handleFetchReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(
         PRIVATE_URLS.report.getAllStudentsAttendanceReportForParticularMonth,
         {
@@ -97,9 +97,11 @@ export default function StudentAttendance() {
         }
       );
       setAttendanceData(data.result);
-      console.log(data, "student attendance data");
+      setSelectedMonthYear(dayjs(entryFormik.values.month).format("YYYY-MM"));
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -134,16 +136,19 @@ export default function StudentAttendance() {
     );
   }
 
-  const getAttendanceStatus = (attendance) => {
-    if (attendance === "present") return "P";
-    if (attendance === "absent") return "A";
-    return "-";
-  };
-
   const getAttendanceForDay = (attendance, yearMonth, day) => {
     const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
-    return getAttendanceStatus(attendance[dayKey]);
+    const status = attendance[dayKey];
+
+    if (status === "present") {
+      return "P";
+    } else if (status === "absent") {
+      return "A";
+    } else {
+      return "-";
+    }
   };
+
   return (
     <>
       <PageHeader title="Student Attendance Report" />
@@ -238,7 +243,7 @@ export default function StudentAttendance() {
                 <TableCell key={num.key} align="center">
                   {getAttendanceForDay(
                     student.attendance,
-                    dayjs(entryFormik.values.month).format("YYYY-MM"),
+                    selectedMonthYear,
                     num.key
                   )}
                 </TableCell>
