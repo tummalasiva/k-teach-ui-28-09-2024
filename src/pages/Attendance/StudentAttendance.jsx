@@ -3,13 +3,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import {
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
-import { studentAttendanceOverviewTableKeys } from "../../data/tableKeys/studentAttendanceOverviewData";
 import FormDatePicker from "../../forms/FormDatePicker";
 import { studentAttendanceReportTableKeys } from "../../data/tableKeys/studentAttendanceReportData";
 import { PRIVATE_URLS } from "../../services/urlConstants";
@@ -35,7 +45,7 @@ export default function StudentAttendance() {
     setSelectValue(newValue);
   };
 
-  const downloadAbsentStudentsReport = async () => {
+  const downloadAbsentStudentsReport = async (values) => {
     try {
       setDownloadingAbsent(true);
       const { data } = await get(
@@ -44,9 +54,10 @@ export default function StudentAttendance() {
           params: {
             schoolId: selectedSetting._id,
             date: dayjs(attendanceFormik.values.date).format("YYYY-MM-DD"),
-            classId: attendanceFormik.values.class,
-            sectionId: attendanceFormik.values.section,
+            classId: values.sectionInfo.class,
+            sectionId: values.section,
           },
+          responseType: "blob",
         }
       );
 
@@ -68,7 +79,7 @@ export default function StudentAttendance() {
           date: dayjs(values.date).format("YYYY-MM-DD"),
         },
       });
-      console.log(data);
+
       setAttendanceData(data.result);
     } catch (error) {
       console.log(error);
@@ -101,10 +112,7 @@ export default function StudentAttendance() {
           },
         }
       );
-      setOverViewData(
-        data.result.map((s) => ({ ...s, section: s.sectionInfo }))
-      );
-      console.log(data, "1111111111");
+      setOverViewData(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -118,9 +126,15 @@ export default function StudentAttendance() {
     onSubmit: getStudentAttendanceOverview,
   });
 
+  // useEffect(() => {
+  //   if (overviewFormik.values.class && overviewFormik.values.date) {
+  //     overviewFormik.handleSubmit();
+  //   }
+  // }, [overviewFormik.values.class, overviewFormik.values.date]);
+
   useEffect(() => {
     if (overviewFormik.values.class && overviewFormik.values.date) {
-      overviewFormik.handleSubmit();
+      getStudentAttendanceOverview(overviewFormik.values);
     }
   }, [overviewFormik.values.class, overviewFormik.values.date]);
 
@@ -277,12 +291,61 @@ export default function StudentAttendance() {
             </Grid>
           </Grid>
         </Paper>
-        <CustomTable
-          actions={[]}
-          bodyDataModal="overview"
-          bodyData={overViewData}
-          tableKeys={studentAttendanceOverviewTableKeys}
-        />
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead
+              sx={{
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? theme.palette.primary.dark
+                    : theme.palette.primary.light,
+              }}>
+              <TableRow>
+                <TableCell align="center">Section</TableCell>
+                <TableCell align="center">Present</TableCell>
+                <TableCell align="center">Absent</TableCell>
+                <TableCell align="center">Percentage</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {overViewData.length > 0 &&
+                overViewData.map((attendanceStudent, index) => (
+                  <TableRow key={attendanceStudent._id}>
+                    <TableCell align="center">
+                      {attendanceStudent.sectionInfo.name}
+                    </TableCell>
+                    <TableCell align="center">
+                      {attendanceStudent.totalPresent}
+                    </TableCell>
+                    <TableCell align="center">
+                      {attendanceStudent.totalAbsent}
+                      <LoadingButton
+                        size="small"
+                        loading={downloadingAbsent}
+                        variant="contained"
+                        sx={{ ml: 1 }}
+                        onClick={() =>
+                          downloadAbsentStudentsReport(attendanceStudent)
+                        }>
+                        Download
+                      </LoadingButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      {attendanceStudent.percentage}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          {!overViewData.length && (
+            <Typography
+              variant="h6"
+              sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
+              No data found
+            </Typography>
+          )}
+        </TableContainer>
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
@@ -313,27 +376,13 @@ export default function StudentAttendance() {
                 name="date"
               />
             </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-              item
-              display={"flex"}
-              gap={1}
-              justifyContent={"flex-end"}>
+            <Grid xs={12} md={3} lg={3} item sx={{ alignSelf: "center" }}>
               <LoadingButton
                 loading={fetchingAttendanceData}
                 onClick={attendanceFormik.handleSubmit}
                 size="small"
                 variant="contained">
                 Find
-              </LoadingButton>
-              <LoadingButton
-                loading={downloadingAbsent}
-                onClick={downloadAbsentStudentsReport}
-                size="small"
-                variant="contained">
-                Print
               </LoadingButton>
             </Grid>
           </Grid>
