@@ -15,6 +15,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import FormDatePicker from "../../forms/FormDatePicker";
 import VisitorInfoViewModel from "./VisitorInfoViewModel";
+import moment from "moment";
 
 const Reason_To_Meet = [
   { label: "Vendor", value: "vendor" },
@@ -195,7 +196,12 @@ export default function VisitorInfo() {
       toMeetUser: dataToEdit?.toMeetUser?._id || "",
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
-      checkOut: dataToEdit?.checkOut || "",
+
+      checkOut: dataToEdit?.checkOut
+        ? moment(dataToEdit.checkOut, "DD/MM/YYYY, HH:mm:ss").format(
+            "YYYY-MM-DDTHH:mm"
+          )
+        : "",
 
       class: dataToEdit?.class?._id || "",
       section: dataToEdit?.section?._id || "",
@@ -230,9 +236,26 @@ export default function VisitorInfo() {
       )?.name;
       entryFormik.setFieldValue("roleName", roleName);
       getEmployees();
-      getStudents();
     }
   }, [entryFormik.values.toMeetUserType]);
+
+  useEffect(() => {
+    if (
+      (entryFormik.values.toMeetUserType,
+      entryFormik.values.class,
+      entryFormik.values.section)
+    ) {
+      let roleName = roles.find(
+        (r) => r._id === entryFormik.values.toMeetUserType
+      )?.name;
+      entryFormik.setFieldValue("roleName", roleName);
+      getStudents();
+    }
+  }, [
+    entryFormik.values.toMeetUserType,
+    entryFormik.values.class,
+    entryFormik.values.section,
+  ]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
@@ -240,7 +263,6 @@ export default function VisitorInfo() {
   };
 
   const handleClickOpenView = (data) => {
-    // console.log(data.school.name, "vvvvvb");
     setModalData({
       ...modalData,
       open: true,
@@ -251,6 +273,8 @@ export default function VisitorInfo() {
   const onCloseViewModel = (e) => {
     setModalData({ ...modalData, open: false });
   };
+
+  console.log(data, "mmmmmm");
 
   return (
     <>
