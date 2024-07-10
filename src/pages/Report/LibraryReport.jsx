@@ -128,14 +128,13 @@ export default function LibraryReport() {
       const getPdf = await get(PRIVATE_URLS.report.downloadGroupedLibraryData, {
         params: {
           schoolId: selectedSetting._id,
-          search: {
-            academicYear: entryFormik.values.academicYear,
+          academicYear: entryFormik.values.academicYear,
 
-            groupByData: entryFormik.values.groupByData,
-            fromDate: dayjs(entryFormik.values.fromDate).format("YYYY/MM/DD"),
-            toDate: dayjs(entryFormik.values.toDate).format("YYYY/MM/DD"),
-          },
+          groupByData: entryFormik.values.groupByData,
+          fromDate: dayjs(entryFormik.values.fromDate).format("YYYY/MM/DD"),
+          toDate: dayjs(entryFormik.values.toDate).format("YYYY/MM/DD"),
         },
+        responseType: "blob",
       });
 
       downloadFile("application/pdf", getPdf.data, "libraryReport.pdf");

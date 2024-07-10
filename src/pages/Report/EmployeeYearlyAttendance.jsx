@@ -72,12 +72,30 @@ export default function EmployeeYearlyAttendance() {
     }
   };
 
+  const handleGetReport = async (values) => {
+    try {
+      const { data } = await get(
+        PRIVATE_URLS.report.getEmployeeAttendanceReport,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            academicYearId: values.academicYear,
+            employeeId: values.employee,
+          },
+        }
+      );
+      console.log(data, "data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       employee: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetReport,
   });
 
   useEffect(() => {
@@ -118,7 +136,10 @@ export default function EmployeeYearlyAttendance() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item alignSelf="center">
-            <Button size="small" variant="contained">
+            <Button
+              onClick={entryFormik.handleSubmit}
+              size="small"
+              variant="contained">
               Find
             </Button>
           </Grid>

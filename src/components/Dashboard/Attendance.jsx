@@ -1,8 +1,13 @@
+/** @format */
+
 import { Box, Card, Grid, Paper, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Groups } from "@mui/icons-material";
 import ChartBar from "./ChartBar";
 import { Link } from "react-router-dom";
+import { get } from "../../services/apiMethods";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import SettingContext from "../../context/SettingsContext";
 
 const OuterCard = styled(Card)(({ theme }) => ({
   marginBottom: "15px",
@@ -51,6 +56,36 @@ const Count = styled(Box)(({ theme }) => ({
 }));
 
 export default function Attendance() {
+  const { selectedSetting } = useContext(SettingContext);
+
+  const getStudentAttendanceSummary = async () => {
+    try {
+      const [studentData, employeeData] = await Promise.all([
+        get(PRIVATE_URLS.studentAttendance.getAttendanceSummaryForToday, {
+          params: {
+            schoolId: selectedSetting._id,
+          },
+        }),
+        get(
+          PRIVATE_URLS.employeeAttendance.getEmployeeAttendanceSummaryForToday,
+          {
+            params: {
+              schoolId: selectedSetting._id,
+            },
+          }
+        ),
+      ]);
+
+      console.log(studentData.data?.result, "student attendance data");
+      console.log(employeeData?.data?.result, "employee attendance data");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStudentAttendanceSummary();
+  }, [selectedSetting._id]);
   return (
     <>
       <Paper sx={{ padding: 2, margin: "20px 0px" }}>

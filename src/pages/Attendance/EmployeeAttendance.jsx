@@ -145,7 +145,12 @@ export default function EmployeeAttendance() {
               />
             </Grid>
             <Grid xs={12} sm={6} md={6} lg={3} item>
-              <FormDatePicker formik={entryFormik} label="Date" name="date" />
+              <FormDatePicker
+                disableFutureDates={true}
+                formik={entryFormik}
+                label="Date"
+                name="date"
+              />
             </Grid>
             <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
               <LoadingButton
@@ -178,6 +183,7 @@ export default function EmployeeAttendance() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
+                disableFutureDates={true}
                 formik={reportFormik}
                 label="From Date"
                 name="fromDate"
@@ -185,6 +191,7 @@ export default function EmployeeAttendance() {
             </Grid>
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
+                disableFutureDates={true}
                 formik={reportFormik}
                 label="To Date"
                 name="toDate"

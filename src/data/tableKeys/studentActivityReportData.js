@@ -1,23 +1,22 @@
+/** @format */
+
 export const studentActivityReportTableKeys = [
   {
-    name: "Academic Year",
-    key: "academicYear",
-  },
-  {
     name: "Student",
-    key: "student",
+    key: "studentName",
   },
   {
     name: "Section",
-    key: "section",
+    key: "sectionName",
   },
 
   {
     name: "Activity",
-    key: "activity",
+    key: "activityName",
   },
   {
     name: "Activity Date",
     key: "activityDate",
+    isDate: true,
   },
 ];

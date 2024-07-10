@@ -10,6 +10,7 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { downloadFile } from "../../utils";
 
 export default function StudentActivityReport() {
   const [data, setData] = useState([]);
@@ -73,13 +74,47 @@ export default function StudentActivityReport() {
       console.log(error);
     }
   };
+
+  const handleGetStudentActivityReport = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.report.getStudentActivityReport, {
+        params: {
+          schoolId: selectedSetting._id,
+          academicYearId: values.academicYear,
+          studentId: values.student,
+        },
+      });
+      setData(data.result);
+    } catch (error) {}
+  };
+
+  const handleGetPrintPdf = async () => {
+    try {
+      const getPdf = await get(
+        PRIVATE_URLS.report.getStudentActivityReportPdf,
+        {
+          params: {
+            schoolId: selectedSetting._id,
+            academicYearId: entryFormik.values.academicYear,
+            studentId: entryFormik.values.student,
+          },
+          responseType: "blob",
+        }
+      );
+
+      downloadFile("application/pdf", getPdf.data, "studentActivityReport.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
       class: "",
       student: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: handleGetStudentActivityReport,
   });
 
   useEffect(() => {
@@ -101,55 +136,61 @@ export default function StudentActivityReport() {
     <>
       <PageHeader title="Student Activity Report" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="academicYear"
-              formik={entryFormik}
-              label="Select Academic Year"
-              options={academicYear}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="class"
-              formik={entryFormik}
-              label="Select Class"
-              options={classes}
-            />
-          </Grid>
+        <form onSubmit={entryFormik.handleSubmit}>
+          {" "}
+          <Grid rowSpacing={1} columnSpacing={2} container>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="academicYear"
+                formik={entryFormik}
+                label="Select Academic Year"
+                options={academicYear}
+              />
+            </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="class"
+                formik={entryFormik}
+                label="Select Class"
+                options={classes}
+              />
+            </Grid>
 
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="student"
-              formik={entryFormik}
-              label="Select Student"
-              options={students}
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormSelect
+                required={true}
+                name="student"
+                formik={entryFormik}
+                label="Select Student"
+                options={students}
+              />
+            </Grid>
 
-          <Grid
-            xs={12}
-            md={6}
-            lg={3}
-            item
-            display="flex"
-            gap={1}
-            alignSelf="center">
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-            <Button size="small" variant="contained">
-              Print
-            </Button>
+            <Grid
+              xs={12}
+              md={6}
+              lg={3}
+              item
+              display="flex"
+              gap={1}
+              alignSelf="center">
+              <Button size="small" variant="contained" type="submit">
+                Find
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleGetPrintPdf}>
+                Print
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </form>
       </Paper>
       <CustomTable
-        actions={["edit"]}
+        actions={[]}
         tableKeys={studentActivityReportTableKeys}
         bodyDataModal="student activity report"
         bodyData={data}
