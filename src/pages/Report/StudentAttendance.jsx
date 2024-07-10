@@ -229,7 +229,7 @@ export default function StudentAttendance() {
         </TableHead>
         <TableBody>
           {attendanceData.map((student) => (
-            <TableRow key={student}>
+            <TableRow key={student.studentId}>
               <TableCell align="center">{student.studentName}</TableCell>
               <TableCell align="center">{student.totalWorkingDays}</TableCell>
               <TableCell align="center">{student.totalPresentDays}</TableCell>
