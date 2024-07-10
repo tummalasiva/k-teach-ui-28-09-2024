@@ -20,17 +20,12 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function EmployeeAttendance() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([
-    {
-      name: "abc",
-      workingDays: "7",
-      presentDays: "9",
-      absentDays: "5",
-    },
-  ]);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [academicYear, setAcademicYear] = useState([]);
 
   const getAcademicYear = async () => {
@@ -52,6 +47,7 @@ export default function EmployeeAttendance() {
 
   const handleFetchReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(
         PRIVATE_URLS.report.getAllEmployeesAttendanceReportForParticularMonth,
         {
@@ -63,12 +59,14 @@ export default function EmployeeAttendance() {
           },
         }
       );
-
-      console.log(data, "data");
+      setAttendanceData(data.result);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
+
   const entryFormik = useFormik({
     initialValues: {
       academicYear: "",
@@ -89,6 +87,18 @@ export default function EmployeeAttendance() {
       </TableCell>
     );
   }
+
+  const getAttendanceStatus = (attendance) => {
+    if (attendance === "present") return "P";
+    if (attendance === "absent") return "A";
+    return "-";
+  };
+
+  const getAttendanceForDay = (attendance, yearMonth, day) => {
+    const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
+    return getAttendanceStatus(attendance[dayKey]);
+  };
+
   return (
     <>
       <PageHeader title="Employee Attendance" />
@@ -115,15 +125,17 @@ export default function EmployeeAttendance() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item alignSelf="center">
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
+
       <Table>
         <TableHead
           sx={{
@@ -133,8 +145,7 @@ export default function EmployeeAttendance() {
                 : theme.palette.primary.light,
           }}>
           <TableRow>
-            <TableCell align="center">Student Name</TableCell>
-
+            <TableCell align="center">Employee Name</TableCell>
             <TableCell align="center">Working Days</TableCell>
             <TableCell align="center">Present Days</TableCell>
             <TableCell align="center">Absent Days</TableCell>
@@ -146,12 +157,21 @@ export default function EmployeeAttendance() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((dat) => (
-            <TableRow>
-              <TableCell align="center">{dat.name}</TableCell>
-              <TableCell align="center">{dat.workingDays}</TableCell>
-              <TableCell align="center">{dat.presentDays}</TableCell>
-              <TableCell align="center">{dat.absentDays}</TableCell>
+          {attendanceData.map((employee) => (
+            <TableRow key={employee.employeeId}>
+              <TableCell align="center">{employee.employeeName}</TableCell>
+              <TableCell align="center">{employee.totalWorkingDays}</TableCell>
+              <TableCell align="center">{employee.totalPresentDays}</TableCell>
+              <TableCell align="center">{employee.totalAbsentDays}</TableCell>
+              {numbers.map((num) => (
+                <TableCell key={num.key} align="center">
+                  {getAttendanceForDay(
+                    employee.attendance,
+                    dayjs(entryFormik.values.month).format("YYYY-MM"),
+                    num.key
+                  )}
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>

@@ -20,22 +20,16 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function StudentAttendance() {
-  const [data, setData] = useState([
-    {
-      name: "abc",
-      workingDays: "7",
-      presentDays: "9",
-      absentDays: "5",
-    },
-  ]);
-
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
 
   const [academicYear, setAcademicYear] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -102,7 +96,7 @@ export default function StudentAttendance() {
           },
         }
       );
-
+      setAttendanceData(data.result);
       console.log(data, "student attendance data");
     } catch (error) {
       console.log(error);
@@ -139,6 +133,17 @@ export default function StudentAttendance() {
       </TableCell>
     );
   }
+
+  const getAttendanceStatus = (attendance) => {
+    if (attendance === "present") return "P";
+    if (attendance === "absent") return "A";
+    return "-";
+  };
+
+  const getAttendanceForDay = (attendance, yearMonth, day) => {
+    const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
+    return getAttendanceStatus(attendance[dayKey]);
+  };
   return (
     <>
       <PageHeader title="Student Attendance Report" />
@@ -190,12 +195,13 @@ export default function StudentAttendance() {
             item
             display="flex"
             justifyContent="flex-end">
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -222,12 +228,21 @@ export default function StudentAttendance() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((dat) => (
-            <TableRow>
-              <TableCell align="center">{dat.name}</TableCell>
-              <TableCell align="center">{dat.workingDays}</TableCell>
-              <TableCell align="center">{dat.presentDays}</TableCell>
-              <TableCell align="center">{dat.absentDays}</TableCell>
+          {attendanceData.map((student) => (
+            <TableRow key={student}>
+              <TableCell align="center">{student.studentName}</TableCell>
+              <TableCell align="center">{student.totalWorkingDays}</TableCell>
+              <TableCell align="center">{student.totalPresentDays}</TableCell>
+              <TableCell align="center">{student.totalAbsentDays}</TableCell>
+              {numbers.map((num) => (
+                <TableCell key={num.key} align="center">
+                  {getAttendanceForDay(
+                    student.attendance,
+                    dayjs(entryFormik.values.month).format("YYYY-MM"),
+                    num.key
+                  )}
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>

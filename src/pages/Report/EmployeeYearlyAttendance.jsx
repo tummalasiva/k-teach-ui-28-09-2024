@@ -3,7 +3,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
-  Box,
   Button,
   Grid,
   Paper,
@@ -16,22 +15,16 @@ import {
 import FormSelect from "../../forms/FormSelect";
 import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { del, get, post, put } from "../../services/apiMethods";
+import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function EmployeeYearlyAttendance() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([
-    {
-      name: "abc",
-      workingDays: "7",
-      presentDays: "9",
-      absentDays: "5",
-    },
-  ]);
-
   const [academicYear, setAcademicYear] = useState([]);
   const [employees, setEmployee] = useState([]);
+  const [attendanceData, setAttendanceData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -65,7 +58,6 @@ export default function EmployeeYearlyAttendance() {
         }))
       );
 
-      console.log(data.result, " qAWSFGHJNM");
       entryFormik.setFieldValue("employee", data.result[0]?._id);
     } catch (error) {
       console.log(error);
@@ -74,6 +66,7 @@ export default function EmployeeYearlyAttendance() {
 
   const handleGetReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(
         PRIVATE_URLS.report.getEmployeeAttendanceReport,
         {
@@ -84,9 +77,12 @@ export default function EmployeeYearlyAttendance() {
           },
         }
       );
-      console.log(data, "data");
+      setAttendanceData(data.result);
+      console.log(data.result, "fdxfgvbnm,.");
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -103,6 +99,12 @@ export default function EmployeeYearlyAttendance() {
     getEmployees();
   }, [selectedSetting._id]);
 
+  // useEffect(() => {
+  //   if (entryFormik.values.academicYear && entryFormik.values.employee) {
+  //     handleGetReport(entryFormik.values);
+  //   }
+  // }, [entryFormik.values.academicYear, entryFormik.values.employee]);
+
   const numbers = [];
   for (let i = 1; i <= 31; i++) {
     numbers.push(
@@ -111,6 +113,18 @@ export default function EmployeeYearlyAttendance() {
       </TableCell>
     );
   }
+
+  const getAttendanceStatus = (attendance) => {
+    if (attendance === "present") return "P";
+    if (attendance === "absent") return "A";
+    return "-";
+  };
+
+  const getAttendanceForDay = (attendance, yearMonth, day) => {
+    const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
+    return getAttendanceStatus(attendance[dayKey]);
+  };
+
   return (
     <>
       <PageHeader title="Employee Yearly Attendance" />
@@ -136,12 +150,13 @@ export default function EmployeeYearlyAttendance() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item alignSelf="center">
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -154,8 +169,7 @@ export default function EmployeeYearlyAttendance() {
                 : theme.palette.primary.light,
           }}>
           <TableRow>
-            <TableCell align="center">Student Name</TableCell>
-
+            <TableCell align="center">Month</TableCell>
             <TableCell align="center">Working Days</TableCell>
             <TableCell align="center">Present Days</TableCell>
             <TableCell align="center">Absent Days</TableCell>
@@ -167,14 +181,30 @@ export default function EmployeeYearlyAttendance() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((dat) => (
-            <TableRow>
-              <TableCell align="center">{dat.name}</TableCell>
-              <TableCell align="center">{dat.workingDays}</TableCell>
-              <TableCell align="center">{dat.presentDays}</TableCell>
-              <TableCell align="center">{dat.absentDays}</TableCell>
-            </TableRow>
-          ))}
+          {attendanceData &&
+            Object.keys(attendanceData).map((month) => (
+              <TableRow key={month}>
+                <TableCell align="center">{month}</TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalWorkingDays}
+                </TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalPresentDays}
+                </TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalAbsentDays}
+                </TableCell>
+                {numbers.map((num) => (
+                  <TableCell key={num.key} align="center">
+                    {getAttendanceForDay(
+                      attendanceData[month].attendance,
+                      month,
+                      num.key
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </>

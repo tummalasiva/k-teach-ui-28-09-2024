@@ -19,23 +19,16 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function StudentYearlyAttendance() {
-  const [data, setData] = useState([
-    {
-      name: "abc",
-      workingDays: "7",
-      presentDays: "9",
-      absentDays: "5",
-    },
-  ]);
-
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
   const [section, setSection] = useState([]);
   const [students, setStudents] = useState([]);
-
   const [academicYear, setAcademicYear] = useState([]);
+  const [attendanceData, setAttendanceData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -115,6 +108,7 @@ export default function StudentYearlyAttendance() {
 
   const handleGetReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(
         PRIVATE_URLS.report.getStudentAttendanceReport,
         {
@@ -125,9 +119,12 @@ export default function StudentYearlyAttendance() {
           },
         }
       );
-      console.log(data, "data");
+      setAttendanceData(data.result);
+      console.log(data.result, "fdxfgvbnm,.");
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -176,6 +173,18 @@ export default function StudentYearlyAttendance() {
       </TableCell>
     );
   }
+
+  const getAttendanceStatus = (attendance) => {
+    if (attendance === "present") return "P";
+    if (attendance === "absent") return "A";
+    return "-";
+  };
+
+  const getAttendanceForDay = (attendance, yearMonth, day) => {
+    const dayKey = `${yearMonth}-${String(day).padStart(2, "0")}`;
+    return getAttendanceStatus(attendance[dayKey]);
+  };
+
   return (
     <>
       <PageHeader title="Student Yearly Attendance" />
@@ -226,12 +235,13 @@ export default function StudentYearlyAttendance() {
             item
             display="flex"
             justifyContent="flex-end">
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -245,7 +255,7 @@ export default function StudentYearlyAttendance() {
                 : theme.palette.primary.light,
           }}>
           <TableRow>
-            <TableCell align="center">Student Name</TableCell>
+            <TableCell align="center">Month</TableCell>
 
             <TableCell align="center">Working Days</TableCell>
             <TableCell align="center">Present Days</TableCell>
@@ -258,14 +268,30 @@ export default function StudentYearlyAttendance() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((dat) => (
-            <TableRow>
-              <TableCell align="center">{dat.name}</TableCell>
-              <TableCell align="center">{dat.workingDays}</TableCell>
-              <TableCell align="center">{dat.presentDays}</TableCell>
-              <TableCell align="center">{dat.absentDays}</TableCell>
-            </TableRow>
-          ))}
+          {attendanceData &&
+            Object.keys(attendanceData).map((month) => (
+              <TableRow key={month}>
+                <TableCell align="center">{month}</TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalWorkingDays}
+                </TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalPresentDays}
+                </TableCell>
+                <TableCell align="center">
+                  {attendanceData[month].totalAbsentDays}
+                </TableCell>
+                {numbers.map((num) => (
+                  <TableCell key={num.key} align="center">
+                    {getAttendanceForDay(
+                      attendanceData[month].attendance,
+                      month,
+                      num.key
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </>
