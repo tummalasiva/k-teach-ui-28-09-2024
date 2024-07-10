@@ -454,7 +454,6 @@ export default function StudentReport() {
                 }}>
                 <TableRow>
                   <TableCell align="center">SL</TableCell>
-                  <TableCell align="center">Library Name</TableCell>
 
                   <TableCell align="center">Male</TableCell>
                   <TableCell align="center">Female</TableCell>
@@ -465,7 +464,6 @@ export default function StudentReport() {
                 {data.map((data, index) => (
                   <TableRow key={index}>
                     <TableCell align="center"> {index + 1}</TableCell>
-                    <TableCell align="center">{data?.libraryName}</TableCell>
 
                     <TableCell align="center">{data.maleCount}</TableCell>
                     <TableCell align="center">{data.femaleCount}</TableCell>
