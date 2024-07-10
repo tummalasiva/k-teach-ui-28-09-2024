@@ -300,55 +300,50 @@ export default function Reshuffle() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {studentReshuffle.map((row, index) => (
-              <TableRow key={row._id}>
-                <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{row.basicInfo.name}</TableCell>
-                <TableCell align="center">
-                  {row.academicInfo.rollNumber}
-                </TableCell>
-                <TableCell align="center">{row.fatherInfo.name}</TableCell>
-                <TableCell align="center">
-                  <Checkbox
-                    checked={checkBox.includes(row._id)}
-                    onChange={(e) => handleReshffleCheckBox(row._id, e)}
-                    {...label}
-                    sx={{
-                      color: "#1b3779",
-                      "&.Mui-checked": {
+            {studentReshuffle
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => (
+                <TableRow key={row._id}>
+                  <TableCell align="center">{index + 1}</TableCell>
+                  <TableCell align="center">{row.basicInfo.name}</TableCell>
+                  <TableCell align="center">
+                    {row.academicInfo.rollNumber}
+                  </TableCell>
+                  <TableCell align="center">{row.fatherInfo.name}</TableCell>
+                  <TableCell align="center">
+                    <Checkbox
+                      checked={checkBox.includes(row._id)}
+                      onChange={(e) => handleReshffleCheckBox(row._id, e)}
+                      {...label}
+                      sx={{
                         color: "#1b3779",
-                      },
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+                        "&.Mui-checked": {
+                          color: "#1b3779",
+                        },
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
-          {!studentReshuffle.length && (
-            <Typography
-              variant="h6"
-              sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
-              No data found
-            </Typography>
-          )}
         </Table>
+        {!studentReshuffle.length && (
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
+            No data found
+          </Typography>
+        )}
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={studentReshuffle.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={studentReshuffle.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          my: 1,
-        }}
-      />
 
       {studentReshuffle.length > 0 && (
         <StickyBar

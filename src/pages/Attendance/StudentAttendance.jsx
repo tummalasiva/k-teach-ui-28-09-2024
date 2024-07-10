@@ -41,6 +41,18 @@ export default function StudentAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [downloadingAbsent, setDownloadingAbsent] = useState(false);
   const [fetchingreport, setFetchingReport] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter pagination==========
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
   };
@@ -309,8 +321,9 @@ export default function StudentAttendance() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {overViewData.length > 0 &&
-                overViewData.map((attendanceStudent, index) => (
+              {overViewData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((attendanceStudent, index) => (
                   <TableRow key={attendanceStudent._id}>
                     <TableCell align="center">
                       {attendanceStudent.sectionInfo.name}
@@ -345,6 +358,16 @@ export default function StudentAttendance() {
               No data found
             </Typography>
           )}
+
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={overViewData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </TableContainer>
       </TabPanel>
       <TabPanel index={1} value={value}>
