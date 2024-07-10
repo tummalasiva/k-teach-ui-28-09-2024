@@ -125,6 +125,8 @@ export default function EmployeeYearlyAttendance() {
       return "P";
     } else if (status === "absent") {
       return "A";
+    } else if (status === "late") {
+      return "L";
     } else {
       return "-";
     }
