@@ -12,6 +12,8 @@ import AddChapterDialog from "./CourseDialogs/AddChapterDialog";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import CourseContext from "../../context/CourseContext";
+import ContentContext from "../../context/ContentContext";
 
 const Label = styled("label")(() => ({
   fontWeight: 650,
@@ -32,7 +34,7 @@ export default function CourseContent() {
   const [courses, setCourses] = useState([]);
   const [openChapter, setOpenChaper] = useState(false);
   const [courseDetails, setCourseDetails] = useState({ chapters: [] });
-  const [chapterData, setChapterData] = useState([]);
+  const [chapterData, setChapterData] = useState(null);
 
   // console.log(chapterData, "chapterData");
   // console.log(courseDetails, "courseDetails");
@@ -93,70 +95,81 @@ export default function CourseContent() {
   };
 
   const handleEditChapter = (data) => {
-    // console.log(data, "upd");
+    console.log(data, "upd");
     setOpenChaper(true);
     setChapterData(data);
   };
 
   return (
     <>
-      <PageHeader title="Course Content" />
+      <CourseContext.Provider
+        value={{
+          courses,
+          courseId: entryFormik.values.courseId,
+          onUpdate: entryFormik.handleSubmit,
+        }}>
+        <PageHeader title="Course Content" />
 
-      <OuterGrid container>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          my={2}
-          gap={2}
-          display="flex"
-          alignItems="center">
-          <Box sx={{ width: 260 }}>
-            <FormSelect
-              required={true}
-              name="courseId"
-              formik={entryFormik}
-              label="Select Course To Add Content"
-              options={courses}
+        <OuterGrid container>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            my={2}
+            gap={2}
+            display="flex"
+            alignItems="center">
+            <Box sx={{ width: 260 }}>
+              <FormSelect
+                required={true}
+                name="courseId"
+                formik={entryFormik}
+                label="Select Course To Add Content"
+                options={courses}
+              />
+            </Box>
+
+            <Button
+              variant="contained"
+              size="medium"
+              disabled={!courses.length}
+              startIcon={<AddIcon />}
+              sx={{ mt: 1 }}
+              multi={false}
+              onClick={handelOpenChapter}>
+              Chapter
+            </Button>
+          </Grid>
+        </OuterGrid>
+        <Divider />
+
+        {/* show all models components == */}
+
+        {courseDetails.chapters?.map((chapter, i) => (
+          <ContentContext.Provider value={{ chapter: chapter }}>
+            <ShowCourseContent
+              key={i}
+              chapter={chapter}
+              courseId={entryFormik.values.courseId}
+              course={courseDetails}
+              // submitDetails={() => entryFormik.handleSubmit()}
+              handleEditChapter={() => handleEditChapter(chapter)}
             />
-          </Box>
+          </ContentContext.Provider>
+        ))}
 
-          <Button
-            variant="contained"
-            size="medium"
-            disabled={!courses.length}
-            startIcon={<AddIcon />}
-            sx={{ mt: 1 }}
-            multi={false}
-            onClick={handelOpenChapter}>
-            Chapter
-          </Button>
-        </Grid>
-      </OuterGrid>
-      <Divider />
-
-      {/* show all models components == */}
-      {courseDetails.chapters?.map((chapter, i) => (
-        <ShowCourseContent
-          key={i}
-          chapter={chapter}
+        {/* open chapter model ========== */}
+        <AddChapterDialog
+          title="Chapter for Course"
+          open={openChapter}
+          setOpenChaper={setOpenChaper}
           courseId={entryFormik.values.courseId}
-          course={courseDetails}
-          submitDetails={() => entryFormik.handleSubmit()}
-          handleEditChapter={() => handleEditChapter(chapter)}
+          chapterData={chapterData}
+          setChapterData={setChapterData}
+          onUpdate={() => entryFormik.handleSubmit()}
         />
-      ))}
-
-      {/* open chapter model ========== */}
-      <AddChapterDialog
-        title="Chapter for Course"
-        open={openChapter}
-        setOpenChaper={setOpenChaper}
-        courseId={entryFormik.values.courseId}
-        chapterData={chapterData}
-        setChapterData={setChapterData}
-      />
+      </CourseContext.Provider>
     </>
   );
 }
