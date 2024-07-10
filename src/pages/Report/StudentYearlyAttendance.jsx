@@ -120,7 +120,6 @@ export default function StudentYearlyAttendance() {
         }
       );
       setAttendanceData(data.result);
-      console.log(data.result, "fdxfgvbnm,.");
       setLoading(false);
     } catch (error) {
       console.log(error);

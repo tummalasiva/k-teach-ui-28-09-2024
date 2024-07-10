@@ -37,6 +37,7 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import themeData from "../../data/themeData";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
+import { LoadingButton } from "@mui/lab";
 
 const HeadingContainer = styled(Grid)(() => ({
   display: "flex",
@@ -155,6 +156,11 @@ export default function StudentReport() {
   const libraryCombinedData = libraryCombineData(libraryBar);
   const vehicleCombinedData = vehcileCombineData(vehicleBar);
   const hostelCombinedData = hostelCombineData(hostelBar);
+
+  const [loading, setLoading] = useState(false);
+
+  const [loadingGraph, setLoadingGraph] = useState(false);
+
   let totalMaleStudents = 0;
   let totalFemaleStudents = 0;
   // filter pagination==========
@@ -191,6 +197,7 @@ export default function StudentReport() {
 
   const handleGetStudentReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(PRIVATE_URLS.report.getStudentReport, {
         params: {
           schoolId: selectedSetting._id,
@@ -200,11 +207,16 @@ export default function StudentReport() {
       });
       setData(data.result);
       setGroupdata(values.groupByData);
-    } catch (error) {}
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   const handleGetStudentReportByGraph = async (values) => {
     try {
+      setLoadingGraph(true);
       const { data } = await get(PRIVATE_URLS.report.getStudentReport, {
         params: {
           schoolId: selectedSetting._id,
@@ -229,7 +241,11 @@ export default function StudentReport() {
       if (values.groupByData === "hostel") {
         setHostelBar(data.result);
       }
-    } catch (error) {}
+      setLoadingGraph(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingGraph(false);
+    }
   };
 
   const entryFormik = useFormik({
@@ -291,9 +307,13 @@ export default function StudentReport() {
                 display="flex"
                 gap={1}
                 item>
-                <Button size="small" variant="contained" type="submit">
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  variant="contained"
+                  type="submit">
                   Find
-                </Button>
+                </LoadingButton>
                 <Button size="small" variant="contained">
                   Print
                 </Button>
@@ -571,9 +591,13 @@ export default function StudentReport() {
                 display="flex"
                 gap={1}
                 item>
-                <Button size="small" variant="contained" type="submit">
+                <LoadingButton
+                  loading={loadingGraph}
+                  size="small"
+                  variant="contained"
+                  type="submit">
                   Find
-                </Button>
+                </LoadingButton>
                 <ReactToPrint
                   trigger={() => (
                     <Button

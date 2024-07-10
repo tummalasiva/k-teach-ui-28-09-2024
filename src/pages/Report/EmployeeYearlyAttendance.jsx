@@ -78,7 +78,7 @@ export default function EmployeeYearlyAttendance() {
         }
       );
       setAttendanceData(data.result);
-      console.log(data.result, "fdxfgvbnm,.");
+
       setLoading(false);
     } catch (error) {
       console.log(error);
