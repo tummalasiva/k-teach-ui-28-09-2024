@@ -248,19 +248,7 @@ export default function StudentYearlyAttendance() {
           </Grid>
         </Grid>
       </Paper>
-      <Card style={{ padding: 10, mt: 1 }}>
-        <Box
-          sx={{
-            paddingLeft: "1rem",
-            display: "flex",
-            gap: "20px",
-          }}>
-          <Typography>Working Days:</Typography>
-          <Typography>Present Days:</Typography>
-          <Typography>Absent Days:</Typography>
-          <Typography>Percentage:</Typography>
-        </Box>
-      </Card>
+
       <Table>
         <TableHead
           sx={{
