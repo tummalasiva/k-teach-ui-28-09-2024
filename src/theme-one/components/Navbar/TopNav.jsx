@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Box,
   Button,
@@ -90,8 +92,7 @@ export default function TopNav() {
                 color: "black",
                 textDecoration: "none",
                 fontWeight: "bold",
-              }}
-            >
+              }}>
               {" "}
               abc@gmail.com
             </Link>
@@ -105,29 +106,25 @@ export default function TopNav() {
             justifyContent: "flex-end",
           }}
           direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-        >
-          <ThemeSelector />
+          spacing={2}>
+          {/* <ThemeSelector /> */}
           {settings.length >= 1 && (
             <>
               <SelectButton
                 variant="contained"
                 onClick={handleClick}
                 size="small"
-                endIcon={<KeyboardArrowDownIcon />}
-              >
+                endIcon={<KeyboardArrowDownIcon />}>
                 {selectedSetting.name || "NA"}
               </SelectButton>
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
+                onClose={handleClose}>
                 {settings.map((school, index) => (
                   <MenuItem
                     key={school.name + index}
-                    onClick={() => handleSchoolSelect(school)}
-                  >
+                    onClick={() => handleSchoolSelect(school)}>
                     {school.name}
                   </MenuItem>
                 ))}

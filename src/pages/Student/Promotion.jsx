@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -257,8 +259,7 @@ export default function Promotion() {
               disabled={!hasAllValues(entryFormik.values, [], false)}
               onClick={entryFormik.handleSubmit}
               size="small"
-              variant="contained"
-            >
+              variant="contained">
               Find
             </Button>
           </Grid>
@@ -272,8 +273,7 @@ export default function Promotion() {
                 theme.palette.mode === "dark"
                   ? theme.palette.primary.dark
                   : theme.palette.primary.light,
-            }}
-          >
+            }}>
             <TableRow>
               <TableCell align="center">S.No</TableCell>
               <TableCell align="center">Name</TableCell>
@@ -326,28 +326,20 @@ export default function Promotion() {
         {!data.length && (
           <Typography
             variant="h6"
-            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}
-          >
+            sx={{ textAlign: "center", margin: "5px", padding: "5px" }}>
             No data found
           </Typography>
         )}
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          my: 1,
-        }}
-      />
 
       {data.length > 0 && (
         <StickyBar
@@ -358,8 +350,7 @@ export default function Promotion() {
                 varient="contained"
                 size="small"
                 type="submit"
-                onClick={handlePromotion}
-              >
+                onClick={handlePromotion}>
                 Promote
               </LoadingButton>
             </Box>

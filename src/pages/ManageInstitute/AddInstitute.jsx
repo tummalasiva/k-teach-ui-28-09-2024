@@ -32,6 +32,7 @@ import FileSelect from "../../forms/FileSelect";
 import CloseIcon from "@mui/icons-material/Close";
 import ThemeModeContext from "../../context/ThemeModeContext";
 import SettingContext from "../../context/SettingsContext";
+import ThemeSelector from "../../components/ThemeSelector";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -549,7 +550,7 @@ export default function AddInstitute({ initialValue = null }) {
         </FormBox>
 
         {/* Social Info */}
-        <FormBox sx={{ marginBottom: !dataToEdit ? "60px" : "20px" }}>
+        <FormBox>
           <Title id="modal-modal-title" variant="h6" component="h2">
             Social Information
           </Title>
@@ -610,7 +611,7 @@ export default function AddInstitute({ initialValue = null }) {
 
         {/* Banner Images */}
         {dataToEdit ? (
-          <FormBox sx={{ marginBottom: "60px" }}>
+          <FormBox>
             <Title id="modal-modal-title" variant="h6" component="h2">
               Banner Image
             </Title>
@@ -696,6 +697,17 @@ export default function AddInstitute({ initialValue = null }) {
             </Grid>
           </FormBox>
         ) : null}
+
+        <FormBox sx={{ marginBottom: "60px" }}>
+          <Title id="modal-modal-title" variant="h6" component="h2">
+            Select Your Favorite Theme
+          </Title>
+          <Box m={2}>
+            {" "}
+            <ThemeSelector />
+          </Box>
+        </FormBox>
+
         <Grid container>
           <Grid item xs={12} md={12}>
             <StyledBox>
