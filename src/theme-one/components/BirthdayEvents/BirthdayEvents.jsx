@@ -1,7 +1,15 @@
 /** @format */
 
-import React from "react";
-import { Box, Grid, Typography, styled, css, keyframes } from "@mui/material";
+import React, { useState, useRef } from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  styled,
+  css,
+  keyframes,
+  Paper,
+} from "@mui/material";
 import Balloon from "../../../theme-one/assets/Images/baloon.png.png";
 import RedImg from "../../../theme-one/assets/Images/redImg.png.png";
 import Image1 from "../../../theme-one/assets/Images/happBirthaday.jpg";
@@ -39,12 +47,10 @@ const MovingTexts = styled(Box)(({}) => ({
   bottom: 0,
   color: "white",
   top: 0,
-
   animation: css`
     ${moveTextAnimation} 13s linear infinite
   `,
   animationPlayState: "running",
-
   "&:hover": {
     animationPlayState: "paused",
   },
@@ -56,6 +62,26 @@ const BirthdayBox = styled(Box)(({}) => ({
   justifyContent: "center",
   zIndex: 10,
   marginBottom: "20px",
+}));
+
+const DotsContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 6,
+  position: "absolute",
+  bottom: 0,
+  padding: "15px 0px 0px 0px",
+  width: "100%",
+  backgroundColor: theme.palette.primary.main,
+}));
+
+const Dot = styled(Paper)(({ theme, active }) => ({
+  height: "10px",
+  width: "10px",
+  borderRadius: "50%",
+  cursor: "pointer",
+  backgroundColor: active ? "white" : "rgba(0, 0, 0, 0.2)",
 }));
 
 const GridContainerBox = styled(Grid)(
@@ -88,23 +114,16 @@ const LeftTitle = styled(Typography)(({}) => ({
 const RightTitle = styled(Typography)(({}) => ({
   fontWeight: "bold",
   color: themeData.darkPalette.primary.main,
+  // textShadow: "3px 3px black",
 }));
 
 const SliderFrame = styled(Box)(({ theme }) => ({
-  border: `5px solid ${theme.palette.primary.main}`,
-  borderRadius: "12px",
-  borderBottomLeftRadius: "25px",
-  borderBottomRightRadius: "25px",
+  border: `14px solid ${theme.palette.primary.main}`,
+  borderRadius: "25px",
   overflow: "hidden",
   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-  borderBottomWidth: "30px",
-
-  ".slick-dots": {
-    bottom: "15px",
-  },
-  ".slick-dots li button:before": {
-    color: "white",
-  },
+  // borderBottomWidth: "30px",
+  position: "relative",
 }));
 
 const names = [
@@ -135,8 +154,11 @@ const names = [
 ];
 
 const BirthdayEvents = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const sliderRef = useRef(null);
+
   const sliderSettings = {
-    dots: true,
+    dots: false,
     dotsClass: "slick-dots",
     infinite: true,
     speed: 500,
@@ -144,6 +166,12 @@ const BirthdayEvents = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
+  };
+
+  const onChangeSlide = (index) => {
+    setCurrentSlide(index);
+    sliderRef.current.slickGoTo(index);
   };
 
   return (
@@ -156,23 +184,22 @@ const BirthdayEvents = () => {
           padding: "40px",
         }}>
         <Grid item xs={12} md={12}>
-          {" "}
           <BirthdayBox>
             <LeftTitle
               variant="h4"
               sx={{ fontSize: { sm: "40px", xs: "30px" } }}>
               BIRTHDAY{" "}
             </LeftTitle>
-            &nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
             <RightTitle
               variant="h4"
               sx={{ fontSize: { sm: "40px", xs: "30px" } }}>
-              Events{" "}
+              EVENTS{" "}
             </RightTitle>
             &nbsp;
             <img
               src={Balloon}
-              style={{ height: "80px", width: "80px" }}
+              style={{ height: "40px", width: "40px" }}
               alt="loading..."
             />
           </BirthdayBox>
@@ -180,9 +207,9 @@ const BirthdayEvents = () => {
 
         <Grid item xs={12} sm={5} md={5} sx={{ paddingTop: "1rem" }}>
           <SliderFrame>
-            <Slider {...sliderSettings}>
+            <Slider {...sliderSettings} ref={sliderRef}>
               {names.map((image, index) => (
-                <Box key={index} sx={{ backgroundColor: "wheat" }}>
+                <Box key={index}>
                   <img
                     src={image.image}
                     alt={"image"}
@@ -190,12 +217,21 @@ const BirthdayEvents = () => {
                       width: "100%",
                       height: "auto",
                       maxHeight: "400px",
-                      objectFit: "contain",
+                      // objectFit: "cover",
                     }}
                   />
                 </Box>
               ))}
             </Slider>
+            <DotsContainer>
+              {names.map((slide, index) => (
+                <Dot
+                  key={index}
+                  active={index === currentSlide}
+                  onClick={() => onChangeSlide(index)}
+                />
+              ))}
+            </DotsContainer>
           </SliderFrame>
         </Grid>
 
@@ -207,7 +243,6 @@ const BirthdayEvents = () => {
               alignItems: "center",
               paddingTop: { xs: "10px" },
             }}>
-            {" "}
             <Typography
               sx={{
                 fontWeight: "bold",
