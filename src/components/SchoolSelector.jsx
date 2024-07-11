@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useState } from "react";
 import SettingContext from "../context/SettingsContext";
 import { Box, IconButton, MenuItem, Select, styled } from "@mui/material";
@@ -25,8 +27,7 @@ export default function SchoolSelector() {
         boxShadow: (theme) => theme.shadows[3],
         borderRadius: "20px",
         overflow: "hidden",
-      }}
-    >
+      }}>
       <Select
         fullWidth
         size="small"
@@ -49,13 +50,12 @@ export default function SchoolSelector() {
               <Home style={{ color: "skyblue" }} />
             </IconButton>
           </InputAdornment>
-        }
-      >
+        }>
         {settings
           .filter((s) => s.active)
           .map((s) => (
             <MenuItem key={s._id} value={s._id}>
-              {s.schoolName}
+              {s.name}
             </MenuItem>
           ))}
       </Select>

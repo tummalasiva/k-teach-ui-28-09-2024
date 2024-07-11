@@ -33,7 +33,7 @@ const StudentDashBoard = React.lazy(() =>
 );
 
 function App() {
-  const [selectedTheme, setSelectedTheme] = useState(2);
+  const [selectedTheme, setSelectedTheme] = useState(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userType, setUserType] = useState("employee");
 
@@ -94,13 +94,12 @@ function App() {
   }, [popupData.data]);
 
   useEffect(() => {
-    let theme = window.localStorage.getItem("selectedTheme");
-    if (!theme) {
-      window.localStorage.setItem("selectedTheme", 1);
+    if (selectedSetting._id) {
+      setSelectedTheme(selectedSetting?.selectedTheme);
     } else {
-      setSelectedTheme(parseInt(theme));
+      setSelectedTheme(1);
     }
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     let isDark = window.localStorage.getItem("isDarkMode");

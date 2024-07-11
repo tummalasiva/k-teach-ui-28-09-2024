@@ -26,7 +26,7 @@ import PageHeader from "../../components/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import currencyToSymbolMap from "currency-symbol-map/map";
 import { get, post, put } from "../../services/apiMethods";
-import { PRIVATE_URLS } from "../../services/urlConstants";
+import { PRIVATE_URLS, PUBLIC_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
 import CloseIcon from "@mui/icons-material/Close";
@@ -123,6 +123,8 @@ const Admission_Options = [
   },
 ];
 export default function AddInstitute({ initialValue = null }) {
+  const { selectedSetting, setSelectedSetting, setSettings } =
+    useContext(SettingContext);
   const navigate = useNavigate();
   const { id } = useParams();
   const symbol = Object.keys(currencyToSymbolMap);
@@ -175,6 +177,18 @@ export default function AddInstitute({ initialValue = null }) {
     value: currency.code,
   }));
 
+  const getAllSchools = async () => {
+    try {
+      const { data } = await get(PUBLIC_URLS.school.getSchools);
+      setSettings(data.result);
+      setSelectedSetting(
+        data.result?.find((s) => s._id === selectedSetting._id)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
     try {
@@ -193,8 +207,6 @@ export default function AddInstitute({ initialValue = null }) {
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
-
-        console.log(data.result, "updateschool");
       } else {
         const { data } = await post(PRIVATE_URLS.school.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -202,6 +214,7 @@ export default function AddInstitute({ initialValue = null }) {
       }
 
       entryFormik.resetForm();
+      getAllSchools();
       setLogo([]);
       navigate(-1);
     } catch (error) {
@@ -251,6 +264,7 @@ export default function AddInstitute({ initialValue = null }) {
       instagramUrl: dataToEdit?.instagramUrl || "",
       pinterestUrl: dataToEdit?.pinterestUrl || "",
       location: dataToEdit?.location || "",
+      selectedTheme: dataToEdit?.selectedTheme || 1,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -268,6 +282,10 @@ export default function AddInstitute({ initialValue = null }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleSelectTheme = (theme) => {
+    entryFormik.setFieldValue("selectedTheme", theme);
   };
 
   return (
@@ -704,7 +722,7 @@ export default function AddInstitute({ initialValue = null }) {
           </Title>
           <Box m={2}>
             {" "}
-            <ThemeSelector />
+            <ThemeSelector onThemeSelect={handleSelectTheme} />
           </Box>
         </FormBox>
 

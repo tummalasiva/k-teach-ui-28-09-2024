@@ -21,7 +21,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { promotionTableKeys } from "../../data/tableKeys/promotionData";
 import SettingContext from "../../context/SettingsContext";
 import { get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
@@ -41,6 +40,7 @@ export default function Promotion() {
   const [activeAcademicYear, setActiveAcademicYear] = useState({});
   const [checkBox, setCheckBox] = useState([]);
   const [promoting, setPromoting] = useState(false);
+  const [gettingStudentsList, setGettingStudentsList] = useState(false);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -59,10 +59,15 @@ export default function Promotion() {
   const getAcademicYear = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.academicYear.list);
+      let allAcademicYears = data.result;
+      let activeAcademicYear = allAcademicYears.find((a) => a.active);
+
       setAcademicYear(
-        data.result.map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
+        allAcademicYears
+          .filter((a) => a._id !== activeAcademicYear?._id)
+          .map((d) => ({ label: `${d.from}-${d.to}`, value: d._id }))
       );
-      setActiveAcademicYear(data.result.find((a) => a.active));
+      setActiveAcademicYear(activeAcademicYear);
       entryFormik.setFieldValue("promoteAcademicYearId", data.result[0]?._id);
     } catch (error) {
       console.log(error);
@@ -74,12 +79,14 @@ export default function Promotion() {
       if (!hasAllValues(values, [])) {
         return;
       }
+      setGettingStudentsList(true);
       const { data } = await get(PRIVATE_URLS.student.list, {
         params: {
           search: {
             academicYear: activeAcademicYear._id,
             "academicInfo.section": values.currentSectionId,
             "academicInfo.class": values.currentClassId,
+            active: true,
           },
         },
       });
@@ -87,6 +94,7 @@ export default function Promotion() {
     } catch (error) {
       console.log(error);
     }
+    setGettingStudentsList(false);
   };
 
   const entryFormik = useFormik({
@@ -166,6 +174,7 @@ export default function Promotion() {
         studentIds: checkBox,
       };
       setPromoting(true);
+      console.log(payload, "payload");
       const { data } = await put(PRIVATE_URLS.student.promote, payload);
       entryFormik.resetForm();
     } catch (error) {
@@ -255,13 +264,14 @@ export default function Promotion() {
             alignItems="center"
             // justifyContent="flex-end"
           >
-            <Button
+            <LoadingButton
+              loading={gettingStudentsList}
               disabled={!hasAllValues(entryFormik.values, [], false)}
               onClick={entryFormik.handleSubmit}
               size="small"
               variant="contained">
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>
@@ -347,7 +357,7 @@ export default function Promotion() {
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <LoadingButton
                 loading={promoting}
-                varient="contained"
+                variant="contained"
                 size="small"
                 type="submit"
                 onClick={handlePromotion}>

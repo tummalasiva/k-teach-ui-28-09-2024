@@ -1,3 +1,5 @@
+/** @format */
+
 import Theme1 from "../assets/images/theme1.png";
 import Theme2 from "../assets/images/theme2.png";
 
