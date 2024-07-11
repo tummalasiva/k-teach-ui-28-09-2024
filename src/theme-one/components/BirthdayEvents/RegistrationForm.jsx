@@ -68,7 +68,7 @@ export default function RegistrationForm() {
           justifyContent: "center",
           borderRadius: "5px",
         }}>
-        <Header textAlign="start" mb={4}>
+        <Header textAlign="center" mb={4}>
           Registration Form
         </Header>
 
