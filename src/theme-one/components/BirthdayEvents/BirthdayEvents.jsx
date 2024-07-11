@@ -61,7 +61,7 @@ const BirthdayBox = styled(Box)(({}) => ({
   alignItems: "center",
   justifyContent: "center",
   zIndex: 10,
-  marginBottom: "20px",
+  marginBottom: "35px",
 }));
 
 const DotsContainer = styled(Box)(({ theme }) => ({
