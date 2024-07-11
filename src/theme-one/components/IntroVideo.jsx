@@ -177,7 +177,7 @@ const IntroVideo = () => {
                 justifyContent: "flex-start",
                 alignItems: "center",
               }}>
-              <Grid item xs={12} lg={5} md={6} sm={12}>
+              <Grid item xs={12} lg={5} md={6} sm={6}>
                 <ContentBox>
                   <Box
                     sx={{
@@ -241,7 +241,7 @@ const IntroVideo = () => {
                 </Box>
               </Modal>
 
-              <Grid item xs={12} lg={4} md={6} sm={12}>
+              <Grid item xs={12} lg={4} md={6} sm={6}>
                 <Play>
                   <OuterBox>
                     <InnerBox>
@@ -264,9 +264,9 @@ const IntroVideo = () => {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={4} lg={3.3}>
+          {/* <Grid item xs={12} sm={12} md={4} lg={3.3}>
             <RegistrationForm />
-          </Grid>
+          </Grid> */}
         </Grid>
       </OuterContainer>
     </>
