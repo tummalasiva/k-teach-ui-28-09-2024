@@ -38,6 +38,7 @@ import SettingContext from "../../context/SettingsContext";
 import themeData from "../../data/themeData";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { LoadingButton } from "@mui/lab";
+import { downloadFile } from "../../utils";
 
 const HeadingContainer = styled(Grid)(() => ({
   display: "flex",
@@ -214,6 +215,23 @@ export default function StudentReport() {
     }
   };
 
+  const handleGetPrintPdf = async () => {
+    try {
+      const getPdf = await get(PRIVATE_URLS.report.downloadStudentReport, {
+        params: {
+          schoolId: selectedSetting._id,
+          groupBy: entryFormik.values.groupByData,
+          academicYearId: entryFormik.values.academicYear,
+        },
+        responseType: "blob",
+      });
+
+      downloadFile("application/pdf", getPdf.data, "studentReport.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleGetStudentReportByGraph = async (values) => {
     try {
       setLoadingGraph(true);
@@ -314,7 +332,10 @@ export default function StudentReport() {
                   type="submit">
                   Find
                 </LoadingButton>
-                <Button size="small" variant="contained">
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleGetPrintPdf}>
                   Print
                 </Button>
               </Grid>

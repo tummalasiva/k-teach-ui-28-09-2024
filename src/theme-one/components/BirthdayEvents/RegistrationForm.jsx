@@ -8,7 +8,6 @@ import {
   styled,
   Checkbox,
   FormControlLabel,
-  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import themeData from "../../../data/themeData";
@@ -44,7 +43,6 @@ const StyledTextField = styled(TextField)(() => ({
 
 export default function RegistrationForm() {
   const [rememberMe, setRememberMe] = useState(false);
-  const theme = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -68,7 +66,7 @@ export default function RegistrationForm() {
           justifyContent: "center",
           borderRadius: "5px",
         }}>
-        <Header textAlign="start" mb={4}>
+        <Header textAlign="center" mb={4}>
           Registration Form
         </Header>
 
