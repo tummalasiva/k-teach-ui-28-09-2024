@@ -668,14 +668,16 @@ const Compose = () => {
                         onChange={handleRoleChange}
                         value={selectRoles}>
                         {roles &&
-                          roles.map((row, index) => (
-                            <MenuItem
-                              key={row._id}
-                              value={row._id}
-                              sx={{ fontSize: 12, fontWeight: 500 }}>
-                              {row.name}
-                            </MenuItem>
-                          ))}
+                          roles
+                            .filter((r) => r.name?.toLowerCase() !== "student")
+                            .map((row, index) => (
+                              <MenuItem
+                                key={row._id}
+                                value={row._id}
+                                sx={{ fontSize: 12, fontWeight: 500 }}>
+                                {row.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                   </Grid>

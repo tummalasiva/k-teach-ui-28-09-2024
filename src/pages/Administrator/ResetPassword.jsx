@@ -10,6 +10,18 @@ import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+
+const Type_Options = [
+  {
+    label: "Student",
+    value: "student",
+  },
+  {
+    label: "Employee",
+    value: "employee",
+  },
+];
+
 export default function ResetPassword() {
   const { selectedSetting } = useContext(SettingContext);
   const [roles, setRoles] = useState([]);
@@ -25,7 +37,7 @@ export default function ResetPassword() {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
       const roles = data.result
-        // .filter((r) => r.name?.toLowerCase() !== "student")
+        .filter((r) => r.name?.toLowerCase() !== "student")
         .map((r) => ({
           label: r.name,
           value: r._id,
@@ -41,7 +53,7 @@ export default function ResetPassword() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            role: entryFormik.values.userType,
+            role: entryFormik.values.role,
           },
         },
       });
@@ -120,11 +132,15 @@ export default function ResetPassword() {
   };
 
   const handleCreateOrUpdate = async (values, { resetForm }) => {
+    console.log(values.userType, "kkkkk");
+
     try {
       const payload = {
         ...values,
         schoolId: selectedSetting._id,
+        userType: values.userType,
         employeeId: values.employeeId,
+        studentId: values.student,
         password: values.password,
       };
       setLoading(true);
@@ -148,6 +164,7 @@ export default function ResetPassword() {
       class: "",
       section: "",
       student: "",
+      role: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -158,10 +175,10 @@ export default function ResetPassword() {
   }, [selectedSetting]);
 
   useEffect(() => {
-    if (entryFormik.values.userType) {
+    if (entryFormik.values.role) {
       getEmployees();
     }
-  }, [entryFormik.values.userType, selectedSetting._id]);
+  }, [entryFormik.values.role, selectedSetting._id]);
 
   useEffect(() => {
     if (entryFormik.values.class) {
@@ -183,10 +200,6 @@ export default function ResetPassword() {
     }
   }, [entryFormik.values.class, entryFormik.values.section, selectedSetting]);
 
-  const selectedRole = roles.find(
-    (role) => role.value === entryFormik.values.userType
-  );
-
   return (
     <>
       <PageHeader title="User Password Reset" />
@@ -199,11 +212,11 @@ export default function ResetPassword() {
                 name="userType"
                 formik={entryFormik}
                 label="User Type"
-                options={roles}
+                options={Type_Options}
               />
             </Grid>
 
-            {selectedRole?.label === "STUDENT" ? (
+            {entryFormik.values.userType === "student" && (
               <>
                 <Grid xs={12} md={6} lg={3} item>
                   <FormSelect
@@ -234,19 +247,33 @@ export default function ResetPassword() {
                   />
                 </Grid>
               </>
-            ) : (
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="employeeId"
-                  formik={entryFormik}
-                  label="Employees"
-                  options={employees}
-                />
-              </Grid>
             )}
 
-            <Grid xs={12} sm={6} md={6} lg={3} item>
+            {entryFormik.values.userType === "employee" && (
+              <>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="role"
+                    formik={entryFormik}
+                    label="Role"
+                    options={roles}
+                  />
+                </Grid>
+
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="employeeId"
+                    formik={entryFormik}
+                    label="Employees"
+                    options={employees}
+                  />
+                </Grid>
+              </>
+            )}
+
+            <Grid xs={12} sm={12} md={6} lg={3} item>
               <FormInput
                 required={true}
                 formik={entryFormik}
