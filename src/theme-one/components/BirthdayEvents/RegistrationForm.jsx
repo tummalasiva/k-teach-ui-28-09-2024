@@ -8,7 +8,6 @@ import {
   styled,
   Checkbox,
   FormControlLabel,
-  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import themeData from "../../../data/themeData";
