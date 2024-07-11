@@ -35,7 +35,12 @@ export default function PageHeader({ title = "", showTextField = true }) {
 
   return (
     <Wrapper>
-      <Typography component="h1" sx={{ fontWeight: "bold" }}>
+      <Typography
+        component="h1"
+        sx={{
+          fontWeight: "bold",
+          color: "#fff",
+        }}>
         {title}
       </Typography>
       {showTextField && (

@@ -725,6 +725,7 @@ export default function AddStudent() {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
+                  required={true}
                   name="fatherName"
                   formik={entryFormik}
                   label="Father Name"
@@ -733,6 +734,7 @@ export default function AddStudent() {
 
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
+                  required={true}
                   name="fatherPhone"
                   formik={entryFormik}
                   label="Father Phone"

@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
@@ -142,7 +144,6 @@ export default function ProfileUpdate({
       facebookUrl: employee?.otherInfo.facebookUrl || "",
       twitterUrl: employee?.otherInfo.twitterUrl || "",
       linkedinUrl: employee?.otherInfo.linkedinUrl || "",
-      gplusUrl: employee?.otherInfo.gplusUrl || "",
       youtubeUrl: employee?.otherInfo.youtubeUrl || "",
       instagramUrl: employee?.otherInfo.instagramUrl || "",
       pinterestUrl: employee?.otherInfo.pinterestUrl || "",
@@ -342,7 +343,7 @@ export default function ProfileUpdate({
                 <FormInput
                   name="twitterUrl"
                   formik={entryFormik}
-                  label="TwitterURL"
+                  label="X URL"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -350,13 +351,6 @@ export default function ProfileUpdate({
                   name="linkedinUrl"
                   formik={entryFormik}
                   label="Linkedin Url"
-                />
-              </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  name="gplusUrl"
-                  formik={entryFormik}
-                  label="Google Plus Url"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -390,16 +384,14 @@ export default function ProfileUpdate({
               size="small"
               color="error"
               variant="contained"
-              onClick={() => setSelectValue(0)}
-            >
+              onClick={() => setSelectValue(0)}>
               Cancel
             </Button>
             <LoadingButton
               loading={loading}
               type="submit"
               size="small"
-              variant="contained"
-            >
+              variant="contained">
               Update
             </LoadingButton>
           </Stack>
