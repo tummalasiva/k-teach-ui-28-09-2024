@@ -1,7 +1,15 @@
 /** @format */
 
-import { Box, Card, Grid, Paper, Typography, styled } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import {
+  Box,
+  Card,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+  styled,
+} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import { Groups } from "@mui/icons-material";
 import ChartBar from "./ChartBar";
 import { Link } from "react-router-dom";
@@ -11,11 +19,11 @@ import SettingContext from "../../context/SettingsContext";
 
 const OuterCard = styled(Card)(({ theme }) => ({
   marginBottom: "15px",
-  padding: "10px",
+  padding: "20px 0",
   height: "auto",
   width: "100%",
   alignItems: "center",
-  justifyContent: "space-around",
+  justifyContent: "center",
 
   [theme.breakpoints.down("sm")]: {
     flexDirection: "column",
@@ -41,22 +49,27 @@ const Content = styled(Box)(({ theme }) => ({
   height: "100%",
   justifyContent: "center",
   fontSize: "16px",
-  fontWeight: 500,
+  fontWeight: 600,
 }));
+
 const Data = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   textAlign: "center",
 }));
+
 const Count = styled(Box)(({ theme }) => ({
   display: "flex",
-  justifyContent: "space-around",
+  justifyContent: "center",
+  flexDirection: "column",
   alignItems: "center",
-  paddingTop: "5px",
+  marginTop: "3px",
 }));
 
 export default function Attendance() {
   const { selectedSetting } = useContext(SettingContext);
+  const [studentAttendence, setStudentAttendence] = useState([]);
+  const [employeeAttendence, setEmployeeAttendence] = useState([]);
 
   const getStudentAttendanceSummary = async () => {
     try {
@@ -76,8 +89,10 @@ export default function Attendance() {
         ),
       ]);
 
-      console.log(studentData.data?.result, "student attendance data");
-      console.log(employeeData?.data?.result, "employee attendance data");
+      // console.log(studentData.data?.result, "student attendance data");
+      // console.log(employeeData?.data?.result, "employee attendance data");
+      setStudentAttendence(studentData.data?.result);
+      setEmployeeAttendence(employeeData?.data?.result);
     } catch (error) {
       console.log(error);
     }
@@ -86,6 +101,9 @@ export default function Attendance() {
   useEffect(() => {
     getStudentAttendanceSummary();
   }, [selectedSetting._id]);
+
+  const darkMode = window.localStorage.getItem("isDarkMode");
+
   return (
     <>
       <Paper sx={{ padding: 2, margin: "20px 0px" }}>
@@ -96,58 +114,89 @@ export default function Attendance() {
                 <Groups
                   sx={{
                     width: "80px",
-                    height: "80px",
-                    color: "#1b3779",
+                    height: "70px",
+                    color: darkMode === "true" ? "#fff" : "#1b3779",
                   }}
                 />
               </InnerBox>
-
-              <Content>
-                <Data>
-                  <Typography>Students Attendance </Typography>
-                  <Typography>2</Typography>
-                  <Count>
-                    <Typography>
-                      <span style={{ color: "green", fontWeight: 600 }}>
-                        P:
-                      </span>
-                      4
+              {/* <Content> */}
+              <Data>
+                <Typography sx={{ fontWeight: 600 }}>
+                  Students Attendance
+                </Typography>
+                <Count>
+                  <Stack direction="row" spacing={2}>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#FF8042" }}>Total Students: </span>
+                      {studentAttendence?.totalStudents}
                     </Typography>
-                    <Typography>
-                      <span style={{ color: "red", fontWeight: 600 }}>A:</span>5
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#00C49F" }}>Not Taken: </span>
+                      {studentAttendence?.attendanceNotTaken}
                     </Typography>
-                  </Count>
-                </Data>
-              </Content>
+                  </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#0088FE" }}>Total Present: </span>
+                      {studentAttendence?.totalPresent}
+                    </Typography>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "red" }}>Total Absent: </span>
+                      {studentAttendence?.totalAbsent}
+                    </Typography>
+                  </Stack>
+                </Count>
+              </Data>
+              {/* </Content> */}
             </OuterCard>
             <OuterCard>
               <InnerBox>
                 <Groups
                   sx={{
                     width: "80px",
-                    height: "80px",
-                    color: "#1b3779",
+                    height: "70px",
+                    color: darkMode === "true" ? "#fff" : "#1b3779",
                   }}
                 />
               </InnerBox>
 
-              <Content>
-                <Data>
-                  <Typography>Employee Attendance</Typography>
-                  <Typography>7</Typography>
-                  <Count>
-                    <Typography>
-                      <span style={{ color: "green", fontWeight: 600 }}>
-                        P:
+              {/* <Content> */}
+              <Data>
+                <Typography sx={{ fontWeight: 600 }}>
+                  Employees Attendance
+                </Typography>
+                <Count>
+                  <Stack direction="row" spacing={2}>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#FF8042" }}>
+                        Total Employees:{" "}
                       </span>
-                      6
+                      {employeeAttendence?.totalEmployees}
                     </Typography>
-                    <Typography>
-                      <span style={{ color: "red", fontWeight: 600 }}>A:</span>4
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#00C49F" }}>Not Taken: </span>
+                      {employeeAttendence?.attendanceNotTaken}
                     </Typography>
-                  </Count>
-                </Data>
-              </Content>
+                  </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#0088FE" }}>Total Present: </span>
+                      {employeeAttendence?.totalPresent}
+                    </Typography>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "red" }}>Total Absent: </span>
+                      {employeeAttendence?.totalAbsent}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <Typography fontSize="12px" fontWeight={600}>
+                      <span style={{ color: "#FFBB28" }}>Total Late: </span>
+                      {employeeAttendence?.totalLate}
+                    </Typography>
+                  </Stack>
+                </Count>
+              </Data>
+              {/* </Content> */}
             </OuterCard>
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={8}>

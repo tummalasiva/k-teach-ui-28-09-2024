@@ -10,21 +10,27 @@ import SettingContext from "../../../context/SettingsContext";
 import { toast } from "react-toastify";
 import { post, put } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
+import CourseContext from "../../../context/CourseContext";
+import ContentContext from "../../../context/ContentContext";
 
 export default function MaterialsDialog({
-  chapter,
-  courseId,
+  // chapter,
+  // courseId,
   title,
   open,
   setOpenMaterial,
-  onUpdate = () => {},
+  // onUpdate = () => {},
   setDataToEdit = () => {},
   dataToEdit,
+  Formik,
 }) {
   const { selectedSetting } = useContext(SettingContext);
+  const { courseId, onUpdate } = useContext(CourseContext);
+  const { chapter } = useContext(ContentContext);
   // const [dataToEdit, setDataToEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectFile, setSelectFile] = useState([]);
+  console.log(dataToEdit, "dataToEdit");
 
   // // create || update actions
   const handleCreateOrUpdate = async (values) => {
@@ -33,11 +39,14 @@ export default function MaterialsDialog({
     const material = {
       type: "Material",
       orderSequence: chapter.contents ? chapter.contents.length + 1 : 1,
-      title: values.material,
-      chapterId: chapter._id,
+      title: values.title,
+      chapterId: chapter?._id,
       contentHours: values.contentHours,
     };
 
+    if (dataToEdit) {
+      material["contentId"] = dataToEdit?._id;
+    }
     formData.append("material", JSON.stringify(material));
     selectFile.forEach((file) => formData.append("file", file));
     formData.append("schoolId", selectedSetting._id);
@@ -49,7 +58,7 @@ export default function MaterialsDialog({
         const { data } = await put(
           PRIVATE_URLS.courseContent.updateContent + "/" + courseId,
           formData,
-          { headerd: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
         const { data } = await post(
@@ -59,7 +68,7 @@ export default function MaterialsDialog({
             headers: { "Content-type": "multipart/form-data" },
           }
         );
-        // console.log(data, "post");
+        console.log(data, "post");
       }
       handleClose();
       onUpdate();
@@ -97,6 +106,7 @@ export default function MaterialsDialog({
   const handleClose = () => {
     setOpenMaterial(false);
     setDataToEdit(null);
+    Formik.resetForm();
   };
 
   return (

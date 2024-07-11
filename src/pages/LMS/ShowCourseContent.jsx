@@ -51,14 +51,14 @@ const Contents = [
 
 export default function ShowCourseContent({
   // chapter,
-  course,
+  // course,
   // courseId,
   // onUpdate = () => {},
   handleEditChapter = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
   const { chapter } = useContext(ContentContext);
-  const { courseId, onUpdate } = useContext(CourseContext);
+  const { courseId, onUpdate, course } = useContext(CourseContext);
 
   const [dataToEdit, setDataToEdit] = useState(null);
   const [openVideo, setOpenVideo] = useState(false);
@@ -68,8 +68,7 @@ export default function ShowCourseContent({
   const [openCodepractice, setOpenCodepractice] = useState(false);
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
 
-  console.log(openDeleteModel, "openDeleteModel");
-  console.log(chapter, "chapter");
+  // console.log(openDeleteModel, "openDeleteModel");
 
   const entryFormik = useFormik({
     initialValues: {
@@ -77,6 +76,8 @@ export default function ShowCourseContent({
     },
     onSubmit: console.log("jj"),
   });
+
+  console.log(entryFormik.values, "entryFormik");
 
   useEffect(() => {
     if (entryFormik.values.contents === "video") {
@@ -194,8 +195,8 @@ export default function ShowCourseContent({
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <CourseContentTable
-              chapter={chapter}
-              courseId={courseId}
+              // chapter={chapter}
+              // courseId={courseId}
               onEditClick={handleEditClick}
               handelOpenDelModel={handelOpenDelModel}
               // handleDeleteChapter={handleDeleteChapter}
@@ -208,7 +209,7 @@ export default function ShowCourseContent({
       <DeleteModal
         deleteModal={openDeleteModel}
         handleDelete={handleDeleteChapter}
-        id={chapter?._id}
+        // id={chapter?._id}
         setDeleteModal={setOpenDeleteModel}
       />
 
@@ -240,11 +241,11 @@ export default function ShowCourseContent({
       <FlashcardDialog
         title="Flashcard"
         open={openFlashcard}
-        chapter={chapter}
-        courseId={courseId}
+        // chapter={chapter}
+        // courseId={courseId}
         Formik={entryFormik}
         setOpenFlashcard={setOpenFlashcard}
-        onUpdate={onUpdate}
+        // onUpdate={onUpdate}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />
@@ -254,10 +255,10 @@ export default function ShowCourseContent({
         title="Material"
         open={openMaterial}
         Formik={entryFormik}
-        chapter={chapter}
-        courseId={courseId}
+        // chapter={chapter}
+        // courseId={courseId}
         setOpenMaterial={setOpenMaterial}
-        onUpdate={onUpdate}
+        // onUpdate={onUpdate}
         setDataToEdit={setDataToEdit}
         dataToEdit={dataToEdit}
       />

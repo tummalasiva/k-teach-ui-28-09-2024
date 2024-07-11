@@ -10,19 +10,23 @@ import { PRIVATE_URLS } from "../../../services/urlConstants";
 import { post, put } from "../../../services/apiMethods";
 import { toast } from "react-toastify";
 import FileSelect from "../../../forms/FileSelect";
+import ContentContext from "../../../context/ContentContext";
+import CourseContext from "../../../context/CourseContext";
 
 export default function VideoDialog({
   open,
   title,
-  courseId,
-  chapter,
+  // courseId,
+  // chapter,
   dataToEdit,
   setDataToEdit = () => {},
   setOpenVideo = () => {},
-  onUpdate = () => {},
+  // onUpdate = () => {},
   Formik,
 }) {
   const { selectedSetting } = useContext(SettingContext);
+  const { courseId, onUpdate } = useContext(CourseContext);
+  const { chapter } = useContext(ContentContext);
   // const [dataToEdit, setDataToEdit] = useState(null);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,12 +38,14 @@ export default function VideoDialog({
     const material = {
       type: "Video",
       orderSequence: chapter.contents ? chapter.contents.length + 1 : 1,
-      title: values.name,
-      description: "",
+      title: values.title,
+      description: values.description,
       chapterId: chapter?._id,
       contentHours: values.contentHours,
     };
-
+    if (dataToEdit) {
+      material["contentId"] = dataToEdit?._id;
+    }
     formData.append("material", JSON.stringify(material));
     selectFile.forEach((video) => formData.append("file", video));
     formData.append("schoolId", selectedSetting._id);
@@ -75,6 +81,7 @@ export default function VideoDialog({
       title: dataToEdit?.title || "",
       contentHours: dataToEdit?.contentHours || "",
       video: dataToEdit?.video || "",
+      description: dataToEdit?.description || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -99,7 +106,7 @@ export default function VideoDialog({
   const handleClose = () => {
     setOpenVideo(false);
     setDataToEdit(null);
-    Formik.setFieldValue("contents", "");
+    Formik.resetForm();
   };
 
   return (

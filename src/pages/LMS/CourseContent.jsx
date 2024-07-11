@@ -95,7 +95,7 @@ export default function CourseContent() {
   };
 
   const handleEditChapter = (data) => {
-    console.log(data, "upd");
+    // console.log(data, "upd");
     setOpenChaper(true);
     setChapterData(data);
   };
@@ -145,14 +145,13 @@ export default function CourseContent() {
         <Divider />
 
         {/* show all models components == */}
-
         {courseDetails.chapters?.map((chapter, i) => (
           <ContentContext.Provider value={{ chapter: chapter }}>
             <ShowCourseContent
               key={i}
-              chapter={chapter}
-              courseId={entryFormik.values.courseId}
-              course={courseDetails}
+              // chapter={chapter}
+              // courseId={entryFormik.values.courseId}
+              // course={courseDetails}
               // submitDetails={() => entryFormik.handleSubmit()}
               handleEditChapter={() => handleEditChapter(chapter)}
             />
