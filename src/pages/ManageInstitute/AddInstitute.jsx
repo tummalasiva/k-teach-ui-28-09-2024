@@ -245,7 +245,7 @@ export default function AddInstitute({ initialValue = null }) {
       facebookUrl: dataToEdit?.facebookUrl || "",
       twitterUrl: dataToEdit?.twitterUrl || "",
       linkedinUrl: dataToEdit?.linkedinUrl || "",
-      gplusUrl: dataToEdit?.gplusUrl || "",
+      // gplusUrl: dataToEdit?.gplusUrl || "",
       youtubeUrl: dataToEdit?.youtubeUrl || "",
       instagramUrl: dataToEdit?.instagramUrl || "",
       pinterestUrl: dataToEdit?.pinterestUrl || "",
@@ -566,7 +566,7 @@ export default function AddInstitute({ initialValue = null }) {
                 <FormInput
                   name="twitterUrl"
                   formik={entryFormik}
-                  label="TwitterURL"
+                  label="X URL"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -574,13 +574,6 @@ export default function AddInstitute({ initialValue = null }) {
                   name="linkedinUrl"
                   formik={entryFormik}
                   label="Linkedin Url"
-                />
-              </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormInput
-                  name="gplusUrl"
-                  formik={entryFormik}
-                  label="Google Plus Url"
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
