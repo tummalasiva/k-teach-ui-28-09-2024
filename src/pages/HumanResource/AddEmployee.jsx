@@ -663,28 +663,28 @@ export default function AddEmployee() {
             <Grid container spacing={2}>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
-                  name="public"
-                  formik={entryFormik}
-                  label="Is public"
-                  options={Is_Public}
-                />
-              </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  name="showDetailsForWeb"
-                  formik={entryFormik}
-                  label="Show Details For Web"
-                  options={View_Web}
-                />
-              </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
                   name="libraryMember"
                   formik={entryFormik}
                   label="Library Member"
                   options={Library_Member}
                 />
               </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="public"
+                  formik={entryFormik}
+                  label="View On Web"
+                  options={Is_Public}
+                />
+              </Grid>
+              {/* <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="showDetailsForWeb"
+                  formik={entryFormik}
+                  label="Show Details For Web"
+                  options={View_Web}
+                />
+              </Grid> */}
             </Grid>
           </Box>
         </FormBox>

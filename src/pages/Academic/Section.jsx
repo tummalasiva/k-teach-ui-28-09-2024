@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Button, Grid, Paper } from "@mui/material";
@@ -201,8 +203,7 @@ export default function Section() {
         formTitle={dataToEdit ? "Update Section" : "Add Section"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Add"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={1} columnSpacing={1} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
@@ -234,7 +235,7 @@ export default function Section() {
             <FormSelect
               formik={entryFormik}
               name="isPublic"
-              label="Is-Public"
+              label="View On Web"
               options={IS_PUBLIC}
             />
           </Grid>

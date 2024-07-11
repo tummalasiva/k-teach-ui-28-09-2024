@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
@@ -147,8 +149,7 @@ export default function Class() {
         formTitle={dataToEdit ? "Update Class" : "Add Class"}
         onClose={handleClose}
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
-        adding={loading}
-      >
+        adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput
@@ -181,7 +182,7 @@ export default function Class() {
             <FormSelect
               formik={entryFormik}
               name="isPublic"
-              label="Is-Public"
+              label="View On Web"
               options={IS_PUBLIC}
             />
           </Grid>
