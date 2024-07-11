@@ -18,6 +18,7 @@ import {
   Visibility,
   ArrowBack,
 } from "@mui/icons-material";
+import HomeIcon from "@mui/icons-material/Home";
 import { InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
 import mobileImg from "../../assets/images/loginpage.png";
@@ -157,7 +158,7 @@ const Login = () => {
             }}>
             <BackButtonContainer>
               <IconButton onClick={() => navigate("/")}>
-                <ArrowBack fontSize="medium" />
+                <HomeIcon fontSize="medium" />
               </IconButton>
             </BackButtonContainer>
 
