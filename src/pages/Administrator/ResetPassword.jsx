@@ -16,11 +16,16 @@ export default function ResetPassword() {
   const [employees, setEmployee] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [students, setStudents] = useState([]);
+
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+
   const getRoles = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.role.list);
       const roles = data.result
-        .filter((r) => r.name?.toLowerCase() !== "student")
+        // .filter((r) => r.name?.toLowerCase() !== "student")
         .map((r) => ({
           label: r.name,
           value: r._id,
@@ -53,6 +58,67 @@ export default function ResetPassword() {
     }
   };
 
+  const getClasses = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.class.list, {
+        params: {
+          schoolId: selectedSetting._id,
+        },
+      });
+      setClasses(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+      entryFormik.setFieldValue("class", data.result[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get sections
+  const getSections = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.section.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            class: entryFormik.values.class,
+          },
+        },
+      });
+      entryFormik.setFieldValue("section", data.result[0]?._id);
+      setSections(
+        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //get students
+  const getStudents = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.student.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            "academicInfo.class": entryFormik.values.class,
+            "academicInfo.section": entryFormik.values.section,
+          },
+        },
+      });
+      setStudents(
+        data.result.map((d) => ({
+          ...d,
+          label: d.basicInfo.name,
+          value: d._id,
+        }))
+      );
+      entryFormik.setFieldValue("student", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
@@ -79,6 +145,9 @@ export default function ResetPassword() {
       userType: "",
       employeeId: "",
       password: "",
+      class: "",
+      section: "",
+      student: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -94,13 +163,37 @@ export default function ResetPassword() {
     }
   }, [entryFormik.values.userType, selectedSetting._id]);
 
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSections();
+    }
+  }, [entryFormik.values.class]);
+
+  useEffect(() => {
+    getClasses();
+  }, [selectedSetting._id]);
+
+  useEffect(() => {
+    if (
+      entryFormik.values.class &&
+      entryFormik.values.section &&
+      selectedSetting
+    ) {
+      getStudents();
+    }
+  }, [entryFormik.values.class, entryFormik.values.section, selectedSetting]);
+
+  const selectedRole = roles.find(
+    (role) => role.value === entryFormik.values.userType
+  );
+
   return (
     <>
       <PageHeader title="User Password Reset" />
       <Paper sx={{ padding: 2 }}>
         <form onSubmit={entryFormik.handleSubmit}>
           <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={4} item>
+            <Grid xs={12} md={6} lg={3} item>
               <FormSelect
                 required={true}
                 name="userType"
@@ -109,17 +202,51 @@ export default function ResetPassword() {
                 options={roles}
               />
             </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="employeeId"
-                formik={entryFormik}
-                label="Employees"
-                options={employees}
-              />
-            </Grid>
 
-            <Grid xs={12} sm={6} md={6} lg={4} item>
+            {selectedRole?.label === "STUDENT" ? (
+              <>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="class"
+                    formik={entryFormik}
+                    label="Select Class"
+                    options={classes}
+                  />
+                </Grid>
+
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="section"
+                    formik={entryFormik}
+                    label="Select Section"
+                    options={sections}
+                  />
+                </Grid>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="student"
+                    formik={entryFormik}
+                    label="Select Student"
+                    options={students}
+                  />
+                </Grid>
+              </>
+            ) : (
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="employeeId"
+                  formik={entryFormik}
+                  label="Employees"
+                  options={employees}
+                />
+              </Grid>
+            )}
+
+            <Grid xs={12} sm={6} md={6} lg={3} item>
               <FormInput
                 required={true}
                 formik={entryFormik}
