@@ -54,7 +54,7 @@ export default function DeleteModal(props) {
             </Button>
             <Button
               onClick={() => {
-                props.handleDelete(props.id, props.routineIndex);
+                props.handleDelete(props.id);
                 props.setDeleteModal(false);
               }}
               color="primary"

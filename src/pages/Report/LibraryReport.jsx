@@ -157,7 +157,6 @@ export default function LibraryReport() {
       <TabPanel index={0} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <form onSubmit={entryFormik.handleSubmit}>
-            {" "}
             <Grid rowSpacing={1} columnSpacing={2} container>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect

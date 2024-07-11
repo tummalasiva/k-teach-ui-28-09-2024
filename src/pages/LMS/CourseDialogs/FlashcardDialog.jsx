@@ -11,24 +11,25 @@ import { toast } from "react-toastify";
 import { post, put } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
 import FileSelect from "../../../forms/FileSelect";
+import CourseContext from "../../../context/CourseContext";
+import ContentContext from "../../../context/ContentContext";
 
 export default function FlashcardDialog({
-  chapter,
+  // chapter,
   title,
   open,
   setOpenFlashcard,
-  courseId,
-  onUpdate = () => {},
+  // courseId,
+  Formik,
+  // onUpdate = () => {},
   setDataToEdit = () => {},
   dataToEdit,
 }) {
   const { selectedSetting } = useContext(SettingContext);
-  // const [dataToEdit, setDataToEdit] = useState(null);
+  const { courseId, onUpdate } = useContext(CourseContext);
+  const { chapter } = useContext(ContentContext);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(dataToEdit, "dataToEdit");
-
-  console.log(chapter, "flash ch");
 
   // // create || update actions
   const handleCreateOrUpdate = async (values) => {
@@ -46,6 +47,10 @@ export default function FlashcardDialog({
       chapterId: chapter?._id,
       contentHours: values.contentHours,
     };
+
+    if (dataToEdit) {
+      material["contentId"] = dataToEdit?._id;
+    }
 
     if (values.cardType === "Image" && !selectFile.length)
       return toast.error("Please select an Image file for Flash Card!");
@@ -111,6 +116,7 @@ export default function FlashcardDialog({
   const handleClose = () => {
     setOpenFlashcard(false);
     setDataToEdit(null);
+    Formik.resetForm();
   };
 
   // console.log(entryFormik.values.cardType, "ggggggggg");
