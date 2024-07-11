@@ -44,7 +44,7 @@ function App() {
 
   const [popupData, setPopupData] = useState({
     open: false,
-    data: {},
+    data: null,
   });
   const [horizontalData, setHorizontalData] = useState([]);
   const handleClosePopup = () => setPopupData({ open: false, data: null });
@@ -62,6 +62,12 @@ function App() {
         params: {
           schoolId: selectedSetting._id,
         },
+      });
+      console.log(data.result, "datat");
+      setHorizontalData([]);
+      setPopupData({
+        open: false,
+        data: null,
       });
 
       if (data.result.length) {

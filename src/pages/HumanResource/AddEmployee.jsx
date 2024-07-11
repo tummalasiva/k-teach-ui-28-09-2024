@@ -145,7 +145,7 @@ export default function AddEmployee() {
   const [rolesData, setRolesData] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState([]);
   const [resume, setResume] = useState([]);
-
+  console.log(dataToEdit, "dataToEdit");
   const [salaryGrade, setSalaryGrade] = useState([]);
 
   const getEmployeeDetails = async () => {
@@ -255,7 +255,7 @@ export default function AddEmployee() {
           salaryType: values.salaryType,
           department: values.department,
           joiningDate: values.joiningDate,
-          resume: values.resume,
+          // resume: values.resume,
         },
         otherInfo: {
           public: values.public || false,
@@ -277,17 +277,17 @@ export default function AddEmployee() {
       selectedPhoto.forEach((file) => formData.append("employeePhoto", file));
       resume.forEach((file) => formData.append("resume", file));
 
-      console.log(formData, "mmmmmmm");
+      console.log(resume, "mmmmmmm");
 
       if (dataToEdit) {
-        const data = await put(
+        const { data } = await put(
           PRIVATE_URLS.employee.update + "/" + dataToEdit._id,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        console.log(formData, "mmmmmmm111");
+        console.log(data, "data555");
       } else {
         const { data } = await post(PRIVATE_URLS.employee.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -483,10 +483,10 @@ export default function AddEmployee() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormDatePicker
+                  required={true}
                   formik={entryFormik}
                   label="Date of Birth"
                   name="dob"
-                  required={true}
                 />
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
@@ -616,10 +616,11 @@ export default function AddEmployee() {
                 <FileSelect
                   multi={false}
                   name="resume"
-                  label="Select File"
+                  label="Upload File"
                   onChange={(e) => handleChangePhoto(e, "resume")}
                   customOnChange={true}
                   selectedFiles={resume}
+                  previousFile={dataToEdit?.academicInfo?.resume}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                   accept="image/*,.pdf"
                 />

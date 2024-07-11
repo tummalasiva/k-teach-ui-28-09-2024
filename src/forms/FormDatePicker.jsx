@@ -10,6 +10,7 @@ function FormDatePicker({
   name,
   label,
   formik,
+  required,
   openTo = "day",
   inputFormat = "DD-MM-YYYY",
   views = ["year", "month", "day"],
@@ -29,6 +30,7 @@ function FormDatePicker({
           width: "100%",
         }}
         // disablePast={true}
+        required={required}
         name={name}
         variant="outlined"
         size="small"
