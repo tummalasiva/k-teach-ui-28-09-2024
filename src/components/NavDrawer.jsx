@@ -331,10 +331,10 @@ export default function NavDrawer() {
   };
 
   const handleLogout = () => {
-    // window.localStorage.removeItem("inventory_current_user");
-    // window.localStorage.removeItem("access_token");
-    // window.localStorage.removeItem("role");
-    // setUser(null);
+    window.localStorage.removeItem("access_token");
+    window.localStorage.removeItem("current_ecs_user");
+    window.localStorage.removeItem("refresh_token");
+    window.localStorage.removeItem("userType");
     navigate("/");
   };
 

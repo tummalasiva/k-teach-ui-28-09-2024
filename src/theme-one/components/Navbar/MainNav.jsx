@@ -28,6 +28,8 @@ import logo from "../../../theme-one/assets/Images/bannback.png";
 import themeData from "../../../data/themeData";
 import { Person } from "@mui/icons-material";
 import SettingContext from "../../../context/SettingsContext";
+import { PUBLIC_URLS } from "../../../services/urlConstants";
+import { get } from "../../../services/apiMethods";
 
 const MainMenuContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -102,13 +104,24 @@ const MainNav = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.between(900, 980));
 
+  const checkLogin = async () => {
+    try {
+      const { data } = await get(PUBLIC_URLS.account.checkIfLoggedIn);
+      setHasAccessToken(true);
+    } catch (error) {
+      window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("current_ecs_user");
+      window.localStorage.removeItem("refresh_token");
+      window.localStorage.removeItem("userType");
+    }
+  };
+
   useEffect(() => {
     let accessToken = window.localStorage.getItem("access_token");
     if (accessToken) {
-      setHasAccessToken(true);
+      checkLogin();
     }
   }, []);
-
   const handleLogin = () => {
     if (hasAccessToken) {
       navigate("/sch/dashboard");
