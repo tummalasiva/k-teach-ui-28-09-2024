@@ -44,7 +44,6 @@ const StyledTextField = styled(TextField)(() => ({
 
 export default function RegistrationForm() {
   const [rememberMe, setRememberMe] = useState(false);
-  const theme = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
