@@ -14,11 +14,7 @@ import {
 import { settings } from "../data/carousal";
 import { Close } from "@mui/icons-material";
 import Gallery from "./Gallery";
-import image from "../../../theme-one/assets/Images/image1.png";
-import image1 from "../../../theme-one/assets/Images/school1.avif";
-import image2 from "../../../theme-one/assets/Images/school-white.avif";
-import image3 from "../../../theme-one/assets/Images/school-green.avif";
-import image4 from "../../../theme-one/assets/Images/school1.avif";
+
 import Header from "../Header";
 import { get } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
@@ -84,13 +80,15 @@ const OurGallery = () => {
       <Main>
         <Header title1="Our" title2="Gallery" />
 
-        <Container sx={{ padding: "10px" }}>
-          <Gallery
-            ref={sliderRef}
-            galleryData={data}
-            setModalOpen={setModalOpen}
-          />
-        </Container>
+        {data.length >= 1 && (
+          <Container sx={{ padding: "10px" }}>
+            <Gallery
+              ref={sliderRef}
+              galleryData={data}
+              setModalOpen={setModalOpen}
+            />
+          </Container>
+        )}
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"

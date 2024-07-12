@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -81,7 +83,7 @@ export const settings = {
 
 export const calculateSlidersData = (length) => {
   return {
-    infinite: true,
+    infinite: length > 1,
     slidesToShow: length >= 4 ? 3 : length,
     speed: 900,
     autoplaySpeed: 3000,

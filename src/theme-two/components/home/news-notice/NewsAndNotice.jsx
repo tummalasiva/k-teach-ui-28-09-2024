@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   Divider,
+  Grid,
   Stack,
   Typography,
   css,
@@ -152,7 +153,62 @@ export default function NewsAndNotice() {
           </TypographyMain>
         </Box>
 
-        <MuiCard>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <MuiCard>
+              <MuiBox>
+                {data?.length ? (
+                  <AnimatedBox>
+                    {data.map((elem, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <NewsDetails elem={elem} notics={notics} />
+                        </React.Fragment>
+                      );
+                    })}
+                  </AnimatedBox>
+                ) : (
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      textAlign: "center",
+                      color: "lightgrey",
+                    }}>
+                    No news and events are available at this time!
+                  </Typography>
+                )}
+              </MuiBox>
+            </MuiCard>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <MuiCard>
+              <MuiBox>
+                {notics?.length ? (
+                  <AnimatedBox>
+                    {notics.map((elem, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <NoticeDetailsTheme_two elem={elem} />
+                        </React.Fragment>
+                      );
+                    })}
+                  </AnimatedBox>
+                ) : (
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      textAlign: "center",
+                      color: "lightgrey",
+                    }}>
+                    No Notics are available at this time!
+                  </Typography>
+                )}
+              </MuiBox>
+            </MuiCard>
+          </Grid>
+        </Grid>
+
+        {/* <MuiCard>
           <Stack
             direction={{ xs: "column", sm: "column", md: "row" }}
             divider={
@@ -209,7 +265,7 @@ export default function NewsAndNotice() {
               )}
             </MuiBox>
           </Stack>
-        </MuiCard>
+        </MuiCard> */}
       </Box>
     </>
   );

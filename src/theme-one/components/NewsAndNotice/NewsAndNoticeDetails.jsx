@@ -71,7 +71,7 @@ export default function NewsDetails({ news }) {
 
   return (
     <>
-      <Card sx={{ display: "flex", width: 600, my: 1, height: 170 }}>
+      <Card sx={{ display: "flex", width: 600, my: 1, height: 150 }}>
         <CardMedia
           component="img"
           sx={{ width: 200 }}
@@ -93,7 +93,7 @@ export default function NewsDetails({ news }) {
               display: "-webkit-box",
               overflow: "hidden",
               WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
+              WebkitLineClamp: 1,
               textOverflow: "ellipsis",
             }}
             paragraph

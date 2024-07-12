@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 
 const ContentBox = styled(Box)(({ theme }) => ({
   backgroundColor: "white",
+  borderRadius: "5px",
 }));
 
 const BoxHeading = styled(Typography)(({ theme }) => ({
@@ -199,6 +200,8 @@ const IntroVideo = () => {
                       marginTop: "1.5rem",
                       backgroundColor: "#068FFF",
                       textAlign: "center",
+                      borderBottomLeftRadius: "5px",
+                      borderBottomRightRadius: "5px",
                     }}>
                     <Link
                       to="/pre-admission"
