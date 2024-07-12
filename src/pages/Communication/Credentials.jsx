@@ -176,19 +176,26 @@ const Credentails = () => {
     const findAll = val.some((item) => item._id === "all");
 
     if (findAll) {
-      const allStudentsContacts = students.map((student) => student._id);
-      setContacts(allStudentsContacts);
-      setSelectedStudentCount(students.length);
-      setSelectContacts("All");
+      if (contactsAutoSelect.length === students.length) {
+        setContactsAutoSelect([]);
+        setContacts([]);
+        setSelectedStudentCount(0);
+        setSelectContacts("");
+      } else {
+        const allStudentContacts = students.map((student) => student._id);
+        setContactsAutoSelect([...students]);
+        setContacts(allStudentContacts);
+        setSelectedStudentCount(students.length);
+        setSelectContacts("All");
+      }
     } else {
       const studentNames = val.map((schclass) => schclass.basicInfo.name);
       const contacts = val.map((ele) => ele._id);
       setContacts(contacts);
       setSelectedStudentCount(val.length);
       setSelectContacts(studentNames.join(", "));
+      setContactsAutoSelect(val);
     }
-
-    setContactsAutoSelect(val);
   };
 
   const handleRoleChange = async (e) => {
@@ -211,26 +218,48 @@ const Credentails = () => {
     } catch (error) {}
   };
 
+  // const handleEmployeeAuto = (event, val) => {
+  //   setEmployeeAutoSelect(val);
+  //   if (val.filter((v) => v._id == "all").length) {
+  //     setSelectEmployee("All");
+  //     setSelectedEmployeeCount(employees.length);
+  //     return;
+  //   }
+  //   const selectedEmployees = val.filter((emp) => emp._id !== "all");
+
+  //   setSelectedEmployeeCount(selectedEmployees.length);
+
+  //   if (selectedEmployees.length === employees.length) {
+  //     setSelectEmployee("All");
+  //   } else {
+  //     setSelectEmployee(
+  //       selectedEmployees.map((emp) => emp.basicInfo.name).join(", ")
+  //     );
+  //   }
+
+  //   setEmployeeAutoSelect(val);
+  // };
+
   const handleEmployeeAuto = (event, val) => {
-    setEmployeeAutoSelect(val);
-    if (val.filter((v) => v._id == "all").length) {
-      setSelectEmployee("All");
-      setSelectedEmployeeCount(employees.length);
-      return;
-    }
-    const selectedEmployees = val.filter((emp) => emp._id !== "all");
+    const findAll = val.some((item) => item._id === "all");
 
-    setSelectedEmployeeCount(selectedEmployees.length);
-
-    if (selectedEmployees.length === employees.length) {
-      setSelectEmployee("All");
+    if (findAll) {
+      if (employeeAutoSelect.length === employees.length) {
+        setEmployeeAutoSelect([]);
+        setSelectedEmployeeCount(0);
+        setSelectEmployee("");
+      } else {
+        setEmployeeAutoSelect([...employees]);
+        setSelectedEmployeeCount(employees.length);
+        setSelectEmployee("All");
+      }
     } else {
-      setSelectEmployee(
-        selectedEmployees.map((emp) => emp.basicInfo.name).join(", ")
-      );
+      const employeeNames = val.map((emp) => emp.basicInfo.name);
+      const selectedEmployeeIds = val.map((emp) => emp._id);
+      setEmployeeAutoSelect(val);
+      setSelectedEmployeeCount(val.length);
+      setSelectEmployee(employeeNames.join(", "));
     }
-
-    setEmployeeAutoSelect(val);
   };
 
   const isStudentRoleSelected = selectRoles.some((roleId) => {
@@ -450,7 +479,7 @@ const Credentails = () => {
                               {
                                 _id: "all",
                                 basicInfo: {
-                                  name: "All",
+                                  name: `All (${students.length})`,
                                 },
                                 contactNumber: "",
                               },
@@ -459,7 +488,7 @@ const Credentails = () => {
                             disableCloseOnSelect
                             getOptionLabel={(option) =>
                               option._id === "all"
-                                ? "All"
+                                ? `All (${students.length})`
                                 : `${option.basicInfo.name} (${option.contactNumber})`
                             }
                             renderOption={(props, option, { selected }) => (
@@ -468,19 +497,31 @@ const Credentails = () => {
                                   icon={icon}
                                   checkedIcon={checkedIcon}
                                   style={{ marginRight: 8 }}
-                                  checked={selected}
+                                  checked={
+                                    selected ||
+                                    (option._id === "all" &&
+                                      contactsAutoSelect.length ===
+                                        students.length)
+                                  }
                                 />
-
-                                {`${option.basicInfo.name} (${option.contactNumber})`}
+                                {option._id === "all"
+                                  ? `All (${students.length})`
+                                  : `${option.basicInfo.name} (${option.contactNumber})`}
                               </li>
                             )}
                             renderInput={(params) => (
-                              <StyledInput
-                                ref={params.InputProps.ref}
-                                inputProps={params.inputProps}
-                                placeholder="Students"
-                                autoFocus
-                              />
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  width: "100%",
+                                }}>
+                                <StyledInput
+                                  ref={params.InputProps.ref}
+                                  inputProps={params.inputProps}
+                                  placeholder="Search student with name"
+                                  autoFocus
+                                />
+                              </Box>
                             )}
                           />
                         </FormControl>
@@ -517,7 +558,7 @@ const Credentails = () => {
                     open={!!employeeListPopper}
                     anchorEl={employeeListPopper}>
                     <FormControl variant="outlined" fullWidth size="small">
-                      <Autocomplete
+                      {/* <Autocomplete
                         onBlur={() => setEmployeeListPopper(null)}
                         open={true}
                         value={employeeAutoSelect}
@@ -554,6 +595,59 @@ const Credentails = () => {
                             placeholder="Employees"
                             autoFocus
                           />
+                        )}
+                      /> */}
+
+                      <Autocomplete
+                        onBlur={() => setEmployeeListPopper(null)}
+                        open={true}
+                        value={employeeAutoSelect}
+                        multiple
+                        onChange={handleEmployeeAuto}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id
+                        }
+                        options={[
+                          {
+                            _id: "all",
+                            basicInfo: { name: "All" },
+                          },
+                          ...employees,
+                        ]}
+                        disableCloseOnSelect
+                        getOptionLabel={(option) =>
+                          `${option?.basicInfo.name} (${option?.contactNumber})`
+                        }
+                        renderOption={(props, option, { selected }) => (
+                          <li {...props}>
+                            <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              checked={
+                                selected ||
+                                (option._id === "all" &&
+                                  employeeAutoSelect.length ===
+                                    employees.length)
+                              }
+                            />
+                            {option._id === "all"
+                              ? `All (${employees.length})`
+                              : `${option?.basicInfo.name} (${option?.contactNumber})`}
+                          </li>
+                        )}
+                        renderInput={(params) => (
+                          <Box
+                            sx={{
+                              ml: 5,
+                              width: "100%",
+                            }}>
+                            <StyledInput
+                              ref={params.InputProps.ref}
+                              inputProps={params.inputProps}
+                              placeholder="Employees"
+                              autoFocus
+                            />
+                          </Box>
                         )}
                       />
                     </FormControl>
@@ -785,7 +879,7 @@ const Credentails = () => {
                       open={!!employeeListPopper}
                       anchorEl={employeeListPopper}>
                       <FormControl variant="outlined" fullWidth size="small">
-                        <Autocomplete
+                        {/* <Autocomplete
                           onBlur={() => setEmployeeListPopper(null)}
                           open={true}
                           value={employeeAutoSelect}
@@ -822,6 +916,58 @@ const Credentails = () => {
                               placeholder="Employees"
                               autoFocus
                             />
+                          )}
+                        /> */}
+                        <Autocomplete
+                          onBlur={() => setEmployeeListPopper(null)}
+                          open={true}
+                          value={employeeAutoSelect}
+                          multiple
+                          onChange={handleEmployeeAuto}
+                          isOptionEqualToValue={(option, value) =>
+                            option._id === value._id
+                          }
+                          options={[
+                            {
+                              _id: "all",
+                              basicInfo: { name: "All" },
+                            },
+                            ...employees,
+                          ]}
+                          disableCloseOnSelect
+                          getOptionLabel={(option) =>
+                            `${option?.basicInfo.name} (${option?.contactNumber})`
+                          }
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                              <Checkbox
+                                icon={icon}
+                                checkedIcon={checkedIcon}
+                                checked={
+                                  selected ||
+                                  (option._id === "all" &&
+                                    employeeAutoSelect.length ===
+                                      employees.length)
+                                }
+                              />
+                              {option._id === "all"
+                                ? `All (${employees.length})`
+                                : `${option?.basicInfo.name} (${option?.contactNumber})`}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <Box
+                              sx={{
+                                ml: 5,
+                                width: "100%",
+                              }}>
+                              <StyledInput
+                                ref={params.InputProps.ref}
+                                inputProps={params.inputProps}
+                                placeholder="Employees"
+                                autoFocus
+                              />
+                            </Box>
                           )}
                         />
                       </FormControl>
