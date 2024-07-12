@@ -29,8 +29,4 @@ export const examResultTableKeys = [
     name: "Grade",
     key: "overallGrade",
   },
-  {
-    name: "action",
-    key: "true",
-  },
 ];

@@ -1,3 +1,5 @@
+/** @format */
+
 import { useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -574,7 +576,7 @@ export default function UpdateEmployee() {
                 <FormSelect
                   name="public"
                   formik={entryFormik}
-                  label="Is public"
+                  label="View On Web"
                   options={Is_Public}
                 />
               </Grid>
@@ -623,16 +625,14 @@ export default function UpdateEmployee() {
                   size="small"
                   color="error"
                   variant="contained"
-                  onClick={() => navigate(-1)}
-                >
+                  onClick={() => navigate(-1)}>
                   Cancel
                 </Button>
                 <LoadingButton
                   loading={loading}
                   type="submit"
                   size="small"
-                  variant="contained"
-                >
+                  variant="contained">
                   Update
                 </LoadingButton>
               </Stack>

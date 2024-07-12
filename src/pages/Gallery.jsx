@@ -202,7 +202,7 @@ export default function Gallery() {
                 required={true}
                 name="isPublic"
                 formik={entryFormik}
-                label="Is Public Web"
+                label="View On Web"
                 options={[
                   { label: "Yes", value: true },
                   { label: "No", value: false },

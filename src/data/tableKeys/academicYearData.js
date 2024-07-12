@@ -1,3 +1,5 @@
+/** @format */
+
 export const academicYearTableKeys = [
   {
     name: "Academic Year",
@@ -5,7 +7,7 @@ export const academicYearTableKeys = [
   },
 
   {
-    name: "Status	",
+    name: "Active	",
     key: "active",
   },
   {

@@ -1,3 +1,5 @@
+/** @format */
+
 export const holidayTableKeys = [
   {
     name: "Title",
@@ -14,7 +16,7 @@ export const holidayTableKeys = [
     isDate: true,
   },
   {
-    name: "Is Public",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

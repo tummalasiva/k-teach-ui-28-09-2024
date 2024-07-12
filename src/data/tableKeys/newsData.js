@@ -1,3 +1,5 @@
+/** @format */
+
 export const newsTableKeys = [
   {
     name: "Title",
@@ -9,7 +11,7 @@ export const newsTableKeys = [
     isDate: true,
   },
   {
-    name: "Is Public",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

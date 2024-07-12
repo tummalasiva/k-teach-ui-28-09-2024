@@ -1,10 +1,12 @@
+/** @format */
+
 export const galleryListTableKeys = [
   {
     name: "Gallery Title",
     key: "title",
   },
   {
-    name: "Is view on web",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

@@ -1,3 +1,5 @@
+/** @format */
+
 export const awardAchievementTableKeys = [
   {
     name: "Title",
@@ -13,7 +15,7 @@ export const awardAchievementTableKeys = [
     key: "location",
   },
   {
-    name: "Is Public",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

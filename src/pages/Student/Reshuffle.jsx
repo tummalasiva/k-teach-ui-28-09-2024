@@ -280,10 +280,18 @@ export default function Reshuffle() {
                   : theme.palette.primary.light,
             }}>
             <TableRow>
-              <TableCell align="center">S.No</TableCell>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Roll No</TableCell>
-              <TableCell align="center">Father Name</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                S.No
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                Name
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                Roll No
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                Father Name
+              </TableCell>
               <TableCell align="center">
                 <Checkbox
                   onChange={handleMultipleChecks}

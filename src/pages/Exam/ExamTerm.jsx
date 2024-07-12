@@ -166,7 +166,7 @@ export default function ExamTerm() {
             <FormSelect
               formik={entryFormik}
               name="isPublic"
-              label="Is Public"
+              label="View On Web"
               options={IS_PUBLIC}
             />
           </Grid>

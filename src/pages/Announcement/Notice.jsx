@@ -190,7 +190,7 @@ export default function Notice() {
             <FormSelect
               name="isPublic"
               formik={entryFormik}
-              label="Is Public"
+              label="View On Web"
               options={Is_Public}
               required={true}
             />

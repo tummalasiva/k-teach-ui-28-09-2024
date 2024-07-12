@@ -1,3 +1,5 @@
+/** @format */
+
 export const academicClassTableKeys = [
   {
     name: "Class",
@@ -8,7 +10,7 @@ export const academicClassTableKeys = [
     key: "active",
   },
   {
-    name: "Is-Public",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

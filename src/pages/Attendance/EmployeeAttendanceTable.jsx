@@ -76,7 +76,9 @@ export default function EmployeeAttendanceTable({
                   : theme.palette.primary.light,
             }}>
             <TableRow>
-              <TableCell align="center">S.No</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                S.No
+              </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Name
               </TableCell>

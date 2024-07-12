@@ -174,11 +174,17 @@ export default function Overview() {
                   : theme.palette.primary.light,
             }}>
             <TableRow>
-              <TableHeader align="center">Class</TableHeader>
+              <TableHeader align="center" sx={{ fontWeight: "bold" }}>
+                Class
+              </TableHeader>
 
-              <TableHeader align="center">Students</TableHeader>
+              <TableHeader align="center" sx={{ fontWeight: "bold" }}>
+                Students
+              </TableHeader>
 
-              <TableHeader align="center">Sections</TableHeader>
+              <TableHeader align="center" sx={{ fontWeight: "bold" }}>
+                Sections
+              </TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>

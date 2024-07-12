@@ -78,7 +78,9 @@ export default function StudentAttendanceTable({
                   : theme.palette.primary.light,
             }}>
             <TableRow>
-              <TableCell align="center">S.No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
+                S.No
+              </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Name
               </TableCell>

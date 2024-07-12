@@ -1,3 +1,5 @@
+/** @format */
+
 export const academicSectionTableKeys = [
   { name: "Section Name", key: "name" },
   // {
@@ -10,7 +12,7 @@ export const academicSectionTableKeys = [
     key: "active",
   },
   {
-    name: "Is-Public",
+    name: "View On Web",
     key: "isPublic",
   },
 ];

@@ -314,10 +314,18 @@ export default function StudentAttendance() {
                     : theme.palette.primary.light,
               }}>
               <TableRow>
-                <TableCell align="center">Section</TableCell>
-                <TableCell align="center">Present</TableCell>
-                <TableCell align="center">Absent</TableCell>
-                <TableCell align="center">Percentage</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Section
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Present
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Absent
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  Percentage
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

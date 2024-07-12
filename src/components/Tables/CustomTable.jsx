@@ -116,7 +116,9 @@ export default function CustomTable({
                   : theme.palette.primary.light,
             }}>
             <TableRow>
-              <TableCell align="center">S.No</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                S.No
+              </TableCell>
               {tableKeys.map((r, i) => (
                 <TableCell
                   sx={{ fontWeight: "bold" }}
