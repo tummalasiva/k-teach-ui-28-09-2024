@@ -85,12 +85,14 @@ export default function Employee() {
           allEmployee.filter(
             (emp) =>
               emp.basicInfo.gender === "male" &&
+              emp.active === true &&
               emp.academicInfo.department._id === department._id
           ).length || 0;
         const femaleCount =
           allEmployee.filter(
             (emp) =>
               emp.basicInfo.gender === "female" &&
+              emp.active === true &&
               emp.academicInfo.department._id === department._id
           ).length || 0;
         const totalCount = maleCount + femaleCount;

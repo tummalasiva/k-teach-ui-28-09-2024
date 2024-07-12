@@ -53,11 +53,8 @@ export default function AdmitStudent() {
   const [sectionData, setSectionData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openModalAdmit, setOpenModalAdmit] = useState(false);
-
   const [loading, setLoading] = useState(false);
-
   const [loader, setLoader] = useState(false);
-
   const [file, setFile] = useState([]);
   const [fileAdmit, setFileAdmit] = useState([]);
 

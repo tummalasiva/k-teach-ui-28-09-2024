@@ -137,7 +137,7 @@ export default function AddStudent() {
           gender: values.gender,
           bloodGroup: values.bloodGroup,
           religion: values.religion,
-          rte: values.rte || "no",
+          rte: values.rte,
           caste: values.caste,
           motherTongue: values.motherTongue,
           birthPlace: values.birthPlace,
@@ -169,9 +169,9 @@ export default function AddStudent() {
         otherInfo: {
           email: values.email,
           healthCondition: values.healthCondition,
-          hostelMember: values.hostelMember || false,
-          transportMember: values.transportMember || false,
-          libraryMember: values.libraryMember || false,
+          hostelMember: values.hostelMember,
+          transportMember: values.transportMember,
+          libraryMember: values.libraryMember,
           busStop: values.busStop,
           extraInfo: values.extraInfo,
         },
@@ -192,7 +192,7 @@ export default function AddStudent() {
         academicYear: values.academicYear,
         schoolId: selectedSetting._id,
         contactNumber: values.contactNumber,
-        active: values.active || true,
+        active: values.active,
       };
       const formData = new FormData();
       formData.append("body", JSON.stringify(payload));
@@ -219,7 +219,6 @@ export default function AddStudent() {
           }
         );
 
-        console.log(formData, "kkkkkk");
         navigate("/sch/student/admit-student");
       } else {
         const { data } = await post(PRIVATE_URLS.student.create, formData, {
@@ -251,7 +250,7 @@ export default function AddStudent() {
       cicn: dataToEdit?.basicInfo.cicn || "",
       religion: dataToEdit?.basicInfo.religion || "",
       caste: dataToEdit?.basicInfo.caste || "",
-      rte: dataToEdit?.basicInfo.rte || "",
+      rte: dataToEdit?.basicInfo.rte || "no",
       aadharNo: dataToEdit?.basicInfo.aadharNo || "",
       satNo: dataToEdit?.basicInfo.satNo || "",
       grNo: dataToEdit?.basicInfo.grNo || "",
@@ -280,9 +279,9 @@ export default function AddStudent() {
 
       email: dataToEdit?.otherInfo?.email || "",
       healthCondition: dataToEdit?.otherInfo?.healthCondition || "",
-      transportMember: dataToEdit?.otherInfo?.transportMember || "",
-      hostelMember: dataToEdit?.otherInfo?.hostelMember || "",
-      libraryMember: dataToEdit?.otherInfo?.libraryMember || "",
+      transportMember: dataToEdit?.otherInfo?.transportMember || false,
+      hostelMember: dataToEdit?.otherInfo?.hostelMember || false,
+      libraryMember: dataToEdit?.otherInfo?.libraryMember || false,
       busStop: dataToEdit?.otherInfo?.busStop || "",
       extraInfo: dataToEdit?.otherInfo?.extraInfo || "",
       active: dataToEdit?.active || true,
