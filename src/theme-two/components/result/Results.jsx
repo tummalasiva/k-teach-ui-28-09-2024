@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Box, styled } from "@mui/material";
 import Result from "../../../theme-one/components/Navbar/navbar/Result";
@@ -15,7 +17,7 @@ export default function Results({ show = false }) {
   return (
     <>
       <OuterBox>
-        <Result show={false} />
+        <Result show={false} headerShow={true} />
       </OuterBox>
     </>
   );

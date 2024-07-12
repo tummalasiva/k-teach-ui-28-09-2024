@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -40,8 +42,7 @@ export default function FileListModal({
           maxWidth: 650,
           ...styles,
         },
-      }}
-    >
+      }}>
       <DialogTitle>
         {selectedFiles.length > 1 ? "Selected files" : "Selected file"}
       </DialogTitle>
@@ -49,8 +50,7 @@ export default function FileListModal({
       <DialogContent
         sx={{
           padding: "10px",
-        }}
-      >
+        }}>
         {selectedFiles.map(
           (f, i) => (
             console.log(f.name, "gg"),
@@ -61,8 +61,7 @@ export default function FileListModal({
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                }}
-              >
+                }}>
                 <Typography>{f.name}</Typography>
                 <IconButton
                   size="small"
@@ -70,8 +69,7 @@ export default function FileListModal({
                     customOnChage
                       ? () => onRemove(f.name)
                       : () => handleRemoveImage(f.name)
-                  }
-                >
+                  }>
                   <Close fontSize="small" />
                 </IconButton>
               </Box>

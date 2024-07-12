@@ -4,14 +4,18 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  IconButton,
   Stack,
   TextField,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
 import styled from "@emotion/styled";
 import FileListModal from "./FileListModal";
+// icons
 import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 const Wrapper = styled(Box)(() => ({
   display: "flex",
@@ -34,6 +38,7 @@ export default function FileSelect({
   customOnChange = false,
   onRemove = () => {},
   accept = "",
+  previousFile = "",
   ...rest
 }) {
   const theme = useTheme();
@@ -49,7 +54,7 @@ export default function FileSelect({
           onClick={() => setOpen(true)}
           sx={{
             borderRadius: "5px",
-            padding: "5px",
+            padding: "8px",
             backgroundColor: "white",
             border: "1px solid lightgray",
             height: "30px",
@@ -75,7 +80,7 @@ export default function FileSelect({
             {selectedFiles.length}
           </Typography>
 
-          <RemoveRedEyeRoundedIcon fontSize="small" />
+          <RemoveRedEyeRoundedIcon fontSize="14px" />
         </Box>
 
         <Button fullWidth component="label" size="small" variant="outlined">
@@ -107,6 +112,18 @@ export default function FileSelect({
           />
           {label}
         </Button>
+        {previousFile && (
+          <Tooltip title="Uploaded File Link">
+            <IconButton
+              component="div"
+              size="small"
+              color="primary"
+              variant="outlined"
+              onClick={() => window.open(previousFile, "_blank")}>
+              <DownloadForOfflineIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
       </Wrapper>
       <FileListModal
         open={open}

@@ -22,9 +22,8 @@ import { PRIVATE_URLS } from "../../../../services/urlConstants";
 import { get } from "../../../../services/apiMethods";
 import SettingContext from "../../../../context/SettingsContext";
 
-export default function Result({ show }) {
+export default function Result({ show, headerShow }) {
   const { selectedSetting } = useContext(SettingContext);
-
   const [data, setData] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
@@ -124,7 +123,7 @@ export default function Result({ show }) {
       />
 
       <Box sx={{ margin: "15px", px: 4 }}>
-        <PageHeader title="Exam Result" showTextField={false} />
+        {headerShow && <PageHeader title="Exam Result" showTextField={false} />}
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={3} item>
