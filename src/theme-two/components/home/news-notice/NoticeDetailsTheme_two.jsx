@@ -78,7 +78,14 @@ export default function NoticeDetailsTheme_two({ elem }) {
   // console.log(elem, "ellele");
   return (
     <>
-      <Card sx={{ display: "flex", width: 600, my: 1, height: 150 }}>
+      <Card
+        sx={{
+          display: "flex",
+          maxWidth: 600,
+          minWidth: 400,
+          my: 1,
+          height: 150,
+        }}>
         <Box
           sx={{
             bgcolor: "#f57c00",

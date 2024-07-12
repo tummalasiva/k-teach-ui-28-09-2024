@@ -67,12 +67,13 @@ const AwardsAndAchievment = () => {
     <>
       <MainContainer>
         <Header title1="Awards &" title2="Achievements" />
-
-        <AppSlider ref={sliderRef} {...calculateSlidersData(data?.length)}>
-          {data?.map((d, i) => (
-            <Awards key={i} awardsDetails={d} />
-          ))}
-        </AppSlider>
+        {data.length >= 1 && (
+          <AppSlider ref={sliderRef} {...calculateSlidersData(data?.length)}>
+            {data?.map((d, i) => (
+              <Awards key={i} awardsDetails={d} />
+            ))}
+          </AppSlider>
+        )}
       </MainContainer>
     </>
   );

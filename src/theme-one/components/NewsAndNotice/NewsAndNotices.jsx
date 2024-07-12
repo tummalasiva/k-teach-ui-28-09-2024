@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   Divider,
+  Grid,
   Stack,
   Typography,
   css,
@@ -12,24 +13,12 @@ import {
   styled,
 } from "@mui/material";
 import themeData from "../../../data/themeData";
-
 import { get } from "../../../services/apiMethods";
 import { PRIVATE_URLS } from "../../../services/urlConstants";
 import SettingContext from "../../../context/SettingsContext";
 import NewsAndNoticeDetails from "./NewsAndNoticeDetails";
 import Header from "../Header";
 import NoticeDetails from "../Notice/NoticeDetails";
-
-const bubbleAnimation = keyframes`
-  0% {
-    transform: translateY(1000%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-`;
 
 const animatedPause = css`
   animation-play-state: paused;
@@ -42,6 +31,7 @@ const MuiBox = styled(Box)(({ theme }) => ({
   overflowY: "auto",
   justifyContent: "center",
   position: "relative",
+
   // backgroundColor: "red",
   ...animatedPause,
 }));
@@ -68,36 +58,13 @@ const AnimatedBox = styled(Box)(({ theme }) => ({
 const MuiCard = styled(Card)(({ theme }) => ({
   display: "flex",
   height: 400,
-  flexDirection: "column",
   alignItems: "center",
   marginTop: "20px",
+  justifyContent: "center",
   background: "#33415c",
-  // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+
   boxShadow: "none",
   borderRadius: "5px",
-}));
-
-const TypographyMain = styled(Typography)(({ theme }) => ({
-  fontSize: "40px",
-  width: "max-content",
-  fontWeight: 700,
-  color: themeData.darkPalette.primary.main,
-  textShadow: "10px 8px 8px #969c96",
-  [theme.breakpoints.down("md")]: {
-    fontSize: "30px",
-  },
-
-  [theme.breakpoints.down("sm")]: {
-    textAlign: "center",
-    margin: 0,
-    padding: "0",
-  },
-  [theme.breakpoints.down(600)]: {
-    fontSize: "20px",
-  },
-  [theme.breakpoints.down(500)]: {
-    fontSize: "15px",
-  },
 }));
 
 export default function NewsAndNotices() {
@@ -140,64 +107,60 @@ export default function NewsAndNotices() {
           <Header title1="News &" title2="Notice" />{" "}
         </Box>
 
-        <MuiCard>
-          <Stack
-            direction={{ xs: "column", sm: "column", md: "row" }}
-            divider={
-              <Divider
-                orientation="vertical"
-                flexItem
-                sx={{ background: "#fff", width: "3px" }}
-              />
-            }
-            spacing={2}
-            sx={{ mx: 1 }}>
-            <MuiBox>
-              {data?.length ? (
-                <AnimatedBox>
-                  {data.map((news, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <NewsAndNoticeDetails key={index} news={news} />
-                      </React.Fragment>
-                    );
-                  })}
-                </AnimatedBox>
-              ) : (
-                <Typography
-                  sx={{
-                    fontSize: "18px",
-                    textAlign: "center",
-                    color: "lightgrey",
-                  }}>
-                  No news and events are available at this time!
-                </Typography>
-              )}
-            </MuiBox>
-            <MuiBox>
-              {notics?.length ? (
-                <AnimatedBox>
-                  {notics.map((notice, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <NoticeDetails key={index} notice={notice} />
-                      </React.Fragment>
-                    );
-                  })}
-                </AnimatedBox>
-              ) : (
-                <Typography
-                  sx={{
-                    fontSize: "18px",
-                    textAlign: "center",
-                    color: "lightgrey",
-                  }}>
-                  No Notics are available at this time!
-                </Typography>
-              )}
-            </MuiBox>
-          </Stack>
-        </MuiCard>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <MuiCard>
+              <MuiBox>
+                {data?.length ? (
+                  <AnimatedBox>
+                    {data.map((news, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <NewsAndNoticeDetails key={index} news={news} />
+                        </React.Fragment>
+                      );
+                    })}
+                  </AnimatedBox>
+                ) : (
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      textAlign: "center",
+                      color: "lightgrey",
+                    }}>
+                    No news are available at this time!
+                  </Typography>
+                )}
+              </MuiBox>
+            </MuiCard>
+          </Grid>{" "}
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <MuiCard>
+              <MuiBox>
+                {notics?.length ? (
+                  <AnimatedBox>
+                    {notics.map((notice, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <NoticeDetails key={index} notice={notice} />
+                        </React.Fragment>
+                      );
+                    })}
+                  </AnimatedBox>
+                ) : (
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      textAlign: "center",
+                      color: "lightgrey",
+                    }}>
+                    No notics are available at this time!
+                  </Typography>
+                )}
+              </MuiBox>
+            </MuiCard>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );
