@@ -218,7 +218,7 @@ export const calculateSlidersSetting = (length) => {
   return {
     slidesToShow: length >= 5 ? 4 : length,
     dots: false,
-    infinite: true,
+    infinite: length > 1,
     speed: 500,
     slidesToScroll: 1,
 

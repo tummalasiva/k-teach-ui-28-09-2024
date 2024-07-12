@@ -69,11 +69,11 @@ const AnimatedBox = styled(Box)(({ theme }) => ({
 const MuiCard = styled(Card)(({ theme }) => ({
   display: "flex",
   height: 400,
-  flexDirection: "column",
+
   alignItems: "center",
   marginTop: "20px",
   background: "#33415c",
-  // boxShadow: "6px 5px 25px rgba(0,0,0,0.08)",
+  justifyContent: "center",
   boxShadow: "none",
   borderRadius: "5px",
 }));
@@ -174,7 +174,7 @@ export default function NewsAndNotice() {
                       textAlign: "center",
                       color: "lightgrey",
                     }}>
-                    No news and events are available at this time!
+                    No news are available at this time!
                   </Typography>
                 )}
               </MuiBox>
@@ -200,7 +200,7 @@ export default function NewsAndNotice() {
                       textAlign: "center",
                       color: "lightgrey",
                     }}>
-                    No Notics are available at this time!
+                    No notics are available at this time!
                   </Typography>
                 )}
               </MuiBox>
