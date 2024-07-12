@@ -1,4 +1,7 @@
+/** @format */
+
 export const guardianFeedbackTableKeys = [
+  { name: "Class Name", key: "className" },
   {
     name: "Parent Name",
     key: "parentName",

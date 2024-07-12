@@ -77,7 +77,7 @@ export default function TopNav() {
               fontSize="small"
             />
             <Typography variant="body2" fontWeight="bold" color="black">
-              +91 9999999999
+              +91 {selectedSetting.phone ? selectedSetting.phone : "9999999999"}
             </Typography>
           </DataContainer>
           <DataContainer>
@@ -87,14 +87,16 @@ export default function TopNav() {
             />
 
             <Link
-              to="mailto:abc@gmail.com"
+              to={`mailto:${
+                selectedSetting.email ? selectedSetting.email : "abc@gmail.com"
+              }`}
               style={{
                 color: "black",
                 textDecoration: "none",
                 fontWeight: "bold",
               }}>
               {" "}
-              abc@gmail.com
+              {selectedSetting.email ? selectedSetting.email : "abc@gmail.com"}
             </Link>
           </DataContainer>
         </SideContainer>

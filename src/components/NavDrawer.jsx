@@ -484,6 +484,17 @@ export default function NavDrawer() {
             </ListItemText>
           </Link>
         </MenuItem>
+
+        <MenuItem onClick={handleLogout}>
+          <Link
+            to="/sch/administrator/reset-password"
+            style={{ display: "flex", textDecoration: "none" }}>
+            <ListItemIcon>
+              <LogoutIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText style={{ color: "black" }}>Log Out</ListItemText>
+          </Link>
+        </MenuItem>
       </Menu>
 
       <Drawer variant="permanent" open={open}>

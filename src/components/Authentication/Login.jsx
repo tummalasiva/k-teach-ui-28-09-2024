@@ -186,7 +186,7 @@ const Login = () => {
                       selectedButton === "employee" ? "contained" : "outlined"
                     }
                     onClick={() => handleButtonClick("employee")}>
-                    Employee
+                    Staff
                   </Button>
                   <Button
                     variant={
