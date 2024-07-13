@@ -17,6 +17,7 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  styled,
 } from "@mui/material";
 import React, { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -39,6 +40,21 @@ const style = {
   boxShadow: 24,
   p: 2,
 };
+
+const CustomSwitch = styled(Switch)(({}) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "green",
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "green",
+  },
+  "& .MuiSwitch-switchBase": {
+    color: "red",
+  },
+  "& .MuiSwitch-switchBase + .MuiSwitch-track": {
+    backgroundColor: "red",
+  },
+}));
 
 const getDataValue = (data, k) => {
   if (typeof data[k.key] === "boolean") {
@@ -102,6 +118,9 @@ export default function CustomTable({
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const getTooltipTitle = (data) => {
+    return data[toggleStatus] === true ? "Active" : "Inactive";
   };
 
   return (
@@ -210,12 +229,13 @@ export default function CustomTable({
                               </Button>
                             </Tooltip>
                           )}
+
                           {actions.includes("switch") && (
-                            <Tooltip title={toggleStatus}>
+                            <Tooltip title={getTooltipTitle(data)}>
                               <IconButton
                                 size="small"
                                 onClick={() => onToggleSwitch(data)}>
-                                <Switch
+                                <CustomSwitch
                                   size="small"
                                   checked={data[toggleStatus] === true}
                                 />
