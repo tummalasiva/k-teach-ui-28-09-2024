@@ -45,15 +45,6 @@ const OurGallery = () => {
     singleImg: {},
   });
 
-  const selectedIndex = modalOpen.img.findIndex(
-    (image) => image._id === modalOpen.singleImg._id
-  );
-
-  const reorderedImages = [
-    ...modalOpen.img.slice(0, selectedIndex),
-    ...modalOpen.img.slice(selectedIndex + 1),
-  ];
-
   let sliderRef = useRef(null);
 
   const { selectedSetting } = useContext(SettingContext);
@@ -116,7 +107,7 @@ const OurGallery = () => {
               <Close />
             </IconButton>
             <Slider {...settings}>
-              {reorderedImages.map((image, index) => (
+              {modalOpen.img?.map((image, index) => (
                 <CardMedia
                   key={index}
                   component="img"
