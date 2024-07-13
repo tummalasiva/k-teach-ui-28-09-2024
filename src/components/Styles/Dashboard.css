@@ -2,8 +2,7 @@
 
 .react-calendar {
   width: 100%;
-  border: 2px solid rgb(242, 239, 235);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #fff;
 
   abbr[title] {
     text-decoration: none;

@@ -315,8 +315,10 @@ export default function RolePermission() {
               </Typography>
             </Grid>
           </Grid>
-          <TableContainer component={Paper} sx={{ marginBottom: "60px" }}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            sx={{ marginBottom: "60px", maxHeight: 650 }}>
+            <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <TableCell

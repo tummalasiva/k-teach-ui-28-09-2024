@@ -44,7 +44,7 @@ const MuiBox = styled(Box)(({ theme }) => ({
   },
   justifyContent: "center",
   columnGap: 2,
-  backgroundColor: themeData.darkPalette.secondary.main,
+  backgroundColor: "#f57c00",
   borderTopLeftRadius: 5,
   borderBottomLeftRadius: 5,
   padding: "8px",

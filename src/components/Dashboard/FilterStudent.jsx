@@ -40,24 +40,41 @@ export default function FilterStudent() {
   // get section
   const getSections = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.section.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: {
-            search: { class: entryFormik.values.class },
+      if (entryFormik.values.class === "all") {
+        const { data } = await get(PRIVATE_URLS.section.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              search: { class: entryFormik.values.class },
+            },
           },
-        },
-      });
+        });
 
-      const section = data.result.map((s) => ({
-        label: s.name,
-        value: s._id,
-      }));
+        const section = data.result.map((s) => ({
+          label: s.name,
+          value: s._id,
+        }));
 
-      const sectionAllOption = [{ label: "All", value: "all" }, ...section];
-      setSections(sectionAllOption);
+        const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+        setSections(sectionAllOption);
 
-      entryFormik.setFieldValue("section", "all");
+        entryFormik.setFieldValue("section", "all");
+      } else {
+        const { data } = await get(PRIVATE_URLS.section.list, {
+          params: {
+            schoolId: selectedSetting._id,
+
+            search: {
+              class: entryFormik.values.class,
+            },
+          },
+        });
+
+        setSections(
+          data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+        );
+        entryFormik.setFieldValue("section", data.result[0]?._id);
+      }
     } catch (error) {
       console.log(error);
     }
