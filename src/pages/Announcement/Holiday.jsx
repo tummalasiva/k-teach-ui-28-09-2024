@@ -79,6 +79,8 @@ export default function Holiday() {
   // get sections
   const getSections = async () => {
     try {
+      let filter = {};
+
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
@@ -139,7 +141,6 @@ export default function Holiday() {
   });
 
   const handleEditClick = (data) => {
-    console.log(data);
     setDataToEdit(data);
     setOpen(true);
   };
@@ -222,7 +223,7 @@ export default function Holiday() {
           <Grid xs={12} sm={12} md={12} item>
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
-          <Grid xs={12} sm={12} md={12} item mt={1}>
+          {/* <Grid xs={12} sm={12} md={12} item mt={1}>
             <FormControlLabel
               control={
                 <Checkbox checked={checked} onChange={handelCheckedBox} />
@@ -251,7 +252,7 @@ export default function Holiday() {
                 />
               </Grid>
             </>
-          )}
+          )} */}
         </Grid>
       </FormModal>
     </>
