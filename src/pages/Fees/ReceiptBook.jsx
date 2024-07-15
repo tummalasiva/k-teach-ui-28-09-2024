@@ -191,9 +191,12 @@ export default function ReceiptBook() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    getData();
   };
 
   const handleCreateOrUpdate = async (values) => {
+    console.log(values, "values");
+
     try {
       const payload = {
         ...values,
@@ -205,12 +208,10 @@ export default function ReceiptBook() {
           PRIVATE_URLS.receiptTitle.update + "/" + dataToEdit._id,
           payload
         );
-
-        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.receiptTitle.create, payload);
-        getData();
       }
+      console.log(data, "data");
       handleClose();
     } catch (error) {
       console.log(error);
@@ -267,6 +268,7 @@ export default function ReceiptBook() {
       <TabPanel index={0} value={value}>
         <Button
           variant="contained"
+          size="small"
           onClick={handleClickOpen}
           startIcon={<Add />}
           sx={{ mt: 1, mb: 2 }}>

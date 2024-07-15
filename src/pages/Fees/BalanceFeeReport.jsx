@@ -131,15 +131,7 @@ export default function BalanceFeeReport() {
               options={receipts}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="feeMap"
-              formik={entryFormik}
-              label="Select Fee Map"
-              // options={}
-            />
-          </Grid>
+
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -156,6 +148,15 @@ export default function BalanceFeeReport() {
               formik={entryFormik}
               label="Select Section"
               options={sections}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              required={true}
+              name="feeMap"
+              formik={entryFormik}
+              label="Select Fee Map"
+              // options={}
             />
           </Grid>
           <Grid
