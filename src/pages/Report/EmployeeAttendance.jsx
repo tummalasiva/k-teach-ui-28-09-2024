@@ -126,7 +126,7 @@ export default function EmployeeAttendance() {
               label="Month"
               name="month"
               openTo="month"
-              inputFormat="MM"
+              inputFormat="MMM"
               views={["month"]}
             />
           </Grid>

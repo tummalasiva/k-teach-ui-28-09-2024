@@ -12,8 +12,8 @@ function FormDatePicker({
   formik,
   required,
   openTo = "day",
-  inputFormat = "DD-MM-YYYY",
   views = ["year", "month", "day"],
+  inputFormat = "DD/MM/YYYY",
   disabled = false,
   disableFutureDates = false,
 }) {
@@ -23,7 +23,6 @@ function FormDatePicker({
         disableFuture={disableFutureDates}
         sx={{
           "& .MuiInputBase-input": {
-            // Target the input element
             height: "8px",
           },
           marginTop: "16px",
@@ -40,18 +39,9 @@ function FormDatePicker({
         openTo={openTo}
         closeOnSelect
         views={views}
-        inputFormat={inputFormat}
+        format={inputFormat}
         value={dayjs(formik.values[name]) || null}
         onChange={(value) => formik.setFieldValue(name, dayjs(value))}
-        // renderInput={(params) => (
-        //   <TextField
-        //     InputLabelProps={{ sx: { fontSize: "80px" } }}
-        //     size="small"
-        //     margin="normal"
-        //     required
-        //     {...params}
-        //   />
-        // )}
       />
     </LocalizationProvider>
   );
