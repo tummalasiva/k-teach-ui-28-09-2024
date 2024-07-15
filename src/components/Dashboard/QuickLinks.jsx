@@ -28,7 +28,7 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 export default function QuickLinks() {
   return (
     <>
-      <Paper sx={{ padding: 2 }}>
+      <Paper sx={{ padding: 2, backgroundColor: "whitesmoke" }}>
         <Grid container spacing={2}>
           <Grid
             item

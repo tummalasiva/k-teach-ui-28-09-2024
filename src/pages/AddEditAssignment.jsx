@@ -227,7 +227,7 @@ export default function AddEditAssignment({
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
-              required={true}
+              // required={true}
               name="attachmentType"
               formik={entryFormik}
               label="Select Attachment Type"
