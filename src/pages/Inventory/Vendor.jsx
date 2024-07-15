@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography, styled } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
@@ -15,6 +15,29 @@ import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
+import avatar from "../../assets/images/avatar.jpg";
+
+const MuiBox = styled(Box)({
+  background: "#ececec",
+  width: "100px",
+  height: "100px",
+  borderRadius: "50%",
+  overflow: "hidden",
+  backgroundPosition: "center",
+  display: "flex",
+
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const BasicData = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: "15px",
+  padding: "15px 0px",
+});
 
 export default function Vendor() {
   const { selectedSetting } = useContext(SettingContext);
@@ -36,11 +59,12 @@ export default function Vendor() {
         },
       });
 
-      console.log(data.result, "firm");
+      console.log(data.result, "pppp");
+
       setData(
         data.result.map((data) => ({
           ...data,
-          name: data?.addedBy?.basicInfo?.name,
+          name: data?.basicInfo?.name,
         }))
       );
     } catch (error) {
@@ -75,7 +99,7 @@ export default function Vendor() {
           ifscCode: values.ifscCode,
           branchName: values.branchName,
         },
-        photo: values.photo,
+
         schoolId: selectedSetting._id,
       };
       setLoading(true);
@@ -97,6 +121,7 @@ export default function Vendor() {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
+
       handleClose();
     } catch (error) {
       console.log(error);
@@ -126,7 +151,6 @@ export default function Vendor() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
-  // console.log(dataToEdit, "dataToEdit");
 
   useEffect(() => {
     getData();
@@ -136,6 +160,7 @@ export default function Vendor() {
     setValue(0);
     getData();
     setDataToEdit(null);
+    setLogo([]);
   };
 
   const handleChangePhoto = (e, type) => {
@@ -156,6 +181,17 @@ export default function Vendor() {
 
   const handleRemoveFile = (fileName, index) => {
     setLogo(logo.filter((img) => img.name != fileName));
+  };
+
+  useEffect(() => {
+    if (value === 0) {
+      entryFormik.resetForm();
+      setDataToEdit(null);
+    }
+  }, [value]);
+  const handleEditClick = (data) => {
+    setDataToEdit(data);
+    setValue(1);
   };
 
   return (
@@ -181,6 +217,7 @@ export default function Vendor() {
           bodyDataModal="Vendor"
           bodyData={data}
           tableKeys={VendorTableKeys}
+          onEditClick={handleEditClick}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -191,27 +228,45 @@ export default function Vendor() {
             container
             component="form"
             onSubmit={entryFormik.handleSubmit}>
-            <Grid xs={12} md={6} lg={3} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
-                Logo:
-              </Typography>
-              <FileSelect
-                name="photo"
-                multi={false}
-                label="Select Logo"
-                onChange={(e) => handleChangePhoto(e, "photo")}
-                customOnChange={true}
-                selectedFiles={logo}
-                onRemove={(fileName) => handleRemoveFile(fileName)}
-                accept="image/jpeg, image/png"
-              />
-            </Grid>
+            <Grid xs={12} md={12} lg={12}>
+              <BasicData>
+                <MuiBox>
+                  <img
+                    src={
+                      logo.length > 0
+                        ? URL.createObjectURL(logo[0])
+                        : dataToEdit?.photo
+                    }
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "contain",
+                    }}
+                    alt="logo"
+                  />
+                </MuiBox>
 
+                <Grid
+                  container
+                  spacing={2}
+                  display="flex"
+                  justifyContent="center">
+                  <Grid xs={12} md={6} lg={3} item>
+                    {" "}
+                    <FileSelect
+                      name="photo"
+                      multi={false}
+                      label="Select Logo"
+                      onChange={(e) => handleChangePhoto(e, "photo")}
+                      customOnChange={true}
+                      selectedFiles={logo}
+                      onRemove={(fileName) => handleRemoveFile(fileName)}
+                      accept="image/jpeg, image/png"
+                    />
+                  </Grid>
+                </Grid>
+              </BasicData>
+            </Grid>
             <Grid xs={12} md={12} lg={12} item>
               <Typography
                 id="modal-modal-title"
