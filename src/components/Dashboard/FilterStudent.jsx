@@ -22,8 +22,16 @@ export default function FilterStudent() {
       const { data } = await get(PRIVATE_URLS.class.list, {
         params: { schoolId: selectedSetting._id },
       });
-      setClasses(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("class", data.result[0]._id);
+
+      const classes = data.result.map((s) => ({
+        label: s.name,
+        value: s._id,
+      }));
+
+      const classesAllOption = [{ label: "All", value: "all" }, ...classes];
+      setClasses(classesAllOption);
+
+      entryFormik.setFieldValue("class", "all");
     } catch (error) {
       console.log(error);
     }
@@ -36,37 +44,77 @@ export default function FilterStudent() {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            class: entryFormik.values.class,
+            search: { class: entryFormik.values.class },
           },
         },
       });
-      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("section", data.result[0]._id);
+
+      const section = data.result.map((s) => ({
+        label: s.name,
+        value: s._id,
+      }));
+
+      const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+      setSections(sectionAllOption);
+
+      entryFormik.setFieldValue("section", "all");
     } catch (error) {
       console.log(error);
     }
   };
 
-  //get students
-  const getStudents = async () => {
+  const getStudents = async (values) => {
     try {
-      const { data } = await get(PRIVATE_URLS.student.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: {
-            "academicInfo.class": entryFormik.values.class,
-            "academicInfo.section": entryFormik.values.section,
+      if (values.class && values.section === "all") {
+        const { data } = await get(PRIVATE_URLS.student.list, {
+          params: {
+            schoolId: selectedSetting._id,
           },
-        },
-      });
-      setStudents(
-        data.result.map((d) => ({
-          ...d,
-          label: d.basicInfo.name,
-          value: d._id,
-        }))
-      );
-      entryFormik.setFieldValue("student", data.result[0]?._id);
+        });
+
+        setStudents(
+          data.result.map((d) => ({
+            ...d,
+            // label: d.basicInfo.name,
+
+            label: `${d.basicInfo.name}  | ${d.academicInfo.rollNumber} | ${d.contactNumber} `,
+            value: d._id,
+          }))
+        );
+      } else if (values.class === "all") {
+        const { data } = await get(PRIVATE_URLS.student.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              "academicInfo.section": values.section,
+            },
+          },
+        });
+        setStudents(
+          data.result.map((d) => ({
+            ...d,
+            label: `${d.basicInfo.name}  | ${d.academicInfo.rollNumber} | ${d.contactNumber} `,
+            value: d._id,
+          }))
+        );
+      } else {
+        const { data } = await get(PRIVATE_URLS.student.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              "academicInfo.class": values.class,
+              "academicInfo.section": values.section,
+            },
+          },
+        });
+        setStudents(
+          data.result.map((d) => ({
+            ...d,
+            label: `${d.basicInfo.name}  | ${d.academicInfo.rollNumber} | ${d.contactNumber} `,
+            value: d._id,
+          }))
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +142,7 @@ export default function FilterStudent() {
 
   useEffect(() => {
     if (entryFormik.values.class && entryFormik.values.section) {
-      getStudents();
+      getStudents(entryFormik.values);
     }
   }, [
     entryFormik.values.class,
@@ -140,6 +188,7 @@ export default function FilterStudent() {
               formik={entryFormik}
               label="Select Student"
               options={students}
+              showSearch={true}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>

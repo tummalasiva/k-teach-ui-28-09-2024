@@ -277,8 +277,6 @@ export default function AddEmployee() {
       selectedPhoto.forEach((file) => formData.append("employeePhoto", file));
       resume.forEach((file) => formData.append("resume", file));
 
-      console.log(resume, "mmmmmmm");
-
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.employee.update + "/" + dataToEdit._id,
@@ -324,7 +322,7 @@ export default function AddEmployee() {
       spouseOccupation: dataToEdit?.basicInfo.spouseOccupation || "",
       qualification: dataToEdit?.academicInfo.qualification || "",
       workExperience: dataToEdit?.academicInfo.workExperience || "",
-      salaryGrade: dataToEdit?.academicInfo.salaryGrade || "",
+      salaryGrade: dataToEdit?.academicInfo.salaryGrade._id || "",
       email: dataToEdit?.academicInfo.email || "",
       salaryType: dataToEdit?.academicInfo.salaryType || "",
       role: dataToEdit?.role._id || "",
@@ -616,7 +614,7 @@ export default function AddEmployee() {
                 <FileSelect
                   multi={false}
                   name="resume"
-                  label="Upload File"
+                  label="Upload Resume"
                   onChange={(e) => handleChangePhoto(e, "resume")}
                   customOnChange={true}
                   selectedFiles={resume}
