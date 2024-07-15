@@ -108,7 +108,7 @@ export default function Attendance() {
     <>
       <Paper
         sx={{
-          padding: "0px 15px",
+          padding: { xs: 2, sm: 2, md: "0px 15px", lg: "0px 15px" },
           margin: "20px 0px",
           backgroundColor: "whitesmoke",
         }}>
