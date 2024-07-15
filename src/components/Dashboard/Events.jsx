@@ -122,7 +122,7 @@ export default function Events() {
 
   return (
     <>
-      <Paper sx={{ padding: 2, mt: 2 }}>
+      <Paper sx={{ padding: 2, mt: 2, backgroundColor: "whitesmoke" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Calendar

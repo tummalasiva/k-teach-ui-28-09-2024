@@ -31,7 +31,7 @@ const ShowIn_Exam_Results = [
 
 const Pratical_Marks = [
   { label: "Active", value: "active" },
-  { label: "In active", value: "inactive" },
+  { label: "In-Active", value: "inactive" },
 ];
 
 export default function ExamSchedule() {
@@ -356,15 +356,6 @@ export default function ExamSchedule() {
             <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 required={true}
-                name="pratical"
-                formik={formik}
-                label="Pratical"
-              />
-            </Grid>
-
-            <Grid xs={12} sm={6} md={6} item>
-              <FormInput
-                required={true}
                 name="maximumMarks"
                 formik={formik}
                 label="Maximum Marks"
@@ -381,6 +372,26 @@ export default function ExamSchedule() {
             </Grid>
 
             <Grid xs={12} sm={6} md={6} item>
+              <FormSelect
+                formik={formik}
+                name="praticalMarks"
+                label="Pratical Marks"
+                options={Pratical_Marks}
+              />
+            </Grid>
+
+            {formik.values.praticalMarks === "active" && (
+              <Grid xs={12} sm={6} md={6} item>
+                <FormInput
+                  required={true}
+                  name="pratical"
+                  formik={formik}
+                  label="Pratical"
+                />
+              </Grid>
+            )}
+
+            <Grid xs={12} sm={6} md={6} item>
               <FormInput
                 formik={formik}
                 name="orderSequence"
@@ -388,7 +399,7 @@ export default function ExamSchedule() {
                 required={true}
               />
             </Grid>
-            <Grid xs={12} sm={6} md={6} item>
+            {/* <Grid xs={12} sm={6} md={6} item>
               <FormSelect
                 formik={formik}
                 name="showInHallTick"
@@ -403,15 +414,7 @@ export default function ExamSchedule() {
                 label="Show In Exam Results"
                 options={ShowIn_Exam_Results}
               />
-            </Grid>
-            <Grid xs={12} sm={6} md={6} item>
-              <FormSelect
-                formik={formik}
-                name="praticalMarks"
-                label="Pratical Marks"
-                options={Pratical_Marks}
-              />
-            </Grid>
+            </Grid> */}
           </Grid>
         </FormModal>
 

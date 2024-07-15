@@ -71,9 +71,9 @@ const ChartBar = () => {
         <Paper sx={{ width: "100%", height: "100%" }}>
           <BarChart
             width={width ? width - 10 : 700}
-            height={350}
+            height={373}
             data={classes}
-            margin={{ top: 20, right: 5, left: 5, bottom: 5 }}>
+            margin={{ top: 20, right: 5, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="className" />
             <YAxis />

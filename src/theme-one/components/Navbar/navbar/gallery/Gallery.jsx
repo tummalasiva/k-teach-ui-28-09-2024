@@ -93,20 +93,20 @@ const MuiMainBox = styled(Box)(({}) => ({
 export default function Gallery({ show }) {
   const { selectedSetting } = useContext(SettingContext);
   const [galleryData, setGalleryData] = useState([]);
-  const [modalOpen, setModalOpen] = React.useState({
+  const [modalOpen, setModalOpen] = useState({
     open: false,
     imageData: [],
     viewSingleImg: {},
   });
 
-  const SelectedImageIndex = modalOpen?.imageData?.findIndex(
-    (img) => img._id === modalOpen.viewSingleImg._id
-  );
+  // const SelectedImageIndex = modalOpen?.imageData?.findIndex(
+  //   (img) => img._id === modalOpen.viewSingleImg._id
+  // );
 
-  const cutailImages = [
-    ...modalOpen?.imageData?.slice(0, SelectedImageIndex),
-    ...modalOpen?.imageData?.slice(SelectedImageIndex + 1),
-  ];
+  // const cutailImages = [
+  //   ...modalOpen?.imageData?.slice(SelectedImageIndex),
+  //   ...modalOpen?.imageData?.slice(0, SelectedImageIndex),
+  // ];
 
   const getData = async () => {
     try {
@@ -142,13 +142,11 @@ export default function Gallery({ show }) {
         </TextBox>
 
         <GridBox>
-          {galleryData.map((item, i) => {
-            return (
-              <React.Fragment key={i}>
-                <GallerySubHome data={item} setModalOpen={setModalOpen} />
-              </React.Fragment>
-            );
-          })}
+          {galleryData.map((item, i) => (
+            <React.Fragment key={i}>
+              <GallerySubHome data={item} setModalOpen={setModalOpen} />
+            </React.Fragment>
+          ))}
         </GridBox>
       </MuiMainBox>
 
@@ -182,7 +180,7 @@ export default function Gallery({ show }) {
             <CloseIcon />
           </IconButton>
           <Carousel>
-            {cutailImages?.map((image, index) => (
+            {modalOpen.imageData?.map((image, index) => (
               <CardMedia
                 key={index}
                 component="img"
