@@ -49,9 +49,16 @@ export default function AddEditAssignment({
           },
         },
       });
-      console.log(data, "section");
-      setSections(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("section", data.result[0]._id);
+
+      const section = data.result.map((s) => ({
+        label: s.name,
+        value: s._id,
+      }));
+
+      const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+      setSections(sectionAllOption);
+
+      entryFormik.setFieldValue("section", "all");
     } catch (error) {
       console.log(error);
     }
@@ -60,14 +67,28 @@ export default function AddEditAssignment({
   // get subject
   const getSubject = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.subject.list, {
-        params: {
-          schoolId: selectedSetting._id,
-          search: { class: entryFormik.values.class },
-        },
-      });
-      setSubject(data.result.map((d) => ({ label: d.name, value: d._id })));
-      entryFormik.setFieldValue("subject", data.result[0]._id);
+      if (entryFormik.values.section === "all") {
+        const { data } = await get(PRIVATE_URLS.subject.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            class: entryFormik.values.class,
+          },
+        });
+        setSubject(data.result.map((d) => ({ label: d.name, value: d._id })));
+        entryFormik.setFieldValue("subject", data.result[0]._id);
+      } else {
+        const { data } = await get(PRIVATE_URLS.subject.list, {
+          params: {
+            schoolId: selectedSetting._id,
+            search: {
+              class: entryFormik.values.class,
+              section: entryFormik.values.section,
+            },
+          },
+        });
+        setSubject(data.result.map((d) => ({ label: d.name, value: d._id })));
+        entryFormik.setFieldValue("subject", data.result[0]._id);
+      }
     } catch (error) {
       console.log(error);
     }
