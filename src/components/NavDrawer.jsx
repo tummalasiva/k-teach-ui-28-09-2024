@@ -633,10 +633,10 @@ export default function NavDrawer() {
             <ListItemText primary={isDarkMode ? "Dark Mode" : "Light Mode"} />
           </ListItemButton>
         </ListItem>
-        <Divider sx={{ marginBottom: "20px" }} />
+        {/* <Divider sx={{ marginBottom: "20px" }} />
         <DrawerFooter>
-          <List sx={{ width: "100%" }}>
-            {/* <ListItem disablePadding>
+          <List sx={{ width: "100%" }}> */}
+        {/* <ListItem disablePadding>
               <Link
                 to={"/settings"}
                 style={{ textDecoration: "none", display: "flex", flex: 1 }}>
@@ -648,7 +648,7 @@ export default function NavDrawer() {
                 </ListItemButton>
               </Link>
             </ListItem> */}
-            <ListItem disablePadding>
+        {/* <ListItem disablePadding>
               <ListItemButton
                 sx={{
                   "& .MuiListItemText-root": {
@@ -656,8 +656,7 @@ export default function NavDrawer() {
                     wordWrap: "wrap",
                   },
                   "& .MuiListItemIcon-root": {
-                    // This ensures the ListItemIcon doesn't use the default minimum width
-                    // Adjust this value to decrease the space
+                  
                   },
                 }}
                 onClick={handleLogout}>
@@ -666,9 +665,9 @@ export default function NavDrawer() {
                 </ListItemIcon>
                 <ListItemText primary={"Logout"} />
               </ListItemButton>
-            </ListItem>
-          </List>
-        </DrawerFooter>
+            </ListItem> */}
+        {/* </List>
+        </DrawerFooter> */}
       </Drawer>
       <Box
         component="main"

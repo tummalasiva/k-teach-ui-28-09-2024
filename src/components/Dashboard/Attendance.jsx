@@ -107,7 +107,11 @@ export default function Attendance() {
   return (
     <>
       <Paper
-        sx={{ padding: 2, margin: "20px 0px", backgroundColor: "whitesmoke" }}>
+        sx={{
+          padding: { xs: 2, sm: 2, md: "0px 15px", lg: "0px 15px" },
+          margin: "20px 0px",
+          backgroundColor: "whitesmoke",
+        }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <OuterCard>

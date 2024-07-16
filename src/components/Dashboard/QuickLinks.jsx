@@ -38,7 +38,8 @@ export default function QuickLinks() {
             lg={12}
             display="flex"
             justifyContent="center">
-            <Typography sx={{ fontSize: 18, fontWeight: "bold" }}>
+            <Typography
+              sx={{ fontSize: 18, fontWeight: "bold", color: "black" }}>
               Quick Links
             </Typography>
           </Grid>
