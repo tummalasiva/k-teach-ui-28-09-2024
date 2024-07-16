@@ -452,7 +452,7 @@ export default function AddInstitute({ initialValue = null }) {
                   label="Session Start Month"
                   name="sessionStartMonth"
                   openTo="month"
-                  inputFormat="MM"
+                  inputFormat="MMM"
                   views={["month"]}
                   required={true}
                 />
@@ -463,7 +463,7 @@ export default function AddInstitute({ initialValue = null }) {
                   label="Session End Month"
                   name="sessionEndMonth"
                   openTo="month"
-                  inputFormat="MM"
+                  inputFormat="MMM"
                   views={["month"]}
                   required={true}
                 />

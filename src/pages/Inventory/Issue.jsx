@@ -31,7 +31,7 @@ export default function Issue() {
   const [selectSchool, setSelectSchool] = useState(
     settings.map((s) => ({ label: s.name, value: s._id }))
   );
-  console.log(selectSchool, "selectSchool");
+
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
   };

@@ -16,7 +16,6 @@ const style = {
   p: 2,
 };
 export default function DeleteModal(props) {
-  console.log(props, "llkprops");
   return (
     <>
       <Modal

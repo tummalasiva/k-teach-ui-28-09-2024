@@ -157,7 +157,7 @@ export default function MakePayment() {
                 label="Month"
                 name="month"
                 openTo="month"
-                inputFormat="MM"
+                inputFormat="MMM"
                 views={["month"]}
               />
             </Grid>
@@ -210,7 +210,7 @@ export default function MakePayment() {
                 formik={formik}
                 label="Date"
                 openTo="month"
-                inputFormat="MM/yyyy"
+                inputFormat="MMM/yyyy"
                 views={["month", "year"]}
                 name="date"
               />

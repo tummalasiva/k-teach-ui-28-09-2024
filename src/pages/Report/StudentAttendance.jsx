@@ -189,7 +189,7 @@ export default function StudentAttendance() {
               label="Month"
               name="month"
               openTo="month"
-              inputFormat="MM"
+              inputFormat="MMM"
               views={["month"]}
             />
           </Grid>

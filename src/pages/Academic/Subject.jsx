@@ -61,6 +61,7 @@ export default function Subject() {
         },
       });
       setData(data.result);
+      console.log(data.result, "rrrrrrrrr");
     } catch (error) {
       console.log(error);
     }

@@ -14,6 +14,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import { downloadFile } from "../../utils";
 
 export default function Item() {
   const { selectedSetting } = useContext(SettingContext);
@@ -32,8 +33,6 @@ export default function Item() {
           schoolId: selectedSetting._id,
         },
       });
-
-      // console.log(data.result, "firm");
       setData(
         data.result.map((data) => ({
           ...data,
@@ -111,7 +110,6 @@ export default function Item() {
   };
 
   const handleEditClick = (data) => {
-    // console.log(data, "fff");
     setDataToEdit({ ...data, department: data.department._id });
     setValue(1);
   };
@@ -127,7 +125,6 @@ export default function Item() {
           schoolId: selectedSetting._id,
         },
       });
-      // console.log(response, "response");
       const uri = URL.createObjectURL(response.data);
       window.open(uri, "_blank");
     } catch (error) {
@@ -139,47 +136,32 @@ export default function Item() {
   // excel download
   const handleExcelDownload = async (e) => {
     setExcelLoading(true);
-    console.log("usha");
 
     try {
-      const response = await get(PRIVATE_URLS.item.downloadExcel, {
-        responseType: "blob",
+      const getExcel = await get(PRIVATE_URLS.item.downloadExcel, {
         params: {
           schoolId: selectedSetting._id,
         },
+        responseType: "blob",
       });
 
-      // Create a blob from the response data
-      const blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-
-      // Create a download URL
-      const url = URL.createObjectURL(blob);
-
-      // Create a link element
-      const link = document.createElement("a");
-      link.href = url;
-      const fileName = `InventoryItem.xlsx`;
-      link.setAttribute("download", fileName);
-
-      // Append the link to the document body
-      document.body.appendChild(link);
-
-      // Simulate a click to trigger the download
-      link.click();
-
-      // Remove the link from the document
-      document.body.removeChild(link);
-
-      // Revoke the object URL to free up memory
-      URL.revokeObjectURL(url);
+      downloadFile(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        getExcel.data,
+        "Inventory_Items"
+      );
     } catch (error) {
-      console.error("Error downloading the Excel file:", error);
-      alert("Failed to download the file. Please try again.");
+      console.error(error);
     }
     setExcelLoading(false);
   };
+
+  useEffect(() => {
+    if (value === 0) {
+      entryFormik.resetForm();
+      setDataToEdit(null);
+    }
+  }, [value]);
 
   return (
     <>

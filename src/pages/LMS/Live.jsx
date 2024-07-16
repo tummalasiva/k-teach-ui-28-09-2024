@@ -168,6 +168,7 @@ export default function Live() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    entryFormik.resetForm();
   };
 
   const getClasses = async () => {
@@ -295,7 +296,7 @@ export default function Live() {
 
         employeeParticipants: employee.filter(
           (e) =>
-            entryFormik.values.roles.includes(e.role) &&
+            entryFormik.values.roles.includes(e.role._id) &&
             entryFormik.values.employeeParticipants.includes(e._id)
         ),
         studentParticipants: students.filter(
@@ -308,6 +309,7 @@ export default function Live() {
         ),
       };
 
+      console.log(payload, "payyload");
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -329,23 +331,19 @@ export default function Live() {
 
   const entryFormik = useFormik({
     initialValues: {
-      classId: dataToEdit?.classId || [],
+      classId: [],
 
-      expiryDate: dataToEdit?.expiryDate
-        ? dayjs(dataToEdit.expiryDate).format("YYYY/MM/DD")
-        : null,
+      expiryDate: null,
 
-      expiryTime: dataToEdit?.expiryTime || "",
-      startDate: dataToEdit?.startDate
-        ? dayjs(dataToEdit?.startDate).format("YYYY/MM/DD")
-        : null,
+      expiryTime: "",
+      startDate: null,
 
-      startTime: dataToEdit?.startTime || "",
-      createdBy: dataToEdit?.createdBy || "",
-      meetingType: dataToEdit?.meetingType || "",
-      participantType: dataToEdit?.participantType || "",
-      userTypes: dataToEdit?.userTypes || [],
-      participants: [],
+      startTime: "",
+      createdBy: "",
+      meetingType: "",
+      participantType: "",
+      userTypes: [],
+
       roles: [],
       section: [],
       employeeParticipants: [],
@@ -377,6 +375,8 @@ export default function Live() {
     console.log(id, "idddddd");
     setDataToEdit(id);
     let meetingData = data.filter((m) => m._id == id)[0];
+
+    console.log(meetingData, "meetingData");
     if (meetingData.userTypes.includes("employee")) {
       let roles = [];
       for (let emp of meetingData.employeeParticipants) {
@@ -413,10 +413,7 @@ export default function Live() {
     }
 
     if (meetingData.participantType === "Class Students") {
-      entryFormik.setFieldValue(
-        "classId",
-        meetingData.classId.map((c) => c._id)
-      );
+      entryFormik.setFieldValue("classId", meetingData.classId);
     }
 
     entryFormik.setFieldValue("meetingType", meetingData.meetingType);
@@ -425,6 +422,7 @@ export default function Live() {
     entryFormik.setFieldValue("expiryTime", meetingData.expiryTime);
     entryFormik.setFieldValue("participantType", meetingData.participantType);
     entryFormik.setFieldValue("userTypes", meetingData.userTypes);
+    entryFormik.setFieldValue("startDate", meetingData.startDate);
 
     setOpen(true);
   };
@@ -463,6 +461,8 @@ export default function Live() {
       console.error(error);
     }
   };
+
+  console.log(entryFormik.values, "kkkkkkkkkk");
 
   return (
     <>
@@ -690,6 +690,7 @@ export default function Live() {
               <Grid xs={12} sm={6} md={6} item>
                 <FormSelect
                   formik={entryFormik}
+                  multiple={true}
                   name="employeeParticipants"
                   label="Select Employee"
                   options={employee}
