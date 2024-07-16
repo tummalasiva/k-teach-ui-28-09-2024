@@ -124,7 +124,6 @@ const CustomActionFee = ({
 
 export default function ReceiptBook() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -135,17 +134,6 @@ export default function ReceiptBook() {
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
   // const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
   console.log(selectedReceiptId, "selectedReceiptId");
-
-  const getData = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-      setData(data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // get fee map list
   const getFeeMaps = async () => {
@@ -186,7 +174,6 @@ export default function ReceiptBook() {
   }, [selectedReceiptId]);
 
   useEffect(() => {
-    getData();
     getReceipts();
   }, [selectedSetting]);
 
@@ -202,7 +189,7 @@ export default function ReceiptBook() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
-    getData();
+    getReceipts();
   };
 
   const handleCreateOrUpdate = async (values) => {
@@ -292,13 +279,13 @@ export default function ReceiptBook() {
         <CustomTable
           actions={["custom"]}
           bodyDataModal="Receipt Book"
-          bodyData={data}
+          bodyData={receipts}
           tableKeys={receiptBookTableKeys}
           feeMapTableKeys
           onEditClick={handleEditClick}
           onNavigateFeeMap={handleFeeMap}
           CustomAction={CustomActionFee}
-          onUpdate={getData}
+          onUpdate={getReceipts}
         />
         {/* Add/Update Receipt book ========= */}
         <FormModal

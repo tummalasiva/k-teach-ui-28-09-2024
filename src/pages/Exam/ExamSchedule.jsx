@@ -234,7 +234,7 @@ export default function ExamSchedule() {
         labels={["Exam List", "Schedule List"]}
       />
       <TabPanel index={0} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
+        {/* <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={4} item>
               <FormSelect
@@ -246,7 +246,7 @@ export default function ExamSchedule() {
               />
             </Grid>
           </Grid>
-        </Paper>
+        </Paper> */}
         <CustomTable
           actions={[]}
           bodyDataModal="exam list"
