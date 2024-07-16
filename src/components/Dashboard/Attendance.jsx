@@ -109,7 +109,9 @@ export default function Attendance() {
       <Paper
         sx={{
           padding: { xs: 2, sm: 2, md: "0px 15px", lg: "0px 15px" },
-          margin: "20px 0px",
+
+          margin: "30px 0px 15px 0px",
+
           backgroundColor: "whitesmoke",
         }}>
         <Grid container spacing={2}>

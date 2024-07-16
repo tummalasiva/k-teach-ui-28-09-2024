@@ -69,6 +69,8 @@ export default function ExamSchedule() {
 
   const handleClose = () => {
     setOpen(false);
+    setDataToEdit(null);
+    entryFormik.resetForm();
   };
 
   const getExamTerm = async () => {
@@ -136,7 +138,7 @@ export default function ExamSchedule() {
     enableReinitialize: true,
   });
 
-  const handleCreateOrUpdate = async (values) => {
+  const handleCreateOrUpdate = async (values, { resetForm }) => {
     try {
       const payload = {
         ...values,
@@ -151,10 +153,12 @@ export default function ExamSchedule() {
           PRIVATE_URLS.examSchedule.update + "/" + dataToEdit._id,
           payload
         );
+        handleClose();
       } else {
         const { data } = await post(PRIVATE_URLS.examSchedule.create, payload);
+        handleClose();
       }
-      handleClose();
+      resetForm();
     } catch (error) {
       console.log(error);
     }

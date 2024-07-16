@@ -572,18 +572,18 @@ export default function Live() {
                       <Delete fontSize="small" color="error" />
                     </IconButton>
                   </Tooltip>
-
-                  <DeleteModal
-                    deleteModal={deleteModal}
-                    handleDelete={handleDelete}
-                    id={listData._id}
-                    setDeleteModal={setDeleteModal}
-                  />
                 </TableBodydata>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+
+        <DeleteModal
+          deleteModal={deleteModal}
+          handleDelete={handleDelete}
+          id={deleteModal}
+          setDeleteModal={setDeleteModal}
+        />
         {!data.length && (
           <Box align="center" colSpan={12} py={2}>
             <Typography variant="h6" align="center">
@@ -599,6 +599,7 @@ export default function Live() {
           </Box>
         )}
       </TableContainer>
+
       <FormModal
         open={open}
         formik={entryFormik}
