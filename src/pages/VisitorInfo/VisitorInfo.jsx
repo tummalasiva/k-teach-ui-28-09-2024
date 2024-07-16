@@ -102,6 +102,12 @@ export default function VisitorInfo() {
     getData();
   }, [selectedSetting]);
 
+  const handleClose = () => {
+    setDataToEdit(null);
+    setOpen(false);
+    entryFormik.resetForm();
+  };
+
   // get section
   const getSections = async () => {
     try {
@@ -186,6 +192,7 @@ export default function VisitorInfo() {
         const { data } = await post(PRIVATE_URLS.visitorInfo.create, payload);
       }
       getData();
+
       handleClose();
     } catch (error) {
       console.log(error);
@@ -217,12 +224,6 @@ export default function VisitorInfo() {
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
-
-  const handleClose = () => {
-    setDataToEdit(null);
-    setOpen(false);
-    // getData();
-  };
 
   useEffect(() => {
     getRoles();

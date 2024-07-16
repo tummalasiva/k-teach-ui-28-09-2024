@@ -68,6 +68,8 @@ const getDataValue = (data, k) => {
 
   if (k.isDate) {
     return data[k.key] ? new Date(data[k.key]).toDateString() : "NA";
+  } else if (k.key === "feedback") {
+    return data[k.key] ? `${data[k.key].substring(0, 50)}...` : "NA";
   } else {
     return data[k.key];
   }
