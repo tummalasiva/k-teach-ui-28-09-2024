@@ -8,15 +8,18 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  Tooltip,
+  Switch,
 } from "@mui/material";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import { useFormik } from "formik";
-import { Add, Search } from "@mui/icons-material";
+import { Add, Edit, Search } from "@mui/icons-material";
 import { feeMapTableKeys } from "../../data/tableKeys/feeMapData";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
@@ -29,38 +32,26 @@ import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
 const showInfo = (data) => {
   let result = [];
-  // console.log(data, "fsusg");
+
   for (let dep of data.dependencies) {
-    if (dep === "academicYear") {
-      result.push(
-        `[${data.academicYearId.from}-${data.academicYearId.to}]-Academic Year`
-      );
-    } else if (dep === "class") {
+    if (["class"].includes(dep)) {
       let newItem = `[${data.class?.name}]-Class`;
       result.push(newItem);
-    } else if (dep === "hostel") {
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
+      result.push(newItem);
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
+      result.push(newItem);
+    } else if (["hostel"].includes(dep)) {
       let newItem = `[${data.hostel?.name}]-Hostel`;
       result.push(newItem);
-    } else if (dep === "roomType") {
-      result.push(`[${data.roomType.name}]-Room_Type`);
-    } else if (dep === "room") {
-      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalBeds} Beds]+[${data.room?.type?.name}]-Room`;
+    } else if (["transport"].includes(dep)) {
+      let newItem = `[${data?.route?.vehicle?.number}]+[${data?.route?.title}]-Transport-[${data?.stop?.name}]-Stop-[${data.pickType}]-Pick_Type`;
       result.push(newItem);
-    } else if (dep == "route") {
-      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Route`;
-      result.push(newItem);
-    } else if (dep == "pickType") {
+    } else if (["pickType"].includes(dep)) {
       let newItem = `[${data.pickType}]-Pick_Type`;
       result.push(newItem);
-    } else if (dep === "stop") {
-      let newItem = `[${data.stop.name}]-Stop`;
-      result.push(newItem);
-    } else if (dep === "addedBefore") {
-      // let newItem = `[${moment(data.addedBefore).format("DD/MM/YYYY")}]-Stop`;
-      // result.push(newItem);
-    } else if (dep === "addedAfter") {
-      // let newItem = `[${moment(data.addedAfter).format("DD/MM/YYYY")}]-Stop`;
-      // result.push(newItem);
     }
   }
 
@@ -90,26 +81,39 @@ const CustomActionFee = ({
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
+        {/* <Button
           size="small"
           variant="contained"
           onClick={() => onEditClick(data)}>
           Edit
-        </Button>
+        </Button> */}
+
         <Button
           size="small"
           variant="contained"
           onClick={() => onNavigateFeeMap(data._id)}>
           Fee Map
         </Button>
-        <LoadingButton
+        {/* <LoadingButton
           loading={loading}
           size="small"
           onClick={updateStatus}
           color={data.active ? "success" : "error"}
           variant="contained">
           {data.active ? "Activate" : "DeActivate"}
-        </LoadingButton>
+        </LoadingButton> */}
+        <Tooltip title="Edit">
+          <IconButton onClick={() => onEditClick(data)}>
+            <Edit color="primary" fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={data.active ? "Deactive" : "Activate"}>
+          <Switch
+            checked={data.active}
+            onChange={updateStatus}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Tooltip>
       </Stack>
     </>
   );
@@ -117,7 +121,6 @@ const CustomActionFee = ({
 
 export default function ReceiptBook() {
   const { selectedSetting } = useContext(SettingContext);
-  const [data, setData] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [value, setSelectValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -127,17 +130,6 @@ export default function ReceiptBook() {
   const [openFeeMap, setOpenFeeMap] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
   const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
-
-  const getData = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-      setData(data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // get fee map list
   const getFeeMaps = async () => {
@@ -176,7 +168,6 @@ export default function ReceiptBook() {
   }, [selectReceipt]);
 
   useEffect(() => {
-    getData();
     getReceipts();
   }, [selectedSetting]);
 
@@ -191,13 +182,14 @@ export default function ReceiptBook() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    getReceipts();
   };
 
   const handleCreateOrUpdate = async (values) => {
     try {
       const payload = {
         ...values,
-        schoolId: selectedSetting._id,
+        schoolId: selectedSetting?._id,
       };
       setLoading(true);
       if (dataToEdit) {
@@ -205,11 +197,8 @@ export default function ReceiptBook() {
           PRIVATE_URLS.receiptTitle.update + "/" + dataToEdit._id,
           payload
         );
-
-        getData();
       } else {
         const { data } = await post(PRIVATE_URLS.receiptTitle.create, payload);
-        getData();
       }
       handleClose();
     } catch (error) {
@@ -232,17 +221,10 @@ export default function ReceiptBook() {
     setOpen(true);
   };
 
-  const handleFeeMapEdit = (id, data) => {
-    // console.log(data, "hgafs");
+  const handleFeeMapEdit = (data) => {
+    // console.log(data, "newss");
     setDataToEdit({ ...data });
-    // setAddForm({
-    //   ...data,
-    //   schoolClass: data.class?._id,
-    //   route: data.route?._id,
-    //   room: data.room?._id,
-    //   others: data.installments.length,
-    //   installmentType: calculateInstallmentType(data.installments.length),
-    // });
+    setOpenFeeMap(true);
   };
 
   const handleOpenFeeMap = () => {
@@ -250,7 +232,6 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMap = (id) => {
-    // console.log(id, "id usha");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };
@@ -267,6 +248,7 @@ export default function ReceiptBook() {
       <TabPanel index={0} value={value}>
         <Button
           variant="contained"
+          size="small"
           onClick={handleClickOpen}
           startIcon={<Add />}
           sx={{ mt: 1, mb: 2 }}>
@@ -276,13 +258,13 @@ export default function ReceiptBook() {
         <CustomTable
           actions={["custom"]}
           bodyDataModal="Receipt Book"
-          bodyData={data}
+          bodyData={receipts}
           tableKeys={receiptBookTableKeys}
           feeMapTableKeys
           onEditClick={handleEditClick}
           onNavigateFeeMap={handleFeeMap}
           CustomAction={CustomActionFee}
-          onUpdate={getData}
+          onUpdate={getReceipts}
         />
         {/* Add/Update Receipt book ========= */}
         <FormModal
@@ -310,7 +292,7 @@ export default function ReceiptBook() {
           rowSpacing={1}
           columnSpacing={2}
           container
-          sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          sx={{ display: "flex", alignItems: "center", my: 1.5 }}>
           <Grid xs={12} md={6} lg={3} item>
             <FormControl fullWidth size="small">
               <InputLabel>Select Receipt</InputLabel>

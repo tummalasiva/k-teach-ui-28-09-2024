@@ -75,7 +75,7 @@ export default function NoticeDetailsTheme_two({ notice }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  console.log(notice, "ellele");
+  // console.log(notice, "ellele");
   return (
     <>
       <Card

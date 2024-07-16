@@ -281,15 +281,6 @@ export default function CollectFees() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
-              name="feeMap"
-              formik={entryFormik}
-              label="Select Fee Map"
-              options={feeMaps}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
               name="class"
               formik={entryFormik}
               label="Select Class"
@@ -308,13 +299,21 @@ export default function CollectFees() {
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
+              name="feeMap"
+              formik={entryFormik}
+              label="Select Fee Map"
+              options={feeMaps}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              required={true}
               name="student"
               formik={entryFormik}
               label="Select Students"
               // options={}
             />
           </Grid>
-
           <Grid
             xs={12}
             md={6}

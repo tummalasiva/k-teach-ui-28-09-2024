@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
-  baseURL: API_PREFIX,
+  baseURL: API_PREFIX + "/ecamps/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": API_PREFIX,

@@ -12,6 +12,7 @@ export const examResultTableKeys = [
   {
     name: "Photo",
     key: "image",
+    type: "image",
   },
   {
     name: "Exam Mark",
