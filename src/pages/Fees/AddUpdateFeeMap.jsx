@@ -28,18 +28,26 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LoadingButton } from "@mui/lab";
 
+// const LABEL = {
+//   class: "Class - (Academic department)",
+//   route: "Route - (Transport department)",
+//   pickType: "Pick-Type - (Transport department)",
+//   stop: "Stop - (Transport department)",
+//   room: "Room - (Hostel department)",
+//   roomType: "Room Type - (Hostel department)",
+//   hostel: "Hostel - (Hostel department)",
+//   addedAfter: "Added After - (Student admission date)",
+//   addedBefore: "Added Before - (Student admission date)",
+//   academicYear: "Academic Year - (Student academic year)",
+//   libraryMember: "Library Member - (Human Resource department)",
+// };
+
 const LABEL = {
-  class: "Class - (Academic department)",
-  route: "Route - (Transport department)",
-  pickType: "Pick-Type - (Transport department)",
-  stop: "Stop - (Transport department)",
-  room: "Room - (Hostel department)",
-  roomType: "Room Type - (Hostel department)",
+  class: "Class",
+  classOld: "Class - (Old)",
+  classNew: "Class - (New)",
+  transport: "Transport - (Transport department)",
   hostel: "Hostel - (Hostel department)",
-  addedAfter: "Added After - (Student admission date)",
-  addedBefore: "Added Before - (Student admission date)",
-  academicYear: "Academic Year - (Student academic year)",
-  libraryMember: "Library Member - (Human Resource department)",
 };
 
 const installmentsType = [
@@ -120,15 +128,8 @@ export default function AddUpdateFeeMap({
       setRoutes(
         data.result.map((r) => ({
           ...r,
-          label: `${r.vehicle?.number} ${r.title} (${r.routeStart} To ${r.routeEnd})`,
-          value: r._id,
-        }))
-      );
-
-      setStops(
-        data.result.map((route) => ({
-          label: route.stops[0]?.name,
-          value: route.stops[0]?._id,
+          label: `${r.vehicle?.number} ${r?.title} (${r?.routeStart} To ${r?.routeEnd})`,
+          value: r?._id,
         }))
       );
     } catch (error) {
@@ -205,46 +206,27 @@ export default function AddUpdateFeeMap({
     try {
       let payload = {
         receiptTitleId: selectedReceipt,
-        collectedFrom: "student",
         dependencies: dependencies,
         classId: addForm.class,
         routeId: addForm.route,
         pickType: addForm.pickType,
-        roomId: addForm.room,
-        roomTypeId: addForm.roomType,
         hostelId: addForm.hostel,
-        addedAfter: new Date(addedAfter),
-        addedBefore: new Date(addedBefore),
         stopId: addForm.stop,
-        academicYearId: addForm.academicYear,
         fee: addForm.fee,
+        installmentType: addForm.installmentsType,
         installments: installments,
         schoolId: selectedSetting._id,
-        libraryMember: "",
       };
-      // console.log(payload, "payload");
+      console.log(payload, "payload");
 
       if (dataToEdit) {
         const { data } = await put(
           PRIVATE_URLS.feeMap.update + "/" + dataToEdit?._id,
           payload
         );
-
-        // // setSearch({});
-        // if (data > 199 && data < 299) {
-        //   await getFeeMaps();
-        //   resetForm();
-        //   // handleCloseAddDialog();
-        // }
       } else {
         const { data } = await post(PRIVATE_URLS.feeMap.create, payload);
-        // console.log(data, "ippp");
-        // setSearch({});
-        // if (status > 199 && status < 299) {
-        //   await getFeeMaps();
-        //   resetForm();
-        //   handleCloseAddDialog();
-        // }
+        console.log(data, "ppppp");
       }
     } catch (error) {
       setLoading(false);
@@ -269,7 +251,21 @@ export default function AddUpdateFeeMap({
     const {
       target: { value },
     } = event;
-    setDependencies(typeof value === "string" ? value.split(",") : value);
+
+    let recentValue = [...value];
+    recentValue = recentValue.pop();
+
+    if (!recentValue) {
+      setDependencies(value);
+    } else if (recentValue === "classOld") {
+      setDependencies(value.filter((v) => !["class", "classNew"].includes(v)));
+    } else if (recentValue === "classNew") {
+      setDependencies(value.filter((v) => !["classOld", "class"].includes(v)));
+    } else if (recentValue === "class") {
+      setDependencies(
+        value.filter((v) => !["classOld", "classNew"].includes(v))
+      );
+    } else setDependencies(value);
   };
 
   const handleAddForm = (e) => {
@@ -294,37 +290,50 @@ export default function AddUpdateFeeMap({
 
   const handleDelete = (chipToDelete) => {
     setDependencies((chips) => chips.filter((chip) => chip !== chipToDelete));
-    if (chipToDelete == "class") {
+    if (["class", "classOld", "classNew"].includes(chipToDelete)) {
       setAddForm((prev) => ({ ...prev, class: "" }));
     }
     if (chipToDelete === "hostel") {
-      setAddForm((prev) => ({ ...prev, hostel: "", room: "" }));
+      setAddForm((prev) => ({ ...prev, hostel: "" }));
     }
-    if (chipToDelete === "route") {
-      setAddForm((prev) => ({ ...prev, stop: "", route: "" }));
-    }
-    if (chipToDelete === "room") {
-      setAddForm((prev) => ({ ...prev, room: "" }));
-    }
-    if (chipToDelete === "pickType") {
-      setAddForm((prev) => ({ ...prev, pickType: "" }));
-    }
-    if (chipToDelete === "roomType") {
-      setAddForm((prev) => ({ ...prev, roomType: "" }));
-    }
-    if (chipToDelete === "academicYear") {
-      setAddForm((prev) => ({ ...prev, academicYearId: "" }));
-    }
-    if (chipToDelete === "addedAfter") {
-      setAddedAfter(null);
-    }
-    if (chipToDelete === "addedBefore") {
-      setAddedBefore(null);
-    }
-    if (chipToDelete === "stop") {
-      setAddForm((prev) => ({ ...prev, stop: "" }));
+    if (chipToDelete === "transport") {
+      setAddForm((prev) => ({ ...prev, stop: "", route: "", pickType: "" }));
     }
   };
+
+  // const handleDelete = (chipToDelete) => {
+  //   setDependencies((chips) => chips.filter((chip) => chip !== chipToDelete));
+  //   if (chipToDelete == "class") {
+  //     setAddForm((prev) => ({ ...prev, class: "" }));
+  //   }
+  //   if (chipToDelete === "hostel") {
+  //     setAddForm((prev) => ({ ...prev, hostel: "", room: "" }));
+  //   }
+  //   if (chipToDelete === "route") {
+  //     setAddForm((prev) => ({ ...prev, stop: "", route: "" }));
+  //   }
+  //   if (chipToDelete === "room") {
+  //     setAddForm((prev) => ({ ...prev, room: "" }));
+  //   }
+  //   if (chipToDelete === "pickType") {
+  //     setAddForm((prev) => ({ ...prev, pickType: "" }));
+  //   }
+  //   if (chipToDelete === "roomType") {
+  //     setAddForm((prev) => ({ ...prev, roomType: "" }));
+  //   }
+  //   if (chipToDelete === "academicYear") {
+  //     setAddForm((prev) => ({ ...prev, academicYearId: "" }));
+  //   }
+  //   if (chipToDelete === "addedAfter") {
+  //     setAddedAfter(null);
+  //   }
+  //   if (chipToDelete === "addedBefore") {
+  //     setAddedBefore(null);
+  //   }
+  //   if (chipToDelete === "stop") {
+  //     setAddForm((prev) => ({ ...prev, stop: "" }));
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (filteredFeeMaps.length) {
@@ -438,7 +447,8 @@ export default function AddUpdateFeeMap({
     );
   };
 
-  // console.log(addForm);
+  console.log(stops, "gsgsg");
+  console.log(dependencies, "dependencies");
 
   return (
     <>
@@ -523,7 +533,9 @@ export default function AddUpdateFeeMap({
               </Grid>
             )}
 
-            {dependencies.includes("class") && (
+            {(dependencies.includes("class") ||
+              dependencies.includes("classNew") ||
+              dependencies.includes("classOld")) && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Select Class</InputLabel>
@@ -543,7 +555,71 @@ export default function AddUpdateFeeMap({
                 </FormControl>
               </Grid>
             )}
-            {dependencies.includes("route") && (
+            {dependencies.includes("transport") && (
+              <>
+                <Grid item xs={12} md={6} lg={6} mt={2}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Route</InputLabel>
+                    <Select
+                      size="small"
+                      name="route"
+                      required
+                      value={addForm.route || ""}
+                      onChange={handleAddForm}
+                      label="Select Route">
+                      {routes.map((route) => (
+                        <MenuItem key={route._id} value={route._id}>
+                          {route?.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6} mt={2}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Stop</InputLabel>
+                    <Select
+                      size="small"
+                      name="stop"
+                      required
+                      value={addForm.stop || ""}
+                      onChange={handleAddForm}
+                      label="Select stop">
+                      {routes
+                        ?.find((s) => s._id === addForm.route)
+                        ?.stops?.map((m) => ({
+                          ...m,
+                          label: m.name,
+                          value: m._id,
+                        }))
+                        ?.map((stop) => (
+                          <MenuItem key={stop.value} value={stop.value}>
+                            {stop?.label}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid xs={12} sm={6} md={6} item mt={2}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Pick Type</InputLabel>
+                    <Select
+                      size="small"
+                      name="pickType"
+                      value={addForm.pickType || ""}
+                      onChange={handleAddForm}
+                      label="Pick Type">
+                      {["Drop", "Pick", "Both"].map((picktype) => (
+                        <MenuItem key={picktype} value={picktype}>
+                          {picktype}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </>
+            )}
+            {/* {dependencies.includes("route") && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Select Route</InputLabel>
@@ -607,7 +683,7 @@ export default function AddUpdateFeeMap({
                   </Select>
                 </FormControl>
               </Grid>
-            )}
+            )} */}
             {dependencies.includes("hostel") && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">

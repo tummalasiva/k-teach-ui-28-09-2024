@@ -139,6 +139,7 @@ export default function FeeMapCategory() {
         <Grid xs={12} md={6} lg={3} item>
           <Button
             variant="contained"
+            size="small"
             startIcon={<Add />}
             onClick={() => setOpen(true)}>
             Add Fee Category

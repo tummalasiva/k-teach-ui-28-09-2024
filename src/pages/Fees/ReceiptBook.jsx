@@ -8,15 +8,18 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  Tooltip,
+  Switch,
 } from "@mui/material";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
 import { useFormik } from "formik";
-import { Add, Search } from "@mui/icons-material";
+import { Add, Edit, Search } from "@mui/icons-material";
 import { feeMapTableKeys } from "../../data/tableKeys/feeMapData";
 import FormSelect from "../../forms/FormSelect";
 import FormInput from "../../forms/FormInput";
@@ -90,26 +93,39 @@ const CustomActionFee = ({
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
+        {/* <Button
           size="small"
           variant="contained"
           onClick={() => onEditClick(data)}>
           Edit
-        </Button>
+        </Button> */}
+
         <Button
           size="small"
           variant="contained"
           onClick={() => onNavigateFeeMap(data._id)}>
           Fee Map
         </Button>
-        <LoadingButton
+        {/* <LoadingButton
           loading={loading}
           size="small"
           onClick={updateStatus}
           color={data.active ? "success" : "error"}
           variant="contained">
           {data.active ? "Activate" : "DeActivate"}
-        </LoadingButton>
+        </LoadingButton> */}
+        <Tooltip title="Edit">
+          <IconButton onClick={() => onEditClick(data)}>
+            <Edit color="primary" fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={data.active ? "Deactive" : "Activate"}>
+          <Switch
+            checked={data.active}
+            onChange={updateStatus}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Tooltip>
       </Stack>
     </>
   );
@@ -200,7 +216,7 @@ export default function ReceiptBook() {
     try {
       const payload = {
         ...values,
-        schoolId: selectedSetting._id,
+        schoolId: selectedSetting?._id,
       };
       setLoading(true);
       if (dataToEdit) {
@@ -222,7 +238,7 @@ export default function ReceiptBook() {
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
-      active: dataToEdit?.active || true,
+      // active: dataToEdit?.active || true,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -312,7 +328,7 @@ export default function ReceiptBook() {
           rowSpacing={1}
           columnSpacing={2}
           container
-          sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          sx={{ display: "flex", alignItems: "center", my: 1.5 }}>
           <Grid xs={12} md={6} lg={3} item>
             <FormControl fullWidth size="small">
               <InputLabel>Select Receipt</InputLabel>
