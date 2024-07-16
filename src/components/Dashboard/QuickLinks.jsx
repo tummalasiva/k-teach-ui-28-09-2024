@@ -28,7 +28,14 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 export default function QuickLinks() {
   return (
     <>
-      <Paper sx={{ padding: 2, backgroundColor: "whitesmoke" }}>
+      <Paper
+        sx={{
+          padding: 2,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,0.5)"
+              : "whitesmoke",
+        }}>
         <Grid container spacing={2}>
           <Grid
             item
@@ -39,7 +46,12 @@ export default function QuickLinks() {
             display="flex"
             justifyContent="center">
             <Typography
-              sx={{ fontSize: 18, fontWeight: "bold", color: "black" }}>
+              sx={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: (theme) =>
+                  theme.palette.mode === "dark" ? "white" : "black",
+              }}>
               Quick Links
             </Typography>
           </Grid>

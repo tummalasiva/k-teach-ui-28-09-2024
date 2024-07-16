@@ -122,7 +122,15 @@ export default function Events() {
 
   return (
     <>
-      <Paper sx={{ padding: 2, mt: 2, backgroundColor: "whitesmoke" }}>
+      <Paper
+        sx={{
+          padding: 2,
+          mt: 2,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,0.5)"
+              : "whitesmoke",
+        }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Calendar
