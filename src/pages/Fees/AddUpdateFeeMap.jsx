@@ -57,6 +57,7 @@ export default function AddUpdateFeeMap({
   selectedReceipt = "",
   open = true,
   setOpen = () => {},
+  getFeeMaps = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
   const [classes, setClasses] = useState([]);
@@ -225,6 +226,7 @@ export default function AddUpdateFeeMap({
 
   const handleClose = () => {
     setAddForm({});
+    getFeeMaps();
     setOpen(false);
   };
 
@@ -714,66 +716,53 @@ export default function AddUpdateFeeMap({
                 />
               </Grid>
             )}
-            {installments.map(
-              (installment, index) => (
-                console.log(installment, "installment"),
-                (
-                  <React.Fragment key={index}>
-                    <Grid container rowSpacing={0} columnSpacing={2} px={2}>
-                      <Grid item xs={12} sm={6} md={6} mt={2}>
-                        <TextField
-                          fullWidth
-                          type="number"
-                          label={`installment ${index + 1}`}
-                          value={installment?.amount || 0}
-                          size="small"
-                          // enabled={dataToEdit}
-                          onChange={(e) =>
-                            handleInstallmentChange(
-                              e.target.value,
-                              "amount",
-                              index
-                            )
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
+            {installments.map((installment, index) => (
+              <React.Fragment key={index}>
+                <Grid container rowSpacing={0} columnSpacing={2} px={2}>
+                  <Grid item xs={12} sm={6} md={6} mt={2}>
+                    <TextField
+                      fullWidth
+                      type="number"
+                      label={`installment ${index + 1}`}
+                      value={installment?.amount || 0}
+                      size="small"
+                      // enabled={dataToEdit}
+                      onChange={(e) =>
+                        handleInstallmentChange(e.target.value, "amount", index)
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        enabled={dataToEdit}
+                        label="Due Date"
+                        format="DD/MM/YYYY"
+                        value={installment?.dueDate || null}
+                        onChange={(newValue) =>
+                          handleInstallmentChange(newValue, "dueDate", index)
+                        }
+                        sx={{
+                          "& .MuiInputBase-input": {
+                            height: "8px",
+                          },
+                          marginTop: "16px",
+                          width: "100%",
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            fullWidth
                             enabled={dataToEdit}
-                            label="Due Date"
-                            format="DD/MM/YYYY"
-                            value={installment?.dueDate || null}
-                            onChange={(newValue) =>
-                              handleInstallmentChange(
-                                newValue,
-                                "dueDate",
-                                index
-                              )
-                            }
-                            sx={{
-                              "& .MuiInputBase-input": {
-                                height: "8px",
-                              },
-                              marginTop: "16px",
-                              width: "100%",
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                fullWidth
-                                enabled={dataToEdit}
-                                {...params}
-                                size="small"
-                              />
-                            )}
+                            {...params}
+                            size="small"
                           />
-                        </LocalizationProvider>
-                      </Grid>
-                    </Grid>
-                  </React.Fragment>
-                )
-              )
-            )}
+                        )}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                </Grid>
+              </React.Fragment>
+            ))}
           </Grid>
         </DialogContent>
         <DialogActions>

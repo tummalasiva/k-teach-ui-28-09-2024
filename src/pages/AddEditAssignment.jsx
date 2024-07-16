@@ -180,8 +180,6 @@ export default function AddEditAssignment({
     }
   }, [entryFormik.values.class, selectedSetting._id]);
 
-  console.log(dataToEdit, "dataToEdit");
-
   return (
     <>
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
