@@ -28,20 +28,6 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LoadingButton } from "@mui/lab";
 
-// const LABEL = {
-//   class: "Class - (Academic department)",
-//   route: "Route - (Transport department)",
-//   pickType: "Pick-Type - (Transport department)",
-//   stop: "Stop - (Transport department)",
-//   room: "Room - (Hostel department)",
-//   roomType: "Room Type - (Hostel department)",
-//   hostel: "Hostel - (Hostel department)",
-//   addedAfter: "Added After - (Student admission date)",
-//   addedBefore: "Added Before - (Student admission date)",
-//   academicYear: "Academic Year - (Student academic year)",
-//   libraryMember: "Library Member - (Human Resource department)",
-// };
-
 const LABEL = {
   class: "Class",
   classOld: "Class - (Old)",
@@ -73,7 +59,6 @@ export default function AddUpdateFeeMap({
   setOpen = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
-  // const [dataToEdit, setDataToEdit] = useState("");
   const [classes, setClasses] = useState([]);
   const [academicYears, setAcademicYears] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -85,11 +70,8 @@ export default function AddUpdateFeeMap({
   const [dependencies, setDependencies] = useState([]);
   const [addForm, setAddForm] = useState({});
   const [installments, setInstallments] = useState([]);
-  const [addedAfter, setAddedAfter] = useState(null);
-  const [addedBefore, setAddedBefore] = useState(null);
+  const [dataToUpdate, setDataToUpdate] = useState(dataToEdit || null);
 
-  // console.log(installments, "gua");
-  console.log(dataToEdit, "dataToEdit");
   // get academic year
   const getAcademicYears = async () => {
     try {
@@ -220,7 +202,7 @@ export default function AddUpdateFeeMap({
         installmentType: addForm.installmentsType,
         installments: installments.map((i) => ({
           ...i,
-          dueDate: dayjs(i?.dueDate).format("DD/MM/YYYY"),
+          dueDate: dayjs(i?.dueDate),
         })),
         schoolId: selectedSetting._id,
       };
@@ -242,7 +224,6 @@ export default function AddUpdateFeeMap({
   };
 
   const handleClose = () => {
-    // setDataToEdit(null);
     setAddForm({});
     setOpen(false);
   };
@@ -270,21 +251,12 @@ export default function AddUpdateFeeMap({
         installmentsType: installmentType || "",
         fee: fee || "",
       });
-      setInstallments(
-        installments.map((i) => ({ ...i, dueDate: dayjs(i.dueDate) }))
-      );
+      setDataToUpdate(dataToEdit);
       setDependencies(dependencies);
     } else {
       setAddForm({});
     }
   }, [dataToEdit]);
-
-  const resetForm = () => {
-    setAddForm({});
-    // setDataToEdit(null);
-    setInstallments([]);
-    setDependencies([]);
-  };
 
   const handleChange = (event) => {
     const {
@@ -347,13 +319,13 @@ export default function AddUpdateFeeMap({
     if (addForm.installmentsType === "Monthly") {
       const monthlyAmount = Math.floor(addForm.fee / 12);
       const missing = addForm.fee - monthlyAmount * 12;
-
-      // console.log(missing, "missing");
       installmentsData = Array.from({ length: 12 }).map((v, i) => ({
         id: i + 1,
         amount: monthlyAmount,
         missing: missing,
-        dueDate: dayjs(),
+        dueDate: dataToUpdate
+          ? dayjs(dataToUpdate.installments[i]?.dueDate)
+          : dayjs(),
       }));
       if (installmentsData.length > 0) {
         installmentsData[0].amount += missing;
@@ -365,7 +337,9 @@ export default function AddUpdateFeeMap({
       installmentsData = Array.from({ length: 4 }).map((v, i) => ({
         id: i + 1,
         amount: quarterlyAmount,
-        dueDate: dayjs(),
+        dueDate: dataToUpdate
+          ? dayjs(dataToUpdate.installments[i]?.dueDate)
+          : dayjs(),
       }));
       if (installmentsData.length > 0) {
         installmentsData[0].amount += missing;
@@ -377,7 +351,9 @@ export default function AddUpdateFeeMap({
       installmentsData = Array.from({ length: 2 }).map((v, i) => ({
         id: i + 1,
         amount: halfYearlyAmount,
-        dueDate: dayjs(),
+        dueDate: dataToUpdate
+          ? dayjs(dataToUpdate.installments[i]?.dueDate)
+          : dayjs(),
       }));
       if (installmentsData.length > 0) {
         installmentsData[0].amount += missing;
@@ -386,7 +362,9 @@ export default function AddUpdateFeeMap({
       installmentsData = Array.from({ length: 1 }).map((v, i) => ({
         id: i,
         amount: addForm.fee,
-        dueDate: dayjs(),
+        dueDate: dataToUpdate
+          ? dayjs(dataToUpdate.installments[i]?.dueDate)
+          : dayjs(),
       }));
     } else if (addForm.installmentsType === "Others") {
       const othersAmount = Math.floor(addForm.fee / addForm.others);
@@ -395,26 +373,29 @@ export default function AddUpdateFeeMap({
       installmentsData = Array.from({ length: addForm.others }).map((v, i) => ({
         id: i + 1,
         amount: othersAmount,
-        dueDate: dayjs(),
+        dueDate: dataToUpdate
+          ? dayjs(dataToUpdate.installments[i]?.dueDate)
+          : dayjs(),
       }));
       if (installmentsData.length > 0) {
         installmentsData[0].amount += missing;
       }
     } else {
       setInstallments([]);
+
       return;
     }
+
     setInstallments(installmentsData);
   };
 
   useEffect(() => {
     handleAddInstallments();
-  }, [addForm.installmentsType, addForm.others, addForm.fee]);
+  }, [addForm.installmentsType, addForm.others, addForm.fee, dataToUpdate]);
 
-  console.log(installments, "kja");
   const handleInstallmentChange = (val, key, changeIndex) => {
-    setInstallments((prev) =>
-      prev.map((installment, index) => {
+    setInstallments((prev) => {
+      let newInstallments = prev.map((installment, index) => {
         if (index === changeIndex) {
           return key === "amount"
             ? { ...installment, [key]: parseInt(val) }
@@ -435,8 +416,12 @@ export default function AddUpdateFeeMap({
         } else {
           return installment;
         }
-      })
-    );
+      });
+
+      setDataToUpdate({ ...dataToUpdate, installments: newInstallments });
+
+      return newInstallments;
+    });
   };
 
   return (
