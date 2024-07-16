@@ -32,38 +32,26 @@ import AddUpdateFeeMap from "./AddUpdateFeeMap";
 
 const showInfo = (data) => {
   let result = [];
-  // console.log(data, "fsusg");
+
   for (let dep of data.dependencies) {
-    if (dep === "academicYear") {
-      result.push(
-        `[${data.academicYearId.from}-${data.academicYearId.to}]-Academic Year`
-      );
-    } else if (dep === "class") {
+    if (["class"].includes(dep)) {
       let newItem = `[${data.class?.name}]-Class`;
       result.push(newItem);
-    } else if (dep === "hostel") {
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
+      result.push(newItem);
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
+      result.push(newItem);
+    } else if (["hostel"].includes(dep)) {
       let newItem = `[${data.hostel?.name}]-Hostel`;
       result.push(newItem);
-    } else if (dep === "roomType") {
-      result.push(`[${data.roomType.name}]-Room_Type`);
-    } else if (dep === "room") {
-      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalBeds} Beds]+[${data.room?.type?.name}]-Room`;
+    } else if (["transport"].includes(dep)) {
+      let newItem = `[${data?.route?.vehicle?.number}]+[${data?.route?.title}]-Transport-[${data?.stop?.name}]-Stop-[${data.pickType}]-Pick_Type`;
       result.push(newItem);
-    } else if (dep == "route") {
-      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Route`;
-      result.push(newItem);
-    } else if (dep == "pickType") {
+    } else if (["pickType"].includes(dep)) {
       let newItem = `[${data.pickType}]-Pick_Type`;
       result.push(newItem);
-    } else if (dep === "stop") {
-      let newItem = `[${data.stop.name}]-Stop`;
-      result.push(newItem);
-    } else if (dep === "addedBefore") {
-      // let newItem = `[${moment(data.addedBefore).format("DD/MM/YYYY")}]-Stop`;
-      // result.push(newItem);
-    } else if (dep === "addedAfter") {
-      // let newItem = `[${moment(data.addedAfter).format("DD/MM/YYYY")}]-Stop`;
-      // result.push(newItem);
     }
   }
 
@@ -211,8 +199,6 @@ export default function ReceiptBook() {
   };
 
   const handleCreateOrUpdate = async (values) => {
-    console.log(values, "values");
-
     try {
       const payload = {
         ...values,
@@ -227,7 +213,6 @@ export default function ReceiptBook() {
       } else {
         const { data } = await post(PRIVATE_URLS.receiptTitle.create, payload);
       }
-      console.log(data, "data");
       handleClose();
     } catch (error) {
       console.log(error);
@@ -238,7 +223,7 @@ export default function ReceiptBook() {
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
-      // active: dataToEdit?.active || true,
+      active: dataToEdit?.active || true,
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -249,17 +234,10 @@ export default function ReceiptBook() {
     setOpen(true);
   };
 
-  const handleFeeMapEdit = (id, data) => {
-    // console.log(data, "hgafs");
+  const handleFeeMapEdit = (data) => {
+    // console.log(data, "newss");
     setDataToEdit({ ...data });
-    // setAddForm({
-    //   ...data,
-    //   schoolClass: data.class?._id,
-    //   route: data.route?._id,
-    //   room: data.room?._id,
-    //   others: data.installments.length,
-    //   installmentType: calculateInstallmentType(data.installments.length),
-    // });
+    setOpenFeeMap(true);
   };
 
   const handleOpenFeeMap = () => {
@@ -267,7 +245,6 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMap = (id) => {
-    // console.log(id, "id usha");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };

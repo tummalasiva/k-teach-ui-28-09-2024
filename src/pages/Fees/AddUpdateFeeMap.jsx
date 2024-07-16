@@ -67,12 +67,13 @@ function removeElementFromArray(array, elementToRemove) {
 }
 
 export default function AddUpdateFeeMap({
+  dataToEdit,
   selectedReceipt = "",
   open = true,
   setOpen = () => {},
 }) {
   const { selectedSetting } = useContext(SettingContext);
-  const [dataToEdit, setDataToEdit] = useState("");
+  // const [dataToEdit, setDataToEdit] = useState("");
   const [classes, setClasses] = useState([]);
   const [academicYears, setAcademicYears] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -86,6 +87,9 @@ export default function AddUpdateFeeMap({
   const [installments, setInstallments] = useState([]);
   const [addedAfter, setAddedAfter] = useState(null);
   const [addedBefore, setAddedBefore] = useState(null);
+
+  // console.log(installments, "gua");
+  console.log(dataToEdit, "dataToEdit");
   // get academic year
   const getAcademicYears = async () => {
     try {
@@ -214,10 +218,12 @@ export default function AddUpdateFeeMap({
         stopId: addForm.stop,
         fee: addForm.fee,
         installmentType: addForm.installmentsType,
-        installments: installments,
+        installments: installments.map((i) => ({
+          ...i,
+          dueDate: dayjs(i?.dueDate).format("DD/MM/YYYY"),
+        })),
         schoolId: selectedSetting._id,
       };
-      console.log(payload, "payload");
 
       if (dataToEdit) {
         const { data } = await put(
@@ -226,8 +232,8 @@ export default function AddUpdateFeeMap({
         );
       } else {
         const { data } = await post(PRIVATE_URLS.feeMap.create, payload);
-        console.log(data, "ppppp");
       }
+      handleClose();
     } catch (error) {
       setLoading(false);
       console.error(error);
@@ -236,13 +242,46 @@ export default function AddUpdateFeeMap({
   };
 
   const handleClose = () => {
-    setDataToEdit(null);
+    // setDataToEdit(null);
+    setAddForm({});
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (dataToEdit) {
+      const {
+        route,
+        class: className,
+        hostel,
+        pickType,
+        stop,
+        fee,
+        installmentType,
+        installments,
+        dependencies,
+      } = dataToEdit;
+
+      setAddForm({
+        route: route?._id || "",
+        class: className?._id || "",
+        hostel: hostel?._id || "",
+        pickType: pickType || "",
+        stop: stop?._id || "",
+        installmentsType: installmentType || "",
+        fee: fee || "",
+      });
+      setInstallments(
+        installments.map((i) => ({ ...i, dueDate: dayjs(i.dueDate) }))
+      );
+      setDependencies(dependencies);
+    } else {
+      setAddForm({});
+    }
+  }, [dataToEdit]);
+
   const resetForm = () => {
     setAddForm({});
-    setDataToEdit(null);
+    // setDataToEdit(null);
     setInstallments([]);
     setDependencies([]);
   };
@@ -300,52 +339,6 @@ export default function AddUpdateFeeMap({
       setAddForm((prev) => ({ ...prev, stop: "", route: "", pickType: "" }));
     }
   };
-
-  // const handleDelete = (chipToDelete) => {
-  //   setDependencies((chips) => chips.filter((chip) => chip !== chipToDelete));
-  //   if (chipToDelete == "class") {
-  //     setAddForm((prev) => ({ ...prev, class: "" }));
-  //   }
-  //   if (chipToDelete === "hostel") {
-  //     setAddForm((prev) => ({ ...prev, hostel: "", room: "" }));
-  //   }
-  //   if (chipToDelete === "route") {
-  //     setAddForm((prev) => ({ ...prev, stop: "", route: "" }));
-  //   }
-  //   if (chipToDelete === "room") {
-  //     setAddForm((prev) => ({ ...prev, room: "" }));
-  //   }
-  //   if (chipToDelete === "pickType") {
-  //     setAddForm((prev) => ({ ...prev, pickType: "" }));
-  //   }
-  //   if (chipToDelete === "roomType") {
-  //     setAddForm((prev) => ({ ...prev, roomType: "" }));
-  //   }
-  //   if (chipToDelete === "academicYear") {
-  //     setAddForm((prev) => ({ ...prev, academicYearId: "" }));
-  //   }
-  //   if (chipToDelete === "addedAfter") {
-  //     setAddedAfter(null);
-  //   }
-  //   if (chipToDelete === "addedBefore") {
-  //     setAddedBefore(null);
-  //   }
-  //   if (chipToDelete === "stop") {
-  //     setAddForm((prev) => ({ ...prev, stop: "" }));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (filteredFeeMaps.length) {
-  //     let deps = [];
-  //     for (let feeMap of filteredFeeMaps) {
-  //       deps = [...deps, ...feeMap.extendedDependencies];
-  //     }
-
-  //     let uniqueDeps = new Set(deps);
-  //     setAllDependencies([...uniqueDeps]);
-  //   }
-  // }, [filteredFeeMaps]);
 
   const handleAddInstallments = () => {
     if (!addForm.installmentsType || !addForm.fee) return;
@@ -418,6 +411,7 @@ export default function AddUpdateFeeMap({
     handleAddInstallments();
   }, [addForm.installmentsType, addForm.others, addForm.fee]);
 
+  console.log(installments, "kja");
   const handleInstallmentChange = (val, key, changeIndex) => {
     setInstallments((prev) =>
       prev.map((installment, index) => {
@@ -436,9 +430,7 @@ export default function AddUpdateFeeMap({
           } else if (addForm.installmentsType === "Others") {
             diffInMonths = diffInMonths * 1;
           }
-          const updatedDueDate = dayjs(val)
-            .add(diffInMonths, "month")
-            .format("YYYY-MM-DD");
+          const updatedDueDate = dayjs(val).add(diffInMonths, "month");
           return { ...installment, dueDate: updatedDueDate };
         } else {
           return installment;
@@ -446,9 +438,6 @@ export default function AddUpdateFeeMap({
       })
     );
   };
-
-  console.log(stops, "gsgsg");
-  console.log(dependencies, "dependencies");
 
   return (
     <>
@@ -619,71 +608,7 @@ export default function AddUpdateFeeMap({
                 </Grid>
               </>
             )}
-            {/* {dependencies.includes("route") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Route</InputLabel>
-                  <Select
-                    size="small"
-                    name="route"
-                    required
-                    value={addForm.route || ""}
-                    onChange={handleAddForm}
-                    label="Select Route">
-                    {routes.map((route) => (
-                      <MenuItem key={route._id} value={route._id}>
-                        {route?.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
-            {dependencies.includes("stop") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Stop</InputLabel>
-                  <Select
-                    size="small"
-                    name="stop"
-                    required
-                    value={addForm.stop || ""}
-                    onChange={handleAddForm}
-                    label="Select stop">
-                    {stops
-                      ?.filter((s) =>
-                        addForm.route ? s.route?._id == addForm.route : s._id
-                      )
-                      .map((stop) => (
-                        <MenuItem key={stop._id} value={stop._id}>
-                          {stop?.label}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
 
-            {(dependencies.includes("route") ||
-              dependencies.includes("pickType")) && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Pick Type</InputLabel>
-                  <Select
-                    size="small"
-                    name="pickType"
-                    value={addForm.pickType || ""}
-                    onChange={handleAddForm}
-                    label="Pick Type">
-                    {["Drop", "Pick", "Both"].map((picktype) => (
-                      <MenuItem key={picktype} value={picktype}>
-                        {picktype}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )} */}
             {dependencies.includes("hostel") && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">
@@ -760,36 +685,7 @@ export default function AddUpdateFeeMap({
                 </FormControl>
               </Grid>
             )}
-            {dependencies.includes("addedAfter") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Added After"
-                    inputFormat="DD-MM-YYYY"
-                    value={addedAfter}
-                    onChange={(newValue) => setAddedAfter(newValue)}
-                    renderInput={(params) => (
-                      <TextField {...params} size="small" fullWidth />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            )}
-            {dependencies.includes("addedBefore") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Added Before"
-                    inputFormat="DD-MM-YYYY"
-                    value={addedBefore}
-                    onChange={(newValue) => setAddedBefore(newValue)}
-                    renderInput={(params) => (
-                      <TextField {...params} size="small" fullWidth />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            )}
+
             <Grid xs={12} sm={6} md={6} item mt={2}>
               <TextField
                 fullWidth
@@ -833,46 +729,66 @@ export default function AddUpdateFeeMap({
                 />
               </Grid>
             )}
-
-            {installments.map((installment, index) => (
-              <React.Fragment key={index}>
-                <Grid item xs={12} sm={6} md={6} mt={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    label={`installment ${index + 1}`}
-                    value={installment.amount}
-                    size="small"
-                    // enabled={dataToEdit}
-                    onChange={(e) =>
-                      handleInstallmentChange(e.target.value, "amount", index)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} mt={2}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      inputFormat="DD-MM-YYYY"
-                      enabled={dataToEdit}
-                      label="Due Date"
-                      form
-                      value={installment.dueDate}
-                      onChange={(newValue) =>
-                        handleInstallmentChange(newValue, "dueDate", index)
-                      }
-                      renderInput={(params) => (
+            {installments.map(
+              (installment, index) => (
+                console.log(installment, "installment"),
+                (
+                  <React.Fragment key={index}>
+                    <Grid container rowSpacing={0} columnSpacing={2} px={2}>
+                      <Grid item xs={12} sm={6} md={6} mt={2}>
                         <TextField
                           fullWidth
-                          enabled={dataToEdit}
-                          {...params}
+                          type="number"
+                          label={`installment ${index + 1}`}
+                          value={installment?.amount || 0}
                           size="small"
+                          // enabled={dataToEdit}
+                          onChange={(e) =>
+                            handleInstallmentChange(
+                              e.target.value,
+                              "amount",
+                              index
+                            )
+                          }
                         />
-                      )}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-              </React.Fragment>
-            ))}
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            enabled={dataToEdit}
+                            label="Due Date"
+                            format="DD/MM/YYYY"
+                            value={installment?.dueDate || null}
+                            onChange={(newValue) =>
+                              handleInstallmentChange(
+                                newValue,
+                                "dueDate",
+                                index
+                              )
+                            }
+                            sx={{
+                              "& .MuiInputBase-input": {
+                                height: "8px",
+                              },
+                              marginTop: "16px",
+                              width: "100%",
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                fullWidth
+                                enabled={dataToEdit}
+                                {...params}
+                                size="small"
+                              />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                    </Grid>
+                  </React.Fragment>
+                )
+              )
+            )}
           </Grid>
         </DialogContent>
         <DialogActions>
