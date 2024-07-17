@@ -359,6 +359,7 @@ export const PRIVATE_URLS = {
     create: "/feeMap/create",
     update: "/feeMap/update",
     delete: "/feeMap/delete",
+    toggleActiveStatus: "/feeMap/toggleActiveStatus",
   },
   receipt: {
     getFeeDetails: "/receipt/getFeeDetails",

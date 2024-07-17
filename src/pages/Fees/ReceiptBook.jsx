@@ -15,6 +15,7 @@ import {
   Stack,
   Tooltip,
   Switch,
+  styled,
 } from "@mui/material";
 import TabList from "../../components/Tabs/Tablist";
 import TabPanel from "../../components/Tabs/TabPanel";
@@ -29,6 +30,21 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import AddUpdateFeeMap from "./AddUpdateFeeMap";
+
+const CustomSwitch = styled(Switch)(({}) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "green",
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "green",
+  },
+  "& .MuiSwitch-switchBase": {
+    color: "red",
+  },
+  "& .MuiSwitch-switchBase + .MuiSwitch-track": {
+    backgroundColor: "red",
+  },
+}));
 
 const showInfo = (data) => {
   let result = [];
@@ -65,7 +81,6 @@ const CustomActionFee = ({
   onNavigateFeeMap = () => {},
 }) => {
   const [loading, setLoading] = useState(false);
-
   const updateStatus = async () => {
     try {
       setLoading(true);
@@ -80,35 +95,22 @@ const CustomActionFee = ({
 
   return (
     <>
-      <Stack direction="row" spacing={1}>
-        {/* <Button
-          size="small"
-          variant="contained"
-          onClick={() => onEditClick(data)}>
-          Edit
-        </Button> */}
-
+      <Stack direction="row" spacing={1} alignItems="center">
         <Button
           size="small"
           variant="contained"
           onClick={() => onNavigateFeeMap(data._id)}>
           Fee Map
         </Button>
-        {/* <LoadingButton
-          loading={loading}
-          size="small"
-          onClick={updateStatus}
-          color={data.active ? "success" : "error"}
-          variant="contained">
-          {data.active ? "Activate" : "DeActivate"}
-        </LoadingButton> */}
+
         <Tooltip title="Edit">
-          <IconButton onClick={() => onEditClick(data)}>
-            <Edit color="primary" fontSize="small" />
+          <IconButton onClick={() => onEditClick(data)} size="small">
+            <Edit color="primary" fontSize="12px" />
           </IconButton>
         </Tooltip>
         <Tooltip title={data.active ? "Deactive" : "Activate"}>
-          <Switch
+          <CustomSwitch
+            size="small"
             checked={data.active}
             onChange={updateStatus}
             inputProps={{ "aria-label": "controlled" }}
@@ -129,7 +131,7 @@ export default function ReceiptBook() {
   const [loading, setLoading] = useState(false);
   const [openFeeMap, setOpenFeeMap] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
-  const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
+  // const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
 
   // get fee map list
   const getFeeMaps = async () => {
@@ -137,7 +139,7 @@ export default function ReceiptBook() {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: {
           schoolId: selectedSetting._id,
-          Search: { receiptTitle: selectReceipt },
+          search: { receiptTitle: selectedReceiptId },
         },
       });
       setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
@@ -154,7 +156,9 @@ export default function ReceiptBook() {
       });
       setReceipts(data.result);
       if (data.result.length > 0) {
-        setSelectReceipt(selectReceipt ? selectReceipt : data.result[0]._id);
+        setSelectedReceiptId(
+          selectedReceiptId ? selectedReceiptId : data.result[0]._id
+        );
       }
     } catch (error) {
       console.log(error);
@@ -162,10 +166,10 @@ export default function ReceiptBook() {
   };
 
   useEffect(() => {
-    if (selectReceipt) {
+    if (selectedReceiptId) {
       getFeeMaps();
     }
-  }, [selectReceipt]);
+  }, [selectedReceiptId, selectedSetting._id]);
 
   useEffect(() => {
     getReceipts();
@@ -207,6 +211,19 @@ export default function ReceiptBook() {
     setLoading(false);
   };
 
+  // active/inactive fee Map
+  const handleToggleButton = async (d) => {
+    try {
+      const { data } = await put(
+        PRIVATE_URLS.feeMap.toggleActiveStatus + "/" + d._id
+      );
+      console.log(data, "data");
+      getFeeMaps();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const entryFormik = useFormik({
     initialValues: {
       name: dataToEdit?.name || "",
@@ -232,6 +249,7 @@ export default function ReceiptBook() {
   };
 
   const handleFeeMap = (id) => {
+    console.log(id, "idddddddsssddddididi");
     setSelectedReceiptId(id);
     setSelectValue(1);
   };
@@ -299,8 +317,8 @@ export default function ReceiptBook() {
               <Select
                 required={true}
                 fullWidth
-                value={selectReceipt || ""}
-                onChange={(e) => setSelectReceipt(e.target.value)}
+                value={selectedReceiptId || ""}
+                onChange={(e) => setSelectedReceiptId(e.target.value)}
                 label="Select Receipt">
                 {receipts.map((receipt) => (
                   <MenuItem value={receipt._id} key={receipt._id || ""}>
@@ -321,22 +339,24 @@ export default function ReceiptBook() {
         </Grid>
 
         <CustomTable
-          actions={["edit", "switch"]}
+          actions={["edit", "switch", "view"]}
           bodyDataModal="Fee Map"
           bodyData={feeMaps}
           tableKeys={feeMapTableKeys}
-          CustomAction={CustomActionFee}
+          // CustomAction={CustomActionFee}
+          onToggleSwitch={handleToggleButton}
+          toggleStatus="active"
           onEditClick={handleFeeMapEdit}
         />
 
         {/* Add/Update Fee Map ========= */}
         <AddUpdateFeeMap
           open={openFeeMap}
-          Formik={entryFormik}
           dataToEdit={dataToEdit}
+          getFeeMaps={getFeeMaps}
           setOpen={setOpenFeeMap}
           loading={loading}
-          selectedReceipt={selectReceipt}
+          selectedReceipt={selectedReceiptId}
         />
       </TabPanel>
     </>
