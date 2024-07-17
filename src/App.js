@@ -294,7 +294,6 @@ function App() {
         styleOverrides: {
           root: {
             borderRadius: 5,
-
             height: "40px",
           },
         },
