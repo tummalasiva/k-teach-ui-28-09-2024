@@ -431,10 +431,22 @@ const SIDE_MENU_DATA = [
           />
         ),
       },
+
       {
         name: "Quick Admit",
         renderName: "quickAdmit",
         path: "/sch/student/quick-admit",
+        icon: (
+          <SubdirectoryArrowRightOutlinedIcon
+            color="primary"
+            fontSize="small"
+          />
+        ),
+      },
+      {
+        name: "Id Card",
+        renderName: "id_card",
+        path: "/sch/student/id-card",
         icon: (
           <SubdirectoryArrowRightOutlinedIcon
             color="primary"
