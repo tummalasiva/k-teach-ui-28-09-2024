@@ -41,12 +41,18 @@ export default function FeeMapCategory() {
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
-        params: { schoolId: selectedSetting._id, search: { active: true } },
+        params: {
+          schoolId: selectedSetting._id,
+          search: { active: true, receiptTitle: Formik.values.name },
+        },
       });
-      // console.log(data, "cat");
-      setFeeMaps(data.result.map((f) => ({ label: f.name, value: f._id })));
+      setFeeMaps(
+        data.result.map((f) => ({ ...f, label: f.name, value: f._id }))
+      );
       Formik.setFieldValue("feeMap", data.result[0]._id);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const Formik = useFormik({
@@ -54,7 +60,7 @@ export default function FeeMapCategory() {
       name: "",
       feeMap: "",
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: console.log,
   });
 
   const handleCreateOrUpdate = async (values) => {

@@ -352,6 +352,7 @@ export const PRIVATE_URLS = {
   feeMapCategory: {
     list: "/feeMapCategory/list",
     create: "/feeMapCategory/create",
+    createMultiple: "/feeMapCategory/createMultiple",
     update: "/feeMapCategory/update",
     delete: "/feeMapCategory/delete",
   },
