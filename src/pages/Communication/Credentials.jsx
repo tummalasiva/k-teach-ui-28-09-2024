@@ -218,28 +218,6 @@ const Credentails = () => {
     } catch (error) {}
   };
 
-  // const handleEmployeeAuto = (event, val) => {
-  //   setEmployeeAutoSelect(val);
-  //   if (val.filter((v) => v._id == "all").length) {
-  //     setSelectEmployee("All");
-  //     setSelectedEmployeeCount(employees.length);
-  //     return;
-  //   }
-  //   const selectedEmployees = val.filter((emp) => emp._id !== "all");
-
-  //   setSelectedEmployeeCount(selectedEmployees.length);
-
-  //   if (selectedEmployees.length === employees.length) {
-  //     setSelectEmployee("All");
-  //   } else {
-  //     setSelectEmployee(
-  //       selectedEmployees.map((emp) => emp.basicInfo.name).join(", ")
-  //     );
-  //   }
-
-  //   setEmployeeAutoSelect(val);
-  // };
-
   const handleEmployeeAuto = (event, val) => {
     const findAll = val.some((item) => item._id === "all");
 
@@ -795,7 +773,7 @@ const Credentails = () => {
                         ),
                       }}
                     />
-
+                    {/* 
                     <Popper
                       style={{ width: "70%" }}
                       id={"contactsPopper"}
@@ -847,6 +825,77 @@ const Credentails = () => {
                               placeholder="Students"
                               autoFocus
                             />
+                          )}
+                        />
+                      </FormControl>
+                    </Popper> */}
+
+                    <Popper
+                      style={{ width: "70%" }}
+                      id={"contactsPopper"}
+                      open={!!contactsPopper}
+                      anchorEl={contactsPopper}>
+                      <FormControl
+                        variant="outlined"
+                        size="small"
+                        sx={{ m: 1, width: "100%" }}>
+                        <Autocomplete
+                          multiple
+                          onBlur={() => setContactsPopper(null)}
+                          open={true}
+                          value={contactsAutoSelect}
+                          onChange={handleContactsList}
+                          isOptionEqualToValue={(option, value) =>
+                            option._id === value._id
+                          }
+                          id="checkboxes-tags-demo"
+                          options={[
+                            {
+                              _id: "all",
+                              basicInfo: {
+                                name: `All (${students.length})`,
+                              },
+                              contactNumber: "",
+                            },
+                            ...students,
+                          ]}
+                          disableCloseOnSelect
+                          getOptionLabel={(option) =>
+                            option._id === "all"
+                              ? `All (${students.length})`
+                              : `${option.basicInfo.name} (${option.contactNumber})`
+                          }
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                              <Checkbox
+                                icon={icon}
+                                checkedIcon={checkedIcon}
+                                style={{ marginRight: 8 }}
+                                checked={
+                                  selected ||
+                                  (option._id === "all" &&
+                                    contactsAutoSelect.length ===
+                                      students.length)
+                                }
+                              />
+                              {option._id === "all"
+                                ? `All (${students.length})`
+                                : `${option.basicInfo.name} (${option.contactNumber})`}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <Box
+                              sx={{
+                                ml: 5,
+                                width: "100%",
+                              }}>
+                              <StyledInput
+                                ref={params.InputProps.ref}
+                                inputProps={params.inputProps}
+                                placeholder="Search student with name"
+                                autoFocus
+                              />
+                            </Box>
                           )}
                         />
                       </FormControl>

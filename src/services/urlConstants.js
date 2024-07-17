@@ -219,6 +219,7 @@ export const PRIVATE_URLS = {
     create: "/visitorInfo/create",
     update: "/visitorInfo/update",
     delete: "/visitorInfo/delete",
+    updateCheckout: "/visitorInfo/updateCheckout",
   },
 
   studentCheckout: {
