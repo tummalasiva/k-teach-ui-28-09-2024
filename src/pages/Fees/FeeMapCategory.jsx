@@ -194,10 +194,8 @@ export default function FeeMapCategory() {
   }, [selectedSetting, Formik.values.name]);
 
   useEffect(() => {
-    if (Formik.values.name) {
-      getFeeMaps();
-    }
-  }, [Formik.values.name]);
+    getReceipts();
+  }, [selectedSetting._id]);
 
   const handleClose = () => {
     setOpen(false);
