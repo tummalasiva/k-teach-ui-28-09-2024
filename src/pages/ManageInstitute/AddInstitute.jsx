@@ -714,8 +714,7 @@ export default function AddInstitute({ initialValue = null }) {
             Select Your Favorite Theme
           </Title>
           <Box m={2}>
-            {" "}
-            <ThemeSelector onThemeSelect={handleSelectTheme} />
+            <ThemeSelector onThemeSelect={handleSelectTheme} webTheme={true} />
           </Box>
         </FormBox>
 

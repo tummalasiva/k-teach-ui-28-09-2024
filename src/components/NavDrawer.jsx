@@ -166,6 +166,7 @@ import Compose from "../pages/Communication/Compose";
 import Report from "../pages/Communication/Report";
 import Credentials from "../pages/Communication/Credentials";
 import BulkPhoto from "../pages/Student/BulkPhoto";
+import IdCard from "../pages/Student/IdCard";
 
 // exlnt_70471681
 // 9538063455
@@ -754,6 +755,7 @@ export default function NavDrawer() {
           <Route path="student/bulk-admission" element={<BulkAdmission />} />
           <Route path="student/credential" element={<Credential />} />
           <Route path="student/quick-admit" element={<QuickAdmit />} />
+          <Route path="student/id-card" element={<IdCard />} />
 
           <Route path="student/bulk-photo" element={<BulkPhoto />} />
           <Route
