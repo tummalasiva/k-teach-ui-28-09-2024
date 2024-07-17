@@ -32,9 +32,6 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
   width: "100%",
 
-  borderBottom: `1px solid ${
-    theme.palette.mode === "light" ? "#eaecef" : "#30363d"
-  }`,
   "& input": {
     borderRadius: 4,
     backgroundColor: theme.palette.mode === "light" ? "#fff" : "#0d1117",
@@ -251,7 +248,7 @@ const Credentails = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      toast.success("Message sent successfully");
+      toast.success("Credential sent successfully");
       setSelectRoles([]);
       setSelectClass("");
       setSelectSection("");
@@ -321,15 +318,10 @@ const Credentails = () => {
                         label="Class"
                       />
                       <Popper
-                        style={{ width: "70%" }}
                         id={"classPopper"}
                         open={!!classPopper}
                         anchorEl={classPopper}>
-                        <FormControl
-                          variant="outlined"
-                          size="small"
-                          fullWidth
-                          sx={{ m: 1, width: "100%" }}>
+                        <FormControl variant="outlined" size="small" fullWidth>
                           <Autocomplete
                             onBlur={() => setClassPopper(null)}
                             open={true}
@@ -380,15 +372,10 @@ const Credentails = () => {
                         label="Section"
                       />
                       <Popper
-                        style={{ width: "70%" }}
                         id={"sectionPopper"}
                         open={!!sectionPopper}
                         anchorEl={sectionPopper}>
-                        <FormControl
-                          variant="outlined"
-                          size="small"
-                          fullWidth
-                          sx={{ m: 1, width: "100%" }}>
+                        <FormControl variant="outlined" size="small" fullWidth>
                           <Autocomplete
                             multiple
                             onBlur={() => setSectionPopper(null)}
@@ -453,14 +440,10 @@ const Credentails = () => {
                       />
 
                       <Popper
-                        style={{ width: "70%" }}
                         id={"contactsPopper"}
                         open={!!contactsPopper}
                         anchorEl={contactsPopper}>
-                        <FormControl
-                          variant="outlined"
-                          size="small"
-                          sx={{ m: 1, width: "100%" }}>
+                        <FormControl variant="outlined" size="small" fullWidth>
                           <Autocomplete
                             multiple
                             onBlur={() => setContactsPopper(null)}
@@ -549,51 +532,10 @@ const Credentails = () => {
                     }}
                   />
                   <Popper
-                    style={{ width: "70%" }}
                     id={"employeePopper"}
                     open={!!employeeListPopper}
                     anchorEl={employeeListPopper}>
                     <FormControl variant="outlined" fullWidth size="small">
-                      {/* <Autocomplete
-                        onBlur={() => setEmployeeListPopper(null)}
-                        open={true}
-                        value={employeeAutoSelect}
-                        multiple
-                        onChange={handleEmployeeAuto}
-                        isOptionEqualToValue={(option, value) =>
-                          option._id === value._id
-                        }
-                        options={[
-                          {
-                            _id: "all",
-                            basicInfo: { name: "All" },
-                          },
-                          ...employees,
-                        ]}
-                        disableCloseOnSelect
-                        getOptionLabel={(option) =>
-                          `${option?.basicInfo.name} (${option?.contactNumber})`
-                        }
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              checked={selected}
-                            />
-                            {`${option?.basicInfo.name} (${option?.contactNumber})`}
-                          </li>
-                        )}
-                        renderInput={(params) => (
-                          <StyledInput
-                            ref={params.InputProps.ref}
-                            inputProps={params.inputProps}
-                            placeholder="Employees"
-                            autoFocus
-                          />
-                        )}
-                      /> */}
-
                       <Autocomplete
                         onBlur={() => setEmployeeListPopper(null)}
                         open={true}
@@ -670,7 +612,6 @@ const Credentails = () => {
                       label="Class"
                     />
                     <Popper
-                      style={{ width: "70%" }}
                       id={"classPopper"}
                       open={!!classPopper}
                       anchorEl={classPopper}>
@@ -724,7 +665,6 @@ const Credentails = () => {
                       label="Section"
                     />
                     <Popper
-                      style={{ width: "70%" }}
                       id={"sectionPopper"}
                       open={!!sectionPopper}
                       anchorEl={sectionPopper}>
@@ -793,14 +733,10 @@ const Credentails = () => {
                     />
 
                     <Popper
-                      style={{ width: "70%" }}
                       id={"contactsPopper"}
                       open={!!contactsPopper}
                       anchorEl={contactsPopper}>
-                      <FormControl
-                        variant="outlined"
-                        size="small"
-                        sx={{ m: 1, width: "100%" }}>
+                      <FormControl variant="outlined" size="small" fullWidth>
                         <Autocomplete
                           multiple
                           onBlur={() => setContactsPopper(null)}
@@ -885,50 +821,10 @@ const Credentails = () => {
                       }}
                     />
                     <Popper
-                      style={{ width: "70%" }}
                       id={"employeePopper"}
                       open={!!employeeListPopper}
                       anchorEl={employeeListPopper}>
                       <FormControl variant="outlined" fullWidth size="small">
-                        {/* <Autocomplete
-                          onBlur={() => setEmployeeListPopper(null)}
-                          open={true}
-                          value={employeeAutoSelect}
-                          multiple
-                          onChange={handleEmployeeAuto}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          options={[
-                            {
-                              _id: "all",
-                              basicInfo: { name: "All" },
-                            },
-                            ...employees,
-                          ]}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            `${option?.basicInfo.name} (${option?.contactNumber})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                checked={selected}
-                              />
-                              {`${option?.basicInfo.name} (${option?.contactNumber})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Employees"
-                              autoFocus
-                            />
-                          )}
-                        /> */}
                         <Autocomplete
                           onBlur={() => setEmployeeListPopper(null)}
                           open={true}
