@@ -194,13 +194,21 @@ export default function CustomTable({
                             alignItems: "center",
                             columnGap: "5px",
                           }}>
-                          {actions.includes("edit") && (
+                          {/* {actions.includes("edit") && (
                             <Tooltip title="Edit">
                               <IconButton onClick={() => onEditClick(data)}>
                                 <EditIcon color="primary" fontSize="small" />
                               </IconButton>
                             </Tooltip>
-                          )}
+                          )} */}
+                          {actions.includes("edit") &&
+                            !data.checkOut && ( // Check if 'edit' action is included and 'checkOut' is not present
+                              <Tooltip title="Edit">
+                                <IconButton onClick={() => onEditClick(data)}>
+                                  <EditIcon color="primary" fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
                           {actions.includes("delete") && (
                             <Tooltip title="Delete">
                               <IconButton
