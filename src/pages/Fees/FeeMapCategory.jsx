@@ -181,7 +181,6 @@ export default function FeeMapCategory() {
     if (Formik.values.name) {
       getFeeMaps();
     }
-    getReceipts();
   }, [selectedSetting, Formik.values.name]);
 
   useEffect(() => {
