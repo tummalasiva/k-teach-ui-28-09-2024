@@ -201,7 +201,6 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )}
-
                           {actions.includes("delete") && (
                             <Tooltip title="Delete">
                               <IconButton
@@ -210,7 +209,6 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )}
-
                           {actions.includes("view") && (
                             <Tooltip title="View">
                               <IconButton onClick={() => onViewClick(data)}>
@@ -231,7 +229,6 @@ export default function CustomTable({
                               </Button>
                             </Tooltip>
                           )}
-
                           {actions.includes("switch") && (
                             <Tooltip title={getTooltipTitle(data)}>
                               <IconButton
@@ -244,7 +241,6 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )}
-
                           {actions.includes("custom") && (
                             <CustomAction
                               onEditClick={onEditClick}
