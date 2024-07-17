@@ -228,6 +228,8 @@ export default function AddUpdateFeeMap({
     setAddForm({});
     getFeeMaps();
     setOpen(false);
+    setDependencies([]);
+    setInstallments([]);
   };
 
   useEffect(() => {

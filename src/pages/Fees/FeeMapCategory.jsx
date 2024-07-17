@@ -43,7 +43,7 @@ export default function FeeMapCategory() {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: { schoolId: selectedSetting._id, search: { active: true } },
       });
-      // console.log(data, "cat");
+      console.log(data, "cat");
       setFeeMaps(data.result.map((f) => ({ label: f.name, value: f._id })));
       Formik.setFieldValue("feeMap", data.result[0]._id);
     } catch (error) {}
@@ -96,7 +96,7 @@ export default function FeeMapCategory() {
   useEffect(() => {
     getReceipts();
     getFeeMaps();
-  }, []);
+  }, [selectedSetting]);
 
   useEffect(() => {
     if (Formik.values.name) {
@@ -133,7 +133,7 @@ export default function FeeMapCategory() {
             name="feeMap"
             formik={Formik}
             label="Select Fee Maps"
-            // options={""}
+            options={feeMaps}
           />
         </Grid>
         <Grid xs={12} md={6} lg={3} item>

@@ -280,7 +280,7 @@ export default function VisitorInfo() {
     setModalData({ ...modalData, open: false });
   };
 
-  console.log(data, "mmmmmm");
+  // console.log(data, "mmmmmm");
 
   return (
     <>
