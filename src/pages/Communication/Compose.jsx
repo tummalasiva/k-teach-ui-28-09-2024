@@ -34,6 +34,7 @@ import { LoadingButton } from "@mui/lab";
 import PageHeader from "../../components/PageHeader";
 import FileSelect from "../../forms/FileSelect";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -325,11 +326,38 @@ const Compose = () => {
     setNotifyChecked(e.target.checked);
   };
 
+  const resetForm = () => {
+    setSmsFrom({
+      sms: state
+        ? state.message
+        : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards Webspruce.`,
+    });
+    setSelectRoles([]);
+    setSelectClass("");
+    setSelectSection("");
+    setSelectContacts([]);
+    setSelectEmployee([]);
+    setReceiverType("");
+  };
+
+  const handleSubmitSms = async (e) => {
+    e.preventDefault();
+    setSendingMessage(true);
+    try {
+      toast.success("Message sent successfully");
+      resetForm();
+      setSendingMessage(false);
+    } catch (error) {
+      setSendingMessage(false);
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Compose" />
 
-      <form>
+      <form onSubmit={handleSubmitSms}>
         <Card sx={{ padding: "10px", mb: 1 }}>
           <Box
             sx={{

@@ -26,6 +26,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import PageHeader from "../../components/PageHeader";
+import { LoadingButton } from "@mui/lab";
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
@@ -79,6 +80,7 @@ const Credentails = () => {
   const [contacts, setContacts] = useState([]);
   const [selectedStudentCount, setSelectedStudentCount] = useState(0);
   const [selectedEmployeeCount, setSelectedEmployeeCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getRoles = async () => {
@@ -245,6 +247,22 @@ const Credentails = () => {
     return role && role.name.includes("STUDENT");
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      toast.success("Message sent successfully");
+      setSelectRoles([]);
+      setSelectClass("");
+      setSelectSection("");
+      setSelectContacts([]);
+      setSelectEmployee([]);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Credentials" />
@@ -254,7 +272,7 @@ const Credentails = () => {
             padding: "15px",
             width: { xs: "100%", sm: "100%", md: "70%", lg: "50%" },
           }}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12} lg={12}>
                 <FormControl variant="outlined" fullWidth required>
@@ -773,62 +791,6 @@ const Credentails = () => {
                         ),
                       }}
                     />
-                    {/* 
-                    <Popper
-                      style={{ width: "70%" }}
-                      id={"contactsPopper"}
-                      open={!!contactsPopper}
-                      anchorEl={contactsPopper}>
-                      <FormControl variant="outlined" fullWidth size="small">
-                        <Autocomplete
-                          multiple
-                          onBlur={() => setContactsPopper(null)}
-                          open={true}
-                          value={contactsAutoSelect}
-                          onChange={handleContactsList}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          id="checkboxes-tags-demo"
-                          options={[
-                            {
-                              _id: "all",
-                              basicInfo: {
-                                name: "All",
-                              },
-                              contactNumber: "",
-                            },
-                            ...students,
-                          ]}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            option._id === "all"
-                              ? "All"
-                              : `${option.basicInfo.name} (${option.contactNumber})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                              />
-
-                              {`${option.basicInfo.name} (${option.contactNumber})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Students"
-                              autoFocus
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Popper> */}
 
                     <Popper
                       style={{ width: "70%" }}
@@ -1028,9 +990,13 @@ const Credentails = () => {
               )}
 
               <Grid item xs={12} md={12} lg={6} container>
-                <Button variant="contained" size="small" type="submit">
+                <LoadingButton
+                  loading={loading}
+                  variant="contained"
+                  size="small"
+                  type="submit">
                   Send Credentials
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </form>
