@@ -14,6 +14,35 @@ import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 import { toast } from "react-toastify";
+import AddFeeMapCategory from "./AddFeeMapCategory";
+
+const showInfo = (data) => {
+  let result = [];
+
+  for (let dep of data.dependencies) {
+    if (["class"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class`;
+      result.push(newItem);
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
+      result.push(newItem);
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
+      result.push(newItem);
+    } else if (dep === "hostel") {
+      let newItem = `[${data.hostel?.name}]-Hostel`;
+      result.push(newItem);
+    } else if (dep == "transport") {
+      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    } else if (dep == "pickType") {
+      let newItem = `[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    }
+  }
+
+  return result.join(" | ");
+};
 
 export default function FeeMapCategory() {
   const { selectedSetting } = useContext(SettingContext);
@@ -24,7 +53,6 @@ export default function FeeMapCategory() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-
   const [categories, setCategories] = useState([
     {
       id: 1,
@@ -45,34 +73,6 @@ export default function FeeMapCategory() {
   const removeCategory = (id) => {
     let newCategories = categories.filter((c) => c.id !== id);
     setCategories(newCategories);
-  };
-
-  const showInfo = (data) => {
-    let result = [];
-
-    for (let dep of data.dependencies) {
-      if (["class"].includes(dep)) {
-        let newItem = `[${data.class?.name}]-Class`;
-        result.push(newItem);
-      } else if (["classOld"].includes(dep)) {
-        let newItem = `[${data.class?.name}]-Class-Old`;
-        result.push(newItem);
-      } else if (["classNew"].includes(dep)) {
-        let newItem = `[${data.class?.name}]-Class-New`;
-        result.push(newItem);
-      } else if (dep === "hostel") {
-        let newItem = `[${data.hostel?.name}]-Hostel`;
-        result.push(newItem);
-      } else if (dep == "transport") {
-        let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
-        result.push(newItem);
-      } else if (dep == "pickType") {
-        let newItem = `[${data.pickType}]-Pick_Type`;
-        result.push(newItem);
-      }
-    }
-
-    return result.join(" | ");
   };
 
   // get Receipt list
@@ -145,16 +145,21 @@ export default function FeeMapCategory() {
           payload
         );
       } else {
-        if (categories.find((c) => !c.name || c.amount))
+        if (categories.find((c) => !c.name || !c.amount))
           return toast.error(
             "Please mention name and amount for each category"
           );
-        const { data } = await post(PRIVATE_URLS.feeMapCategory.create, {
-          feeMapId: Formik.values.feeMap,
-          categories,
-        });
+        const { data } = await post(
+          PRIVATE_URLS.feeMapCategory.createMultiple,
+          {
+            schoolId: selectedSetting._id,
+            feeMapId: Formik.values.feeMap,
+            categories,
+          }
+        );
       }
       handleClose();
+      handleCloseAddModel();
     } catch (error) {
       console.log(error);
     }
@@ -188,6 +193,18 @@ export default function FeeMapCategory() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+  };
+
+  const handleCloseAddModel = () => {
+    setOpenAddModal(false);
+    setCategories([
+      {
+        id: 1,
+        name: "Category 1",
+        amount: 1,
+        description: "",
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -240,7 +257,7 @@ export default function FeeMapCategory() {
         feeMapTableKeys
       />
 
-      {/* Add/Update Fee map Category ========= */}
+      {/* Update Fee map Category ========= */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -279,42 +296,16 @@ export default function FeeMapCategory() {
       </FormModal>
 
       {/* Add Fee Map category modal */}
-      <FormModal
+      <AddFeeMapCategory
         open={openAddModal}
-        formik={entryFormik}
-        formTitle={"Add Fee Map Category"}
-        onClose={() => setOpenAddModal(false)}
-        submitButtonTitle={"Submit"}
-        adding={loading}>
-        {categories.map((c, i) => (
-          <Grid key={c.id} rowSpacing={0} columnSpacing={2} container>
-            <Grid xs={12} sm={6} md={4} item>
-              <FormInput
-                formik={entryFormik}
-                name="name"
-                label="Name"
-                required={true}
-              />
-            </Grid>
-            <Grid xs={12} sm={6} md={4} item>
-              <FormInput
-                formik={entryFormik}
-                name="description"
-                label="Description"
-              />
-            </Grid>
-            <Grid xs={12} sm={6} md={4} item>
-              <FormInput
-                formik={entryFormik}
-                name="amount"
-                label="Amount"
-                type="number"
-                required={true}
-              />
-            </Grid>
-          </Grid>
-        ))}
-      </FormModal>
+        adding={loading}
+        categories={categories}
+        setCategories={setCategories}
+        addCategory={addCategory}
+        removeCategory={removeCategory}
+        onClose={handleCloseAddModel}
+        onSubmit={() => entryFormik.handleSubmit()}
+      />
     </>
   );
 }
