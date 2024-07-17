@@ -20,6 +20,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import AssignmentViewModel from "./AssignmentViewModal";
 
 const CustomActionDownload = ({ data = {} }) => {
+  console.log(data, "kkk");
   const handleClick = () => {
     try {
       if (data.file) {
