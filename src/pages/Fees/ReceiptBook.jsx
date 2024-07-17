@@ -179,7 +179,6 @@ export default function ReceiptBook() {
 
   const handleTabChange = (e, newValue) => {
     setSelectValue(newValue);
-    getData();
   };
 
   const handleClickOpen = () => {
@@ -342,7 +341,7 @@ export default function ReceiptBook() {
         </Grid>
 
         <CustomTable
-          actions={["edit", "switch"]}
+          actions={["edit", "switch", "view"]}
           bodyDataModal="Fee Map"
           bodyData={feeMaps}
           tableKeys={feeMapTableKeys}
