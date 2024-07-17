@@ -98,7 +98,7 @@ const Compose = () => {
   const [smsFrom, setSmsFrom] = useState({
     sms: state
       ? state.message
-      : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards EXCELLENT SCHOOL VIJAYAPURA.`,
+      : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards Webspruce.`,
   });
 
   const [contacts, setContacts] = useState([]);
