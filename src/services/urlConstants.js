@@ -219,6 +219,7 @@ export const PRIVATE_URLS = {
     create: "/visitorInfo/create",
     update: "/visitorInfo/update",
     delete: "/visitorInfo/delete",
+    updateCheckout: "/visitorInfo/updateCheckout",
   },
 
   studentCheckout: {
@@ -362,6 +363,7 @@ export const PRIVATE_URLS = {
     toggleActiveStatus: "/feeMap/toggleActiveStatus",
   },
   receipt: {
+    getStudentsList: "/receipt/getStudentsList",
     getFeeDetails: "/receipt/getFeeDetails",
     collectFees: "/receipt/collectFees",
     previewReceipt: "/receipt/previewReceipt",

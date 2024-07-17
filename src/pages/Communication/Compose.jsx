@@ -34,6 +34,7 @@ import { LoadingButton } from "@mui/lab";
 import PageHeader from "../../components/PageHeader";
 import FileSelect from "../../forms/FileSelect";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -98,7 +99,7 @@ const Compose = () => {
   const [smsFrom, setSmsFrom] = useState({
     sms: state
       ? state.message
-      : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards EXCELLENT SCHOOL VIJAYAPURA.`,
+      : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards Webspruce.`,
   });
 
   const [contacts, setContacts] = useState([]);
@@ -125,27 +126,6 @@ const Compose = () => {
 
   const [balance, setBalance] = useState("");
 
-  // const handleEmployeeAuto = (event, val) => {
-  //   setEmployeeAutoSelect(val);
-  //   if (val.filter((v) => v._id == "all").length) {
-  //     setSelectEmployee("All");
-  //     setSelectedEmployeeCount(employees.length);
-  //     return;
-  //   }
-  //   const selectedEmployees = val.filter((emp) => emp._id !== "all");
-
-  //   setSelectedEmployeeCount(selectedEmployees.length);
-
-  //   if (selectedEmployees.length === employees.length) {
-  //     setSelectEmployee("All");
-  //   } else {
-  //     setSelectEmployee(
-  //       selectedEmployees.map((emp) => emp.basicInfo.name).join(", ")
-  //     );
-  //   }
-
-  //   setEmployeeAutoSelect(val);
-  // };
   const handleEmployeeAuto = (event, val) => {
     const findAll = val.some((item) => item._id === "all");
 
@@ -237,17 +217,15 @@ const Compose = () => {
   };
 
   const handleRoleChange = async (e) => {
+    handleFormChange(e);
+    const role = e.target.value;
     try {
-      const {
-        target: { value },
-      } = e;
-      setSelectRoles(typeof value === "string" ? value.split(",") : value);
       const { data } = await get(PRIVATE_URLS.employee.list, {
         params: {
           schoolId: selectedSetting._id,
           search: {
             role: {
-              $in: value,
+              $in: role,
             },
           },
         },
@@ -348,11 +326,38 @@ const Compose = () => {
     setNotifyChecked(e.target.checked);
   };
 
+  const resetForm = () => {
+    setSmsFrom({
+      sms: state
+        ? state.message
+        : `Dear {{VAR}}, We would like to inform you {{VAR1}},{{VAR2}},{{VAR3}},{{VAR4}},{{VAR5}} Regards Webspruce.`,
+    });
+    setSelectRoles([]);
+    setSelectClass("");
+    setSelectSection("");
+    setSelectContacts([]);
+    setSelectEmployee([]);
+    setReceiverType("");
+  };
+
+  const handleSubmitSms = async (e) => {
+    e.preventDefault();
+    setSendingMessage(true);
+    try {
+      toast.success("Message sent successfully");
+      resetForm();
+      setSendingMessage(false);
+    } catch (error) {
+      setSendingMessage(false);
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Compose" />
 
-      <form>
+      <form onSubmit={handleSubmitSms}>
         <Card sx={{ padding: "10px", mb: 1 }}>
           <Box
             sx={{
@@ -750,11 +755,10 @@ const Compose = () => {
                         id="demo-simple-select-filled"
                         name="role"
                         sx={{ marginBottom: "15px" }}
-                        multiple
                         label="Role"
                         size="small"
                         onChange={handleRoleChange}
-                        value={selectRoles}>
+                        value={smsFrom.role}>
                         {roles &&
                           roles
                             .filter((r) => r.name?.toLowerCase() !== "student")
@@ -770,7 +774,7 @@ const Compose = () => {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={12} md={3} lg={3}>
+                  {/* <Grid item xs={12} md={3} lg={3}>
                     <TextField
                       fullWidth
                       value={selectEmployee}
@@ -796,45 +800,6 @@ const Compose = () => {
                       open={!!employeeListPopper}
                       anchorEl={employeeListPopper}>
                       <FormControl variant="outlined" fullWidth size="small">
-                        {/* <Autocomplete
-                          onBlur={() => setEmployeeListPopper(null)}
-                          open={true}
-                          value={employeeAutoSelect}
-                          multiple
-                          onChange={handleEmployeeAuto}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          options={[
-                            {
-                              _id: "all",
-                              basicInfo: { name: "All" },
-                            },
-                            ...employees,
-                          ]}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            `${option?.basicInfo.name} (${option?.contactNumber})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                checked={selected}
-                              />
-                              {`${option?.basicInfo.name} (${option?.contactNumber})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Employees"
-                              autoFocus
-                            />
-                          )}
-                        /> */}
                         <Autocomplete
                           onBlur={() => setEmployeeListPopper(null)}
                           open={true}
@@ -889,8 +854,47 @@ const Compose = () => {
                         />
                       </FormControl>
                     </Popper>
-                  </Grid>
+                  </Grid> */}
                 </>
+              )}
+
+              {smsFrom.role && receiverType === "user" && (
+                <Grid item xs={12} md={3} lg={3}>
+                  <FormControl required={true} fullWidth>
+                    <Autocomplete
+                      multiple
+                      fullWidth
+                      size="small"
+                      onChange={handleContactsList}
+                      id="checkboxes-tags-demo"
+                      options={employees}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) =>
+                        `${option.basicInfo.name} (${option.contactNumber})`
+                      }
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {`${option.basicInfo.name} (${option.contactNumber})`}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          size="small"
+                          fullWidth
+                          {...params}
+                          label="Employees"
+                          placeholder="Favorites"
+                        />
+                      )}
+                    />
+                  </FormControl>
+                </Grid>
               )}
             </Grid>
           </Box>

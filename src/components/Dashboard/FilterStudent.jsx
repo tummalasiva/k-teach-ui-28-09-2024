@@ -44,9 +44,9 @@ export default function FilterStudent() {
         const { data } = await get(PRIVATE_URLS.section.list, {
           params: {
             schoolId: selectedSetting._id,
-            search: {
-              search: { class: entryFormik.values.class },
-            },
+            // search: {
+            //   search: { class: entryFormik.values.class },
+            // },
           },
         });
 

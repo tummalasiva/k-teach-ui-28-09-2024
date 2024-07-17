@@ -26,6 +26,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import PageHeader from "../../components/PageHeader";
+import { LoadingButton } from "@mui/lab";
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
@@ -79,6 +80,7 @@ const Credentails = () => {
   const [contacts, setContacts] = useState([]);
   const [selectedStudentCount, setSelectedStudentCount] = useState(0);
   const [selectedEmployeeCount, setSelectedEmployeeCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getRoles = async () => {
@@ -218,28 +220,6 @@ const Credentails = () => {
     } catch (error) {}
   };
 
-  // const handleEmployeeAuto = (event, val) => {
-  //   setEmployeeAutoSelect(val);
-  //   if (val.filter((v) => v._id == "all").length) {
-  //     setSelectEmployee("All");
-  //     setSelectedEmployeeCount(employees.length);
-  //     return;
-  //   }
-  //   const selectedEmployees = val.filter((emp) => emp._id !== "all");
-
-  //   setSelectedEmployeeCount(selectedEmployees.length);
-
-  //   if (selectedEmployees.length === employees.length) {
-  //     setSelectEmployee("All");
-  //   } else {
-  //     setSelectEmployee(
-  //       selectedEmployees.map((emp) => emp.basicInfo.name).join(", ")
-  //     );
-  //   }
-
-  //   setEmployeeAutoSelect(val);
-  // };
-
   const handleEmployeeAuto = (event, val) => {
     const findAll = val.some((item) => item._id === "all");
 
@@ -267,6 +247,22 @@ const Credentails = () => {
     return role && role.name.includes("STUDENT");
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      toast.success("Message sent successfully");
+      setSelectRoles([]);
+      setSelectClass("");
+      setSelectSection("");
+      setSelectContacts([]);
+      setSelectEmployee([]);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Credentials" />
@@ -276,7 +272,7 @@ const Credentails = () => {
             padding: "15px",
             width: { xs: "100%", sm: "100%", md: "70%", lg: "50%" },
           }}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12} lg={12}>
                 <FormControl variant="outlined" fullWidth required>
@@ -801,7 +797,10 @@ const Credentails = () => {
                       id={"contactsPopper"}
                       open={!!contactsPopper}
                       anchorEl={contactsPopper}>
-                      <FormControl variant="outlined" fullWidth size="small">
+                      <FormControl
+                        variant="outlined"
+                        size="small"
+                        sx={{ m: 1, width: "100%" }}>
                         <Autocomplete
                           multiple
                           onBlur={() => setContactsPopper(null)}
@@ -816,7 +815,7 @@ const Credentails = () => {
                             {
                               _id: "all",
                               basicInfo: {
-                                name: "All",
+                                name: `All (${students.length})`,
                               },
                               contactNumber: "",
                             },
@@ -825,7 +824,7 @@ const Credentails = () => {
                           disableCloseOnSelect
                           getOptionLabel={(option) =>
                             option._id === "all"
-                              ? "All"
+                              ? `All (${students.length})`
                               : `${option.basicInfo.name} (${option.contactNumber})`
                           }
                           renderOption={(props, option, { selected }) => (
@@ -834,19 +833,31 @@ const Credentails = () => {
                                 icon={icon}
                                 checkedIcon={checkedIcon}
                                 style={{ marginRight: 8 }}
-                                checked={selected}
+                                checked={
+                                  selected ||
+                                  (option._id === "all" &&
+                                    contactsAutoSelect.length ===
+                                      students.length)
+                                }
                               />
-
-                              {`${option.basicInfo.name} (${option.contactNumber})`}
+                              {option._id === "all"
+                                ? `All (${students.length})`
+                                : `${option.basicInfo.name} (${option.contactNumber})`}
                             </li>
                           )}
                           renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Students"
-                              autoFocus
-                            />
+                            <Box
+                              sx={{
+                                ml: 5,
+                                width: "100%",
+                              }}>
+                              <StyledInput
+                                ref={params.InputProps.ref}
+                                inputProps={params.inputProps}
+                                placeholder="Search student with name"
+                                autoFocus
+                              />
+                            </Box>
                           )}
                         />
                       </FormControl>
@@ -979,9 +990,13 @@ const Credentails = () => {
               )}
 
               <Grid item xs={12} md={12} lg={6} container>
-                <Button variant="contained" size="small" type="submit">
+                <LoadingButton
+                  loading={loading}
+                  variant="contained"
+                  size="small"
+                  type="submit">
                   Send Credentials
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </form>

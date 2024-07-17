@@ -184,7 +184,7 @@ export default function VisitorInfo() {
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
-          PRIVATE_URLS.visitorInfo.update + "/" + dataToEdit._id,
+          PRIVATE_URLS.visitorInfo.updateCheckout + "/" + dataToEdit._id,
           payload
         );
         getData();
@@ -211,11 +211,13 @@ export default function VisitorInfo() {
       reasonToMeet: dataToEdit?.reasonToMeet || "",
       note: dataToEdit?.note || "",
 
-      checkOut: dataToEdit?.checkOut
-        ? moment(dataToEdit.checkOut, "DD/MM/YYYY, HH:mm:ss").format(
-            "YYYY-MM-DDTHH:mm"
-          )
-        : "",
+      // checkOut: dataToEdit?.checkOut
+      //   ? moment(dataToEdit.checkOut, "DD/MM/YYYY, HH:mm:ss").format(
+      //       "YYYY-MM-DDTHH:mm"
+      //     )
+      //   : "",
+
+      checkOut: dataToEdit?.checkOut || null,
 
       class: dataToEdit?.class?._id || "",
       section: dataToEdit?.section?._id || "",
@@ -329,7 +331,7 @@ export default function VisitorInfo() {
         formik={entryFormik}
         formTitle={dataToEdit ? "Update Visitor Info" : "Add Visitor Info"}
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Submit"}
+        submitButtonTitle={dataToEdit ? "Check Out" : "Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
@@ -439,13 +441,26 @@ export default function VisitorInfo() {
                 />
               </Grid>
               <Grid xs={12} md={6} lg={6} item>
-                <FormInput
-                  formik={entryFormik}
+                <TextField
+                  value={dataToEdit?.checkOut}
+                  fullWidth
                   label="Check Out"
                   name="checkOut"
-                  type="datetime-local"
+                  disabled={dataToEdit != null}
                   InputLabelProps={{
                     shrink: true,
+                  }}
+                  sx={{
+                    mt: 2,
+                    borderWidth: 1,
+                    borderRadius: (theme) => theme.shape.borderRadius,
+                  }}
+                  InputProps={{
+                    style: {
+                      borderWidth: 1,
+                      height: "42px",
+                      borderRadius: (theme) => theme.shape.borderRadius,
+                    },
                   }}
                 />
               </Grid>
