@@ -81,7 +81,6 @@ const CustomActionFee = ({
   onNavigateFeeMap = () => {},
 }) => {
   const [loading, setLoading] = useState(false);
-  console.log(data, "kakakakak");
   const updateStatus = async () => {
     try {
       setLoading(true);
@@ -133,7 +132,6 @@ export default function ReceiptBook() {
   const [openFeeMap, setOpenFeeMap] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
   // const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
-  console.log(selectedReceiptId, "selectedReceiptId");
 
   // get fee map list
   const getFeeMaps = async () => {
@@ -141,7 +139,7 @@ export default function ReceiptBook() {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: {
           schoolId: selectedSetting._id,
-          Search: { receiptTitle: selectedReceiptId },
+          search: { receiptTitle: selectedReceiptId },
         },
       });
       setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
@@ -171,7 +169,7 @@ export default function ReceiptBook() {
     if (selectedReceiptId) {
       getFeeMaps();
     }
-  }, [selectedReceiptId]);
+  }, [selectedReceiptId, selectedSetting._id]);
 
   useEffect(() => {
     getReceipts();
