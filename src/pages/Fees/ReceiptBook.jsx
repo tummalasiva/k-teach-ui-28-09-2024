@@ -222,7 +222,7 @@ export default function ReceiptBook() {
       const { data } = await put(
         PRIVATE_URLS.feeMap.toggleActiveStatus + "/" + d._id
       );
-      console.log(data, "data");
+      // console.log(data, "data");
       getFeeMaps();
     } catch (error) {
       console.error(error);

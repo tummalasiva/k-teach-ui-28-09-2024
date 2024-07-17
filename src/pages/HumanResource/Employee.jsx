@@ -46,7 +46,7 @@ export default function Employee() {
         },
       });
 
-      console.log(data.result, "employyeee");
+      // console.log(data.result, "employyeee");
       setAllEmployee(data.result);
 
       const activeData = data.result

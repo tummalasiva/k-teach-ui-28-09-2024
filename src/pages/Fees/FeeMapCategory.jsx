@@ -9,7 +9,7 @@ import FormSelect from "../../forms/FormSelect";
 import { feeMapCategoryTableKeys } from "../../data/tableKeys/feeMapCategoryData";
 import { Add } from "@mui/icons-material";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get, post, put } from "../../services/apiMethods";
+import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
@@ -107,13 +107,14 @@ export default function FeeMapCategory() {
     }
   };
 
+  // get fee map category list
   const handleGetFeeCategories = async (values) => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMapCategory.list, {
         params: {
           schoolId: selectedSetting._id,
           search: {
-            feeMap: values.feeMap,
+            feeMap: values?.feeMap,
           },
         },
       });
@@ -200,6 +201,8 @@ export default function FeeMapCategory() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    handleGetFeeCategories();
+    Formik.resetForm();
   };
 
   const handleCloseAddModel = () => {
@@ -219,6 +222,21 @@ export default function FeeMapCategory() {
       Formik.handleSubmit();
     }
   }, [Formik.values.feeMap, selectedSetting._id]);
+
+  const handleFeeMapCategoryEdit = (data) => {
+    // console.log(data, "editcat");
+    setOpen(true);
+    setDataToEdit(data);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await del(PRIVATE_URLS.feeMapCategory.delete + "/" + id);
+      handleGetFeeCategories();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -262,6 +280,8 @@ export default function FeeMapCategory() {
         bodyData={data}
         tableKeys={feeMapCategoryTableKeys}
         feeMapTableKeys
+        onEditClick={handleFeeMapCategoryEdit}
+        onDeleteClick={handleDelete}
       />
 
       {/* Update Fee map Category ========= */}
