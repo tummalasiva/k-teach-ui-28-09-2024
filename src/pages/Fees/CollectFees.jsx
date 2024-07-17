@@ -14,16 +14,22 @@ const showInfo = (data) => {
   let result = [];
 
   for (let dep of data.dependencies) {
-    if (dep === "class") {
-      let newItem = `[${data.class?.className}]-Class`;
+    if (["class"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class`;
       result.push(newItem);
-    } else if (dep === "room") {
-      let newItem = `[${data.room?.hostel.name}]+[${data.room?.totalSeats} Beds]+[${data.room?.type?.name}]-Room`;
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
       result.push(newItem);
-    } else if (dep == "route") {
-      let newItem = `[${data.route.vehicleNumber.vehicleNumber}]+[${data.route.transportRouteTitle}]+[${data.route.routeStart}-${data.route.routeEnd}]`;
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
       result.push(newItem);
-    } else if (dep == "pickType") {
+    } else if (["hostel"].includes(dep)) {
+      let newItem = `[${data.hostel?.name}]-Hostel`;
+      result.push(newItem);
+    } else if (["transport"].includes(dep)) {
+      let newItem = `[${data?.route?.vehicle?.number}]+[${data?.route?.title}]-Transport-[${data?.stop?.name}]-Stop-[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    } else if (["pickType"].includes(dep)) {
       let newItem = `[${data.pickType}]-Pick_Type`;
       result.push(newItem);
     }
@@ -35,18 +41,18 @@ const showInfo = (data) => {
 export default function CollectFees() {
   const [data, setData] = useState([]);
   const { selectedSetting } = useContext(SettingContext);
-
   const [receiptTitles, setReceiptTitles] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const [students, setStudents] = useState([]);
-  const [selectStudent, setSelectStudent] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const [feeDetails, setFeeDetails] = useState(null);
   const [paymentData, setPaymentData] = useState({});
   const [totalAmountToBePaid, setTotalAmountToBePaid] = useState(0);
   const [selectedPastDueIds, setSelectedPastDueIds] = useState([]);
   const [downloadingReceipt, setDownloadingReceipt] = useState(false);
+  const [feeParticular, setFeeParticulars] = useState([]);
   const [itemDetails, setItemDetails] = useState([]);
   const [fetchingStudents, setFetchingStudents] = useState(false);
 
@@ -60,7 +66,7 @@ export default function CollectFees() {
         {
           params: {
             feeMapId: entryFormik.values.feeMap,
-            studentId: selectStudent._id,
+            studentId: selectedStudent._id,
             receiptTitleId: entryFormik.values.receiptName,
             installmentId:
               entryFormik.values.installmentId ||
@@ -69,14 +75,17 @@ export default function CollectFees() {
           },
         }
       );
-      setFeeDetails(feeReceipt.result);
-      setItemDetails(
-        feeReceipt.result.feeMapCategories.map((d) => ({
-          name: d.name,
-          amount: Number(d.amount),
-          description: d.description,
-        }))
-      );
+
+      console.log(feeReceipt.result, "fee details");
+
+      // setFeeDetails(feeReceipt.result);
+      // setItemDetails(
+      //   feeReceipt.result.feeMapCategories.map((d) => ({
+      //     name: d.name,
+      //     amount: Number(d.amount),
+      //     description: d.description,
+      //   }))
+      // );
     } catch (error) {
       console.log(error);
     }
@@ -101,15 +110,13 @@ export default function CollectFees() {
       const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
         params: {
           search: { active: true },
+          schoolId: selectedSetting._id,
         },
       });
       setReceiptTitles(
         data.result.map((d) => ({ ...d, label: d.name, value: d._id }))
       );
-      entryFormik.setFieldValue(
-        "receiptName",
-        data.result[0] ? data.result[0]._id : ""
-      );
+      entryFormik.setFieldValue("receiptName", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -119,51 +126,13 @@ export default function CollectFees() {
     getAllReceiptTitles();
   }, [selectedSetting._id]);
 
-  const getAllFeeMaps = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.feeMap.list, {
-        params: { search: { active: true }, schoolId: selectedSetting._id },
-      });
-      setFeeMaps(
-        data.result.map((d) => ({ ...d, name: showInfo(d), value: d._id }))
-      );
-      entryFormik.setFieldValue(
-        "feeMap",
-        data.result[0] ? data.result[0]._id : ""
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (entryFormik.values.receiptName) {
-      getAllFeeMaps();
-    }
-  }, [entryFormik.values.receiptName, selectedSetting._id]);
-
   const getClasses = async () => {
     try {
-      const { data } = await get(PRIVATE_URLS.class.list, {
-        params: {
-          schoolId: selectedSetting._id,
-        },
-      });
+      const { data } = await get(PRIVATE_URLS.class.list);
       setClasses(
         data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
       );
-      if (entryFormik.values.feeMap) {
-        let feeMap = feeMaps.filter(
-          (f) => f._id == entryFormik.values.feeMap
-        )[0];
-        if (feeMap.dependencies.includes("class")) {
-          return entryFormik.setFieldValue("class", feeMap.class?._id);
-        }
-      }
-      entryFormik.setFieldValue(
-        "class",
-        data.result[0] ? data.result[0]._id : ""
-      );
+      entryFormik.setFieldValue("class", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -172,7 +141,7 @@ export default function CollectFees() {
   // get all classes
   useEffect(() => {
     getClasses();
-  }, [selectedSetting._id, entryFormik.values.feeMap]);
+  }, []);
 
   const getSections = async () => {
     try {
@@ -182,10 +151,7 @@ export default function CollectFees() {
       setSections(
         data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
       );
-      entryFormik.setFieldValue(
-        "section",
-        data.result[0] ? data.result[0]._id : ""
-      );
+      entryFormik.setFieldValue("section", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -197,39 +163,61 @@ export default function CollectFees() {
     }
   }, [entryFormik.values.class]);
 
+  const getAllFeeMaps = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.feeMap.list, {
+        params: {
+          search: {
+            active: true,
+            receiptTitle: entryFormik.values.receiptName,
+            class: entryFormik.values.class,
+          },
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      setFeeMaps(
+        data.result.map((d) => ({ ...d, label: showInfo(d), value: d._id }))
+      );
+      entryFormik.setFieldValue("feeMap", data.result[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (entryFormik.values.receiptName && entryFormik.values.class) {
+      getAllFeeMaps();
+    }
+  }, [
+    entryFormik.values.receiptName,
+    entryFormik.values.class,
+    selectedSetting._id,
+  ]);
+
   // get all students
   const getAllStudents = async () => {
     try {
-      let feeMap = feeMaps.filter((f) => f._id == entryFormik.values.feeMap)[0];
-      let dependencies = feeMap.dependencies;
-      let filter = {};
-      if (dependencies.includes("class")) {
-        filter["academicInfo.class"] = entryFormik.values.class;
-      }
-      if (dependencies.includes("room")) {
-        filter["hostelInfo.room"] = feeMap.room._id;
-      }
-      if (dependencies.includes("route")) {
-        filter["transportInfo.route"] = feeMap.route._id;
-      }
-      if (dependencies.includes("pickType")) {
-        filter["transportInfo.pickType"] = feeMap.pickType;
-      }
-      if (entryFormik.values.section) {
-        filter["academicInfo.section"] = entryFormik.values.section;
-      }
+      const filter = {
+        feeMapId: entryFormik.values.feeMap,
+        classId: entryFormik.values.class,
+        sectionId: entryFormik.values.section,
+      };
 
-      const { data: students } = await get(PRIVATE_URLS.student.list, {
-        params: {
-          search: filter,
-        },
-        schoolId: selectedSetting._id,
-      });
-      setSelectStudent(null);
+      const { data: students } = await get(
+        PRIVATE_URLS.receipt.getStudentsList,
+        {
+          params: {
+            search: filter,
+            schoolId: selectedSetting._id,
+          },
+        }
+      );
+
       setStudents(
         students.result.map((s) => ({
           ...s,
-          label: s.basicInfo.name,
+          label: `${s.basicInfo.name} | ${s.academicInfo.rollNumber} | ${s.fatherInfo.name}`,
           value: s._id,
         }))
       );
@@ -239,6 +227,7 @@ export default function CollectFees() {
   };
 
   useEffect(() => {
+    entryFormik.setFieldValue("student", "");
     if (
       entryFormik.values.feeMap &&
       entryFormik.values.class &&
@@ -247,12 +236,12 @@ export default function CollectFees() {
       getAllStudents();
     } else {
       setStudents([]);
-      setSelectStudent(null);
+      setSelectedStudent(null);
     }
-  }, [entryFormik.values.section, entryFormik.values.feeMap]);
+  }, [entryFormik.values.feeMap]);
 
   const handleStudentSelect = (e, val) => {
-    setSelectStudent(val);
+    setSelectedStudent(val);
     setItemDetails([]);
     setFeeDetails(null);
     setPaymentData({});
@@ -311,7 +300,7 @@ export default function CollectFees() {
               name="student"
               formik={entryFormik}
               label="Select Students"
-              // options={}
+              options={students}
             />
           </Grid>
           <Grid

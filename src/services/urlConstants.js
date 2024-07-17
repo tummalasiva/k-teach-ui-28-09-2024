@@ -362,6 +362,7 @@ export const PRIVATE_URLS = {
     toggleActiveStatus: "/feeMap/toggleActiveStatus",
   },
   receipt: {
+    getStudentsList: "/receipt/getStudentsList",
     getFeeDetails: "/receipt/getFeeDetails",
     collectFees: "/receipt/collectFees",
     previewReceipt: "/receipt/previewReceipt",
