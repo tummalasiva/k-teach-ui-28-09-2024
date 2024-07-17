@@ -30,6 +30,8 @@ export default function AddFeeMapCategory({
   removeCategory = () => {},
   onClose = () => {},
   onSubmit = () => {},
+  totalAmount = 0,
+  leftAmount = 0,
 }) {
   const theme = useTheme();
   let fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -54,7 +56,10 @@ export default function AddFeeMapCategory({
             maxWidth: 650,
           },
         }}>
-        <DialogTitle sx={{ fontWeight: 600 }}>Add Fee Map Category</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600 }}>
+          Add Fee Map Category (Total Fee: {totalAmount})- (Left Amount:{" "}
+          {leftAmount})
+        </DialogTitle>
         <Divider />
         <DialogContent
           sx={{

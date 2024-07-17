@@ -182,7 +182,6 @@ export default function FeeMapCategory() {
       name: dataToEdit?.name || "",
       description: dataToEdit?.description || "",
       amount: dataToEdit?.amount || "",
-      feeMapId: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -201,8 +200,8 @@ export default function FeeMapCategory() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
-    handleGetFeeCategories();
-    Formik.resetForm();
+    Formik.handleSubmit();
+    entryFormik.resetForm();
   };
 
   const handleCloseAddModel = () => {
@@ -224,7 +223,6 @@ export default function FeeMapCategory() {
   }, [Formik.values.feeMap, selectedSetting._id]);
 
   const handleFeeMapCategoryEdit = (data) => {
-    // console.log(data, "editcat");
     setOpen(true);
     setDataToEdit(data);
   };
@@ -232,7 +230,7 @@ export default function FeeMapCategory() {
   const handleDelete = async (id) => {
     try {
       const res = await del(PRIVATE_URLS.feeMapCategory.delete + "/" + id);
-      handleGetFeeCategories();
+      Formik.handleSubmit();
     } catch (error) {
       console.error(error);
     }
@@ -324,6 +322,11 @@ export default function FeeMapCategory() {
 
       {/* Add Fee Map category modal */}
       <AddFeeMapCategory
+        totalAmount={feeMaps.find((f) => f._id === Formik.values.feeMap)?.fee}
+        leftAmount={
+          feeMaps.find((f) => f._id === Formik.values.feeMap)?.fee -
+          data?.reduce((acc, f) => acc + f.amount, 0)
+        }
         open={openAddModal}
         adding={loading}
         categories={categories}
