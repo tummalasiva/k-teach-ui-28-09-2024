@@ -23,6 +23,35 @@ export default function FeeMapCategory() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const showInfo = (data) => {
+    console.log(data, "feemapppp");
+    let result = [];
+
+    for (let dep of data.dependencies) {
+      if (["class"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class`;
+        result.push(newItem);
+      } else if (["classOld"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class-Old`;
+        result.push(newItem);
+      } else if (["classNew"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class-New`;
+        result.push(newItem);
+      } else if (dep === "hostel") {
+        let newItem = `[${data.hostel?.name}]-Hostel`;
+        result.push(newItem);
+      } else if (dep == "transport") {
+        let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
+        result.push(newItem);
+      } else if (dep == "pickType") {
+        let newItem = `[${data.pickType}]-Pick_Type`;
+        result.push(newItem);
+      }
+    }
+
+    return result.join(" | ");
+  };
+
   // get Receipt list
   const getReceipts = async () => {
     try {
@@ -37,16 +66,21 @@ export default function FeeMapCategory() {
     }
   };
 
-  // get feemap list
+  // get fee map list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
-        params: { schoolId: selectedSetting._id, search: { active: true } },
+        params: {
+          schoolId: selectedSetting._id,
+          search: { receiptTitle: Formik.values.name },
+        },
       });
-      console.log(data, "cat");
-      setFeeMaps(data.result.map((f) => ({ label: f.name, value: f._id })));
-      Formik.setFieldValue("feeMap", data.result[0]._id);
-    } catch (error) {}
+      setFeeMaps(
+        data?.result?.map((f) => ({ ...f, label: showInfo(f), value: f._id }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const Formik = useFormik({
@@ -109,6 +143,8 @@ export default function FeeMapCategory() {
     setOpen(false);
     setDataToEdit(null);
   };
+
+  console.log(Formik.values.name, "jush");
 
   return (
     <>
