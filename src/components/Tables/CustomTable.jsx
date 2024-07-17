@@ -194,7 +194,14 @@ export default function CustomTable({
                             alignItems: "center",
                             columnGap: "5px",
                           }}>
-                          {actions.includes("edit") && (
+                          {/* {actions.includes("edit") && (
+                            <Tooltip title="Edit">
+                              <IconButton onClick={() => onEditClick(data)}>
+                                <EditIcon color="primary" fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )} */}
+                          {actions.includes("edit") && !data.checkOut && (
                             <Tooltip title="Edit">
                               <IconButton onClick={() => onEditClick(data)}>
                                 <EditIcon color="primary" fontSize="small" />

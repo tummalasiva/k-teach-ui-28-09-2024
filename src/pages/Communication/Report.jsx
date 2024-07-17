@@ -44,19 +44,19 @@ export default function Report() {
       smsSubject: "Pre-Admission",
       smsType: "Manual",
       message:
-        "Http://Localhost:3000/Details/Pre-Admission/65c238836fab59fd89a506e2",
+        "Dear John,Thank you for your admission at webspruce. Our staff will help you for all admission related process.",
     },
     {
       smsSubject: "Pre-Admission",
       smsType: "Manual",
       message:
-        "Http://Localhost:3000/Details/Pre-Admission/65c238836fab59fd89a506e2",
+        "Dear John,Thank you for your admission at webspruce. Our staff will help you for all admission related process.",
     },
     {
       smsSubject: "Pre-Admission",
       smsType: "Manual",
       message:
-        "Http://Localhost:3000/Details/Pre-Admission/65c238836fab59fd89a506e2",
+        "Dear John,Thank you for your admission at webspruce. Our staff will help you for all admission related process.",
     },
   ]);
   const [page, setPage] = React.useState(0);
@@ -131,7 +131,7 @@ export default function Report() {
             }}>
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                #SL
+                S.No
               </TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 Subject
@@ -162,12 +162,14 @@ export default function Report() {
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell align="center">{row.smsSubject}</TableCell>
                     <TableCell align="center">{row.smsType}</TableCell>
-                    <TableCell align="center">{row.message}</TableCell>
+                    <TableCell align="center">
+                      {row.message.substring(0, 50) + "..."}
+                    </TableCell>
                     <TableCell align="center" sx={{ verticalAlign: "top" }}>
-                      <Typography>Total:</Typography>
-                      <Typography>Awaiting:</Typography>
-                      <Typography>Delivered:</Typography>{" "}
-                      <Typography>Rejected/Failed: </Typography>
+                      <Typography>Total:50</Typography>
+                      <Typography>Awaiting:30</Typography>
+                      <Typography>Delivered:20</Typography>{" "}
+                      <Typography>Rejected/Failed:0 </Typography>
                     </TableCell>
                     <TableCell align="center">
                       {dayjs(row.sentTime).format("DD-MM-YYYY hh:mm A")}

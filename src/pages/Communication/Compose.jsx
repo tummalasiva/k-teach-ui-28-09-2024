@@ -124,7 +124,9 @@ const Compose = () => {
   const [selectedEmployeeCount, setSelectedEmployeeCount] = useState(0);
   const [employeeAutoSelect, setEmployeeAutoSelect] = useState([]);
 
-  const [balance, setBalance] = useState("");
+  const [totalSms, setTotalSms] = useState(50);
+  const [consumedSms, setConsumedSms] = useState(0);
+  const [balance, setBalance] = useState(50);
 
   const handleEmployeeAuto = (event, val) => {
     const findAll = val.some((item) => item._id === "all");
@@ -335,15 +337,24 @@ const Compose = () => {
     setSelectRoles([]);
     setSelectClass("");
     setSelectSection("");
-    setSelectContacts([]);
+    setSelectContacts("");
     setSelectEmployee([]);
     setReceiverType("");
+    setStudents([]);
+    setContactsAutoSelect([]);
+    setEmployees([]);
+    selectedStudentCount(0);
+    setSelectedEmployeeCount(0);
+    setEmployeeAutoSelect([]);
   };
 
   const handleSubmitSms = async (e) => {
     e.preventDefault();
     setSendingMessage(true);
     try {
+      setConsumedSms(consumedSms + 1);
+      setBalance(totalSms - (consumedSms + 1));
+
       toast.success("Message sent successfully");
       resetForm();
       setSendingMessage(false);
@@ -363,22 +374,22 @@ const Compose = () => {
             sx={{
               paddingLeft: "1rem",
               display: "flex",
-              gap: "5px",
+              gap: "8px",
             }}>
             <Box>
-              Total SMS :{" "}
+              Total SMS:{" "}
               <Typography component={"span"} fontWeight={"bold"}>
-                79875
+                {totalSms}
               </Typography>
             </Box>
             <Box>
-              Consumed SMS :{" "}
+              Consumed SMS:{" "}
               <Typography component={"span"} fontWeight={"bold"}>
-                {79875 - balance}
+                {consumedSms}
               </Typography>
             </Box>
             <Box>
-              Balance SMS :{" "}
+              Balance SMS:{" "}
               <Typography component={"span"} fontWeight={"bold"}>
                 {balance}
               </Typography>
@@ -774,7 +785,7 @@ const Compose = () => {
                     </FormControl>
                   </Grid>
 
-                  {/* <Grid item xs={12} md={3} lg={3}>
+                  <Grid item xs={12} md={3} lg={3}>
                     <TextField
                       fullWidth
                       value={selectEmployee}
@@ -854,11 +865,11 @@ const Compose = () => {
                         />
                       </FormControl>
                     </Popper>
-                  </Grid> */}
+                  </Grid>
                 </>
               )}
 
-              {smsFrom.role && receiverType === "user" && (
+              {/* {smsFrom.role && receiverType === "user" && (
                 <Grid item xs={12} md={3} lg={3}>
                   <FormControl required={true} fullWidth>
                     <Autocomplete
@@ -895,7 +906,7 @@ const Compose = () => {
                     />
                   </FormControl>
                 </Grid>
-              )}
+              )} */}
             </Grid>
           </Box>
         </Card>

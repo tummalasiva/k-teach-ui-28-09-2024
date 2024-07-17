@@ -44,18 +44,16 @@ export default function FilterStudent() {
         const { data } = await get(PRIVATE_URLS.section.list, {
           params: {
             schoolId: selectedSetting._id,
-            // search: {
-            //   search: { class: entryFormik.values.class },
-            // },
           },
         });
 
-        const section = data.result.map((s) => ({
-          label: s.name,
-          value: s._id,
-        }));
+        // const section = data.result.map((s) => ({
+        //   label: s.name,
+        //   value: s._id,
+        // }));
 
-        const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+        // const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+        const sectionAllOption = [{ label: "All", value: "all" }];
         setSections(sectionAllOption);
 
         entryFormik.setFieldValue("section", "all");
