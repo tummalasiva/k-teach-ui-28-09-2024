@@ -52,6 +52,7 @@ export default function ExamGrade() {
   const handleClose = () => {
     setOpen(false);
     setDataToEdit(null);
+    entryFormik.resetForm();
   };
 
   const handleCreateOrUpdate = async (values) => {
