@@ -30,6 +30,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import AddUpdateFeeMap from "./AddUpdateFeeMap";
+import ViewInstallments from "./ViewInstallments";
 
 const CustomSwitch = styled(Switch)(({}) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -131,7 +132,11 @@ export default function ReceiptBook() {
   const [loading, setLoading] = useState(false);
   const [openFeeMap, setOpenFeeMap] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState("");
-  // const [selectReceipt, setSelectReceipt] = useState(selectedReceiptId || "");
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: [],
+    action: () => {},
+  });
 
   // get fee map list
   const getFeeMaps = async () => {
@@ -142,7 +147,7 @@ export default function ReceiptBook() {
           search: { receiptTitle: selectedReceiptId },
         },
       });
-      setFeeMaps(data.result.map((f) => ({ ...f, detail: showInfo(f) })));
+      setFeeMaps(data?.result?.map((f) => ({ ...f, detail: showInfo(f) })));
     } catch (error) {
       console.error(error);
     }
@@ -238,20 +243,33 @@ export default function ReceiptBook() {
     setOpen(true);
   };
 
-  const handleFeeMapEdit = (data) => {
-    // console.log(data, "newss");
-    setDataToEdit({ ...data });
-    setOpenFeeMap(true);
-  };
-
   const handleOpenFeeMap = () => {
     setOpenFeeMap(true);
+    setDataToEdit(null);
+    setSelectedReceiptId("");
   };
 
-  const handleFeeMap = (id) => {
-    console.log(id, "idddddddsssddddididi");
+  const handleFeeMapEdit = (data) => {
+    // console.log(data, "newss");
+    setDataToEdit(data);
+    setOpenFeeMap(true);
+  };
+
+  const handleFeeMapNavigate = (id) => {
     setSelectedReceiptId(id);
     setSelectValue(1);
+  };
+
+  const handleClickOpenView = (data) => {
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data?.installments,
+    });
+  };
+
+  const onCloseViewModel = (e) => {
+    setModalData({ ...modalData, open: false });
   };
 
   return (
@@ -280,7 +298,7 @@ export default function ReceiptBook() {
           tableKeys={receiptBookTableKeys}
           feeMapTableKeys
           onEditClick={handleEditClick}
-          onNavigateFeeMap={handleFeeMap}
+          onNavigateFeeMap={handleFeeMapNavigate}
           CustomAction={CustomActionFee}
           onUpdate={getReceipts}
         />
@@ -343,9 +361,9 @@ export default function ReceiptBook() {
           bodyDataModal="Fee Map"
           bodyData={feeMaps}
           tableKeys={feeMapTableKeys}
-          // CustomAction={CustomActionFee}
-          onToggleSwitch={handleToggleButton}
           toggleStatus="active"
+          onToggleSwitch={handleToggleButton}
+          onViewClick={handleClickOpenView}
           onEditClick={handleFeeMapEdit}
         />
 
@@ -357,6 +375,14 @@ export default function ReceiptBook() {
           setOpen={setOpenFeeMap}
           loading={loading}
           selectedReceipt={selectedReceiptId}
+        />
+
+        {/* view installments */}
+        <ViewInstallments
+          title="Installment Details"
+          open={modalData?.open}
+          tableData={modalData?.tableData}
+          onClose={onCloseViewModel}
         />
       </TabPanel>
     </>

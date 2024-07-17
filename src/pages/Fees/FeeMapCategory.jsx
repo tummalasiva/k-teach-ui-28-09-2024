@@ -13,6 +13,7 @@ import { get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
+import { toast } from "react-toastify";
 
 export default function FeeMapCategory() {
   const { selectedSetting } = useContext(SettingContext);
@@ -22,6 +23,57 @@ export default function FeeMapCategory() {
   const [dataToEdit, setDataToEdit] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+
+  const [categories, setCategories] = useState([
+    {
+      id: 1,
+      name: "Category 1",
+      amount: 1,
+      description: "",
+    },
+  ]);
+
+  const addCategory = () => {
+    let newCategories = [
+      ...categories,
+      { id: categories.length + 1, name: "New", amount: 1, description: "" },
+    ];
+    setCategories(newCategories);
+  };
+
+  const removeCategory = (id) => {
+    let newCategories = categories.filter((c) => c.id !== id);
+    setCategories(newCategories);
+  };
+
+  const showInfo = (data) => {
+    let result = [];
+
+    for (let dep of data.dependencies) {
+      if (["class"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class`;
+        result.push(newItem);
+      } else if (["classOld"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class-Old`;
+        result.push(newItem);
+      } else if (["classNew"].includes(dep)) {
+        let newItem = `[${data.class?.name}]-Class-New`;
+        result.push(newItem);
+      } else if (dep === "hostel") {
+        let newItem = `[${data.hostel?.name}]-Hostel`;
+        result.push(newItem);
+      } else if (dep == "transport") {
+        let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
+        result.push(newItem);
+      } else if (dep == "pickType") {
+        let newItem = `[${data.pickType}]-Pick_Type`;
+        result.push(newItem);
+      }
+    }
+
+    return result.join(" | ");
+  };
 
   // get Receipt list
   const getReceipts = async () => {
@@ -37,19 +89,36 @@ export default function FeeMapCategory() {
     }
   };
 
-  // get feemap list
+  // get fee map list
   const getFeeMaps = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: {
           schoolId: selectedSetting._id,
-          search: { active: true, receiptTitle: Formik.values.name },
+          search: { receiptTitle: Formik.values.name },
         },
       });
       setFeeMaps(
-        data.result.map((f) => ({ ...f, label: f.name, value: f._id }))
+        data?.result?.map((f) => ({ ...f, label: showInfo(f), value: f._id }))
       );
-      Formik.setFieldValue("feeMap", data.result[0]._id);
+      Formik.setFieldValue("feeMap", data.result[0]?._id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleGetFeeCategories = async (values) => {
+    try {
+      const { data } = await get(PRIVATE_URLS.feeMapCategory.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            feeMap: values.feeMap,
+          },
+        },
+      });
+
+      setData(data.result);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +129,7 @@ export default function FeeMapCategory() {
       name: "",
       feeMap: "",
     },
-    onSubmit: console.log,
+    onSubmit: handleGetFeeCategories,
   });
 
   const handleCreateOrUpdate = async (values) => {
@@ -76,10 +145,14 @@ export default function FeeMapCategory() {
           payload
         );
       } else {
-        const { data } = await post(
-          PRIVATE_URLS.feeMapCategory.create,
-          payload
-        );
+        if (categories.find((c) => !c.name || c.amount))
+          return toast.error(
+            "Please mention name and amount for each category"
+          );
+        const { data } = await post(PRIVATE_URLS.feeMapCategory.create, {
+          feeMapId: Formik.values.feeMap,
+          categories,
+        });
       }
       handleClose();
     } catch (error) {
@@ -100,9 +173,11 @@ export default function FeeMapCategory() {
   });
 
   useEffect(() => {
+    if (Formik.values.name) {
+      getFeeMaps();
+    }
     getReceipts();
-    getFeeMaps();
-  }, []);
+  }, [selectedSetting, Formik.values.name]);
 
   useEffect(() => {
     if (Formik.values.name) {
@@ -111,10 +186,15 @@ export default function FeeMapCategory() {
   }, [Formik.values.name]);
 
   const handleClose = () => {
-    // getData();
     setOpen(false);
     setDataToEdit(null);
   };
+
+  useEffect(() => {
+    if (Formik.values.feeMap) {
+      Formik.handleSubmit();
+    }
+  }, [Formik.values.feeMap, selectedSetting._id]);
 
   return (
     <>
@@ -139,7 +219,7 @@ export default function FeeMapCategory() {
             name="feeMap"
             formik={Formik}
             label="Select Fee Maps"
-            // options={""}
+            options={feeMaps}
           />
         </Grid>
         <Grid xs={12} md={6} lg={3} item>
@@ -147,7 +227,7 @@ export default function FeeMapCategory() {
             variant="contained"
             size="small"
             startIcon={<Add />}
-            onClick={() => setOpen(true)}>
+            onClick={() => setOpenAddModal(true)}>
             Add Fee Category
           </Button>
         </Grid>
@@ -196,6 +276,44 @@ export default function FeeMapCategory() {
             />
           </Grid>
         </Grid>
+      </FormModal>
+
+      {/* Add Fee Map category modal */}
+      <FormModal
+        open={openAddModal}
+        formik={entryFormik}
+        formTitle={"Add Fee Map Category"}
+        onClose={() => setOpenAddModal(false)}
+        submitButtonTitle={"Submit"}
+        adding={loading}>
+        {categories.map((c, i) => (
+          <Grid key={c.id} rowSpacing={0} columnSpacing={2} container>
+            <Grid xs={12} sm={6} md={4} item>
+              <FormInput
+                formik={entryFormik}
+                name="name"
+                label="Name"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={4} item>
+              <FormInput
+                formik={entryFormik}
+                name="description"
+                label="Description"
+              />
+            </Grid>
+            <Grid xs={12} sm={6} md={4} item>
+              <FormInput
+                formik={entryFormik}
+                name="amount"
+                label="Amount"
+                type="number"
+                required={true}
+              />
+            </Grid>
+          </Grid>
+        ))}
       </FormModal>
     </>
   );
