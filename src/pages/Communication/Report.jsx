@@ -165,7 +165,7 @@ export default function Report() {
                     <TableCell align="center">
                       {row.message.substring(0, 50) + "..."}
                     </TableCell>
-                    <TableCell align="center" sx={{ verticalAlign: "top" }}>
+                    <TableCell align="center">
                       <Typography>Total:50</Typography>
                       <Typography>Awaiting:30</Typography>
                       <Typography>Delivered:20</Typography>{" "}

@@ -27,6 +27,7 @@ import { get, post } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import PageHeader from "../../components/PageHeader";
 import { LoadingButton } from "@mui/lab";
+import useResizeObserver from "use-resize-observer";
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
@@ -77,6 +78,7 @@ const Credentails = () => {
   const [contacts, setContacts] = useState([]);
   const [selectedStudentCount, setSelectedStudentCount] = useState(0);
   const [selectedEmployeeCount, setSelectedEmployeeCount] = useState(0);
+  const { ref, width, height } = useResizeObserver();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -317,7 +319,338 @@ const Credentails = () => {
                         size="small"
                         label="Class"
                       />
+                      <Box ref={ref}>
+                        <Popper
+                          sx={{
+                            width: width ? width + 15 : 700,
+                            zIndex: 1,
+                          }}
+                          id={"classPopper"}
+                          open={!!classPopper}
+                          anchorEl={classPopper}>
+                          <FormControl
+                            variant="outlined"
+                            size="small"
+                            fullWidth>
+                            <Autocomplete
+                              onBlur={() => setClassPopper(null)}
+                              open={true}
+                              value={classAutoSelect}
+                              multiple
+                              onChange={handleClassSelect}
+                              isOptionEqualToValue={(option, value) =>
+                                option._id === value._id
+                              }
+                              options={classes}
+                              disableCloseOnSelect
+                              getOptionLabel={(option) => `${option.name}`}
+                              renderOption={(props, option, { selected }) => (
+                                <li {...props}>
+                                  <Checkbox
+                                    icon={icon}
+                                    checkedIcon={checkedIcon}
+                                    checked={selected}
+                                  />
+                                  {`${option.name}`}
+                                </li>
+                              )}
+                              renderInput={(params) => (
+                                <StyledInput
+                                  ref={params.InputProps.ref}
+                                  inputProps={params.inputProps}
+                                  placeholder="Class"
+                                  autoFocus
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </Popper>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                      <TextField
+                        value={selectSection}
+                        aria-describedby={"sectionPopper"}
+                        sx={{ marginBottom: "15px" }}
+                        fullWidth
+                        onFocus={(e) => {
+                          setSectionPopper(
+                            sectionPopper ? null : e.currentTarget
+                          );
+                        }}
+                        variant="outlined"
+                        size="small"
+                        label="Section"
+                      />
+                      <Box ref={ref}>
+                        <Popper
+                          sx={{
+                            width: width ? width + 15 : 700,
+                            zIndex: 1,
+                          }}
+                          id={"sectionPopper"}
+                          open={!!sectionPopper}
+                          anchorEl={sectionPopper}>
+                          <FormControl
+                            variant="outlined"
+                            size="small"
+                            fullWidth>
+                            <Autocomplete
+                              multiple
+                              onBlur={() => setSectionPopper(null)}
+                              open={true}
+                              value={sectionAutoSelect}
+                              onChange={handleSectionSelect}
+                              isOptionEqualToValue={(option, value) =>
+                                option._id === value._id
+                              }
+                              id="checkboxes-tags-demo"
+                              options={sections.sort((a, b) =>
+                                a.class.name.localeCompare(b.class.name)
+                              )}
+                              disableCloseOnSelect
+                              getOptionLabel={(option) =>
+                                `${option.name}(class:${option.class.name})`
+                              }
+                              renderOption={(props, option, { selected }) => (
+                                <li {...props}>
+                                  <Checkbox
+                                    icon={icon}
+                                    checkedIcon={checkedIcon}
+                                    style={{ marginRight: 8 }}
+                                    checked={selected}
+                                  />
+                                  {`${option.name}(class:${option.class.name})`}
+                                </li>
+                              )}
+                              renderInput={(params) => (
+                                <StyledInput
+                                  ref={params.InputProps.ref}
+                                  inputProps={params.inputProps}
+                                  placeholder="Section"
+                                  autoFocus
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </Popper>
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={12} lg={12}>
+                      <TextField
+                        value={selectContacts}
+                        aria-describedby={"contactsPopper"}
+                        fullWidth
+                        onFocus={(e) => {
+                          setContactsPopper(
+                            contactsPopper ? null : e.currentTarget
+                          );
+                        }}
+                        variant="outlined"
+                        size="small"
+                        label="Students"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">
+                              All Total-{selectedStudentCount}
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      <Box ref={ref}>
+                        <Popper
+                          sx={{
+                            width: width ? width + 15 : 700,
+                            zIndex: 1,
+                          }}
+                          id={"contactsPopper"}
+                          open={!!contactsPopper}
+                          anchorEl={contactsPopper}>
+                          <FormControl
+                            variant="outlined"
+                            size="small"
+                            fullWidth>
+                            <Autocomplete
+                              multiple
+                              onBlur={() => setContactsPopper(null)}
+                              open={true}
+                              value={contactsAutoSelect}
+                              onChange={handleContactsList}
+                              isOptionEqualToValue={(option, value) =>
+                                option._id === value._id
+                              }
+                              id="checkboxes-tags-demo"
+                              options={[
+                                {
+                                  _id: "all",
+                                  basicInfo: {
+                                    name: `All (${students.length})`,
+                                  },
+                                  contactNumber: "",
+                                },
+                                ...students,
+                              ]}
+                              disableCloseOnSelect
+                              getOptionLabel={(option) =>
+                                option._id === "all"
+                                  ? `All (${students.length})`
+                                  : `${option.basicInfo.name} (${option.contactNumber})`
+                              }
+                              renderOption={(props, option, { selected }) => (
+                                <li {...props}>
+                                  <Checkbox
+                                    icon={icon}
+                                    checkedIcon={checkedIcon}
+                                    style={{ marginRight: 8 }}
+                                    checked={
+                                      selected ||
+                                      (option._id === "all" &&
+                                        contactsAutoSelect.length ===
+                                          students.length)
+                                    }
+                                  />
+                                  {option._id === "all"
+                                    ? `All (${students.length})`
+                                    : `${option.basicInfo.name} (${option.contactNumber})`}
+                                </li>
+                              )}
+                              renderInput={(params) => (
+                                <Box
+                                  sx={{
+                                    ml: 5,
+                                    width: "100%",
+                                  }}>
+                                  <StyledInput
+                                    ref={params.InputProps.ref}
+                                    inputProps={params.inputProps}
+                                    placeholder="Search student with name"
+                                    autoFocus
+                                  />
+                                </Box>
+                              )}
+                            />
+                          </FormControl>
+                        </Popper>
+                      </Box>
+                    </Grid>
+                  </>
+                ) : null}
+              </Grid>
+              {!isStudentRoleSelected ? (
+                <Grid item xs={12} md={12} lg={12}>
+                  <TextField
+                    fullWidth
+                    value={selectEmployee}
+                    aria-describedby={"employeePopper"}
+                    onFocus={(e) => {
+                      setEmployeeListPopper(
+                        employeeListPopper ? null : e.currentTarget
+                      );
+                    }}
+                    variant="outlined"
+                    size="small"
+                    label="Employees"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          All Total- {selectedEmployeeCount}
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <Box ref={ref}>
+                    <Popper
+                      sx={{
+                        width: width ? width + 15 : 700,
+                        zIndex: 1,
+                      }}
+                      id={"employeePopper"}
+                      open={!!employeeListPopper}
+                      anchorEl={employeeListPopper}>
+                      <FormControl variant="outlined" fullWidth size="small">
+                        <Autocomplete
+                          onBlur={() => setEmployeeListPopper(null)}
+                          open={true}
+                          value={employeeAutoSelect}
+                          multiple
+                          onChange={handleEmployeeAuto}
+                          isOptionEqualToValue={(option, value) =>
+                            option._id === value._id
+                          }
+                          options={[
+                            {
+                              _id: "all",
+                              basicInfo: { name: "All" },
+                            },
+                            ...employees,
+                          ]}
+                          disableCloseOnSelect
+                          getOptionLabel={(option) =>
+                            `${option?.basicInfo.name} (${option?.contactNumber})`
+                          }
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                              <Checkbox
+                                icon={icon}
+                                checkedIcon={checkedIcon}
+                                checked={
+                                  selected ||
+                                  (option._id === "all" &&
+                                    employeeAutoSelect.length ===
+                                      employees.length)
+                                }
+                              />
+                              {option._id === "all"
+                                ? `All (${employees.length})`
+                                : `${option?.basicInfo.name} (${option?.contactNumber})`}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <Box
+                              sx={{
+                                ml: 5,
+                                width: "100%",
+                              }}>
+                              <StyledInput
+                                ref={params.InputProps.ref}
+                                inputProps={params.inputProps}
+                                placeholder="Employees"
+                                autoFocus
+                              />
+                            </Box>
+                          )}
+                        />
+                      </FormControl>
+                    </Popper>
+                  </Box>
+                </Grid>
+              ) : null}
+
+              {selectRoles.length >= 2 &&
+              selectRoles.some((roleId) => {
+                const role = roles.find((r) => r._id === roleId);
+                return role && role.name.includes("STUDENT");
+              }) ? (
+                <>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <TextField
+                      value={selectClass}
+                      fullWidth
+                      aria-describedby={"classPopper"}
+                      onFocus={(e) => {
+                        setClassPopper(classPopper ? null : e.currentTarget);
+                      }}
+                      variant="outlined"
+                      size="small"
+                      label="Class"
+                    />
+                    <Box ref={ref}>
                       <Popper
+                        sx={{
+                          width: width ? width + 15 : 700,
+                          zIndex: 1,
+                        }}
                         id={"classPopper"}
                         open={!!classPopper}
                         anchorEl={classPopper}>
@@ -355,23 +688,28 @@ const Credentails = () => {
                           />
                         </FormControl>
                       </Popper>
-                    </Grid>
-                    <Grid item xs={12} md={12} lg={12}>
-                      <TextField
-                        value={selectSection}
-                        aria-describedby={"sectionPopper"}
-                        sx={{ marginBottom: "15px" }}
-                        fullWidth
-                        onFocus={(e) => {
-                          setSectionPopper(
-                            sectionPopper ? null : e.currentTarget
-                          );
-                        }}
-                        variant="outlined"
-                        size="small"
-                        label="Section"
-                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <TextField
+                      value={selectSection}
+                      aria-describedby={"sectionPopper"}
+                      fullWidth
+                      onFocus={(e) => {
+                        setSectionPopper(
+                          sectionPopper ? null : e.currentTarget
+                        );
+                      }}
+                      variant="outlined"
+                      size="small"
+                      label="Section"
+                    />
+                    <Box ref={ref}>
                       <Popper
+                        sx={{
+                          width: width ? width + 15 : 700,
+                          zIndex: 1,
+                        }}
                         id={"sectionPopper"}
                         open={!!sectionPopper}
                         anchorEl={sectionPopper}>
@@ -415,31 +753,36 @@ const Credentails = () => {
                           />
                         </FormControl>
                       </Popper>
-                    </Grid>
+                    </Box>
+                  </Grid>
 
-                    <Grid item xs={12} md={12} lg={12}>
-                      <TextField
-                        value={selectContacts}
-                        aria-describedby={"contactsPopper"}
-                        fullWidth
-                        onFocus={(e) => {
-                          setContactsPopper(
-                            contactsPopper ? null : e.currentTarget
-                          );
-                        }}
-                        variant="outlined"
-                        size="small"
-                        label="Students"
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="start">
-                              All Total-{selectedStudentCount}
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-
+                  <Grid item xs={12} md={12} lg={12}>
+                    <TextField
+                      value={selectContacts}
+                      aria-describedby={"contactsPopper"}
+                      fullWidth
+                      onFocus={(e) => {
+                        setContactsPopper(
+                          contactsPopper ? null : e.currentTarget
+                        );
+                      }}
+                      variant="outlined"
+                      size="small"
+                      label="Students"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="start">
+                            All Total-{selectedStudentCount}
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <Box ref={ref}>
                       <Popper
+                        sx={{
+                          width: width ? width + 15 : 700,
+                          zIndex: 1,
+                        }}
                         id={"contactsPopper"}
                         open={!!contactsPopper}
                         anchorEl={contactsPopper}>
@@ -505,299 +848,7 @@ const Credentails = () => {
                           />
                         </FormControl>
                       </Popper>
-                    </Grid>
-                  </>
-                ) : null}
-              </Grid>
-              {!isStudentRoleSelected ? (
-                <Grid item xs={12} md={12} lg={12}>
-                  <TextField
-                    fullWidth
-                    value={selectEmployee}
-                    aria-describedby={"employeePopper"}
-                    onFocus={(e) => {
-                      setEmployeeListPopper(
-                        employeeListPopper ? null : e.currentTarget
-                      );
-                    }}
-                    variant="outlined"
-                    size="small"
-                    label="Employees"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          All Total- {selectedEmployeeCount}
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <Popper
-                    id={"employeePopper"}
-                    open={!!employeeListPopper}
-                    anchorEl={employeeListPopper}>
-                    <FormControl variant="outlined" fullWidth size="small">
-                      <Autocomplete
-                        onBlur={() => setEmployeeListPopper(null)}
-                        open={true}
-                        value={employeeAutoSelect}
-                        multiple
-                        onChange={handleEmployeeAuto}
-                        isOptionEqualToValue={(option, value) =>
-                          option._id === value._id
-                        }
-                        options={[
-                          {
-                            _id: "all",
-                            basicInfo: { name: "All" },
-                          },
-                          ...employees,
-                        ]}
-                        disableCloseOnSelect
-                        getOptionLabel={(option) =>
-                          `${option?.basicInfo.name} (${option?.contactNumber})`
-                        }
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              checked={
-                                selected ||
-                                (option._id === "all" &&
-                                  employeeAutoSelect.length ===
-                                    employees.length)
-                              }
-                            />
-                            {option._id === "all"
-                              ? `All (${employees.length})`
-                              : `${option?.basicInfo.name} (${option?.contactNumber})`}
-                          </li>
-                        )}
-                        renderInput={(params) => (
-                          <Box
-                            sx={{
-                              ml: 5,
-                              width: "100%",
-                            }}>
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Employees"
-                              autoFocus
-                            />
-                          </Box>
-                        )}
-                      />
-                    </FormControl>
-                  </Popper>
-                </Grid>
-              ) : null}
-
-              {selectRoles.length >= 2 &&
-              selectRoles.some((roleId) => {
-                const role = roles.find((r) => r._id === roleId);
-                return role && role.name.includes("STUDENT");
-              }) ? (
-                <>
-                  <Grid item xs={12} md={12} lg={12}>
-                    <TextField
-                      value={selectClass}
-                      fullWidth
-                      aria-describedby={"classPopper"}
-                      onFocus={(e) => {
-                        setClassPopper(classPopper ? null : e.currentTarget);
-                      }}
-                      variant="outlined"
-                      size="small"
-                      label="Class"
-                    />
-                    <Popper
-                      id={"classPopper"}
-                      open={!!classPopper}
-                      anchorEl={classPopper}>
-                      <FormControl variant="outlined" size="small" fullWidth>
-                        <Autocomplete
-                          onBlur={() => setClassPopper(null)}
-                          open={true}
-                          value={classAutoSelect}
-                          multiple
-                          onChange={handleClassSelect}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          options={classes}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) => `${option.name}`}
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                checked={selected}
-                              />
-                              {`${option.name}`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Class"
-                              autoFocus
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Popper>
-                  </Grid>
-                  <Grid item xs={12} md={12} lg={12}>
-                    <TextField
-                      value={selectSection}
-                      aria-describedby={"sectionPopper"}
-                      fullWidth
-                      onFocus={(e) => {
-                        setSectionPopper(
-                          sectionPopper ? null : e.currentTarget
-                        );
-                      }}
-                      variant="outlined"
-                      size="small"
-                      label="Section"
-                    />
-                    <Popper
-                      id={"sectionPopper"}
-                      open={!!sectionPopper}
-                      anchorEl={sectionPopper}>
-                      <FormControl variant="outlined" size="small" fullWidth>
-                        <Autocomplete
-                          multiple
-                          onBlur={() => setSectionPopper(null)}
-                          open={true}
-                          value={sectionAutoSelect}
-                          onChange={handleSectionSelect}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          id="checkboxes-tags-demo"
-                          options={sections.sort((a, b) =>
-                            a.class.name.localeCompare(b.class.name)
-                          )}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            `${option.name}(class:${option.class.name})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                              />
-                              {`${option.name}(class:${option.class.name})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <StyledInput
-                              ref={params.InputProps.ref}
-                              inputProps={params.inputProps}
-                              placeholder="Section"
-                              autoFocus
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Popper>
-                  </Grid>
-
-                  <Grid item xs={12} md={12} lg={12}>
-                    <TextField
-                      value={selectContacts}
-                      aria-describedby={"contactsPopper"}
-                      fullWidth
-                      onFocus={(e) => {
-                        setContactsPopper(
-                          contactsPopper ? null : e.currentTarget
-                        );
-                      }}
-                      variant="outlined"
-                      size="small"
-                      label="Students"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            All Total-{selectedStudentCount}
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-
-                    <Popper
-                      id={"contactsPopper"}
-                      open={!!contactsPopper}
-                      anchorEl={contactsPopper}>
-                      <FormControl variant="outlined" size="small" fullWidth>
-                        <Autocomplete
-                          multiple
-                          onBlur={() => setContactsPopper(null)}
-                          open={true}
-                          value={contactsAutoSelect}
-                          onChange={handleContactsList}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          id="checkboxes-tags-demo"
-                          options={[
-                            {
-                              _id: "all",
-                              basicInfo: {
-                                name: `All (${students.length})`,
-                              },
-                              contactNumber: "",
-                            },
-                            ...students,
-                          ]}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            option._id === "all"
-                              ? `All (${students.length})`
-                              : `${option.basicInfo.name} (${option.contactNumber})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={
-                                  selected ||
-                                  (option._id === "all" &&
-                                    contactsAutoSelect.length ===
-                                      students.length)
-                                }
-                              />
-                              {option._id === "all"
-                                ? `All (${students.length})`
-                                : `${option.basicInfo.name} (${option.contactNumber})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <Box
-                              sx={{
-                                ml: 5,
-                                width: "100%",
-                              }}>
-                              <StyledInput
-                                ref={params.InputProps.ref}
-                                inputProps={params.inputProps}
-                                placeholder="Search student with name"
-                                autoFocus
-                              />
-                            </Box>
-                          )}
-                        />
-                      </FormControl>
-                    </Popper>
+                    </Box>
                   </Grid>
                   <Grid item xs={12} md={12} lg={12}>
                     <TextField
@@ -820,65 +871,71 @@ const Credentails = () => {
                         ),
                       }}
                     />
-                    <Popper
-                      id={"employeePopper"}
-                      open={!!employeeListPopper}
-                      anchorEl={employeeListPopper}>
-                      <FormControl variant="outlined" fullWidth size="small">
-                        <Autocomplete
-                          onBlur={() => setEmployeeListPopper(null)}
-                          open={true}
-                          value={employeeAutoSelect}
-                          multiple
-                          onChange={handleEmployeeAuto}
-                          isOptionEqualToValue={(option, value) =>
-                            option._id === value._id
-                          }
-                          options={[
-                            {
-                              _id: "all",
-                              basicInfo: { name: "All" },
-                            },
-                            ...employees,
-                          ]}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) =>
-                            `${option?.basicInfo.name} (${option?.contactNumber})`
-                          }
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                checked={
-                                  selected ||
-                                  (option._id === "all" &&
-                                    employeeAutoSelect.length ===
-                                      employees.length)
-                                }
-                              />
-                              {option._id === "all"
-                                ? `All (${employees.length})`
-                                : `${option?.basicInfo.name} (${option?.contactNumber})`}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <Box
-                              sx={{
-                                ml: 5,
-                                width: "100%",
-                              }}>
-                              <StyledInput
-                                ref={params.InputProps.ref}
-                                inputProps={params.inputProps}
-                                placeholder="Employees"
-                                autoFocus
-                              />
-                            </Box>
-                          )}
-                        />
-                      </FormControl>
-                    </Popper>
+                    <Box ref={ref}>
+                      <Popper
+                        sx={{
+                          width: width ? width + 15 : 700,
+                          zIndex: 1,
+                        }}
+                        id={"employeePopper"}
+                        open={!!employeeListPopper}
+                        anchorEl={employeeListPopper}>
+                        <FormControl variant="outlined" fullWidth size="small">
+                          <Autocomplete
+                            onBlur={() => setEmployeeListPopper(null)}
+                            open={true}
+                            value={employeeAutoSelect}
+                            multiple
+                            onChange={handleEmployeeAuto}
+                            isOptionEqualToValue={(option, value) =>
+                              option._id === value._id
+                            }
+                            options={[
+                              {
+                                _id: "all",
+                                basicInfo: { name: "All" },
+                              },
+                              ...employees,
+                            ]}
+                            disableCloseOnSelect
+                            getOptionLabel={(option) =>
+                              `${option?.basicInfo.name} (${option?.contactNumber})`
+                            }
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  icon={icon}
+                                  checkedIcon={checkedIcon}
+                                  checked={
+                                    selected ||
+                                    (option._id === "all" &&
+                                      employeeAutoSelect.length ===
+                                        employees.length)
+                                  }
+                                />
+                                {option._id === "all"
+                                  ? `All (${employees.length})`
+                                  : `${option?.basicInfo.name} (${option?.contactNumber})`}
+                              </li>
+                            )}
+                            renderInput={(params) => (
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  width: "100%",
+                                }}>
+                                <StyledInput
+                                  ref={params.InputProps.ref}
+                                  inputProps={params.inputProps}
+                                  placeholder="Employees"
+                                  autoFocus
+                                />
+                              </Box>
+                            )}
+                          />
+                        </FormControl>
+                      </Popper>
+                    </Box>
                   </Grid>
                 </>
               ) : (

@@ -46,32 +46,26 @@ export default function FilterStudent() {
             schoolId: selectedSetting._id,
           },
         });
-
-        // const section = data.result.map((s) => ({
-        //   label: s.name,
-        //   value: s._id,
-        // }));
-
-        // const sectionAllOption = [{ label: "All", value: "all" }, ...section];
         const sectionAllOption = [{ label: "All", value: "all" }];
         setSections(sectionAllOption);
-
         entryFormik.setFieldValue("section", "all");
       } else {
         const { data } = await get(PRIVATE_URLS.section.list, {
           params: {
             schoolId: selectedSetting._id,
-
             search: {
               class: entryFormik.values.class,
             },
           },
         });
 
-        setSections(
-          data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
-        );
-        entryFormik.setFieldValue("section", data.result[0]?._id);
+        const section = data.result.map((s) => ({
+          label: s.name,
+          value: s._id,
+        }));
+        const sectionAllOption = [{ label: "All", value: "all" }, ...section];
+        setSections(sectionAllOption);
+        entryFormik.setFieldValue("section", "all");
       }
     } catch (error) {
       console.log(error);
@@ -80,18 +74,18 @@ export default function FilterStudent() {
 
   const getStudents = async (values) => {
     try {
-      if (values.class && values.section === "all") {
+      if (values.class !== "all" && values.section === "all") {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
             schoolId: selectedSetting._id,
+            search: {
+              "academicInfo.class": values.class,
+            },
           },
         });
-
         setStudents(
           data.result.map((d) => ({
             ...d,
-            // label: d.basicInfo.name,
-
             label: `${d.basicInfo.name}  | ${d.academicInfo.rollNumber} | ${d.contactNumber} `,
             value: d._id,
           }))
@@ -100,11 +94,9 @@ export default function FilterStudent() {
         const { data } = await get(PRIVATE_URLS.student.list, {
           params: {
             schoolId: selectedSetting._id,
-            search: {
-              "academicInfo.section": values.section,
-            },
           },
         });
+
         setStudents(
           data.result.map((d) => ({
             ...d,

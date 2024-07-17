@@ -76,7 +76,7 @@ import BulkAdmission from "../pages/Student/BulkAdmission";
 import Credential from "../pages/Student/Credential";
 import QuickAdmit from "../pages/Student/QuickAdmit";
 import StudentActivity from "../pages/Student/StudentActivity";
-import Assignment from "../pages/Assignment";
+
 import Notice from "../pages/Announcement/Notice";
 import News from "../pages/Announcement/News";
 import Holiday from "../pages/Announcement/Holiday";
@@ -167,6 +167,7 @@ import Report from "../pages/Communication/Report";
 import Credentials from "../pages/Communication/Credentials";
 import BulkPhoto from "../pages/Student/BulkPhoto";
 import IdCard from "../pages/Student/IdCard";
+import Assignment from "../pages/Assignment/Assignment";
 
 // exlnt_70471681
 // 9538063455

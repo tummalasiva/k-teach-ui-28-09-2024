@@ -3,21 +3,44 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
-import PageHeader from "../components/PageHeader";
-import { assignmentTableKeys } from "../data/tableKeys/assignmentData";
-import CustomTable from "../components/Tables/CustomTable";
-import TabPanel from "../components/Tabs/TabPanel";
-import TabList from "../components/Tabs/Tablist";
-import FormSelect from "../forms/FormSelect";
-import FormDatePicker from "../forms/FormDatePicker";
-import FormInput from "../forms/FormInput";
-import { PRIVATE_URLS } from "../services/urlConstants";
-import { del, get, post, put } from "../services/apiMethods";
-import SettingContext from "../context/SettingsContext";
-import FileSelect from "../forms/FileSelect";
+import { Grid, IconButton, Paper } from "@mui/material";
+import PageHeader from "../../components/PageHeader";
+import { assignmentTableKeys } from "../../data/tableKeys/assignmentData";
+import CustomTable from "../../components/Tables/CustomTable";
+import TabPanel from "../../components/Tabs/TabPanel";
+import TabList from "../../components/Tabs/Tablist";
+import FormSelect from "../../forms/FormSelect";
+import { PRIVATE_URLS } from "../../services/urlConstants";
+import { del, get, post, put } from "../../services/apiMethods";
+import SettingContext from "../../context/SettingsContext";
+
 import { LoadingButton } from "@mui/lab";
 import AddEditAssignment from "./AddEditAssignment";
+import DownloadIcon from "@mui/icons-material/Download";
+import AssignmentViewModel from "./AssignmentViewModal";
+
+const CustomActionDownload = ({ data = {} }) => {
+  console.log(data, "kkk");
+  const handleClick = () => {
+    try {
+      if (data.file) {
+        window.open(data.file, "_blank");
+      } else {
+        window.open(data.link, "_blank");
+      }
+    } catch (error) {
+      console.error("No file or link found in the data");
+    }
+  };
+
+  return (
+    <>
+      <IconButton size="small" variant="contained" onClick={handleClick}>
+        <DownloadIcon color="primary" fontSize="small" />
+      </IconButton>
+    </>
+  );
+};
 
 export default function Assignment() {
   const { selectedSetting } = useContext(SettingContext);
@@ -27,8 +50,26 @@ export default function Assignment() {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const Section_Options = [{ label: "All", value: "all" }, ...sections];
+  const [open, setOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    open: false,
+    tableData: "",
+    action: () => {},
+  });
 
   const [loading, setLoading] = useState(false);
+
+  const handleClickOpenView = (data) => {
+    setModalData({
+      ...modalData,
+      open: true,
+      tableData: data,
+    });
+  };
+
+  const onCloseViewModel = (e) => {
+    setModalData({ ...modalData, open: false });
+  };
 
   // get assignment
   const getData = async (values) => {
@@ -43,7 +84,6 @@ export default function Assignment() {
             },
           },
         });
-        // console.log(data.responseCode, "all");
 
         if (data.responseCode === "OK") {
           setData(
@@ -135,7 +175,7 @@ export default function Assignment() {
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
-      getData();
+      getData(entryFormik.values);
     }
   }, [entryFormik.values.class, selectedSetting._id]);
 
@@ -153,19 +193,6 @@ export default function Assignment() {
       subject: data.subject._id,
     });
     setSelectValue(1);
-  };
-
-  const handleClickOpenView = (data) => {
-    // console.log(data, "pppppp");
-    try {
-      if (data.file) {
-        window.open(data.file, "_blank");
-      } else {
-        window.open(data.link, "_blank");
-      }
-    } catch (error) {
-      console.error("No file or link found in the data");
-    }
   };
 
   useEffect(() => {
@@ -234,13 +261,21 @@ export default function Assignment() {
           </Grid>
         </Paper>
         <CustomTable
-          actions={["view", "edit", "delete"]}
+          actions={["view", "edit", "delete", "custom"]}
           bodyDataModal="Assignment"
           bodyData={data}
           tableKeys={assignmentTableKeys}
           onEditClick={handleEditClick}
           onViewClick={handleClickOpenView}
           onDeleteClick={handleDelete}
+          CustomAction={CustomActionDownload}
+        />
+
+        <AssignmentViewModel
+          title="Assignment Information"
+          open={modalData?.open}
+          tableData={modalData?.tableData}
+          onClose={onCloseViewModel}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
