@@ -145,16 +145,26 @@ export default function FeeMapCategory() {
           payload
         );
       } else {
-        if (categories.find((c) => !c.name || !c.amount))
+        if (
+          categories.find(
+            (c) => !c.name || !parseFloat(c.amount) || parseFloat(c.amount) < 0
+          )
+        ) {
+          setLoading(false);
           return toast.error(
             "Please mention name and amount for each category"
           );
+        }
+
         const { data } = await post(
           PRIVATE_URLS.feeMapCategory.createMultiple,
           {
             schoolId: selectedSetting._id,
             feeMapId: Formik.values.feeMap,
-            categories,
+            categories: categories.map((c) => ({
+              ...c,
+              amount: parseFloat(c.amount),
+            })),
           }
         );
       }
