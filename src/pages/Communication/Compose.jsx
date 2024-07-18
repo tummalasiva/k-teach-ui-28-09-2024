@@ -267,6 +267,7 @@ const Compose = () => {
     const classNames = val.map((schclass) => schclass.name);
     setClassAutoSelect(val);
     setSelectClass(classNames.join(","));
+
     try {
       if (val.length) {
         const { data } = await get(PRIVATE_URLS.section.list, {
@@ -284,8 +285,37 @@ const Compose = () => {
           a.name.localeCompare(b.name)
         );
         setSections(sortedSections);
+        const filteredSections = sectionAutoSelect.filter((section) =>
+          classIds.includes(section.class._id)
+        );
+        setSectionAutoSelect(filteredSections);
+        setSelectSection(
+          filteredSections
+            .map((section) => `${section.name} (${section.class.name})`)
+            .join(", ")
+        );
+
+        const filteredSectionIds = filteredSections.map(
+          (section) => section._id
+        );
+        if (filteredSectionIds.length) {
+          const { data: studentData } = await get(PRIVATE_URLS.student.list, {
+            params: {
+              schoolId: selectedSetting._id,
+              search: {
+                "academicInfo.section": filteredSectionIds,
+              },
+            },
+          });
+          setStudents(studentData.result);
+        } else {
+          setStudents([]);
+        }
       } else {
         setSections([]);
+        setSectionAutoSelect([]);
+        setSelectSection("");
+        setStudents([]);
       }
     } catch (error) {
       console.log(error);
@@ -453,16 +483,20 @@ const Compose = () => {
                   <Grid
                     item
                     xs={12}
-                    md={8}
-                    sx={{
-                      alignSelf: "center",
-                      display: "flex",
-                      justifyContent: "flex-start",
-                    }}>
+                    md={3}
+                    lg={1}
+                    sx={{ alignSelf: "center", mt: "-15px" }}>
                     <Button size="small" variant="contained">
                       Sample File
                     </Button>
+                  </Grid>
 
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    lg={3}
+                    sx={{ alignSelf: "center", mt: "-15px" }}>
                     <FileSelect
                       name="file"
                       onChange={(e) => handleChangeFiles(e)}
@@ -868,45 +902,6 @@ const Compose = () => {
                   </Grid>
                 </>
               )}
-
-              {/* {smsFrom.role && receiverType === "user" && (
-                <Grid item xs={12} md={3} lg={3}>
-                  <FormControl required={true} fullWidth>
-                    <Autocomplete
-                      multiple
-                      fullWidth
-                      size="small"
-                      onChange={handleContactsList}
-                      id="checkboxes-tags-demo"
-                      options={employees}
-                      disableCloseOnSelect
-                      getOptionLabel={(option) =>
-                        `${option.basicInfo.name} (${option.contactNumber})`
-                      }
-                      renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                          <Checkbox
-                            icon={icon}
-                            checkedIcon={checkedIcon}
-                            style={{ marginRight: 8 }}
-                            checked={selected}
-                          />
-                          {`${option.basicInfo.name} (${option.contactNumber})`}
-                        </li>
-                      )}
-                      renderInput={(params) => (
-                        <TextField
-                          size="small"
-                          fullWidth
-                          {...params}
-                          label="Employees"
-                          placeholder="Favorites"
-                        />
-                      )}
-                    />
-                  </FormControl>
-                </Grid>
-              )} */}
             </Grid>
           </Box>
         </Card>
@@ -1048,26 +1043,23 @@ const Compose = () => {
             </Grid>
           </Grid>
         </Card>
-        <Card sx={{ padding: "10px", mb: 1 }}>
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid
-                item
-                xs={12}
-                md={12}
-                lg={12}
-                style={{ display: "flex", justifyContent: "flex-end" }}>
-                <LoadingButton
-                  loading={sendingMessage}
-                  size="small"
-                  variant="contained"
-                  type="submit">
-                  Submit
-                </LoadingButton>
-              </Grid>
-            </Grid>
-          </Box>
-        </Card>
+
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            style={{ display: "flex", justifyContent: "flex-end" }}>
+            <LoadingButton
+              loading={sendingMessage}
+              size="small"
+              variant="contained"
+              type="submit">
+              Submit
+            </LoadingButton>
+          </Grid>
+        </Grid>
       </form>
     </>
   );
