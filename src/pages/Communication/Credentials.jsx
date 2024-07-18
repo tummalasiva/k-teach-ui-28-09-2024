@@ -116,6 +116,7 @@ const Credentails = () => {
     const classNames = val.map((schclass) => schclass.name);
     setClassAutoSelect(val);
     setSelectClass(classNames.join(","));
+
     try {
       if (val.length) {
         const { data } = await get(PRIVATE_URLS.section.list, {
@@ -133,8 +134,37 @@ const Credentails = () => {
           a.name.localeCompare(b.name)
         );
         setSections(sortedSections);
+        const filteredSections = sectionAutoSelect.filter((section) =>
+          classIds.includes(section.class._id)
+        );
+        setSectionAutoSelect(filteredSections);
+        setSelectSection(
+          filteredSections
+            .map((section) => `${section.name} (${section.class.name})`)
+            .join(", ")
+        );
+
+        const filteredSectionIds = filteredSections.map(
+          (section) => section._id
+        );
+        if (filteredSectionIds.length) {
+          const { data: studentData } = await get(PRIVATE_URLS.student.list, {
+            params: {
+              schoolId: selectedSetting._id,
+              search: {
+                "academicInfo.section": filteredSectionIds,
+              },
+            },
+          });
+          setStudents(studentData.result);
+        } else {
+          setStudents([]);
+        }
       } else {
         setSections([]);
+        setSectionAutoSelect([]);
+        setSelectSection("");
+        setStudents([]);
       }
     } catch (error) {
       console.log(error);

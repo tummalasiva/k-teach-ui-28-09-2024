@@ -267,6 +267,7 @@ const Compose = () => {
     const classNames = val.map((schclass) => schclass.name);
     setClassAutoSelect(val);
     setSelectClass(classNames.join(","));
+
     try {
       if (val.length) {
         const { data } = await get(PRIVATE_URLS.section.list, {
@@ -284,8 +285,37 @@ const Compose = () => {
           a.name.localeCompare(b.name)
         );
         setSections(sortedSections);
+        const filteredSections = sectionAutoSelect.filter((section) =>
+          classIds.includes(section.class._id)
+        );
+        setSectionAutoSelect(filteredSections);
+        setSelectSection(
+          filteredSections
+            .map((section) => `${section.name} (${section.class.name})`)
+            .join(", ")
+        );
+
+        const filteredSectionIds = filteredSections.map(
+          (section) => section._id
+        );
+        if (filteredSectionIds.length) {
+          const { data: studentData } = await get(PRIVATE_URLS.student.list, {
+            params: {
+              schoolId: selectedSetting._id,
+              search: {
+                "academicInfo.section": filteredSectionIds,
+              },
+            },
+          });
+          setStudents(studentData.result);
+        } else {
+          setStudents([]);
+        }
       } else {
         setSections([]);
+        setSectionAutoSelect([]);
+        setSelectSection("");
+        setStudents([]);
       }
     } catch (error) {
       console.log(error);
@@ -1048,26 +1078,23 @@ const Compose = () => {
             </Grid>
           </Grid>
         </Card>
-        <Card sx={{ padding: "10px", mb: 1 }}>
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid
-                item
-                xs={12}
-                md={12}
-                lg={12}
-                style={{ display: "flex", justifyContent: "flex-end" }}>
-                <LoadingButton
-                  loading={sendingMessage}
-                  size="small"
-                  variant="contained"
-                  type="submit">
-                  Submit
-                </LoadingButton>
-              </Grid>
-            </Grid>
-          </Box>
-        </Card>
+
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            style={{ display: "flex", justifyContent: "flex-end" }}>
+            <LoadingButton
+              loading={sendingMessage}
+              size="small"
+              variant="contained"
+              type="submit">
+              Submit
+            </LoadingButton>
+          </Grid>
+        </Grid>
       </form>
     </>
   );
