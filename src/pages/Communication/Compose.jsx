@@ -483,16 +483,20 @@ const Compose = () => {
                   <Grid
                     item
                     xs={12}
-                    md={8}
-                    sx={{
-                      alignSelf: "center",
-                      display: "flex",
-                      justifyContent: "flex-start",
-                    }}>
+                    md={3}
+                    lg={1}
+                    sx={{ alignSelf: "center", mt: "-15px" }}>
                     <Button size="small" variant="contained">
                       Sample File
                     </Button>
+                  </Grid>
 
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    lg={3}
+                    sx={{ alignSelf: "center", mt: "-15px" }}>
                     <FileSelect
                       name="file"
                       onChange={(e) => handleChangeFiles(e)}
@@ -898,45 +902,6 @@ const Compose = () => {
                   </Grid>
                 </>
               )}
-
-              {/* {smsFrom.role && receiverType === "user" && (
-                <Grid item xs={12} md={3} lg={3}>
-                  <FormControl required={true} fullWidth>
-                    <Autocomplete
-                      multiple
-                      fullWidth
-                      size="small"
-                      onChange={handleContactsList}
-                      id="checkboxes-tags-demo"
-                      options={employees}
-                      disableCloseOnSelect
-                      getOptionLabel={(option) =>
-                        `${option.basicInfo.name} (${option.contactNumber})`
-                      }
-                      renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                          <Checkbox
-                            icon={icon}
-                            checkedIcon={checkedIcon}
-                            style={{ marginRight: 8 }}
-                            checked={selected}
-                          />
-                          {`${option.basicInfo.name} (${option.contactNumber})`}
-                        </li>
-                      )}
-                      renderInput={(params) => (
-                        <TextField
-                          size="small"
-                          fullWidth
-                          {...params}
-                          label="Employees"
-                          placeholder="Favorites"
-                        />
-                      )}
-                    />
-                  </FormControl>
-                </Grid>
-              )} */}
             </Grid>
           </Box>
         </Card>
