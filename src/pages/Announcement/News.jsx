@@ -194,6 +194,7 @@ export default function News() {
               name="image"
               label="Select Image"
               onChange={(e) => handleChangeFiles(e)}
+              previousFile={dataToEdit?.image}
               customOnChange={true}
               selectedFiles={selectImg}
               onRemove={(fileName) => handleRemoveFile(fileName)}

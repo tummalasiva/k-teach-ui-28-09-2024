@@ -258,6 +258,7 @@ export default function Vendor() {
                       multi={false}
                       label="Select Logo"
                       onChange={(e) => handleChangePhoto(e, "photo")}
+                      previousFile={dataToEdit?.photo}
                       customOnChange={true}
                       selectedFiles={logo}
                       onRemove={(fileName) => handleRemoveFile(fileName)}

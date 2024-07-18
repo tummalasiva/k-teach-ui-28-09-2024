@@ -322,7 +322,7 @@ export default function AddEmployee() {
       spouseOccupation: dataToEdit?.basicInfo.spouseOccupation || "",
       qualification: dataToEdit?.academicInfo.qualification || "",
       workExperience: dataToEdit?.academicInfo.workExperience || "",
-      salaryGrade: dataToEdit?.academicInfo.salaryGrade._id || "",
+      salaryGrade: dataToEdit?.academicInfo.salaryGrade?._id || "",
       email: dataToEdit?.academicInfo.email || "",
       salaryType: dataToEdit?.academicInfo.salaryType || "",
       role: dataToEdit?.role._id || "",
@@ -393,6 +393,7 @@ export default function AddEmployee() {
               multi={false}
               label="Select Photo"
               onChange={(e) => handleChangePhoto(e, "employeePhoto")}
+              previousFile={dataToEdit?.photo}
               customOnChange={true}
               selectedFiles={selectedPhoto}
               onRemove={(fileName) => handleRemoveFile(fileName)}

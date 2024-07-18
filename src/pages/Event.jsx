@@ -31,7 +31,7 @@ export default function Event() {
       const { data } = await get(PRIVATE_URLS.event.list, {
         params: { schoolId: selectedSetting._id },
       });
-      // console.log(data, "event");
+
       setData(data.result);
     } catch (error) {
       console.log(error);
@@ -231,22 +231,13 @@ export default function Event() {
             <FormInput formik={entryFormik} name="video" label="Video Link" />
           </Grid>
           <Grid xs={12} sm={6} md={6} item>
-            {/* <FormInput
-              required={true}
-              formik={entryFormik}
-              type="file"
-              name="image"
-              label="Select Image"
-              inputProps={{
-                accept: "image/*",
-              }}
-            /> */}
             <FileSelect
               name={`image`}
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               label="Select Photo"
               selectedFiles={selectImg}
+              previousFile={dataToEdit?.image}
               // onRemove={(fileName) => handleRemoveFile(fileName)}
               multi={false}
             />

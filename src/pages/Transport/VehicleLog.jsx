@@ -283,21 +283,6 @@ export default function VehicleLog() {
     }
   };
 
-  const handleDownloadDeparture = () => {
-    const downloadUrl = dataToEdit?.readingAtDeparture?.image;
-
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
-  const handleDownloadArrival = async () => {
-    const downloadUrl = dataToEdit?.readingAtArrival?.image;
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
   return (
     <>
       <PageHeader title="Vehicle Log" />
@@ -432,22 +417,12 @@ export default function VehicleLog() {
                 label="Select File"
                 onChange={(e) => handleChangePhoto(e, "departureImage")}
                 customOnChange={true}
+                previousFile={dataToEdit?.readingAtDeparture?.image}
                 selectedFiles={departure}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
                 accept="image/*,.pdf"
               />
             </Grid>
-            {dataToEdit?.readingAtDeparture &&
-            dataToEdit.readingAtDeparture?.image ? (
-              <Grid xs={12} md={6} lg={6} item>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={handleDownloadDeparture}>
-                  Download File
-                </Button>
-              </Grid>
-            ) : null}
           </Grid>
         </FormBox>
         {dataToEdit ? (
@@ -490,21 +465,11 @@ export default function VehicleLog() {
                     onChange={(e) => handleChangePhoto(e, "arrivalImage")}
                     customOnChange={true}
                     selectedFiles={arrival}
+                    previousFile={dataToEdit?.readingAtArrival?.image}
                     onRemove={(fileName) => handleRemoveFile(fileName)}
                     accept="image/*,.pdf"
                   />
                 </Grid>
-                {dataToEdit?.readingAtArrival &&
-                dataToEdit.readingAtArrival?.image ? (
-                  <Grid xs={12} md={6} lg={6} item>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      onClick={handleDownloadArrival}>
-                      Download File
-                    </Button>
-                  </Grid>
-                ) : null}
               </Grid>
             </FormBox>
           </>

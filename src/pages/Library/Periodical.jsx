@@ -284,6 +284,7 @@ export default function Periodical() {
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectImg}
+              previousFile={dataToEdit?.bookCover}
               label="Select Book Cover"
               // onRemove={(fileName) => handleRemoveFile(fileName)}
               accept="image/*"

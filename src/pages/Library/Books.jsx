@@ -272,6 +272,7 @@ export default function Books() {
               name="bookCover"
               label="Select Book"
               onChange={(e) => handleChangeFiles(e)}
+              previousFile={dataToEdit?.bookCover}
               customOnChange={true}
               selectedFiles={selectImg}
               onRemove={(fileName) => handleRemoveFile(fileName)}

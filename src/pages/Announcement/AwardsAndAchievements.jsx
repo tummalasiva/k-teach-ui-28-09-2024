@@ -219,6 +219,7 @@ export default function AwardsAndAchievements() {
               onChange={(e) => handleChangeFiles(e)}
               customOnChange={true}
               selectedFiles={selectImg}
+              previousFile={dataToEdit?.image}
               onRemove={(fileName) => handleRemoveFile(fileName)}
             />
           </Grid>

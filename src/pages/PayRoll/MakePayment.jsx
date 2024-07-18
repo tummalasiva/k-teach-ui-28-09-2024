@@ -210,7 +210,7 @@ export default function MakePayment() {
                 formik={formik}
                 label="Date"
                 openTo="month"
-                inputFormat="MMM/yyyy"
+                inputFormat="MMM/YYYY"
                 views={["month", "year"]}
                 name="date"
               />

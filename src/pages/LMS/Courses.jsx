@@ -117,8 +117,6 @@ export default function Courses() {
       });
 
       setData(data.result);
-
-      // console.log(data.result, "mmmmmmbbbbbbnnnnnn");
     } catch (error) {
       console.error(error);
     }

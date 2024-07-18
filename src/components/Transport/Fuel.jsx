@@ -358,6 +358,7 @@ export default function Fuel() {
               name="receipt"
               label="Select File"
               onChange={(e) => handleChangeFiles(e)}
+              previousFile={dataToEdit?.receipt}
               customOnChange={true}
               selectedFiles={selectReceipt}
               onRemove={(fileName) => handleRemoveFile(fileName)}

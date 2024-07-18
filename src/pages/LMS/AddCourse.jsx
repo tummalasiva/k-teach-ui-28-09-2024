@@ -252,12 +252,13 @@ export default function AddCourse() {
               />
             </Grid>
 
-            <Grid xs={12} md={6} lg={3} item>
+            <Grid xs={12} md={6} lg={4} item>
               <FileSelect
                 multi={false}
                 name="thumbnailImage"
                 label="Select Thumbnail Image"
                 onChange={(e) => handleChangeFiles(e)}
+                previousFile={dataToEdit?.thumbnailImage}
                 customOnChange={true}
                 selectedFiles={selectImg}
                 onRemove={(fileName) => handleRemoveFile(fileName)}

@@ -294,17 +294,6 @@ export default function AddInstitute({ initialValue = null }) {
 
       <form onSubmit={entryFormik.handleSubmit}>
         <BasicData>
-          {/* <MuiBox>
-            <img
-              src={dataToEdit?.logo || avatar}
-              style={{
-                width: "100px",
-                height: "100px",
-                objectFit: "contain",
-              }}
-              alt="Preview"
-            />
-          </MuiBox> */}
           <MuiBox>
             <img
               src={
@@ -329,6 +318,7 @@ export default function AddInstitute({ initialValue = null }) {
                 name="logo"
                 label="Select Logo"
                 onChange={(e) => handleChangePhoto(e, "logo")}
+                previousFile={dataToEdit?.logo}
                 customOnChange={true}
                 selectedFiles={logo}
                 onRemove={(fileName) => handleRemoveFile(fileName)}

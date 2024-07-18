@@ -242,6 +242,7 @@ export default function UpdateCourse() {
                 onChange={(e) => handleChangeFiles(e)}
                 customOnChange={true}
                 selectedFiles={selectImg}
+                previousFile={course?.thumbnailImage}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
               />
             </Grid>

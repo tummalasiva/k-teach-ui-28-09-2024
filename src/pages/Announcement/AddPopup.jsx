@@ -46,7 +46,7 @@ export default function AddPopup() {
 
       setData(popupvalues);
 
-      console.log(data.result, "result");
+      // console.log(data.result, "result");
     } catch (error) {
       console.log(error);
     }
@@ -227,6 +227,7 @@ export default function AddPopup() {
                 multi={false}
                 label="Select Photo"
                 onChange={(e) => handleChangeFiles(e, "image")}
+                previousFile={dataToEdit?.image}
                 customOnChange={true}
                 selectedFiles={selectImg}
                 onRemove={(fileName) => handleRemoveFile(fileName)}
