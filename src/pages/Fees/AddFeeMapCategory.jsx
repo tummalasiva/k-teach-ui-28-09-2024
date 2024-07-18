@@ -14,6 +14,7 @@ import {
   useMediaQuery,
   IconButton,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import CustomInput from "../../forms/CustomInput";
 import { LoadingButton } from "@mui/lab";
@@ -56,15 +57,17 @@ export default function AddFeeMapCategory({
             maxWidth: 650,
           },
         }}>
-        <DialogTitle sx={{ fontWeight: 600 }}>
-          Add Fee Map Category (Total Fee: {totalAmount})- (Left Amount:{" "}
-          {leftAmount})
-        </DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600 }}>Add Fee Map Category</DialogTitle>
         <Divider />
         <DialogContent
           sx={{
             padding: "10px",
           }}>
+          <Typography variant="subtitle">
+            Total Amount:{" "}
+            <b style={{ color: "rgb(0, 196, 159)" }}>{totalAmount}</b> Left
+            Amount: <b style={{ color: "rgb(255, 128, 66)" }}>{leftAmount}</b>
+          </Typography>
           {categories.map((c, i) => (
             <Grid
               key={c.id}
