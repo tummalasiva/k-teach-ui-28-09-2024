@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -20,6 +20,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
@@ -29,6 +30,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
 import CustomInput from "../../forms/CustomInput";
+import QuickFeeConcessionModal from "./QuickFeeConcessionModal";
 
 const showInfo = (data) => {
   let result = [];
@@ -58,6 +60,18 @@ const showInfo = (data) => {
   return result.join(" | ");
 };
 
+const ExtraFeeContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  padding: "10px",
+  columnGap: "10px",
+  backgroundColor:
+    theme.palette.mode === "dark" ? "rgba(255,255,255,0.2)" : "whitesmoke",
+  borderRadius: "5px",
+  marginTop: "80px",
+}));
+
 export default function CollectFees() {
   const [data, setData] = useState([]);
   const { selectedSetting } = useContext(SettingContext);
@@ -74,6 +88,25 @@ export default function CollectFees() {
   const [downloadingReceipt, setDownloadingReceipt] = useState(false);
   const [fetchingStudents, setFetchingStudents] = useState(false);
   const [installmentId, setInstallmentId] = useState("");
+
+  const [penalty, setPenalty] = useState("");
+  const [miscellaneous, setMiscellaneous] = useState("");
+  const [openConcessionModal, setOpenConcessionModal] = useState(false);
+  const [concession, setConcession] = useState(null);
+
+  const handleConcessionSubmit = (data) => {
+    setConcession(data);
+    setOpenConcessionModal(false);
+  };
+
+  const handleCloseConcessionModal = () => setOpenConcessionModal(false);
+  const handleOpenConcessionModal = () => {
+    if (concession) {
+      setConcession(null);
+    } else {
+      setOpenConcessionModal(true);
+    }
+  };
 
   // get student fee Details
   const handleSubmitFind = async (values) => {
@@ -276,13 +309,30 @@ export default function CollectFees() {
     );
   }, [entryFormik.values.student, entryFormik.values.feeMap]);
 
+  const handleChangeCollectingAmount = (e, itemDetail) => {
+    let newCategories = feeDetails.feeMapCategories?.map((c) =>
+      c._id === itemDetail._id ? { ...c, amountPaid: e.target.value } : c
+    );
+
+    setFeeDetails({ ...feeDetails, feeMapCategories: newCategories });
+  };
+
+  const collectingAmount = useMemo(() => {
+    return feeDetails
+      ? feeDetails.feeMapCategories?.reduce(
+          (acc, c) => acc + parseFloat(c.amountPaid),
+          0
+        )
+      : 0;
+  }, [feeDetails]);
+
   return (
     <>
       <PageHeader title="Collect Fees" />
 
       {/* Filter selection */}
-      <Paper sx={{ padding: 2, marginBottom: 2 }}>
-        <Grid rowSpacing={1} columnSpacing={2} container>
+      <Paper sx={{ padding: 1, marginBottom: 2 }}>
+        <Grid columnSpacing={1} container>
           <Grid xs={12} md={6} lg={3} item>
             <FormSelect
               required={true}
@@ -349,7 +399,7 @@ export default function CollectFees() {
       {feeDetails ? (
         <Paper
           sx={{
-            padding: 2,
+            padding: 1,
             my: 3,
             backgroundColor: (theme) =>
               theme.palette.mode === "dark"
@@ -471,13 +521,19 @@ export default function CollectFees() {
                   </TableCell>
 
                   <TableCell align="center">
-                    <Typography>₹ {itemDetail.amount}</Typography>
+                    <Typography fontWeight="bold">
+                      ₹ {itemDetail.amount}
+                    </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <CustomInput
+                      type="number"
                       style={{ maxWidth: "150px" }}
-                      value={itemDetail.amountPaid}
+                      value={itemDetail.amountPaid || ""}
                       label="Enter Amount"
+                      onChange={(e) =>
+                        handleChangeCollectingAmount(e, itemDetail)
+                      }
                     />
                   </TableCell>
                 </TableRow>
@@ -495,80 +551,71 @@ export default function CollectFees() {
                 </TableCell>
 
                 <TableCell align="center">
-                  <Typography sx={{ fontWeight: "bold" }}>₹ 100</Typography>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    ₹ {feeDetails?.currentDue?.toFixed(2)}
+                  </Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography sx={{ fontWeight: "bold" }}>₹ 100</Typography>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    ₹ {collectingAmount}
+                  </Typography>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              padding: "10px",
-              columnGap: "10px",
-              backgroundColor: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "rgba(255,255,255,0.2)"
-                  : "whitesmoke",
-              borderRadius: "5px",
-              marginTop: "80px",
-            }}>
+          <ExtraFeeContainer>
             <Stack direction="row" columnGap={2}>
-              <TextField
+              <CustomInput
                 type="number"
-                size="small"
                 name="penalty"
-                label="Penalty"
-                // value={penalty || ""}
-                // onChange={(e) => setPenalty(e.target.value)}
+                value={penalty}
+                onChange={(e) => setPenalty(e.target.value)}
+                label="Penalty/Fine"
+                style={{ marginBottom: "15px" }}
               />
-              <TextField
+              <CustomInput
                 type="number"
-                size="small"
-                name="payingAmount"
-                label="Paying Amount"
-                // value={payingAmount || ""}
-                // onChange={(e) => setPayingAmount(e.target.value)}
+                name="miscellaneous"
+                value={miscellaneous}
+                onChange={(e) => setMiscellaneous(e.target.value)}
+                label="Miscellaneous"
               />
             </Stack>
-            {/* <div className={css.addRowBtn_childFlex}>
-                  <div>
-                    <Button
-                      onClick={handleConcessionDialogOpen}
-                      variant="contained"
-                      size="small"
-                    >
-                      {concession ? "remove concession" : "add concession"}
-                    </Button>
-                    <div className={css.concessionText}>
-                      {concession
-                        ? concession?.format === "Value"
-                          ? `Concession:- ₹${concession?.concession}`
-                          : `Concession:- ${concession?.concession}%`
-                        : ""}
-                    </div>
-                  </div>
-                  <Button
-                    onClick={handleCollectFeeDialogOpen}
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      background: "#1B3779",
-                      "&:hover": {
-                        background: "#1B3779",
-                      },
-                    }}
-                  >
-                    collect fee
-                  </Button>
-                </div> */}
-          </Box>
+            <Box sx={{ display: "flex", columnGap: 2, alignItems: "center" }}>
+              <Stack direction="row" columnGap={2}>
+                <Typography sx={{ textAlign: "center", fontWeight: "bold" }}>
+                  {concession
+                    ? concession?.format === "Value"
+                      ? `Concession : ₹${concession?.concession}`
+                      : `Concession : ${concession?.concession}%`
+                    : ""}
+                </Typography>
+                <Button
+                  color="warning"
+                  onClick={handleOpenConcessionModal}
+                  variant="contained"
+                  size="small">
+                  {concession ? "remove concession" : "add concession"}
+                </Button>
+              </Stack>
+
+              <Button
+                // onClick={handleCollectFeeDialogOpen}
+                variant="contained"
+                size="small">
+                collect fee
+              </Button>
+            </Box>
+          </ExtraFeeContainer>
         </TableContainer>
       )}
+
+      {/* Concession model */}
+      <QuickFeeConcessionModal
+        onSubmit={handleConcessionSubmit}
+        open={openConcessionModal}
+        onClose={handleCloseConcessionModal}
+      />
     </>
   );
 }
