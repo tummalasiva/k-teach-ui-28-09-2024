@@ -63,10 +63,13 @@ export default function AddFeeMapCategory({
           sx={{
             padding: "10px",
           }}>
-          <Typography variant="subtitle">
+          <Typography variant="caption" fontSize={12}>
             Total Amount:{" "}
-            <b style={{ color: "rgb(0, 196, 159)" }}>{totalAmount}</b> Left
-            Amount: <b style={{ color: "rgb(255, 128, 66)" }}>{leftAmount}</b>
+            <b style={{ color: "rgb(0, 196, 159)" }}>₹{totalAmount}</b>
+          </Typography>
+          <Typography variant="caption" fontSize={12} ml={2}>
+            Left Amount:{" "}
+            <b style={{ color: "rgb(255, 128, 66)" }}>₹{leftAmount}</b>
           </Typography>
           {categories.map((c, i) => (
             <Grid
