@@ -2,13 +2,33 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
 import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
+import dayjs from "dayjs";
+import CustomInput from "../../forms/CustomInput";
 
 const showInfo = (data) => {
   let result = [];
@@ -52,40 +72,39 @@ export default function CollectFees() {
   const [totalAmountToBePaid, setTotalAmountToBePaid] = useState(0);
   const [selectedPastDueIds, setSelectedPastDueIds] = useState([]);
   const [downloadingReceipt, setDownloadingReceipt] = useState(false);
-  const [feeParticular, setFeeParticulars] = useState([]);
-  const [itemDetails, setItemDetails] = useState([]);
   const [fetchingStudents, setFetchingStudents] = useState(false);
+  const [installmentId, setInstallmentId] = useState("");
 
   // get student fee Details
   const handleSubmitFind = async (values) => {
     setFetchingStudents(true);
+
+    if (!values.feeMap || !values.student || !values.receiptName) {
+      setFeeDetails(null);
+      return setFetchingStudents(false);
+    }
 
     try {
       const { data: feeReceipt, status } = await get(
         PRIVATE_URLS.receipt.getFeeDetails,
         {
           params: {
-            feeMapId: entryFormik.values.feeMap,
-            studentId: selectedStudent._id,
-            receiptTitleId: entryFormik.values.receiptName,
+            feeMapId: values.feeMap,
+            studentId: values.student,
+            receiptTitleId: values.receiptName,
             installmentId:
-              entryFormik.values.installmentId ||
-              feeMaps.filter((f) => f._id == entryFormik.values.feeMap)[0]
-                ?.installments[0]._id,
+              installmentId ||
+              feeMaps.filter((f) => f._id == values.feeMap)[0]?.installments[0]
+                ._id,
+            schoolId: selectedSetting._id,
           },
         }
       );
 
       console.log(feeReceipt.result, "fee details");
 
-      // setFeeDetails(feeReceipt.result);
-      // setItemDetails(
-      //   feeReceipt.result.feeMapCategories.map((d) => ({
-      //     name: d.name,
-      //     amount: Number(d.amount),
-      //     description: d.description,
-      //   }))
-      // );
+      setFeeDetails(feeReceipt.result);
+      setInstallmentId(feeReceipt.result.currentInstallment);
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +118,6 @@ export default function CollectFees() {
       class: "",
       section: "",
       student: "",
-      installmentId: "",
     },
     onSubmit: handleSubmitFind,
     enableReinitialize: true,
@@ -145,26 +163,33 @@ export default function CollectFees() {
 
   const getSections = async () => {
     try {
+      if (!entryFormik.values.class) {
+        entryFormik.setFieldValue("section", data.result[0]?._id || "");
+        return setSections([]);
+      }
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: { search: { class: entryFormik.values.class } },
       });
       setSections(
         data.result.map((s) => ({ ...s, label: s.name, value: s._id }))
       );
-      entryFormik.setFieldValue("section", data.result[0]?._id);
+      entryFormik.setFieldValue("section", data.result[0]?._id || "");
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (entryFormik.values.class) {
-      getSections();
-    }
+    getSections();
   }, [entryFormik.values.class]);
 
   const getAllFeeMaps = async () => {
     try {
+      if (!entryFormik.values.class || !entryFormik.values.receiptName) {
+        setFeeMaps([]);
+        entryFormik.setFieldValue("feeMap", "");
+        return;
+      }
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: {
           search: {
@@ -177,26 +202,33 @@ export default function CollectFees() {
       });
 
       setFeeMaps(
-        data.result.map((d) => ({ ...d, label: showInfo(d), value: d._id }))
+        data?.result?.map((d) => ({ ...d, label: showInfo(d), value: d._id }))
       );
-      entryFormik.setFieldValue("feeMap", data.result[0]?._id);
+      entryFormik.setFieldValue("feeMap", data?.result?.[0]?._id);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (entryFormik.values.receiptName && entryFormik.values.class) {
-      getAllFeeMaps();
-    }
+    getAllFeeMaps();
   }, [
     entryFormik.values.receiptName,
     entryFormik.values.class,
-    selectedSetting._id,
+    selectedSetting,
   ]);
 
   // get all students
   const getAllStudents = async () => {
+    if (
+      !entryFormik.values.feeMap ||
+      !entryFormik.values.class ||
+      !entryFormik.values.section
+    ) {
+      setStudents([]);
+      entryFormik.setFieldValue("student", "");
+      return;
+    }
     try {
       const filter = {
         feeMapId: entryFormik.values.feeMap,
@@ -221,41 +253,34 @@ export default function CollectFees() {
           value: s._id,
         }))
       );
+
+      entryFormik.setFieldValue("student", students.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    entryFormik.setFieldValue("student", "");
-    if (
-      entryFormik.values.feeMap &&
-      entryFormik.values.class &&
-      entryFormik.values.section
-    ) {
-      getAllStudents();
-    } else {
-      setStudents([]);
-      setSelectedStudent(null);
-    }
-  }, [entryFormik.values.feeMap]);
-
-  const handleStudentSelect = (e, val) => {
-    setSelectedStudent(val);
-    setItemDetails([]);
-    setFeeDetails(null);
-    setPaymentData({});
-  };
+    getAllStudents();
+  }, [
+    entryFormik.values.feeMap,
+    entryFormik.values.class,
+    entryFormik.values.section,
+  ]);
 
   useEffect(() => {
-    if (entryFormik.values.installmentId) {
-      entryFormik.handleSubmit();
-    }
-  }, [entryFormik.values.installmentId]);
+    setFeeDetails(null);
+    setInstallmentId(
+      feeMaps.find((f) => f._id === entryFormik.values.feeMap)?.installments[0]
+        ?._id
+    );
+  }, [entryFormik.values.student, entryFormik.values.feeMap]);
 
   return (
     <>
       <PageHeader title="Collect Fees" />
+
+      {/* Filter selection */}
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} md={6} lg={3} item>
@@ -319,6 +344,231 @@ export default function CollectFees() {
           </Grid>
         </Grid>
       </Paper>
+
+      {/* Student Info, installment info and due details */}
+      {feeDetails ? (
+        <Paper
+          sx={{
+            padding: 2,
+            my: 3,
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255,255,255,0.2)"
+                : "whitesmoke",
+          }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}>
+            <Box>
+              <Typography fontSize="15px">
+                <b>Student Name: </b> {feeDetails?.student?.basicInfo?.name}
+              </Typography>
+              <FormControl size="small" sx={{ width: 300, mt: 1 }} required>
+                <InputLabel id="demo-simple-select-filled-label">
+                  Select Installment
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  name="installmentId"
+                  label="Select Installment"
+                  value={
+                    installmentId || feeDetails?.feeMap?.installments[0]._id
+                  }
+                  required
+                  onChange={(event) => {
+                    setInstallmentId(event.target.value);
+                    entryFormik.handleSubmit();
+                  }}>
+                  {feeDetails?.feeMap?.installments?.map((row, index) => (
+                    <MenuItem
+                      key={row._id}
+                      value={row._id}
+                      sx={{ fontSize: 12, fontWeight: 500 }}>
+                      {index + 1}-{row.amount}-
+                      {feeDetails?.previousReceipts?.filter(
+                        (r) => r.installmentPaid == row._id
+                      )[0]
+                        ? "Paid"
+                        : "Not-Paid"}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Typography sx={{ fontSize: "14px", margin: "2px 0 0 0" }}>
+                Due Date :{" "}
+                {installmentId
+                  ? dayjs(
+                      feeDetails?.feeMap?.installments.filter(
+                        (i) => i._id == installmentId
+                      )[0]?.dueDate
+                    )
+                      .toDate()
+                      .toLocaleDateString()
+                  : null}
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography fontSize="15px">
+                <b>Past Due :</b> ₹{" "}
+                <span>
+                  {feeDetails?.pastDues
+                    ?.reduce((total, current) => total + current.amount, 0)
+                    .toFixed(2)}
+                </span>
+              </Typography>
+              <Typography fontSize="15px">
+                <b>Total Due :</b> ₹{" "}
+                <span>
+                  {feeDetails?.totalDueForThisAcademicYear?.toFixed(2)}
+                </span>
+              </Typography>
+              {installmentId && (
+                <Typography fontSize="15px">
+                  <b>Current Due :</b> ₹{" "}
+                  <span>{feeDetails?.currentDue?.toFixed(2)}</span>
+                </Typography>
+              )}
+            </Box>
+          </Box>
+        </Paper>
+      ) : null}
+
+      {/* Fee Particular details */}
+
+      {!feeDetails ? null : (
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead
+              sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
+              <TableRow>
+                <TableCell sx={{ color: "white" }} align="center">
+                  #SL
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
+                  Fee Particular
+                </TableCell>
+
+                <TableCell sx={{ color: "white" }} align="center">
+                  Due Amount
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
+                  Collecting Amount
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {feeDetails?.feeMapCategories?.map((itemDetail, index) => (
+                <TableRow key={index}>
+                  <TableCell align="center">{index + 1}</TableCell>
+                  <TableCell align="center">
+                    <Typography>{itemDetail.name}</Typography>
+                  </TableCell>
+
+                  <TableCell align="center">
+                    <Typography>₹ {itemDetail.amount}</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <CustomInput
+                      style={{ maxWidth: "150px" }}
+                      value={itemDetail.amountPaid}
+                      label="Enter Amount"
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow
+                sx={{
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255,255,255,0.2)"
+                      : "whitesmoke",
+                }}>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center">
+                  <Typography sx={{ fontWeight: "bold" }}>Total</Typography>
+                </TableCell>
+
+                <TableCell align="center">
+                  <Typography sx={{ fontWeight: "bold" }}>₹ 100</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography sx={{ fontWeight: "bold" }}>₹ 100</Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              padding: "10px",
+              columnGap: "10px",
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255,255,255,0.2)"
+                  : "whitesmoke",
+              borderRadius: "5px",
+              marginTop: "80px",
+            }}>
+            <Stack direction="row" columnGap={2}>
+              <TextField
+                type="number"
+                size="small"
+                name="penalty"
+                label="Penalty"
+                // value={penalty || ""}
+                // onChange={(e) => setPenalty(e.target.value)}
+              />
+              <TextField
+                type="number"
+                size="small"
+                name="payingAmount"
+                label="Paying Amount"
+                // value={payingAmount || ""}
+                // onChange={(e) => setPayingAmount(e.target.value)}
+              />
+            </Stack>
+            {/* <div className={css.addRowBtn_childFlex}>
+                  <div>
+                    <Button
+                      onClick={handleConcessionDialogOpen}
+                      variant="contained"
+                      size="small"
+                    >
+                      {concession ? "remove concession" : "add concession"}
+                    </Button>
+                    <div className={css.concessionText}>
+                      {concession
+                        ? concession?.format === "Value"
+                          ? `Concession:- ₹${concession?.concession}`
+                          : `Concession:- ${concession?.concession}%`
+                        : ""}
+                    </div>
+                  </div>
+                  <Button
+                    onClick={handleCollectFeeDialogOpen}
+                    variant="contained"
+                    size="small"
+                    sx={{
+                      background: "#1B3779",
+                      "&:hover": {
+                        background: "#1B3779",
+                      },
+                    }}
+                  >
+                    collect fee
+                  </Button>
+                </div> */}
+          </Box>
+        </TableContainer>
+      )}
     </>
   );
 }
