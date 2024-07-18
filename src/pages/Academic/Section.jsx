@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import CustomTable from "../../components/Tables/CustomTable";
 import { academicSectionTableKeys } from "../../data/tableKeys/academicSectionData";
@@ -34,6 +34,8 @@ export default function Section() {
   const [classes, setClasses] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
+  const [subject, setSubject] = useState([]);
+  const [subjectTeachers, setSubjectTeachers] = useState([]);
 
   const getEmployees = async () => {
     try {
@@ -76,6 +78,22 @@ export default function Section() {
         setSelectedClass(data.result[0]._id);
         entryFormik.setFieldValue("class", data.result[0]._id);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSubject = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.subject.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: { class: entryFormik.values.class },
+        },
+      });
+      setSubject(data.result);
+
+      console.log(data.result, "rrrrrrrrr");
     } catch (error) {
       console.log(error);
     }
@@ -142,6 +160,11 @@ export default function Section() {
       getData();
     }
   }, [selectedClass, selectedSetting]);
+  useEffect(() => {
+    if (entryFormik.values.class) {
+      getSubject();
+    }
+  }, [entryFormik.values.class, selectedSetting]);
 
   const handleEditClick = (data) => {
     setDataToEdit(data);
@@ -217,6 +240,16 @@ export default function Section() {
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
+              name="class"
+              label="Select Class"
+              required={true}
+              options={classes}
+            />
+          </Grid>
+
+          <Grid xs={12} sm={6} md={6} item>
+            <FormSelect
+              formik={entryFormik}
               name="sectionTeacher"
               label="Section Teacher"
               options={employees}
@@ -243,6 +276,43 @@ export default function Section() {
             <FormInput formik={entryFormik} name="note" label="Note" />
           </Grid>
         </Grid>
+
+        <Box
+          sx={{
+            padding: "10px",
+            border: "1px solid lightgray",
+            borderRadius: "5px",
+          }}>
+          <Typography>Select subject teachers</Typography>
+
+          {subject.map((sub, index) => (
+            <Grid
+              container
+              spacing={2}
+              key={sub._id}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}>
+              <Grid item xs={12} md={3}>
+                {" "}
+                <Typography sx={{ fontSize: "14px", fontWeight: "bold" }}>
+                  {sub.name}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <FormSelect
+                  formik={entryFormik}
+                  name="subjectTeacher"
+                  label="Select Teacher"
+                  options={employees}
+                  showSearch={true}
+                />
+              </Grid>
+            </Grid>
+          ))}
+        </Box>
       </FormModal>
     </>
   );
