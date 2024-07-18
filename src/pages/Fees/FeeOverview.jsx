@@ -15,6 +15,34 @@ import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 
+const showInfo = (data) => {
+  let result = [];
+
+  for (let dep of data.dependencies) {
+    if (["class"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class`;
+      result.push(newItem);
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
+      result.push(newItem);
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
+      result.push(newItem);
+    } else if (dep === "hostel") {
+      let newItem = `[${data.hostel?.name}]-Hostel`;
+      result.push(newItem);
+    } else if (dep == "transport") {
+      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    } else if (dep == "pickType") {
+      let newItem = `[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    }
+  }
+
+  return result.join(" | ");
+};
+
 export default function FeeOverview() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
@@ -22,6 +50,22 @@ export default function FeeOverview() {
   const [receipts, setReceips] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
+  const [feeMaps, setFeeMaps] = useState([]);
+  const [collectedBy, setCollectedBy] = useState([]);
+
+  const entryFormik = useFormik({
+    initialValues: {
+      academicYear: "",
+      collected: "",
+      feeReceipt: "",
+      feeMap: "",
+      class: "",
+      section: "",
+      fromDate: dayjs(new Date()),
+      toDate: dayjs(new Date()),
+    },
+    onSubmit: console.log("nnnn"),
+  });
 
   //get academic year
   const getAcademicYear = async () => {
@@ -40,6 +84,48 @@ export default function FeeOverview() {
     }
   };
 
+  const getCollected = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.role.list, {
+        params: {
+          search: {
+            $or: [
+              { roleName: "ACCOUNTANT" },
+              { roleName: "SUPER ADMIN" },
+              { roleName: "ADMIN" },
+            ],
+          },
+          schoolId: selectedSetting._id,
+        },
+      });
+
+      // console.log(data.result, "role");
+
+      entryFormik.setFieldValue("collected", data.result[0]?._id);
+
+      const employeeResponse = await get(PRIVATE_URLS.employee.list, {
+        params: {
+          search: {
+            role: entryFormik.values.collected,
+          },
+          schoolId: selectedSetting._id,
+        },
+      });
+      // console.log(employeeResponse.data, "mep");
+
+      setCollectedBy(
+        employeeResponse?.data?.result.map((e) => ({
+          ...e,
+          label: e.role?.name,
+          value: e?._id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get receipts
   const getReceipts = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
@@ -47,6 +133,7 @@ export default function FeeOverview() {
       });
 
       setReceips(data.result.map((r) => ({ label: r.name, value: r._id })));
+      entryFormik.setFieldValue("feeReceipt", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -89,30 +176,51 @@ export default function FeeOverview() {
     }
   };
 
+  // get fee map list
+  const getFeeMaps = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.feeMap.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            active: true,
+            class: entryFormik.values.class,
+            receiptTitle: entryFormik.values.receiptName,
+          },
+        },
+      });
+      setFeeMaps(
+        data?.result?.map((f) => ({ ...f, label: showInfo(f), value: f._id }))
+      );
+      entryFormik.setFieldValue("feeMap", data.result[0]?._id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getAcademicYear();
     getReceipts();
     getClasses();
+    getCollected();
   }, [selectedSetting._id]);
 
-  const entryFormik = useFormik({
-    initialValues: {
-      academicYear: "",
-      collected: "",
-      feeReceipt: "",
-      feeMap: "",
-      class: "",
-      section: "",
-      fromDate: dayjs(new Date()),
-      toDate: dayjs(new Date()),
-    },
-    onSubmit: console.log("nnnn"),
-  });
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
     }
-  }, [entryFormik.values.class]);
+  }, [entryFormik.values.class, selectedSetting]);
+
+  useEffect(() => {
+    if (entryFormik.values.class && entryFormik.values.feeReceipt) {
+      getFeeMaps();
+    }
+  }, [
+    entryFormik.values.class,
+    entryFormik.values.feeReceipt,
+    selectedSetting,
+  ]);
+
   return (
     <>
       <PageHeader title="Fee Overview" />
@@ -137,7 +245,7 @@ export default function FeeOverview() {
               name="collected"
               formik={entryFormik}
               label="Select Collected By"
-              // options={""}
+              options={collectedBy}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -147,15 +255,6 @@ export default function FeeOverview() {
               formik={entryFormik}
               label="Select Fee Receipt"
               options={receipts}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormSelect
-              required={true}
-              name="feeMap"
-              formik={entryFormik}
-              label="Select Fee Map"
-              // options={""}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -174,6 +273,15 @@ export default function FeeOverview() {
               formik={entryFormik}
               label="Select Section"
               options={sections}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              required={true}
+              name="feeMap"
+              formik={entryFormik}
+              label="Select Fee Map"
+              options={feeMaps}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>

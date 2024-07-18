@@ -10,6 +10,35 @@ import { balanceFeeReportTableKeys } from "../../data/tableKeys/balanceFeeReport
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import { LoadingButton } from "@mui/lab";
+
+const showInfo = (data) => {
+  let result = [];
+
+  for (let dep of data.dependencies) {
+    if (["class"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class`;
+      result.push(newItem);
+    } else if (["classOld"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-Old`;
+      result.push(newItem);
+    } else if (["classNew"].includes(dep)) {
+      let newItem = `[${data.class?.name}]-Class-New`;
+      result.push(newItem);
+    } else if (dep === "hostel") {
+      let newItem = `[${data.hostel?.name}]-Hostel`;
+      result.push(newItem);
+    } else if (dep == "transport") {
+      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    } else if (dep == "pickType") {
+      let newItem = `[${data.pickType}]-Pick_Type`;
+      result.push(newItem);
+    }
+  }
+
+  return result.join(" | ");
+};
 
 export default function BalanceFeeReport() {
   const { selectedSetting } = useContext(SettingContext);
@@ -18,6 +47,51 @@ export default function BalanceFeeReport() {
   const [receipts, setReceips] = useState([]);
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
+  const [feeMaps, setFeeMaps] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // get balance fee reports
+  const handleSubmitFind = async (values) => {
+    console.log(values, "values");
+    setLoading(true);
+
+    try {
+      const { data: feeReport, status } = await get(
+        PRIVATE_URLS.receipt.getBalanceFeeReport,
+        {
+          params: {
+            search: {
+              classId: values.class,
+              sectionId: values.section,
+              receiptTitleId: values.receiptName,
+              feeMapId: values.feeMap,
+              academicYearId: values.academicYear,
+            },
+            schoolId: selectedSetting._id,
+          },
+        }
+      );
+
+      console.log(feeReport.result, "fee details");
+
+      setData(feeReport.result);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const entryFormik = useFormik({
+    initialValues: {
+      academicYear: "",
+      receiptName: "",
+      feeMap: "",
+      class: "",
+      section: "",
+    },
+    onSubmit: handleSubmitFind,
+    enableReinitialize: true,
+  });
 
   //get academic year
   const getAcademicYear = async () => {
@@ -36,13 +110,18 @@ export default function BalanceFeeReport() {
     }
   };
 
+  // get receipts
   const getReceipts = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.receiptTitle.list, {
-        params: { schoolId: selectedSetting._id },
+        params: {
+          search: { active: true },
+          schoolId: selectedSetting._id,
+        },
       });
 
       setReceips(data.result.map((r) => ({ label: r.name, value: r._id })));
+      entryFormik.setFieldValue("receiptName", data.result[0]?._id);
     } catch (error) {
       console.log(error);
     }
@@ -85,28 +164,49 @@ export default function BalanceFeeReport() {
     }
   };
 
+  // get fee map list
+  const getFeeMaps = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.feeMap.list, {
+        params: {
+          schoolId: selectedSetting._id,
+          search: {
+            active: true,
+            class: entryFormik.values.class,
+            receiptTitle: entryFormik.values.receiptName,
+          },
+        },
+      });
+      setFeeMaps(
+        data?.result?.map((f) => ({ ...f, label: showInfo(f), value: f._id }))
+      );
+      entryFormik.setFieldValue("feeMap", data.result[0]?._id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getAcademicYear();
     getReceipts();
     getClasses();
   }, [selectedSetting._id]);
 
-  const entryFormik = useFormik({
-    initialValues: {
-      academicYear: "",
-      receiptName: "",
-      feeMap: "",
-      class: "",
-      section: "",
-    },
-    onSubmit: console.log("nnnn"),
-  });
-
   useEffect(() => {
     if (entryFormik.values.class) {
       getSections();
     }
   }, [entryFormik.values.class]);
+
+  useEffect(() => {
+    if (entryFormik.values.receiptName && entryFormik.values.class) {
+      getFeeMaps();
+    }
+  }, [
+    entryFormik.values.receiptName,
+    entryFormik.values.class,
+    selectedSetting._id,
+  ]);
 
   return (
     <>
@@ -156,7 +256,7 @@ export default function BalanceFeeReport() {
               name="feeMap"
               formik={entryFormik}
               label="Select Fee Map"
-              // options={}
+              options={feeMaps}
             />
           </Grid>
           <Grid
@@ -165,9 +265,13 @@ export default function BalanceFeeReport() {
             lg={3}
             style={{ alignSelf: "center", marginTop: "10px" }}
             item>
-            <Button size="small" variant="contained">
+            <LoadingButton
+              size="small"
+              variant="contained"
+              loading={loading}
+              onClick={entryFormik.handleSubmit}>
               Find
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Paper>

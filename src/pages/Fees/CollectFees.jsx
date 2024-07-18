@@ -101,7 +101,7 @@ export default function CollectFees() {
         }
       );
 
-      console.log(feeReceipt.result, "fee details");
+      // console.log(feeReceipt.result, "fee details");
 
       setFeeDetails(feeReceipt.result);
       setInstallmentId(feeReceipt.result.currentInstallment);
