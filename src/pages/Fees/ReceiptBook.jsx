@@ -246,7 +246,6 @@ export default function ReceiptBook() {
   const handleOpenFeeMap = () => {
     setOpenFeeMap(true);
     setDataToEdit(null);
-    setSelectedReceiptId("");
   };
 
   const handleFeeMapEdit = (data) => {
