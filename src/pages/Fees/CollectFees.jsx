@@ -811,7 +811,7 @@ export default function CollectFees() {
                       type="number"
                       style={{ maxWidth: "150px", margin: "4px 0" }}
                       value={itemDetail.amountPaid || ""}
-                      label="Enter Amount"
+                      label="Amount"
                       onChange={(e) =>
                         handleChangeCollectingAmount(e, itemDetail)
                       }

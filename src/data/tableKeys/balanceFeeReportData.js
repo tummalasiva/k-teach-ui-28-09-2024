@@ -42,6 +42,10 @@ export const balanceFeeReportTableKeys = [
     key: "fine",
   },
   {
+    name: "Miscellaneous",
+    key: "miscellaneous",
+  },
+  {
     name: "Paid",
     key: "paid",
   },
