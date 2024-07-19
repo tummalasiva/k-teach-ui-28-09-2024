@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
@@ -50,9 +52,15 @@ export default function FormTable({ employee }) {
       {employee?.photo ? (
         <img
           src={employee.photo}
-          height={75}
-          width={75}
-          style={{ borderRadius: "50%", alignSelf: "center" }}
+          height={100}
+          width={100}
+          style={{
+            borderRadius: "50%",
+            display: "block",
+            objectFit: "cover",
+            margin: "0 auto",
+            border: "1x solid lightgray",
+          }}
           alt="Employee Photo"
         />
       ) : (
@@ -71,8 +79,7 @@ export default function FormTable({ employee }) {
             lg: "block",
           },
           borderRadius: "5px",
-        }}
-      >
+        }}>
         <TableBody>
           <StyledTableRow>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>
@@ -201,8 +208,7 @@ export default function FormTable({ employee }) {
             md: "none",
             lg: "none",
           },
-        }}
-      >
+        }}>
         <TableBody>
           <StyledTableRow>
             <StyledTableCell align="left" sx={{ fontWeight: "bold" }}>

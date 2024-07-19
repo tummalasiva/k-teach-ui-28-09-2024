@@ -285,7 +285,7 @@ export default function AddEmployee() {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        console.log(data, "data555");
+        // console.log(data, "data555");
       } else {
         const { data } = await post(PRIVATE_URLS.employee.create, formData, {
           headers: { "Content-Type": "multipart/form-data" },
