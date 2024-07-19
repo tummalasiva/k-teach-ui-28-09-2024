@@ -25,12 +25,15 @@ import {
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
 import SettingContext from "../../context/SettingsContext";
-import { get } from "../../services/apiMethods";
+import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
 import CustomInput from "../../forms/CustomInput";
 import QuickFeeConcessionModal from "./QuickFeeConcessionModal";
+import QuickFeeCollectModal from "./QuickFeeCollectModal";
+import { downloadFile } from "../../utils";
+import { toast } from "react-toastify";
 
 const showInfo = (data) => {
   let result = [];
@@ -93,6 +96,14 @@ export default function CollectFees() {
   const [miscellaneous, setMiscellaneous] = useState("");
   const [openConcessionModal, setOpenConcessionModal] = useState(false);
   const [concession, setConcession] = useState(null);
+  const [note, setNote] = useState("");
+  const [payingDate, setPayingDate] = useState(null);
+  const [collectingFee, setCollectingFee] = useState(false);
+  const [downloadingPreview, setDownloadingPreview] = useState(false);
+  const [openCollectModal, setOpenCollectModal] = useState(false);
+
+  const handleCloseCollectFeeModal = () => setOpenCollectModal(false);
+  const handleOpenCollectFeeModal = () => setOpenCollectModal(true);
 
   const handleConcessionSubmit = (data) => {
     setConcession(data);
@@ -197,7 +208,7 @@ export default function CollectFees() {
   const getSections = async () => {
     try {
       if (!entryFormik.values.class) {
-        entryFormik.setFieldValue("section", data.result[0]?._id || "");
+        entryFormik.setFieldValue("section", "");
         return setSections([]);
       }
       const { data } = await get(PRIVATE_URLS.section.list, {
@@ -317,6 +328,36 @@ export default function CollectFees() {
     setFeeDetails({ ...feeDetails, feeMapCategories: newCategories });
   };
 
+  const payableAmount = useMemo(() => {
+    let feeParticularAmount = feeDetails
+      ? feeDetails.feeMapCategories?.reduce(
+          (acc, c) => acc + parseFloat(c.amountPaid),
+          0
+        )
+      : 0;
+
+    let totalAmountBeingPaid =
+      parseFloat(feeParticularAmount) +
+      parseFloat(penalty || 0) +
+      parseFloat(miscellaneous || 0);
+
+    let concessionAmount = 0;
+    if (concession) {
+      if (concession.format === "Percentage") {
+        concessionAmount =
+          (Number(concession.concession) / 100) * Number(totalAmountBeingPaid);
+      } else {
+        concessionAmount = Number(concession.concession);
+      }
+    }
+    return (
+      parseFloat(feeParticularAmount) +
+      parseFloat(penalty || 0) +
+      parseFloat(miscellaneous || 0) -
+      concessionAmount
+    );
+  }, [feeDetails, penalty, miscellaneous, concession]);
+
   const collectingAmount = useMemo(() => {
     return feeDetails
       ? feeDetails.feeMapCategories?.reduce(
@@ -325,6 +366,90 @@ export default function CollectFees() {
         )
       : 0;
   }, [feeDetails]);
+
+  // Preview
+  const handlePreviewButtonClick = async (paymentMode, paymentDetails) => {
+    setDownloadingPreview(true);
+    const data = {
+      penalty: penalty || 0,
+      miscellaneous: miscellaneous || 0,
+      payingDate: payingDate ? dayjs(payingDate).format("DD/MM/YYYY") : null,
+      note,
+      receiptTitleId: entryFormik.values.receiptName,
+      feeMapId: entryFormik.values.feeMap,
+      studentId: entryFormik.values.student,
+      paymentMode: paymentMode,
+      feeParticulars: feeDetails?.feeMapCategories,
+      installmentId,
+      concessionDetails: concession
+        ? {
+            amount: concession.concession,
+            referredBy: concession.refer,
+            givenAs: concession.format,
+          }
+        : {},
+      schoolId: selectedSetting._id,
+    };
+
+    switch (paymentMode) {
+      case "Cash":
+        data.cashDetails = {};
+        break;
+      case "Cheque":
+        data.chequeDetails = {
+          bankName: paymentDetails.bankName,
+          branchName: paymentDetails.branchName,
+          chequeNumber: paymentDetails.chequeNumber,
+          chequeDate: paymentDetails.chequeDate,
+        };
+        break;
+      case "DD":
+        data.ddDetails = {
+          bankName: paymentDetails.bankName,
+          branchName: paymentDetails.branchName,
+        };
+        break;
+      case "Upi":
+        data.upiDetails = {
+          upiApp: paymentDetails.upiApp,
+          utrNo: paymentDetails.utrNo,
+        };
+        break;
+      case "Card":
+        data.cardDetails = {
+          bankName: paymentDetails.bankName,
+          cardType: paymentDetails.cardType,
+        };
+        break;
+      case "Netbanking":
+        data.netBankingDetails = {
+          bankName: paymentDetails.bankName,
+          refNumber: paymentDetails.refNumber,
+          paidByName: paymentDetails.paidByName,
+        };
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const response = await post(PRIVATE_URLS.receipt.previewReceipt, data, {
+        responseType: "blob",
+        validateStatus: (status) => status < 500, // Accept any status code less than 500
+      });
+
+      if (response.status === 200) {
+        downloadFile("application/pdf", response.data, "Receipt_preview");
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    } finally {
+      setDownloadingPreview(false);
+    }
+  };
 
   return (
     <>
@@ -413,14 +538,15 @@ export default function CollectFees() {
               alignItems: "center",
             }}>
             <Box>
-              <Typography fontSize="15px">
+              {/* <Typography fontSize="14px">
                 <b>Student Name: </b> {feeDetails?.student?.basicInfo?.name}
-              </Typography>
+              </Typography> */}
               <FormControl size="small" sx={{ width: 300, mt: 1 }} required>
                 <InputLabel id="demo-simple-select-filled-label">
                   Select Installment
                 </InputLabel>
                 <Select
+                  size="small"
                   labelId="demo-simple-select-filled-label"
                   id="demo-simple-select-filled"
                   name="installmentId"
@@ -449,7 +575,14 @@ export default function CollectFees() {
                 </Select>
               </FormControl>
 
-              <Typography sx={{ fontSize: "14px", margin: "2px 0 0 0" }}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  margin: "2px 0 0 0",
+                  fontWeight: "bold",
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "orange" : "red",
+                }}>
                 Due Date :{" "}
                 {installmentId
                   ? dayjs(
@@ -464,23 +597,19 @@ export default function CollectFees() {
             </Box>
 
             <Box>
-              <Typography fontSize="15px">
-                <b>Past Due :</b> ₹{" "}
-                <span>
-                  {feeDetails?.pastDues
-                    ?.reduce((total, current) => total + current.amount, 0)
-                    .toFixed(2)}
-                </span>
+              <Typography fontSize="12px">
+                <b>Past Due (All Academic Years) :</b> ₹{" "}
+                <span>{feeDetails?.pastDues?.toFixed(2)}</span>
               </Typography>
-              <Typography fontSize="15px">
-                <b>Total Due :</b> ₹{" "}
+              <Typography fontSize="12px">
+                <b>Total Due (Current Academic Year) :</b> ₹{" "}
                 <span>
                   {feeDetails?.totalDueForThisAcademicYear?.toFixed(2)}
                 </span>
               </Typography>
               {installmentId && (
-                <Typography fontSize="15px">
-                  <b>Current Due :</b> ₹{" "}
+                <Typography fontSize="12px">
+                  <b>Current Due (Current Academic Year) :</b> ₹{" "}
                   <span>{feeDetails?.currentDue?.toFixed(2)}</span>
                 </Typography>
               )}
@@ -528,7 +657,7 @@ export default function CollectFees() {
                   <TableCell align="center">
                     <CustomInput
                       type="number"
-                      style={{ maxWidth: "150px" }}
+                      style={{ maxWidth: "150px", margin: "4px 0" }}
                       value={itemDetail.amountPaid || ""}
                       label="Enter Amount"
                       onChange={(e) =>
@@ -600,7 +729,7 @@ export default function CollectFees() {
               </Stack>
 
               <Button
-                // onClick={handleCollectFeeDialogOpen}
+                onClick={handleOpenCollectFeeModal}
                 variant="contained"
                 size="small">
                 collect fee
@@ -615,6 +744,21 @@ export default function CollectFees() {
         onSubmit={handleConcessionSubmit}
         open={openConcessionModal}
         onClose={handleCloseConcessionModal}
+      />
+      {/* payment details model */}
+      <QuickFeeCollectModal
+        collectingFee={collectingFee}
+        downloadingPreview={downloadingPreview}
+        onPreviewButtonClick={handlePreviewButtonClick}
+        feeReceipt={feeDetails}
+        // onSubmit={handleFeeCollect}
+        open={openCollectModal}
+        onClose={handleCloseCollectFeeModal}
+        onUpdateNote={setNote}
+        payingAmount={payableAmount}
+        note={note}
+        payingDate={payingDate}
+        setPayingDate={setPayingDate}
       />
     </>
   );
