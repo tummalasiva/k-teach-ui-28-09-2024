@@ -34,6 +34,7 @@ import QuickFeeConcessionModal from "./QuickFeeConcessionModal";
 import QuickFeeCollectModal from "./QuickFeeCollectModal";
 import { downloadFile } from "../../utils";
 import { toast } from "react-toastify";
+import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
 
 const showInfo = (data) => {
   let result = [];
@@ -145,10 +146,9 @@ export default function CollectFees() {
         }
       );
 
-      // console.log(feeReceipt.result, "fee details");
+      console.log(feeReceipt.result, "====");
 
       setFeeDetails(feeReceipt.result);
-      setInstallmentId(feeReceipt.result.currentInstallment);
     } catch (error) {
       console.log(error);
     }
@@ -379,7 +379,9 @@ export default function CollectFees() {
       feeMapId: entryFormik.values.feeMap,
       studentId: entryFormik.values.student,
       paymentMode: paymentMode,
-      feeParticulars: feeDetails?.feeMapCategories,
+      feeParticulars: feeDetails?.feeMapCategories?.filter(
+        (f) => f.amountPaid > 0
+      ),
       installmentId,
       concessionDetails: concession
         ? {
@@ -448,6 +450,98 @@ export default function CollectFees() {
       console.error("Network error:", error);
     } finally {
       setDownloadingPreview(false);
+    }
+  };
+
+  // collect
+
+  const handleCollectFee = async (paymentMode, paymentDetails) => {
+    setCollectingFee(true);
+    const data = {
+      penalty: penalty || 0,
+      miscellaneous: miscellaneous || 0,
+      payingDate: payingDate ? dayjs(payingDate).format("DD/MM/YYYY") : null,
+      note,
+      receiptTitleId: entryFormik.values.receiptName,
+      feeMapId: entryFormik.values.feeMap,
+      studentId: entryFormik.values.student,
+      paymentMode: paymentMode,
+      feeParticulars: feeDetails?.feeMapCategories?.filter(
+        (f) => f.amountPaid > 0
+      ),
+      installmentId,
+      concessionDetails: concession
+        ? {
+            amount: concession.concession,
+            referredBy: concession.refer,
+            givenAs: concession.format,
+          }
+        : {},
+      schoolId: selectedSetting._id,
+    };
+
+    switch (paymentMode) {
+      case "Cash":
+        data.cashDetails = {};
+        break;
+      case "Cheque":
+        data.chequeDetails = {
+          bankName: paymentDetails.bankName,
+          branchName: paymentDetails.branchName,
+          chequeNumber: paymentDetails.chequeNumber,
+          chequeDate: paymentDetails.chequeDate,
+        };
+        break;
+      case "DD":
+        data.ddDetails = {
+          bankName: paymentDetails.bankName,
+          branchName: paymentDetails.branchName,
+        };
+        break;
+      case "Upi":
+        data.upiDetails = {
+          upiApp: paymentDetails.upiApp,
+          utrNo: paymentDetails.utrNo,
+        };
+        break;
+      case "Card":
+        data.cardDetails = {
+          bankName: paymentDetails.bankName,
+          cardType: paymentDetails.cardType,
+        };
+        break;
+      case "Netbanking":
+        data.netBankingDetails = {
+          bankName: paymentDetails.bankName,
+          refNumber: paymentDetails.refNumber,
+          paidByName: paymentDetails.paidByName,
+        };
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const response = await post(PRIVATE_URLS.receipt.collectFees, data, {
+        responseType: "blob",
+        validateStatus: (status) => status < 500, // Accept any status code less than 500
+      });
+
+      if (response.status === 200) {
+        downloadFile("application/pdf", response.data, "Receipt_preview");
+        handleCloseCollectFeeModal();
+        entryFormik.handleSubmit();
+        setConcession(null);
+        setPenalty("");
+        setMiscellaneous("");
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    } finally {
+      setCollectingFee(false);
     }
   };
 
@@ -538,9 +632,6 @@ export default function CollectFees() {
               alignItems: "center",
             }}>
             <Box>
-              {/* <Typography fontSize="14px">
-                <b>Student Name: </b> {feeDetails?.student?.basicInfo?.name}
-              </Typography> */}
               <FormControl size="small" sx={{ width: 300, mt: 1 }} required>
                 <InputLabel id="demo-simple-select-filled-label">
                   Select Installment
@@ -598,7 +689,7 @@ export default function CollectFees() {
 
             <Box>
               <Typography fontSize="12px">
-                <b>Past Due (All Academic Years) :</b> ₹{" "}
+                <b>Past Due (All Other Academic Years) :</b> ₹{" "}
                 <span>{feeDetails?.pastDues?.toFixed(2)}</span>
               </Typography>
               <Typography fontSize="12px">
@@ -618,8 +709,41 @@ export default function CollectFees() {
         </Paper>
       ) : null}
 
+      {/* Previous Receipts */}
+      {!feeDetails?.previousReceipts?.length ? null : (
+        <Paper sx={{ padding: "10px", margin: "10px 0" }}>
+          <Typography fontSize="14px" mb={2}>
+            <b>Previous Receipts:</b> PP - Partially Paid, PPD - Partial Payment
+            Done, FP - Full Payment
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
+              columnGap: "5px",
+            }}>
+            {feeDetails.previousReceipts.map((p) => (
+              <LoadingButton
+                loading={downloadingReceipt === p._id}
+                size="small"
+                variant="outlined"
+                disabled={downloadingReceipt ? true : false}
+                key={p._id}
+                // onClick={(e) => downloadReceipt(e, p._id)}
+                endIcon={<DownloadForOfflineSharpIcon />}>
+                {dayjs(p.paidAt).format("DD/MM/YYYY")}-
+                {p.partiallyPaid
+                  ? p.partialPaymentCompleted
+                    ? "PPD"
+                    : "PP"
+                  : "FP"}
+              </LoadingButton>
+            ))}
+          </Box>
+        </Paper>
+      )}
       {/* Fee Particular details */}
-
       {!feeDetails ? null : (
         <TableContainer component={Paper}>
           <Table size="small">
@@ -656,6 +780,7 @@ export default function CollectFees() {
                   </TableCell>
                   <TableCell align="center">
                     <CustomInput
+                      disabled={!itemDetail.amount}
                       type="number"
                       style={{ maxWidth: "150px", margin: "4px 0" }}
                       value={itemDetail.amountPaid || ""}
@@ -751,7 +876,7 @@ export default function CollectFees() {
         downloadingPreview={downloadingPreview}
         onPreviewButtonClick={handlePreviewButtonClick}
         feeReceipt={feeDetails}
-        // onSubmit={handleFeeCollect}
+        onSubmit={handleCollectFee}
         open={openCollectModal}
         onClose={handleCloseCollectFeeModal}
         onUpdateNote={setNote}
