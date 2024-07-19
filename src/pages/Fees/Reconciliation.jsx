@@ -22,7 +22,17 @@ export default function Reconciliation() {
           },
         }
       );
-      setData(data.result);
+      setData(
+        data.result.map((d) => ({
+          ...d,
+          roleNo: d?.payeeDetails?.rollNumber,
+          name: d?.payeeDetails?.name,
+          bankName: d?.chequeDetails?.bankName,
+          branchName: d?.chequeDetails?.branchName,
+          chequeNumber: d?.chequeDetails?.chequeNumber,
+          chequeDate: d?.chequeDetails?.chequeDate,
+        }))
+      );
     } catch (error) {
       console.log(error);
     }
