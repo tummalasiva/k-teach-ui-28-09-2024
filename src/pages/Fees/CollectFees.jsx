@@ -545,6 +545,31 @@ export default function CollectFees() {
     }
   };
 
+  // download receipts
+  const downloadReceipt = async (e, id) => {
+    e.preventDefault();
+    try {
+      setDownloadingReceipt(id);
+      const response = await get(
+        PRIVATE_URLS.receipt.downloadReceipt + "/" + id,
+        {
+          validateStatus: (status) => status < 500,
+          responseType: "blob",
+        }
+      );
+
+      if (response.status === 200) {
+        downloadFile("application/pdf", response.data, "receipt");
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setDownloadingReceipt("");
+  };
+
   return (
     <>
       <PageHeader title="Collect Fees" />
@@ -730,7 +755,7 @@ export default function CollectFees() {
                 variant="outlined"
                 disabled={downloadingReceipt ? true : false}
                 key={p._id}
-                // onClick={(e) => downloadReceipt(e, p._id)}
+                onClick={(e) => downloadReceipt(e, p._id)}
                 endIcon={<DownloadForOfflineSharpIcon />}>
                 {dayjs(p.paidAt).format("DD/MM/YYYY")}-
                 {p.partiallyPaid
