@@ -773,7 +773,9 @@ export default function CollectFees() {
         <TableContainer component={Paper}>
           <Table size="small">
             <TableHead
-              sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
+              sx={{
+                backgroundColor: (theme) => theme.palette.primary.main,
+              }}>
               <TableRow>
                 <TableCell sx={{ color: "white" }} align="center">
                   #SL
