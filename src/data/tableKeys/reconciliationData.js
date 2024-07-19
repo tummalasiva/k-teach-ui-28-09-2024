@@ -1,7 +1,9 @@
+/** @format */
+
 export const reconciliationTableKeys = [
   {
     name: "Receipt Number",
-    key: "receipt",
+    key: "receiptNumber",
   },
   {
     name: "Name",
@@ -13,7 +15,7 @@ export const reconciliationTableKeys = [
   },
   {
     name: "Amount",
-    key: "amount",
+    key: "amountPaid",
   },
   {
     name: "Bank Name",
@@ -21,15 +23,16 @@ export const reconciliationTableKeys = [
   },
   {
     name: "Bank Branch",
-    key: "branch",
+    key: "branchName",
   },
 
   {
     name: "Cheque Number",
-    key: "chequeNo",
+    key: "chequeNumber",
   },
   {
     name: "Date",
-    key: "date",
+    key: "chequeDate",
+    isDate: true,
   },
 ];
