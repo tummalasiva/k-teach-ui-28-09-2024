@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import {
@@ -20,7 +20,9 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
 import { PRIVATE_URLS } from "../../services/urlConstants";
-import { get, post } from "../../services/apiMethods";
+import { get, post, put } from "../../services/apiMethods";
+import FileSelect from "../../forms/FileSelect";
+import SettingContext from "../../context/SettingsContext";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -89,14 +91,20 @@ const Blood_Group = [
 ];
 
 export default function ProfileUpdate({
-  handleCreateOrUpdate = () => {},
+  getEmployees = () => {},
   employee = "",
   setSelectValue = 0,
 }) {
   const navigate = useNavigate();
+  const { selectedSetting } = useContext(SettingContext);
+  const [dataToEdit, setDataToEdit] = useState(null);
   const [previewCreateUrl, setPreviewCreateUrl] = useState(null);
   const [designations, setDesignations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [profileImages, setProfileImages] = useState([]);
+  const [resume, setResume] = useState([]);
+
+  console.log(employee, "usha");
 
   const getDesignation = async () => {
     try {
@@ -109,16 +117,91 @@ export default function ProfileUpdate({
     }
   };
 
-  const handleEmpPhoto = async (e) => {
-    const formData = new FormData();
-    console.log(e, "hawa");
-    formData.append("files", e.target.files[0]);
+  // create || update actions
+  const handleCreateOrUpdate = async (values) => {
     try {
-      const res = await post(PRIVATE_URLS.fileUpload.create, formData);
-      console.log(res, "fafa");
+      const payload = {
+        schoolId: selectedSetting._id,
+        basicInfo: {
+          name: values.name,
+          aadharNo: values.aadharNo,
+          designation: values.designation,
+          gender: values.gender,
+          bloodGroup: values.bloodGroup,
+          religion: values.religion,
+          dob: values.dob,
+          presentAddress: values.presentAddress,
+          permanentAddress: values.permanentAddress,
+        },
+        academicInfo: {
+          email: values.email,
+          username: values.username,
+          joiningDate: values.joiningDate,
+          resume: values.resume,
+        },
+        otherInfo: {
+          facebookUrl: values?.facebookUrl,
+          twitterUrl: values?.twitterUrl,
+          linkedinUrl: values?.linkedinUrl,
+          googlePlusUrl: values?.googlePlusUrl,
+          youtubeUrl: values?.youtubeUrl,
+          instagramUrl: values?.instagramUrl,
+          pinterestUrl: values?.pinterestUrl,
+        },
+        username: values.username,
+        photo: values.photo,
+        contactNumber: values.contactNumber,
+      };
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("body", JSON.stringify(payload));
+      profileImages.forEach((file) => formData.append("employeePhoto", file));
+      resume.forEach((file) => formData.append("resume", file));
+
+      const { data } = await put(
+        PRIVATE_URLS.employee.update + "/" + employee._id,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log(data, "put");
+
+      window.localStorage.setItem(
+        "current_ecs_user",
+        JSON.stringify(data.result)
+      );
+      getEmployees();
+      setSelectValue(0);
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
+  };
+
+  const handleChangePhoto = (e, type) => {
+    const { files } = e.target;
+    let fileList = [];
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(file);
+      }
+      if (type === "photo") {
+        console.log(fileList, "photo");
+        setProfileImages(fileList);
+      } else if (type === "resume") {
+        setResume(fileList);
+      }
+    } else {
+      console.log("No files selected");
+    }
+  };
+
+  const handleRemoveFile = (fileName, index) => {
+    setResume(resume.filter((img) => img.name != fileName));
+    setProfileImages(profileImages.filter((img) => img.name != fileName));
   };
 
   useEffect(() => {
@@ -161,27 +244,36 @@ export default function ProfileUpdate({
         <BasicData>
           <MuiBox>
             <img
-              src={previewCreateUrl || avatar}
+              // src={profileImages || avatar}
+              src={
+                profileImages.length > 0
+                  ? URL.createObjectURL(profileImages[0])
+                  : employee?.photo
+                  ? employee?.photo
+                  : avatar
+              }
               style={{
                 width: "100px",
                 height: "100px",
-                objectFit: "contain",
+                display: "block",
+                objectFit: "cover",
+                margin: "0 auto",
               }}
               alt="Preview"
             />
           </MuiBox>
           <Grid container spacing={2} display="flex" justifyContent="center">
             <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                // required={true}
-                name="logo"
-                formik={entryFormik}
-                label="Logo"
-                type="file"
-                onChange={(e) => handleEmpPhoto(e)}
-                inputProps={{
-                  accept: "image/*",
-                }}
+              <FileSelect
+                multi={false}
+                name="photo"
+                label="Select Profile"
+                onChange={(e) => handleChangePhoto(e, "photo")}
+                previousFile={employee?.photo}
+                customOnChange={true}
+                selectedFiles={profileImages}
+                onRemove={(fileName) => handleRemoveFile(fileName)}
+                accept="image/jpeg, image/png"
               />
             </Grid>
           </Grid>
@@ -312,11 +404,16 @@ export default function ProfileUpdate({
               </Grid>
 
               <Grid xs={12} md={6} lg={3} item>
-                <FormInput
+                <FileSelect
+                  multi={false}
                   name="resume"
-                  formik={entryFormik}
-                  label="Upload Resume"
-                  type="file"
+                  label="Select Resume"
+                  onChange={(e) => handleChangePhoto(e, "resume")}
+                  previousFile={employee?.academicInfo?.resume}
+                  customOnChange={true}
+                  selectedFiles={resume}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/*,.pdf"
                 />
               </Grid>
             </Grid>

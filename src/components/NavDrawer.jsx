@@ -254,18 +254,22 @@ export default function NavDrawer() {
   const [open, setOpen] = React.useState(true);
   // const { setUser, user } = React.useContext(UserContext);
   const [sideMenuData, setSideMenuData] = React.useState([]);
-
   const navigate = useNavigate();
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openProfile = Boolean(anchorEl);
   const [activeYear, setActiveYear] = React.useState([]);
-
+  const [employee, setEmployee] = React.useState([]);
+  console.log(employee, "ll");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const getEmployees = async () => {
+    const user = window.localStorage.getItem("current_ecs_user");
+    setEmployee(JSON.parse(user));
   };
 
   const { isDarkMode, setIsDarkMode } = React.useContext(ThemeModeContext);
@@ -276,6 +280,7 @@ export default function NavDrawer() {
   React.useEffect(() => {
     setSideMenuData(SIDE_MENU_DATA);
     getActiveAcademicYear();
+    getEmployees();
   }, []);
 
   //get academic year
@@ -395,12 +400,27 @@ export default function NavDrawer() {
               <Tooltip title="Account Settings">
                 <IconButton
                   onClick={handleClick}
-                  // size="small"
-                  // sx={{ ml: 2 }}
                   aria-controls={openProfile ? "account-menu" : undefined}
                   aria-haspopup="true"
-                  aria-expanded={openProfile ? "true" : undefined}>
-                  <Avatar sx={{ width: 26, height: 26 }} />
+                  aria-expanded={openProfile ? true : undefined}>
+                  {employee?.photo ? (
+                    <img
+                      src={employee?.photo}
+                      style={{
+                        width: "26px",
+                        height: "26px",
+                        display: "block",
+                        objectFit: "cover",
+                        margin: "0 auto",
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                      }}
+                      alt="Preview"
+                    />
+                  ) : (
+                    <Avatar sx={{ width: 26, height: 26 }} />
+                  )}
                 </IconButton>
               </Tooltip>
               <Tooltip title="websites">

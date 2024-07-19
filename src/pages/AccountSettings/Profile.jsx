@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
@@ -34,8 +36,8 @@ export default function Profile() {
 
   const handleTabChange = (e, newValue) => setSelectValue(newValue);
 
-  console.log(selectedSetting, "selectedSetting");
-  console.log(employee, "employee");
+  // console.log(selectedSetting, "selectedSetting");
+  // console.log(employee, "employee");
 
   const getEmployees = async () => {
     const user = window.localStorage.getItem("current_ecs_user");
@@ -45,59 +47,6 @@ export default function Profile() {
   useEffect(() => {
     getEmployees();
   }, []);
-
-  // create || update actions
-  const handleCreateOrUpdate = async (values) => {
-    try {
-      const payload = {
-        schoolId: selectedSetting._id,
-        basicInfo: {
-          name: values.name,
-          designation: values.designation,
-          gender: values.gender,
-          bloodGroup: values.bloodGroup,
-          religion: values.religion,
-          dob: values.dob,
-          presentAddress: values.presentAddress,
-          permanentAddress: values.permanentAddress,
-          aadharNo: values.aadharNo,
-        },
-        academicInfo: {
-          email: values.email,
-          joiningDate: values.joiningDate,
-          resume: values.resume,
-        },
-        otherInfo: {
-          facebookUrl: values?.facebookUrl,
-          twitterUrl: values?.twitterUrl,
-          linkedinUrl: values?.linkedinUrl,
-          googlePlusUrl: values?.googlePlusUrl,
-          youtubeUrl: values?.youtubeUrl,
-          instagramUrl: values?.instagramUrl,
-          pinterestUrl: values?.pinterestUrl,
-        },
-        username: values.username,
-        photo: values.photo,
-        contactNumber: values.contactNumber,
-      };
-      setLoading(true);
-      if (employee) {
-        const { data } = await put(
-          PRIVATE_URLS.employee.update + "/" + employee._id,
-          payload
-        );
-        getEmployees();
-      } else {
-        const { data } = await post(PRIVATE_URLS.employee.create, payload);
-        console.log(data, "gg");
-        getEmployees();
-      }
-      // handleClose();
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
 
   if (!employee) {
     return null;
@@ -120,16 +69,15 @@ export default function Profile() {
             justifyContent: "center",
             alignItems: "center",
             mt: 3,
-          }}
-        >
+          }}>
           <FormTable employee={employee} />
         </Box>
       </TabPanel>
       <TabPanel index={1} value={value}>
         <ProfileUpdate
-          handleCreateOrUpdate={handleCreateOrUpdate}
           employee={employee}
           setSelectValue={setSelectValue}
+          getEmployees={getEmployees}
         />
       </TabPanel>
     </>
