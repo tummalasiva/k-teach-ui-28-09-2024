@@ -1,15 +1,14 @@
 /** @format */
 
 import React from "react";
-import { TextField } from "@mui/material";
+import { TextField, Grid } from "@mui/material";
 
 export default function FormInput({
   name,
   multiline = false,
-  rows = {},
+  rows = 4,
   label = "default label",
   formik,
-
   required = false,
   disabled = false,
   containerStyle = {},
@@ -28,7 +27,7 @@ export default function FormInput({
       name={name}
       label={label}
       multiline={multiline}
-      rows={4}
+      rows={multiline ? rows : 1}
       disabled={disabled}
       placeholder={`Enter ${label}`}
       fullWidth
@@ -49,7 +48,7 @@ export default function FormInput({
         multiple: true,
         style: {
           borderWidth: 1,
-          height: "42px",
+          height: multiline ? "auto" : "42px",
           borderRadius: (theme) => theme.shape.borderRadius,
         },
       }}

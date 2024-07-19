@@ -393,6 +393,7 @@ export default function AddEmployee() {
               multi={false}
               label="Select Photo"
               onChange={(e) => handleChangePhoto(e, "employeePhoto")}
+              previousFile={dataToEdit?.photo}
               customOnChange={true}
               selectedFiles={selectedPhoto}
               onRemove={(fileName) => handleRemoveFile(fileName)}

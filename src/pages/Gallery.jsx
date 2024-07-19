@@ -36,7 +36,7 @@ export default function Gallery() {
           schoolId: selectedSetting._id,
         },
       });
-      // console.log(data, "gallery list");
+
       setData(data.result);
     } catch (error) {
       console.log(error);

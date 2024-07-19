@@ -31,6 +31,11 @@ const Issued_To_Type_Option = [
   { label: "Employee", value: "employee" },
 ];
 
+const Type_Options = [
+  { label: "Book", value: "book" },
+  { label: "Periodical", value: "periodical" },
+];
+
 const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -99,6 +104,7 @@ export default function StudentIssueReturn() {
   const [dueList, setDueList] = useState([]);
   const [history, setHistory] = useState([]);
 
+  const [periodical, setPeriodical] = useState([]);
   const getData = async () => {
     try {
       const { data } = await get(PRIVATE_URLS.bookIssue.list, {
@@ -139,6 +145,18 @@ export default function StudentIssueReturn() {
   useEffect(() => {
     getData();
   }, [selectedSetting]);
+
+  const getPeriodical = async () => {
+    try {
+      const { data } = await get(PRIVATE_URLS.periodical.list);
+
+      setPeriodical(
+        data.result.map((s) => ({ ...s, label: s.title, value: s._id }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getBooks = async () => {
     try {
@@ -194,6 +212,7 @@ export default function StudentIssueReturn() {
   };
   useEffect(() => {
     getBooks();
+    getPeriodical();
     getStudents();
     getEmployee();
   }, [selectedSetting]);
@@ -297,8 +316,10 @@ export default function StudentIssueReturn() {
       book: "",
       quantity: 0,
       dueDate: null,
+      type: "",
       issuedToType: "",
       issuedTo: "",
+      type: "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -422,13 +443,23 @@ export default function StudentIssueReturn() {
         submitButtonTitle={"Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
+          <Grid xs={12} md={6} lg={3} item>
+            <FormSelect
+              required={true}
+              name="type"
+              formik={entryFormik}
+              label="Select Tyoe"
+              options={Type_Options}
+            />
+          </Grid>
+
           <Grid xs={12} sm={6} md={6} item>
             <FormSelect
               formik={entryFormik}
               name="book"
-              label="Book"
+              label={entryFormik.values.type === "book" ? "Book" : "Periodical"}
               required={true}
-              options={book}
+              options={entryFormik.values.type === "book" ? book : periodical}
             />
           </Grid>
 

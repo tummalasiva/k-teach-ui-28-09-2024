@@ -58,7 +58,7 @@ export default function AddEditAssignment({
       const sectionAllOption = [{ label: "All", value: "all" }, ...section];
       setSections(sectionAllOption);
 
-      entryFormik.setFieldValue("section", "all");
+      // entryFormik.setFieldValue("section", "all");
     } catch (error) {
       console.log(error);
     }
@@ -262,6 +262,7 @@ export default function AddEditAssignment({
                 name={`file`}
                 label="Select File"
                 onChange={(e) => handleChangeFiles(e)}
+                previousFile={dataToEdit?.file}
                 customOnChange={true}
                 selectedFiles={selectFile}
               />
@@ -289,7 +290,13 @@ export default function AddEditAssignment({
             />
           </Grid>
           <Grid xs={12} md={12} lg={12} item>
-            <FormInput name="note" formik={entryFormik} label="Note" />
+            <FormInput
+              name="note"
+              formik={entryFormik}
+              label="Note"
+              multiline
+              rows={3}
+            />
           </Grid>
           <Grid
             xs={12}

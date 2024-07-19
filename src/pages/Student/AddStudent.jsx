@@ -376,40 +376,6 @@ export default function AddStudent() {
     );
   };
 
-  const handleDownloadFatherPhoto = () => {
-    const downloadUrl = dataToEdit?.fatherInfo?.photo;
-
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
-  const handleDownloadMotherPhoto = () => {
-    const downloadUrl = dataToEdit?.motherInfo?.photo;
-
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
-  const handleDownloadStudentPhoto = () => {
-    const downloadUrl = dataToEdit?.photo;
-
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
-  const handleDownloadTransferCertificate = () => {
-    const downloadUrl = dataToEdit?.prevSchInfo.transferCertificate;
-
-    if (downloadUrl) {
-      window.open(downloadUrl, "_blank");
-    }
-  };
-
-  console.log(selectedSetting, "sssssssssssss");
-
   return (
     <>
       <PageHeader title="Admit Student" />
@@ -694,24 +660,13 @@ export default function AddStudent() {
                   name="transferCertificate"
                   label="Select File"
                   onChange={(e) => handleChangePhoto(e, "transferCertificate")}
+                  previousFile={dataToEdit?.prevSchInfo?.transferCertificate}
                   customOnChange={true}
                   selectedFiles={transferCertificate}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                   accept="image/*,.pdf"
                 />
               </Grid>
-
-              {dataToEdit?.prevSchInfo &&
-              dataToEdit.prevSchInfo?.transferCertificate ? (
-                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleDownloadTransferCertificate}>
-                    Download File
-                  </Button>
-                </Grid>
-              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -766,22 +721,13 @@ export default function AddStudent() {
                   multi={false}
                   label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "fatherPhoto")}
+                  previousFile={dataToEdit?.fatherInfo?.photo}
                   customOnChange={true}
                   selectedFiles={selectedFatherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                   accept="image/jpeg, image/png"
                 />
               </Grid>
-              {dataToEdit?.fatherInfo && dataToEdit.fatherInfo?.photo ? (
-                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleDownloadFatherPhoto}>
-                    Download Photo
-                  </Button>
-                </Grid>
-              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -835,23 +781,13 @@ export default function AddStudent() {
                   multi={false}
                   name="motherPhoto"
                   onChange={(e) => handleChangePhoto(e, "motherPhoto")}
+                  previousFile={dataToEdit?.motherInfo?.photo}
                   customOnChange={true}
                   selectedFiles={selectedMotherPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                   accept="image/jpeg, image/png"
                 />
               </Grid>
-
-              {dataToEdit?.motherInfo && dataToEdit.motherInfo?.photo ? (
-                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleDownloadMotherPhoto}>
-                    Download Photo
-                  </Button>
-                </Grid>
-              ) : null}
             </Grid>
           </Box>
         </FormBox>
@@ -941,23 +877,13 @@ export default function AddStudent() {
                   multi={false}
                   label="Select Photo"
                   onChange={(e) => handleChangePhoto(e, "studentPhoto")}
+                  previousFile={dataToEdit?.photo}
                   customOnChange={true}
                   selectedFiles={selectedStudentPhoto}
                   onRemove={(fileName) => handleRemoveFile(fileName)}
                   accept="image/jpeg, image/png"
                 />
               </Grid>
-
-              {dataToEdit && dataToEdit?.photo ? (
-                <Grid xs={12} md={6} lg={6} item sx={{ alignSelf: "center" }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleDownloadStudentPhoto}>
-                    Download Photo
-                  </Button>
-                </Grid>
-              ) : null}
             </Grid>
           </Box>
         </FormBox>
