@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { Button, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, Paper } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
 import CustomTable from "../../components/Tables/CustomTable";
@@ -11,6 +11,8 @@ import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import { downloadFile } from "../../utils";
+import { toast } from "react-toastify";
 
 const showInfo = (data) => {
   let result = [];
@@ -49,6 +51,7 @@ export default function BalanceFeeReport() {
   const [sections, setSections] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [downloadingExcel, setDownloadingExcel] = useState(false);
 
   // get balance fee reports
   const handleSubmitFind = async (values) => {
@@ -60,19 +63,14 @@ export default function BalanceFeeReport() {
         PRIVATE_URLS.receipt.getBalanceFeeReport,
         {
           params: {
-            search: {
-              classId: values.class,
-              sectionId: values.section,
-              receiptTitleId: values.receiptName,
-              feeMapId: values.feeMap,
-              academicYearId: values.academicYear,
-            },
+            classId: values.class,
+            sectionId: values.section,
+            feeMapId: values.feeMap,
+            academicYearId: values.academicYear,
             schoolId: selectedSetting._id,
           },
         }
       );
-
-      console.log(feeReport.result, "fee details");
 
       setData(feeReport.result);
     } catch (error) {
@@ -208,6 +206,47 @@ export default function BalanceFeeReport() {
     selectedSetting._id,
   ]);
 
+  useEffect(() => {
+    setData([]);
+  }, [entryFormik.values.feeMap, selectedSetting._id]);
+
+  // Download excel file
+
+  const downloadBalanceReport = async () => {
+    setDownloadingExcel(true);
+    const values = entryFormik.values;
+    try {
+      const response = await get(
+        PRIVATE_URLS.receipt.downloadBalanceFeeReport,
+        {
+          params: {
+            classId: values.class,
+            sectionId: values.section,
+            feeMapId: values.feeMap,
+            academicYearId: values.academicYear,
+            schoolId: selectedSetting._id,
+          },
+          validateStatus: (status) => status < 500,
+          responseType: "blob",
+        }
+      );
+
+      if (response.status === 200) {
+        downloadFile(
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          response.data,
+          "Balance_Report.xlsx"
+        );
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setDownloadingExcel(false);
+  };
+
   return (
     <>
       <PageHeader title="Balance Fee Report" />
@@ -281,6 +320,27 @@ export default function BalanceFeeReport() {
         bodyData={data}
         tableKeys={balanceFeeReportTableKeys}
       />
+
+      {data.length > 0 && (
+        <>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}>
+            <LoadingButton
+              loading={downloadingExcel}
+              onClick={downloadBalanceReport}
+              size="small"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3 }}>
+              DOWNLOAD
+            </LoadingButton>
+          </Box>
+        </>
+      )}
     </>
   );
 }

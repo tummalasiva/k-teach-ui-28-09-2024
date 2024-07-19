@@ -1,11 +1,13 @@
+/** @format */
+
 export const balanceFeeReportTableKeys = [
   {
     name: "Receipt",
-    key: "receipt",
+    key: "receiptTitle",
   },
   {
     name: "Roll No",
-    key: "roleNo",
+    key: "rollNo",
   },
   {
     name: "Class",
@@ -21,7 +23,7 @@ export const balanceFeeReportTableKeys = [
   },
   {
     name: "Father",
-    key: "father",
+    key: "fatherName",
   },
   {
     name: "Phone",
