@@ -116,6 +116,8 @@ export default function Section() {
 
   const AddDepartmentHandel = () => {
     setOpen(true);
+    setDataToEdit(null);
+    clearFormValues();
   };
 
   const handleClose = () => {
@@ -162,15 +164,22 @@ export default function Section() {
       active: dataToEdit?.active || false,
       isPublic: dataToEdit?.isPublic || false,
       note: dataToEdit?.note || "",
-      subjectTeachers:
-        dataToEdit?.subjectTeachers?.map((st) => ({
-          subject: st.subject._id,
-          teacher: st.teacher?._id || "",
-        })) || [],
+      subjectTeachers: dataToEdit?.subjectTeachers || [],
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
   });
+  const clearFormValues = () => {
+    entryFormik.setValues({
+      name: "",
+      class: selectedClass || "",
+      sectionTeacher: "",
+      active: false,
+      isPublic: false,
+      note: "",
+      subjectTeachers: [],
+    });
+  };
 
   useEffect(() => {
     if (selectedClass) {
