@@ -729,6 +729,10 @@ export default function CollectFees() {
                   <span>{feeDetails?.currentDue?.toFixed(2)}</span>
                 </Typography>
               )}
+              <Typography fontSize="12px">
+                <b>Total Paid (Current Academic Year) :</b> ₹{" "}
+                <span>{feeDetails?.totalPaid?.toFixed(2)}</span>
+              </Typography>
             </Box>
           </Box>
         </Paper>
