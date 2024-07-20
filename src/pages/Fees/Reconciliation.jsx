@@ -51,10 +51,10 @@ const CustomActionFee = ({
           </IconButton>
         </Tooltip>
         {data?.reconciliationStatus === "Rejected" && (
-          <Tooltip
-            title="Reject"
-            onClick={() => updateStatus("Reject", data?._id)}>
-            <IconButton size="small">
+          <Tooltip title="Reject">
+            <IconButton
+              size="small"
+              onClick={() => updateStatus("Reject", data?._id)}>
               <CloseIcon color="error" fontSize="12px" />
             </IconButton>
           </Tooltip>
