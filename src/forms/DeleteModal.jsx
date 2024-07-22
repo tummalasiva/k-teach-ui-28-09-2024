@@ -9,7 +9,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 350,
+  width: 380,
   bgcolor: "background.paper",
   borderRadius: "10px",
   boxShadow: 24,
@@ -34,7 +34,9 @@ export default function DeleteModal(props) {
             Delete Confirmation
           </Typography>
           <Typography sx={{ mt: 2, textAlign: "center" }}>
-            Are you sure want to delete this item?
+            Please note that deleting this item could lead to data
+            inconsistencies if there are other documents dependent on it. Are
+            you certain you wish to continue with the deletion?
           </Typography>
           <Box
             my={3}
@@ -47,7 +49,7 @@ export default function DeleteModal(props) {
             <Button
               size="small"
               color="error"
-              variant="contained"
+              variant="outlined"
               onClick={() => props.setDeleteModal(false)}>
               Cancel
             </Button>
@@ -56,7 +58,7 @@ export default function DeleteModal(props) {
                 props.handleDelete(props.id);
                 props.setDeleteModal(false);
               }}
-              color="primary"
+              color="error"
               size="small"
               variant="contained">
               Delete

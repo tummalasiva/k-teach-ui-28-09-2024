@@ -291,7 +291,7 @@ export default function NavDrawerStudent() {
                   <Avatar sx={{ width: 26, height: 26 }} />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="websites">
+              <Tooltip title="Website">
                 <Link to="/">
                   <IconButton>
                     <Avatar
