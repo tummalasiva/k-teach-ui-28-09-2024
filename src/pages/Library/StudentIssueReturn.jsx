@@ -103,6 +103,7 @@ export default function StudentIssueReturn() {
   const [book, setBook] = useState([]);
   const [dueList, setDueList] = useState([]);
   const [history, setHistory] = useState([]);
+  const [tabValue, setTabValue] = useState(0);
 
   const [periodical, setPeriodical] = useState([]);
   const getData = async () => {
@@ -349,7 +350,7 @@ export default function StudentIssueReturn() {
         variant="contained"
         onClick={handleClickOpen}
         sx={{ mt: 1, mb: 2 }}>
-        Issue Book
+        Issue
       </Button>
       <TabPanel index={0} value={value}>
         <BookDetailed sx={{ padding: 1 }}>
@@ -443,12 +444,12 @@ export default function StudentIssueReturn() {
         submitButtonTitle={"Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={3} item>
+          <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               required={true}
               name="type"
               formik={entryFormik}
-              label="Select Tyoe"
+              label="Select Type"
               options={Type_Options}
             />
           </Grid>
