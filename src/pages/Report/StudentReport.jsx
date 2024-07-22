@@ -161,6 +161,7 @@ export default function StudentReport() {
   const [loading, setLoading] = useState(false);
 
   const [loadingGraph, setLoadingGraph] = useState(false);
+  const [loadingPdf, setLoadingPdf] = useState(false);
 
   let totalMaleStudents = 0;
   let totalFemaleStudents = 0;
@@ -217,6 +218,7 @@ export default function StudentReport() {
 
   const handleGetPrintPdf = async () => {
     try {
+      setLoadingPdf(true);
       const getPdf = await get(PRIVATE_URLS.report.downloadStudentReport, {
         params: {
           schoolId: selectedSetting._id,
@@ -227,8 +229,10 @@ export default function StudentReport() {
       });
 
       downloadFile("application/pdf", getPdf.data, "studentReport.pdf");
+      setLoadingPdf(false);
     } catch (error) {
       console.log(error);
+      setLoadingPdf(false);
     }
   };
 
@@ -332,12 +336,13 @@ export default function StudentReport() {
                   type="submit">
                   Find
                 </LoadingButton>
-                <Button
+                <LoadingButton
+                  loading={loadingPdf}
                   size="small"
                   variant="contained"
                   onClick={handleGetPrintPdf}>
                   Print
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </form>

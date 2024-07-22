@@ -11,6 +11,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
+import { LoadingButton } from "@mui/lab";
 
 export default function StudentActivityReport() {
   const [data, setData] = useState([]);
@@ -18,6 +19,8 @@ export default function StudentActivityReport() {
   const [classes, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [academicYear, setAcademicYear] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingPdf, setLoadingPdf] = useState(false);
 
   const getAcademicYear = async () => {
     try {
@@ -77,6 +80,7 @@ export default function StudentActivityReport() {
 
   const handleGetStudentActivityReport = async (values) => {
     try {
+      setLoading(true);
       const { data } = await get(PRIVATE_URLS.report.getStudentActivityReport, {
         params: {
           schoolId: selectedSetting._id,
@@ -84,12 +88,17 @@ export default function StudentActivityReport() {
           studentId: values.student,
         },
       });
+
       setData(data.result);
-    } catch (error) {}
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   const handleGetPrintPdf = async () => {
     try {
+      setLoadingPdf(true);
       const getPdf = await get(
         PRIVATE_URLS.report.getStudentActivityReportPdf,
         {
@@ -103,8 +112,10 @@ export default function StudentActivityReport() {
       );
 
       downloadFile("application/pdf", getPdf.data, "studentActivityReport.pdf");
+      setLoadingPdf(false);
     } catch (error) {
       console.log(error);
+      setLoadingPdf(false);
     }
   };
 
@@ -176,15 +187,20 @@ export default function StudentActivityReport() {
               display="flex"
               gap={1}
               alignSelf="center">
-              <Button size="small" variant="contained" type="submit">
+              <LoadingButton
+                loading={loading}
+                size="small"
+                variant="contained"
+                type="submit">
                 Find
-              </Button>
-              <Button
+              </LoadingButton>
+              <LoadingButton
+                loading={loadingPdf}
                 size="small"
                 variant="contained"
                 onClick={handleGetPrintPdf}>
                 Print
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>
