@@ -423,7 +423,7 @@ export default function NavDrawer() {
                   )}
                 </IconButton>
               </Tooltip>
-              <Tooltip title="websites">
+              <Tooltip title="Website">
                 <Link to="/">
                   <IconButton>
                     <Avatar

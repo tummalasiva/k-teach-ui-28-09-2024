@@ -10,7 +10,7 @@ import SettingContext from "../../context/SettingsContext";
 // icons
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, Stack, Tooltip } from "@mui/material";
+import { CircularProgress, IconButton, Stack, Tooltip } from "@mui/material";
 
 const CustomActionFee = ({
   onUpdate = () => {},
@@ -18,14 +18,14 @@ const CustomActionFee = ({
   // onEditClick = () => {},
   onNavigateFeeMap = () => {},
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState("");
   console.log(data?.reconciliationStatus, "llloosing");
 
   const updateStatus = async (status, id) => {
     console.log(status, id, "pooo");
 
     try {
-      setLoading(true);
+      setLoading(status);
       const payload = {
         action: status,
       };
@@ -37,7 +37,7 @@ const CustomActionFee = ({
     } catch (error) {
       console.log(error);
     }
-    setLoading(false);
+    setLoading("");
   };
 
   return (
@@ -45,17 +45,27 @@ const CustomActionFee = ({
       <Stack direction="row" spacing={1} alignItems="center">
         <Tooltip title="Approve">
           <IconButton
+            disabled={loading === "Approve"}
             size="small"
             onClick={() => updateStatus("Approve", data?._id)}>
-            <CheckIcon color="primary" fontSize="12px" />
+            {loading === "Approve" ? (
+              <CircularProgress size={20} />
+            ) : (
+              <CheckIcon color="primary" fontSize="12px" />
+            )}
           </IconButton>
         </Tooltip>
-        {data?.reconciliationStatus === "Rejected" && (
-          <Tooltip
-            title="Reject"
-            onClick={() => updateStatus("Reject", data?._id)}>
-            <IconButton size="small">
-              <CloseIcon color="error" fontSize="12px" />
+        {data?.reconciliationStatus != "Rejected" && (
+          <Tooltip title="Reject">
+            <IconButton
+              disabled={loading === "Reject"}
+              size="small"
+              onClick={() => updateStatus("Reject", data?._id)}>
+              {loading === "Reject" ? (
+                <CircularProgress size={20} />
+              ) : (
+                <CloseIcon color="error" fontSize="12px" />
+              )}
             </IconButton>
           </Tooltip>
         )}
