@@ -82,6 +82,7 @@ const CustomActionFee = ({
   onNavigateFeeMap = () => {},
 }) => {
   const [loading, setLoading] = useState(false);
+
   const updateStatus = async () => {
     try {
       setLoading(true);
