@@ -168,6 +168,7 @@ import Credentials from "../pages/Communication/Credentials";
 import BulkPhoto from "../pages/Student/BulkPhoto";
 import IdCard from "../pages/Student/IdCard";
 import Assignment from "../pages/Assignment/Assignment";
+import PageNotFound from "./PageNotFound";
 
 // exlnt_70471681
 // 9538063455
@@ -968,6 +969,7 @@ export default function NavDrawer() {
             element={<AddInstitute />}
           />
           <Route path="profile" element={<Profile />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Outlet />
       </Box>

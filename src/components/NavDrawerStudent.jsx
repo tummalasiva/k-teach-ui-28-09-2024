@@ -38,7 +38,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import studentMenu from "../data/studentMenu";
 
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ExpandLess, ExpandMore, PagesOutlined } from "@mui/icons-material";
 import LOGO from "../assets/images/deleteicon.png";
 
 import { useNavigate } from "react-router-dom";
@@ -60,6 +60,7 @@ import Assignment from "../pages/StudentDashboard/Assignment";
 import Attendance from "../pages/StudentDashboard/Attendance";
 import Receipts from "../pages/StudentDashboard/Receipts";
 import Profile from "../pages/StudentDashboard/accountSetting/Profile";
+import PageNotFound from "./PageNotFound";
 
 const drawerWidth = 270;
 
@@ -524,6 +525,7 @@ export default function NavDrawerStudent() {
           <Route path="student_courses" element={<Courses />} />
           <Route path="student_live" element={<Live />} />
           <Route path="student_profile" element={<Profile />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Outlet />
       </Box>

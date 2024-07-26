@@ -33,6 +33,13 @@ export default function PageHeader({ title = "", showTextField = true }) {
     setSelectedSetting({ ...settings.filter((s) => s._id == value)[0] });
   };
 
+  let user = window.localStorage.getItem("current_ecs_user");
+
+  let extractedUser = JSON.parse(user);
+  let role = extractedUser.role;
+
+  let IsAdminOrSuper = role?.name === "SUPER ADMIN" || role?.name === "ADMIN";
+
   return (
     <Wrapper>
       <Typography
@@ -43,7 +50,7 @@ export default function PageHeader({ title = "", showTextField = true }) {
         }}>
         {title}
       </Typography>
-      {showTextField && (
+      {IsAdminOrSuper && showTextField && (
         <Stack direction="row" spacing={2}>
           <FormControl fullWidth size="small" sx={{ minWidth: "200px" }}>
             <InputLabel id="demo-simple-select-label">Select School</InputLabel>
