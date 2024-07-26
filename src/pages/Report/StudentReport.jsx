@@ -574,16 +574,20 @@ export default function StudentReport() {
               </TableBody>
             </Table>
           )}
+          <TablePagination
+            size="small"
+            component="div"
+            count={data ? (data.length ? data.length : 0) : 0}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start,",
+            }}
+          />
         </TableContainer>
-        <TablePagination
-          size="small"
-          component="div"
-          count={data ? (data.length ? data.length : 0) : 0}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>

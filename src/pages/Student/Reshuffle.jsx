@@ -350,6 +350,10 @@ export default function Reshuffle() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start,",
+          }}
         />
       </TableContainer>
 
