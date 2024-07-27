@@ -72,7 +72,7 @@ const Category_Options = [
   },
   {
     label: "Amount",
-    value: "totalAmountPaid",
+    value: "amountPaid",
   },
 
   {
