@@ -253,14 +253,12 @@ export default function NavDrawer() {
   const theme = useTheme();
   const { selectedSetting } = React.useContext(SettingContext);
   const [open, setOpen] = React.useState(true);
-  // const { setUser, user } = React.useContext(UserContext);
   const [sideMenuData, setSideMenuData] = React.useState([]);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openProfile = Boolean(anchorEl);
   const [activeYear, setActiveYear] = React.useState([]);
   const [employee, setEmployee] = React.useState([]);
-  console.log(employee, "ll");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

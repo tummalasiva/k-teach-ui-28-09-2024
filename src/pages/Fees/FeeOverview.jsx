@@ -26,6 +26,9 @@ import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import { downloadFile } from "../../utils";
+import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
 
 const showInfo = (data) => {
   let result = [];
@@ -58,6 +61,43 @@ const showInfo = (data) => {
 const ALL_OPTION = {
   label: "All",
   value: "all",
+};
+
+const CustomAction = ({ data }) => {
+  const [downloadingReceipt, setDownloadingReceipt] = useState(false);
+
+  const downloadStaffCopy = async (e) => {
+    e.preventDefault();
+    try {
+      setDownloadingReceipt(true);
+      const response = await get(
+        PRIVATE_URLS.receipt.downloadReceiptStaff + "/" + data?._id,
+        {
+          validateStatus: (status) => status < 500,
+          responseType: "blob",
+        }
+      );
+
+      if (response.status === 200) {
+        downloadFile("application/pdf", response.data, "receipt");
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setDownloadingReceipt(false);
+  };
+  return (
+    <LoadingButton
+      loading={downloadingReceipt}
+      size="small"
+      variant="contained"
+      onClick={downloadStaffCopy}>
+      Staff Copy
+    </LoadingButton>
+  );
 };
 
 export default function FeeOverview() {
@@ -100,16 +140,16 @@ export default function FeeOverview() {
         }
       );
 
-      setAllReceipts(data);
-
-      console.log(
-        receipts,
-        "================================================="
+      setAllReceipts(
+        receipts?.result?.map((r) => ({
+          ...r,
+          name: r.payeeDetails.name,
+          class: r.payeeDetails.className,
+          section: r.payeeDetails.sectionName,
+          admissionNumber: r.payeeDetails.admissionNumber,
+        }))
       );
-
       setAmountInDifferentModes(data.result?.finalResult);
-
-      console.log(data.result.finalResult, "result");
     } catch (error) {}
   };
 
@@ -265,6 +305,7 @@ export default function FeeOverview() {
           search: filter,
         },
       });
+      console.log(data.result, "result fee maps");
       setFeeMaps(
         data?.result?.map((f) => ({ ...f, label: showInfo(f), value: f._id }))
       );
@@ -499,10 +540,11 @@ export default function FeeOverview() {
         </Grid>
       </Grid>
       <CustomTable
-        actions={[]}
+        actions={["custom"]}
         bodyDataModal="data"
-        bodyData={data}
+        bodyData={allReceipts}
         tableKeys={feeOverviewReceiptTableKeys}
+        CustomAction={CustomAction}
       />
     </>
   );

@@ -1,14 +1,15 @@
+/** @format */
+
 export const feeOverviewReceiptTableKeys = [
   {
     name: "Receipt No",
-    key: "receiptNo",
+    key: "receiptNumber",
   },
-  { name: "Paid Date", key: "paidDate" },
-  { name: "Amount", key: "amount" },
+  { name: "Paid Date", key: "paidAt", isDate: true },
+  { name: "Amount", key: "amountPaid" },
   { name: "Payment Mode", key: "paymentMode" },
   { name: "Name", key: "name" },
   { name: "Class", key: "class" },
   { name: "Section", key: "section" },
-  { name: "Admission No", key: "admissionNo" },
-  { name: "View", key: "view" },
+  { name: "Admission No", key: "admissionNumber" },
 ];
