@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { designationTableKeys } from "../../data/tableKeys/designation";
 import PageHeader from "../../components/PageHeader";
@@ -91,6 +93,7 @@ export default function ManageDesignation() {
       <PageHeader title="Designation" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Designation"
         tableKeys={designationTableKeys}
         bodyDataModal="designation"
         bodyData={data}
@@ -98,7 +101,11 @@ export default function ManageDesignation() {
         onDeleteClick={handleDelete}
       />
       {/* ====== Add form fab button =======*/}
-      <AddForm title="Add Desigation" onAddClick={AddDesigationHandel} />
+      <AddForm
+        module="Designation"
+        title="Add Desigation"
+        onAddClick={AddDesigationHandel}
+      />
       {/* ================================== */}
 
       {/* ==== add department ======== */}
@@ -107,8 +114,7 @@ export default function ManageDesignation() {
         formik={entryFormik}
         formTitle="Add Desigation"
         onClose={handleClose}
-        submitButtonTitle={dataToEdit ? "Update" : "Add"}
-      >
+        submitButtonTitle={dataToEdit ? "Update" : "Add"}>
         <Grid rowSpacing={1} columnSpacing={2} container>
           <Grid xs={12} sm={6} md={6} item>
             <FormInput

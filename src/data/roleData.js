@@ -71,7 +71,7 @@ export const ROLE_PERMISSIONS = [
       },
 
       {
-        module: "Experience Letter",
+        module: "Experience-Letter",
         permissions: [],
       },
 
@@ -86,15 +86,15 @@ export const ROLE_PERMISSIONS = [
     module: "Pre-Admission",
     subModule: [
       {
-        module: "Enquiries",
+        module: "Pre Addmission Enquiry",
         permissions: [],
       },
       {
-        module: "Exams",
+        module: "Pre Addmission Exam",
         permissions: [],
       },
       {
-        module: "Exam Schedules",
+        module: "Pre Addmission ExamSchedule",
         permissions: [],
       },
       {
@@ -232,7 +232,7 @@ export const ROLE_PERMISSIONS = [
       },
 
       {
-        module: "Awards And Achievement",
+        module: "Awards",
         permissions: [],
       },
       {

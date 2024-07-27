@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import TabList from "../../components/Tabs/Tablist";
@@ -100,6 +102,7 @@ export default function OffBoarding() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit"]}
+          module="Off Boarding"
           tableKeys={offBoardingDataTableKeys}
           bodyDataModal="Off-Boarding letter"
           bodyData={data}
@@ -278,8 +281,7 @@ export default function OffBoarding() {
                 size="small"
                 variant="outlined"
                 onClick={handleAddRow}
-                startIcon={<AddIcon />}
-              >
+                startIcon={<AddIcon />}>
                 Add
               </Button>
             </Grid>

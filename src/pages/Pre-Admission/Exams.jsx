@@ -116,7 +116,11 @@ export default function Exams() {
     <>
       <PageHeader title="Exams" />
 
-      <AddForm title="Add Exam" onAddClick={handleOpenQuestionModel} />
+      <AddForm
+        module="Pre Addmission Exam"
+        title="Add Exam"
+        onAddClick={handleOpenQuestionModel}
+      />
 
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid
@@ -158,6 +162,7 @@ export default function Exams() {
 
       <CustomTable
         actions={["edit", "delete"]}
+        module="Pre Addmission Exam"
         tableKeys={examsTableKeys}
         bodyDataModal="exams"
         bodyData={data}

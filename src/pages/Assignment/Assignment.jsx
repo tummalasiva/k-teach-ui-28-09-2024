@@ -262,6 +262,7 @@ export default function Assignment() {
         </Paper>
         <CustomTable
           actions={["view", "edit", "delete", "custom"]}
+          module="Assignment"
           bodyDataModal="Assignment"
           bodyData={data}
           tableKeys={assignmentTableKeys}

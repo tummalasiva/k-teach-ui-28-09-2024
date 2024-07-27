@@ -160,6 +160,7 @@ export default function AddPopup() {
     <>
       <CustomTable
         actions={["edit", "delete", "switch"]}
+        module="Splash News"
         bodyDataModal="Popup Splash News"
         bodyData={data}
         tableKeys={popupSplashNewsTableKeys}
@@ -170,6 +171,7 @@ export default function AddPopup() {
       />
       <AddForm
         title="Add Vertical Splash News"
+        module="Splash News"
         onAddClick={AddHorizontalSplashNews}
       />
 

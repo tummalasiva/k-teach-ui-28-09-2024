@@ -147,6 +147,7 @@ export default function AwardsAndAchievements() {
       <PageHeader title="Award And Achievements" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Awards"
         bodyDataModal="Award and Achievements"
         bodyData={data}
         tableKeys={awardAchievementTableKeys}
@@ -156,6 +157,7 @@ export default function AwardsAndAchievements() {
 
       <AddForm
         title="Add Awards & Achievement"
+        module="Awards"
         onAddClick={AddAwardsAchievement}
       />
 

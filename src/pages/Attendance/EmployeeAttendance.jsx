@@ -210,6 +210,7 @@ export default function EmployeeAttendance() {
         </Paper>
         <CustomTable
           actions={[]}
+          module="Employee Attendance"
           bodyDataModal="reports"
           bodyData={data}
           tableKeys={employeeAttendanceReportTableKeys}

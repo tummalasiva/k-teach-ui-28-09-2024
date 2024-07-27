@@ -122,6 +122,7 @@ export default function Result() {
 
       <CustomTable
         actions={["edit"]}
+        module="Result"
         tableKeys={resultTableKeys}
         bodyDataModal="result"
         bodyData={data}

@@ -314,6 +314,7 @@ export default function StudentActivity() {
       </Paper>
       <CustomTable
         actions={["edit", "delete"]}
+        module="Student Activity"
         tableKeys={studentActivityTableKeys}
         bodyDataModal="student activity"
         bodyData={data}
@@ -324,6 +325,7 @@ export default function StudentActivity() {
       {/* ====== Fab button component =======*/}
       <AddForm
         title="Student Activity"
+        module="Student Activity"
         onAddClick={AddDepartmentHandel}
         disabled={!Formik.values.student}
       />

@@ -167,6 +167,7 @@ export default function ExperienceLetter() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["view", "edit", "delete"]}
+          module="Experience Letter"
           tableKeys={experienceTableKeys}
           bodyDataModal="experience  letter"
           bodyData={data}

@@ -331,6 +331,7 @@ export default function TeacherActivity() {
         </Paper>
         <CustomTable
           actions={["edit", "delete"]}
+          module="Teacher Activity"
           tableKeys={teacherActivityTableKeys}
           bodyDataModal="teacher activity"
           bodyData={data}

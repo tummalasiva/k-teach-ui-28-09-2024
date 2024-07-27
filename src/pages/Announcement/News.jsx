@@ -146,6 +146,7 @@ export default function News() {
       <PageHeader title="News" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="News"
         bodyDataModal="News"
         bodyData={data}
         tableKeys={newsTableKeys}
@@ -153,7 +154,7 @@ export default function News() {
         onDeleteClick={handleDelete}
       />
 
-      <AddForm title="Add News" onAddClick={AddNews} />
+      <AddForm module="News" title="Add News" onAddClick={AddNews} />
 
       <FormModal
         open={open}

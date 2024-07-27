@@ -168,6 +168,7 @@ export default function OfferLetter() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["view", "edit", "delete"]}
+          module="Offer Letter"
           tableKeys={offerLetterTableKeys}
           bodyDataModal="offer letter"
           bodyData={data}

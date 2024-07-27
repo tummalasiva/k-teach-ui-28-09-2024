@@ -132,6 +132,7 @@ export default function Notice() {
       <PageHeader title="Notice" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Notice"
         bodyDataModal="Notice"
         bodyData={data}
         tableKeys={noticeTableKeys}
@@ -139,7 +140,7 @@ export default function Notice() {
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
-      <AddForm title="Add Notice" onAddClick={AddNotice} />
+      <AddForm module="Notice" title="Add Notice" onAddClick={AddNotice} />
 
       <FormModal
         open={open}

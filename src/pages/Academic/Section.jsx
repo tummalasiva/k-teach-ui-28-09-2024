@@ -254,13 +254,18 @@ export default function Section() {
 
       <CustomTable
         actions={["edit", "delete"]}
+        module="Section"
         tableKeys={academicSectionTableKeys}
         bodyDataModal="section"
         bodyData={data}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
-      <AddForm title="Add Section" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        module="Section"
+        title="Add Section"
+        onAddClick={AddDepartmentHandel}
+      />
 
       <FormModal
         open={open}

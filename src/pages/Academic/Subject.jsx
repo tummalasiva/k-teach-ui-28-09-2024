@@ -190,6 +190,7 @@ export default function Subject() {
 
       <CustomTable
         actions={["edit", "delete"]}
+        module="Subject"
         tableKeys={academicSubjectTableKeys}
         bodyDataModal="subject"
         bodyData={data}
@@ -198,7 +199,11 @@ export default function Subject() {
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Subject" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        module="Subject"
+        title="Add Subject"
+        onAddClick={AddDepartmentHandel}
+      />
       {/* ================================== */}
 
       {/* ==== add/edit Subjects ======== */}

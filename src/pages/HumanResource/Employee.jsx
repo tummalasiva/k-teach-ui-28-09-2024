@@ -21,6 +21,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Employee() {
   const { selectedSetting } = useContext(SettingContext);
@@ -159,6 +160,7 @@ export default function Employee() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={""}
+          module="Employee"
           tableKeys={overviewTableKeys}
           bodyData={overviewData}
           bodyDataModal="employee"
@@ -189,19 +191,23 @@ export default function Employee() {
             }}
           />
 
-          <Tooltip title="Print">
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <Print />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Excel Sheet Download">
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <ListAlt />
-            </IconButton>
-          </Tooltip>
+          <CheckPermission module="Employee" permission="view">
+            {" "}
+            <Tooltip title="Print">
+              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                <Print />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Excel Sheet Download">
+              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                <ListAlt />
+              </IconButton>
+            </Tooltip>
+          </CheckPermission>
         </Box>
         <CustomTable
           actions={["edit", "delete"]}
+          module="Employee"
           tableKeys={employeeTableKeys}
           bodyData={search ? searchFilter : activeData}
           bodyDataModal="employee"
@@ -247,6 +253,7 @@ export default function Employee() {
         </Box>
         <CustomTable
           actions={["edit", "delete"]}
+          module="Employee"
           tableKeys={inactiveTableKeys}
           bodyDataModal="employee"
           bodyData={search ? searchFilter : InactiveData}
@@ -256,7 +263,11 @@ export default function Employee() {
       </TabPanel>
 
       {/* == Fab button component =========== */}
-      <AddForm title="Add Employee" onAddClick={AddEmployeeHandle} />
+      <AddForm
+        module="Employee"
+        title="Add Employee"
+        onAddClick={AddEmployeeHandle}
+      />
     </>
   );
 }

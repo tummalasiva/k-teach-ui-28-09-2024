@@ -97,6 +97,7 @@ export default function ManageDepartment() {
       <PageHeader title="Department" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Department"
         tableKeys={departmentTableKeys}
         bodyDataModal="department"
         bodyData={data}
@@ -104,7 +105,11 @@ export default function ManageDepartment() {
         onDeleteClick={handleDelete}
       />
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Department" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        module="Department"
+        title="Add Department"
+        onAddClick={AddDepartmentHandel}
+      />
       {/* ================================== */}
 
       {/* ==== add department ======== */}

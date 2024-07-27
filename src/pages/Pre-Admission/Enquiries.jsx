@@ -334,6 +334,7 @@ export default function Enquiries() {
 
       <CustomTable
         actions={["custom", "delete", "view"]}
+        module="Pre Addmission Enquiry"
         tableKeys={enquriesTableKeys}
         bodyDataModal="enquiries"
         bodyData={filteredData}

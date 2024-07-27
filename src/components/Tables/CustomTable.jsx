@@ -27,6 +27,7 @@ import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import { PuffLoader } from "react-spinners";
 import image from "../../assets/images/deleteicon.png";
 import { Download } from "@mui/icons-material";
+import CheckPermission from "../Authentication/CheckPermission";
 
 const style = {
   position: "absolute",
@@ -201,31 +202,38 @@ export default function CustomTable({
                               </IconButton>
                             </Tooltip>
                           )} */}
-                          {actions.includes("edit") && !data.checkOut && (
-                            <Tooltip title="Edit">
-                              <IconButton onClick={() => onEditClick(data)}>
-                                <EditIcon color="primary" fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          )}
-                          {actions.includes("delete") && (
-                            <Tooltip title="Delete">
-                              <IconButton
-                                onClick={() => handleDeleteClick(data)}>
-                                <DeleteIcon fontSize="small" color="error" />
-                              </IconButton>
-                            </Tooltip>
-                          )}
-                          {actions.includes("view") && (
-                            <Tooltip title="View">
-                              <IconButton onClick={() => onViewClick(data)}>
-                                <RemoveRedEyeRoundedIcon
-                                  fontSize="small"
-                                  color="primary"
-                                />
-                              </IconButton>
-                            </Tooltip>
-                          )}
+                          <CheckPermission module={module} permission="update">
+                            {actions.includes("edit") && !data.checkOut && (
+                              <Tooltip title="Edit">
+                                <IconButton onClick={() => onEditClick(data)}>
+                                  <EditIcon color="primary" fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </CheckPermission>
+                          <CheckPermission module={module} permission="delete">
+                            {actions.includes("delete") && (
+                              <Tooltip title="Delete">
+                                <IconButton
+                                  onClick={() => handleDeleteClick(data)}>
+                                  <DeleteIcon fontSize="small" color="error" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </CheckPermission>
+
+                          <CheckPermission module={module} permission="view">
+                            {actions.includes("view") && (
+                              <Tooltip title="View">
+                                <IconButton onClick={() => onViewClick(data)}>
+                                  <RemoveRedEyeRoundedIcon
+                                    fontSize="small"
+                                    color="primary"
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </CheckPermission>
                           {actions.includes("card") && (
                             <Tooltip title="Unbundle">
                               <Button
@@ -236,18 +244,20 @@ export default function CustomTable({
                               </Button>
                             </Tooltip>
                           )}
-                          {actions.includes("switch") && (
-                            <Tooltip title={getTooltipTitle(data)}>
-                              <IconButton
-                                size="small"
-                                onClick={() => onToggleSwitch(data)}>
-                                <CustomSwitch
+                          <CheckPermission module={module} permission="update">
+                            {actions.includes("switch") && (
+                              <Tooltip title={getTooltipTitle(data)}>
+                                <IconButton
                                   size="small"
-                                  checked={data[toggleStatus] === true}
-                                />
-                              </IconButton>
-                            </Tooltip>
-                          )}
+                                  onClick={() => onToggleSwitch(data)}>
+                                  <CustomSwitch
+                                    size="small"
+                                    checked={data[toggleStatus] === true}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </CheckPermission>
                           {actions.includes("custom") && (
                             <CustomAction
                               onEditClick={onEditClick}
@@ -256,13 +266,15 @@ export default function CustomTable({
                               onNavigateFeeMap={onNavigateFeeMap}
                             />
                           )}
-                          {actions.includes("download") && (
-                            <IconButton
-                              size="small"
-                              onClick={() => onDownloadClick(data)}>
-                              <Download fontSize="small" />
-                            </IconButton>
-                          )}
+                          <CheckPermission module={module} permission="view">
+                            {actions.includes("download") && (
+                              <IconButton
+                                size="small"
+                                onClick={() => onDownloadClick(data)}>
+                                <Download fontSize="small" />
+                              </IconButton>
+                            )}
+                          </CheckPermission>
                         </TableCell>
                       ) : null}
                     </TableRow>

@@ -171,6 +171,7 @@ export default function Gallery() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["edit", "delete"]}
+          module="Gallery"
           bodyDataModal="Gallery"
           bodyData={data}
           onEditClick={handleEditClick}

@@ -491,6 +491,7 @@ export default function StudentAttendance() {
         </Paper>
         <CustomTable
           actions={[]}
+          module="Student Attendance"
           bodyDataModal="reports"
           bodyData={reportData}
           tableKeys={studentAttendanceReportTableKeys}
