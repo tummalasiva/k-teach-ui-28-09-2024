@@ -52,7 +52,7 @@ function App() {
   const handleClosePopup = () => setPopupData({ open: false, data: null });
 
   useEffect(() => {
-    let userType = window.localStorage.getItem("userType");
+    let userType = window.localStorage.getItem(process.env.REACT_APP_USER_TYPE);
     if (userType) {
       setUserType(userType);
     }

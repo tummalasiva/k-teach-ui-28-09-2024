@@ -1,3 +1,5 @@
+/** @format */
+
 import { jwtDecode } from "jwt-decode";
 import React from "react";
 
@@ -7,12 +9,14 @@ export default function ShowComponent({
   CustomComponent,
   children,
 }) {
-  let decodedToken = jwtDecode(window.localStorage.getItem("access_token"));
+  let decodedToken = jwtDecode(
+    window.localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN)
+  );
 
   if (!decodedToken && !CustomComponent) return null;
   if (!decodedToken && CustomComponent) return CustomComponent;
 
-  let user = window.localStorage.getItem("current_ecs_user");
+  let user = window.localStorage.getItem(process.env.REACT_APP_CURRENT_USER);
   if (!user && !CustomComponent) return null;
   if (!user && CustomComponent) return CustomComponent;
 

@@ -269,7 +269,9 @@ export default function NavDrawer() {
   };
 
   const getEmployees = async () => {
-    const user = window.localStorage.getItem("current_ecs_user");
+    const user = window.localStorage.getItem(
+      process.env.REACT_APP_CURRENT_USER
+    );
     setEmployee(JSON.parse(user));
   };
 
@@ -339,10 +341,9 @@ export default function NavDrawer() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("current_ecs_user");
-    window.localStorage.removeItem("refresh_token");
-    window.localStorage.removeItem("userType");
+    window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+    window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+    window.localStorage.removeItem(process.env.REACT_APP_USER_TYPE);
     navigate("/");
   };
 

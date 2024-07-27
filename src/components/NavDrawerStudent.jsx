@@ -222,10 +222,9 @@ export default function NavDrawerStudent() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("current_ecs_user");
-    window.localStorage.removeItem("refresh_token");
-    window.localStorage.removeItem("userType");
+    window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+    window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+    window.localStorage.removeItem(process.env.REACT_APP_USER_TYPE);
     navigate("/");
   };
 

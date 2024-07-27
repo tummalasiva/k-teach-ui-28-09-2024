@@ -33,10 +33,10 @@ export default function PageHeader({ title = "", showTextField = true }) {
     setSelectedSetting({ ...settings.filter((s) => s._id == value)[0] });
   };
 
-  let user = window.localStorage.getItem("current_ecs_user");
+  let user = window.localStorage.getItem(process.env.REACT_APP_CURRENT_USER);
 
   let extractedUser = JSON.parse(user);
-  let role = extractedUser.role;
+  let role = extractedUser?.role;
 
   let IsAdminOrSuper = role?.name === "SUPER ADMIN" || role?.name === "ADMIN";
 
@@ -46,7 +46,7 @@ export default function PageHeader({ title = "", showTextField = true }) {
         component="h1"
         sx={{
           fontWeight: "bold",
-          color: "#fff",
+          color: (theme) => (theme.palette.mode === "dark" ? "white" : "black"),
         }}>
         {title}
       </Typography>

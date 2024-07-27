@@ -93,15 +93,14 @@ export default function Navbar() {
       const { data } = await get(PUBLIC_URLS.account.checkIfLoggedIn);
       setHasAccessToken(true);
     } catch (error) {
-      window.localStorage.removeItem("access_token");
-      window.localStorage.removeItem("current_ecs_user");
-      window.localStorage.removeItem("refresh_token");
-      window.localStorage.removeItem("userType");
+      window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+      window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+      window.localStorage.removeItem(process.env.REACT_APP_USER_TYPE);
     }
   };
 
   useEffect(() => {
-    let accessToken = window.localStorage.getItem("access_token");
+    let accessToken = window.localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
     if (accessToken) {
       checkLogin();
     }
