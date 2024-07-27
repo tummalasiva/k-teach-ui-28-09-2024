@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import {
+  Box,
   Button,
   Grid,
   Paper,
@@ -140,6 +141,7 @@ export default function FeeOverview() {
   const [amountInDifferentModes, setAmountInDifferentModes] = useState(null);
   const [allReceipts, setAllReceipts] = useState([]);
   const [filteredReceipts, setFilteredReceipts] = useState([]);
+  const [downloadingOverview, setDownloadingOverview] = useState(false);
 
   const getAmountInDifferentModes = async (values) => {
     try {
@@ -189,6 +191,45 @@ export default function FeeOverview() {
       );
       setAmountInDifferentModes(data.result?.finalResult);
     } catch (error) {}
+  };
+
+  const downloadFeeOverview = async () => {
+    try {
+      const payload = {
+        academicYearId: entryFormik.values.academicYear,
+        cashierId: entryFormik.values.collected,
+        receiptTitleId: entryFormik.values.feeReceipt,
+        feeMapId: entryFormik.values.feeMap,
+        fromDate: entryFormik.values.fromDate,
+        toDate: entryFormik.values.toDate,
+        sectionId: entryFormik.values.section,
+        classId: entryFormik.values.class,
+        schoolId: selectedSetting._id,
+      };
+
+      setDownloadingOverview(true);
+
+      const response = await get(PRIVATE_URLS.receipt.downloadFeeOverView, {
+        params: payload,
+        validateStatus: (status) => status < 500,
+        responseType: "blob",
+      });
+
+      if (response.status === 200) {
+        downloadFile(
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          response.data,
+          "Fee_overview"
+        );
+      } else {
+        const errorText = await new Response(response.data).text();
+        toast.error(JSON.parse(errorText)?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setDownloadingOverview(false);
   };
 
   const entryFormik = useFormik({
@@ -384,7 +425,6 @@ export default function FeeOverview() {
         ?.includes(searchValue.toLowerCase())
     );
 
-    console.log(filtered, "filtered ");
     setFilteredReceipts(filtered);
   };
 
@@ -611,6 +651,25 @@ export default function FeeOverview() {
         tableKeys={feeOverviewReceiptTableKeys}
         CustomAction={CustomAction}
       />
+
+      {allReceipts.length && (
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "flex-end",
+            padding: "10px",
+            alignItems: "center",
+          }}>
+          <LoadingButton
+            variant="contained"
+            size="small"
+            loading={downloadingOverview}
+            onClick={downloadFeeOverview}>
+            Download
+          </LoadingButton>
+        </Box>
+      )}
     </>
   );
 }
