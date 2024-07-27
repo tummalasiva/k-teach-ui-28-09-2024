@@ -26,6 +26,7 @@ import RedoRoundedIcon from "@mui/icons-material/RedoRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import { RefreshRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Type_Options = [
   {
@@ -113,11 +114,13 @@ export default function Report() {
         <Grid xs={12} sm={6} md={3} item>
           <FormDatePicker formik={entryFormik} label="To Date" name="toDate" />
         </Grid>
-        <Grid item xs={12} md={3} lg={3} display="flex" alignSelf="center">
-          <Button size="small" type="submit" variant="contained">
-            Find
-          </Button>
-        </Grid>
+        <CheckPermission module="Report" permission="view">
+          <Grid item xs={12} md={3} lg={3} display="flex" alignSelf="center">
+            <Button size="small" type="submit" variant="contained">
+              Find
+            </Button>
+          </Grid>
+        </CheckPermission>
       </Grid>
 
       <TableContainer component={Paper}>
