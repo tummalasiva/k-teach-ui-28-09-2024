@@ -30,7 +30,9 @@ export default function TeacherActivity() {
   const [subjects, setSubjects] = useState([]);
   const [employees, setEmployees] = useState([]);
 
-  let currentUserStringified = window.localStorage.getItem("current_ecs_user");
+  let currentUserStringified = window.localStorage.getItem(
+    process.env.REACT_APP_CURRENT_USER
+  );
 
   let currentUser = JSON.parse(currentUserStringified);
 

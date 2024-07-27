@@ -106,8 +106,9 @@ export default function Room() {
       serverSecret,
       "=============================================="
     );
-    let currentUserStringified =
-      window.localStorage.getItem("current_ecs_user");
+    let currentUserStringified = window.localStorage.getItem(
+      process.env.REACT_APP_CURRENT_USER
+    );
 
     console.log(currentUserStringified);
 

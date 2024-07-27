@@ -38,7 +38,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import studentMenu from "../data/studentMenu";
 
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ExpandLess, ExpandMore, PagesOutlined } from "@mui/icons-material";
 import LOGO from "../assets/images/deleteicon.png";
 
 import { useNavigate } from "react-router-dom";
@@ -60,6 +60,7 @@ import Assignment from "../pages/StudentDashboard/Assignment";
 import Attendance from "../pages/StudentDashboard/Attendance";
 import Receipts from "../pages/StudentDashboard/Receipts";
 import Profile from "../pages/StudentDashboard/accountSetting/Profile";
+import PageNotFound from "./PageNotFound";
 
 const drawerWidth = 270;
 
@@ -221,10 +222,9 @@ export default function NavDrawerStudent() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("current_ecs_user");
-    window.localStorage.removeItem("refresh_token");
-    window.localStorage.removeItem("userType");
+    window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+    window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+    window.localStorage.removeItem(process.env.REACT_APP_USER_TYPE);
     navigate("/");
   };
 
@@ -524,6 +524,7 @@ export default function NavDrawerStudent() {
           <Route path="student_courses" element={<Courses />} />
           <Route path="student_live" element={<Live />} />
           <Route path="student_profile" element={<Profile />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Outlet />
       </Box>

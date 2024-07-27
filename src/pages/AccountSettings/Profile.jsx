@@ -40,7 +40,9 @@ export default function Profile() {
   // console.log(employee, "employee");
 
   const getEmployees = async () => {
-    const user = window.localStorage.getItem("current_ecs_user");
+    const user = window.localStorage.getItem(
+      process.env.REACT_APP_CURRENT_USER
+    );
     setEmployee(JSON.parse(user));
   };
 

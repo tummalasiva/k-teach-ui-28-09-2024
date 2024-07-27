@@ -8,7 +8,15 @@ import TabPanel from "../../components/Tabs/TabPanel";
 import { studentLibraryDueTableKeys } from "../../data/tableKeys/studentLibraryDueData";
 import { studentLibraryHistoryTableKeys } from "../../data/tableKeys/studentLibraryHistoryData";
 import { studentLibraryIssueTableKeys } from "../../data/tableKeys/studentlibraryIssueData";
-import { Button, Grid, Paper, Stack, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useFormik } from "formik";
 import FormDatePicker from "../../forms/FormDatePicker";
 import FormInput from "../../forms/FormInput";
@@ -24,6 +32,14 @@ import dayjs from "dayjs";
 const BookDetailed = styled(Paper)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
+  backgroundColor: "whitesmoke",
+  padding: "10px",
+}));
+
+const BookHeader = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  color: "black",
+  fontSize: "15px",
 }));
 
 const Issued_To_Type_Option = [
@@ -103,6 +119,7 @@ export default function StudentIssueReturn() {
   const [book, setBook] = useState([]);
   const [dueList, setDueList] = useState([]);
   const [history, setHistory] = useState([]);
+  const [tabValue, setTabValue] = useState(0);
 
   const [periodical, setPeriodical] = useState([]);
   const getData = async () => {
@@ -349,20 +366,29 @@ export default function StudentIssueReturn() {
         variant="contained"
         onClick={handleClickOpen}
         sx={{ mt: 1, mb: 2 }}>
-        Issue Book
+        Issue
       </Button>
       <TabPanel index={0} value={value}>
-        <BookDetailed sx={{ padding: 1 }}>
-          <Typography variant="h6" fontWeight="bold" fontSize={16}>
-            Total Books:{" "}
-            {book.reduce((total, current) => total + current.leftInStock, 0)}
-          </Typography>
-          <Typography variant="h6" fontWeight="bold" fontSize={16}>
-            Issued: {data.length}
-          </Typography>
-          <Typography variant="h6" fontSize={16} fontWeight="bold">
-            Due: {dueList.length}
-          </Typography>
+        <BookDetailed>
+          <Box>
+            {" "}
+            <BookHeader>
+              Total Books:{" "}
+              {book.reduce((total, current) => total + current.leftInStock, 0)}
+            </BookHeader>
+            <BookHeader>Total Periodical: 0</BookHeader>
+          </Box>
+
+          <Box>
+            {" "}
+            <BookHeader>Issued: {data.length}</BookHeader>
+            <BookHeader>Issued: 0</BookHeader>
+          </Box>
+          <Box>
+            {" "}
+            <BookHeader>Due: {dueList.length}</BookHeader>
+            <BookHeader>Due:0</BookHeader>
+          </Box>
         </BookDetailed>
         <CustomTable
           actions={["custom"]}
@@ -443,12 +469,12 @@ export default function StudentIssueReturn() {
         submitButtonTitle={"Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
-          <Grid xs={12} md={6} lg={3} item>
+          <Grid xs={12} md={6} lg={6} item>
             <FormSelect
               required={true}
               name="type"
               formik={entryFormik}
-              label="Select Tyoe"
+              label="Select Type"
               options={Type_Options}
             />
           </Grid>

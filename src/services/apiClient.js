@@ -15,26 +15,45 @@ const client = Axios.create({
 });
 
 const setAuthToken = (config) => {
-  const access_token = window.localStorage.getItem("access_token");
+  const access_token = window.localStorage.getItem(
+    process.env.REACT_APP_ACCESS_TOKEN
+  );
   if (access_token) {
     config.headers["x-auth-token"] = `bearer ${access_token}`;
+    config.headers["x-user-url"] = window.location.href;
+    config.headers["isMobile"] = false;
   }
   return config;
 };
 
 const refreshAccessToken = async () => {
   try {
-    const res = await client.post("/refresh-token");
-    const newAccessToken = res.data.accessToken;
+    const res = await Axios.post(
+      `${API_PREFIX}/ecamps/v1/account/refreshToken`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          access_token: window.localStorage.getItem(
+            process.env.REACT_APP_ACCESS_TOKEN
+          ),
+        },
+      }
+    );
+    const newAccessToken = res.data.result;
+
     // Store new access token
-    window.localStorage.setItem("access_token", newAccessToken);
+    window.localStorage.setItem(
+      process.env.REACT_APP_ACCESS_TOKEN,
+      newAccessToken
+    );
     return newAccessToken;
   } catch (error) {
     // Handle error (e.g., redirect to login)
-    console.log("refresh token error", error);
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("current_user");
+    window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+    window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
     window.location.href = "/login";
+    return null;
   }
 };
 
@@ -51,12 +70,17 @@ client.interceptors.response.use(
   async (error) => {
     const { response } = error;
     const originalRequest = error.config;
-    if (response && response.status === 401) {
-      // originalRequest._retry = true;
-      // const accessToken = await refreshAccessToken();
-      // originalRequest.headers["x-auth-token"] = `bearer ${accessToken}`;
-      // return Axios(originalRequest);
+
+    // Handle 401 error
+    if (response && response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // Prevent infinite loops
+      const accessToken = await refreshAccessToken();
+      if (accessToken) {
+        originalRequest.headers["x-auth-token"] = `bearer ${accessToken}`;
+        return client(originalRequest);
+      }
     }
+
     if (response && response.data && response.data.message) {
       toast.error(response.data.message);
     } else {

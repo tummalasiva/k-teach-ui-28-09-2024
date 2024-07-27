@@ -168,6 +168,7 @@ import Credentials from "../pages/Communication/Credentials";
 import BulkPhoto from "../pages/Student/BulkPhoto";
 import IdCard from "../pages/Student/IdCard";
 import Assignment from "../pages/Assignment/Assignment";
+import PageNotFound from "./PageNotFound";
 
 // exlnt_70471681
 // 9538063455
@@ -268,7 +269,9 @@ export default function NavDrawer() {
   };
 
   const getEmployees = async () => {
-    const user = window.localStorage.getItem("current_ecs_user");
+    const user = window.localStorage.getItem(
+      process.env.REACT_APP_CURRENT_USER
+    );
     setEmployee(JSON.parse(user));
   };
 
@@ -338,10 +341,9 @@ export default function NavDrawer() {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("current_ecs_user");
-    window.localStorage.removeItem("refresh_token");
-    window.localStorage.removeItem("userType");
+    window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+    window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+    window.localStorage.removeItem(process.env.REACT_APP_USER_TYPE);
     navigate("/");
   };
 
@@ -968,6 +970,7 @@ export default function NavDrawer() {
             element={<AddInstitute />}
           />
           <Route path="profile" element={<Profile />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Outlet />
       </Box>

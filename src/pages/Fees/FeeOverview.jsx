@@ -3,7 +3,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
-import { Button, Grid, Paper } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import FormDatePicker from "../../forms/FormDatePicker";
 import PageHeader from "../../components/PageHeader";
 import FormSelect from "../../forms/FormSelect";
@@ -14,6 +25,7 @@ import FormInput from "../../forms/FormInput";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const showInfo = (data) => {
   let result = [];
@@ -43,6 +55,11 @@ const showInfo = (data) => {
   return result.join(" | ");
 };
 
+const ALL_OPTION = {
+  label: "All",
+  value: "all",
+};
+
 export default function FeeOverview() {
   const { selectedSetting } = useContext(SettingContext);
   const [data, setData] = useState([]);
@@ -52,6 +69,49 @@ export default function FeeOverview() {
   const [sections, setSections] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [collectedBy, setCollectedBy] = useState([]);
+
+  const [amountInDifferentModes, setAmountInDifferentModes] = useState(null);
+  const [allReceipts, setAllReceipts] = useState([]);
+
+  const getAmountInDifferentModes = async (values) => {
+    try {
+      let payload = {
+        academicYearId: values.academicYear,
+        cashierId: values.collected,
+        receiptTitleId: values.feeReceipt,
+        feeMapId: values.feeMap,
+        fromDate: values.fromDate,
+        toDate: values.toDate,
+        sectionId: values.section,
+        classId: values.class,
+        schoolId: selectedSetting._id,
+      };
+      const { data } = await get(
+        PRIVATE_URLS.receipt.getAmountCollectedWithDifferentModes,
+        {
+          params: payload,
+        }
+      );
+
+      const { data: receipts } = await get(
+        PRIVATE_URLS.receipt.getAllReceipts,
+        {
+          params: payload,
+        }
+      );
+
+      setAllReceipts(data);
+
+      console.log(
+        receipts,
+        "================================================="
+      );
+
+      setAmountInDifferentModes(data.result?.finalResult);
+
+      console.log(data.result.finalResult, "result");
+    } catch (error) {}
+  };
 
   const entryFormik = useFormik({
     initialValues: {
@@ -64,8 +124,12 @@ export default function FeeOverview() {
       fromDate: dayjs(new Date()),
       toDate: dayjs(new Date()),
     },
-    onSubmit: console.log("nnnn"),
+    onSubmit: getAmountInDifferentModes,
   });
+
+  useEffect(() => {
+    setAmountInDifferentModes(null);
+  }, [entryFormik.values]);
 
   //get academic year
   const getAcademicYear = async () => {
@@ -90,28 +154,25 @@ export default function FeeOverview() {
         params: {
           search: {
             $or: [
-              { roleName: "ACCOUNTANT" },
-              { roleName: "SUPER ADMIN" },
-              { roleName: "ADMIN" },
+              { name: "ACCOUNTANT" },
+              { name: "SUPER ADMIN" },
+              { name: "ADMIN" },
             ],
           },
           schoolId: selectedSetting._id,
         },
       });
 
-      // console.log(data.result, "role");
-
-      entryFormik.setFieldValue("collected", data.result[0]?._id);
+      let roleIds = data.result.map((r) => r._id);
 
       const employeeResponse = await get(PRIVATE_URLS.employee.list, {
         params: {
           search: {
-            role: entryFormik.values.collected,
+            role: { $in: roleIds },
           },
           schoolId: selectedSetting._id,
         },
       });
-      // console.log(employeeResponse.data, "mep");
 
       setCollectedBy(
         employeeResponse?.data?.result.map((e) => ({
@@ -119,6 +180,10 @@ export default function FeeOverview() {
           label: e.role?.name,
           value: e?._id,
         }))
+      );
+      entryFormik.setFieldValue(
+        "collected",
+        employeeResponse?.data?.result[0]?._id
       );
     } catch (error) {
       console.log(error);
@@ -159,17 +224,23 @@ export default function FeeOverview() {
   //get sections
   const getSections = async () => {
     try {
+      const filter = {};
+      if (entryFormik.values.class !== "all") {
+        filter["class"] = entryFormik.values.class;
+      }
       const { data } = await get(PRIVATE_URLS.section.list, {
         params: {
           schoolId: selectedSetting._id,
-          search: {
-            class: entryFormik.values.class,
-          },
+          search: filter,
         },
       });
       entryFormik.setFieldValue("section", data.result[0]?._id);
       setSections(
-        data.result.map((c) => ({ ...c, label: c.name, value: c._id }))
+        data.result.map((c) => ({
+          ...c,
+          label: `${c.class.name} - ${c.name}`,
+          value: c._id,
+        }))
       );
     } catch (error) {
       console.log(error);
@@ -178,15 +249,20 @@ export default function FeeOverview() {
 
   // get fee map list
   const getFeeMaps = async () => {
+    const filter = {
+      active: true,
+    };
+    if (entryFormik.values.class !== "all") {
+      filter["class"] = entryFormik.values.class;
+    }
+    if (entryFormik.values.receiptName !== "all") {
+      filter["receiptTitle"] = entryFormik.values.feeReceipt;
+    }
     try {
       const { data } = await get(PRIVATE_URLS.feeMap.list, {
         params: {
           schoolId: selectedSetting._id,
-          search: {
-            active: true,
-            class: entryFormik.values.class,
-            receiptTitle: entryFormik.values.receiptName,
-          },
+          search: filter,
         },
       });
       setFeeMaps(
@@ -245,7 +321,7 @@ export default function FeeOverview() {
               name="collected"
               formik={entryFormik}
               label="Select Collected By"
-              options={collectedBy}
+              options={[ALL_OPTION, ...collectedBy]}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -254,7 +330,7 @@ export default function FeeOverview() {
               name="feeReceipt"
               formik={entryFormik}
               label="Select Fee Receipt"
-              options={receipts}
+              options={[ALL_OPTION, ...receipts]}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -263,7 +339,7 @@ export default function FeeOverview() {
               name="class"
               formik={entryFormik}
               label="Select Class"
-              options={classes}
+              options={[ALL_OPTION, ...classes]}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -272,7 +348,7 @@ export default function FeeOverview() {
               name="section"
               formik={entryFormik}
               label="Select Section"
-              options={sections}
+              options={[ALL_OPTION, ...sections]}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -281,7 +357,7 @@ export default function FeeOverview() {
               name="feeMap"
               formik={entryFormik}
               label="Select Fee Map"
-              options={feeMaps}
+              options={[ALL_OPTION, ...feeMaps]}
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
@@ -299,16 +375,111 @@ export default function FeeOverview() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} item>
-            <Button variant="contained">Find</Button>
+            <Button onClick={entryFormik.handleSubmit} variant="contained">
+              Find
+            </Button>
           </Grid>
         </Grid>
       </Paper>
-      <CustomTable
-        actions={[]}
-        bodyDataModal="data"
-        bodyData={data}
-        tableKeys={feeOverviewPaymentTableKeys}
-      />
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead style={{ background: "rgb(27 55 121)" }}>
+              <TableRow>
+                <TableCell align="center">
+                  <span className="class-table-header">Payment</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">Total</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">Cash</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">Cheque</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">DD</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">Chalan</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">NetBanking</span>
+                </TableCell>
+                <TableCell align="center">
+                  <span className="class-table-header">Online</span>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            {!amountInDifferentModes ? (
+              <TableBody>
+                <TableRow
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}>
+                  <TableCell align="center" colSpan={8}>
+                    <Typography variant="h6" sx={{ textAlign: "center" }}>
+                      No data found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <TableBody>
+                <TableRow
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}>
+                  <TableCell align="center">
+                    Amount
+                    <CurrencyRupeeIcon size="small" fontSize="10px" />
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {Object.values(amountInDifferentModes).reduce(
+                      (t, c) => t + parseInt(c),
+                      0
+                    )}
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["Cash"]}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["Cheque"]}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["DD"]}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["Card"]}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["Netbanking"]}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ textTransform: "capitalize" }}>
+                    {amountInDifferentModes["Upi"]}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            )}
+          </Table>
+        </TableContainer>
+      </Paper>
       <Grid
         rowSpacing={1}
         columnSpacing={2}

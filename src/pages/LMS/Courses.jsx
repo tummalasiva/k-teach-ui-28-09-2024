@@ -341,22 +341,20 @@ export default function Courses() {
             No data found
           </Typography>
         )}
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start,",
+          }}
+        />
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          my: 1,
-        }}
-      />
 
       <Dialog
         fullScreen={fullScreen}

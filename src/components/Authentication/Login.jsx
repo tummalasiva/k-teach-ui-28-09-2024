@@ -112,12 +112,20 @@ const Login = () => {
   };
 
   const onLogin = (data) => {
-    const { access_token, refresh_token, user } = data.result;
+    const { access_token, user } = data.result;
     let decodedToken = jwtdecode.jwtDecode(access_token);
-    window.localStorage.setItem("access_token", access_token);
-    window.localStorage.setItem("current_ecs_user", JSON.stringify(user));
-    window.localStorage.setItem("refresh_token", refresh_token);
-    window.localStorage.setItem("userType", decodedToken.userType);
+    window.localStorage.setItem(
+      process.env.REACT_APP_ACCESS_TOKEN,
+      access_token
+    );
+    window.localStorage.setItem(
+      process.env.REACT_APP_CURRENT_USER,
+      JSON.stringify(user)
+    );
+    window.localStorage.setItem(
+      process.env.REACT_APP_USER_TYPE,
+      decodedToken.userType
+    );
     setUserType(decodedToken.userType);
     navigate("/sch/dashboard");
   };

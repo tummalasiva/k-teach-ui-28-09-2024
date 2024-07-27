@@ -33,17 +33,24 @@ export default function PageHeader({ title = "", showTextField = true }) {
     setSelectedSetting({ ...settings.filter((s) => s._id == value)[0] });
   };
 
+  let user = window.localStorage.getItem(process.env.REACT_APP_CURRENT_USER);
+
+  let extractedUser = JSON.parse(user);
+  let role = extractedUser?.role;
+
+  let IsAdminOrSuper = role?.name === "SUPER ADMIN" || role?.name === "ADMIN";
+
   return (
     <Wrapper>
       <Typography
         component="h1"
         sx={{
           fontWeight: "bold",
-          color: "#fff",
+          color: (theme) => (theme.palette.mode === "dark" ? "white" : "black"),
         }}>
         {title}
       </Typography>
-      {showTextField && (
+      {IsAdminOrSuper && showTextField && (
         <Stack direction="row" spacing={2}>
           <FormControl fullWidth size="small" sx={{ minWidth: "200px" }}>
             <InputLabel id="demo-simple-select-label">Select School</InputLabel>

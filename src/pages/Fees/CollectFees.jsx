@@ -98,7 +98,7 @@ export default function CollectFees() {
   const [openConcessionModal, setOpenConcessionModal] = useState(false);
   const [concession, setConcession] = useState(null);
   const [note, setNote] = useState("");
-  const [payingDate, setPayingDate] = useState(null);
+  const [payingDate, setPayingDate] = useState(dayjs(Date.now()));
   const [collectingFee, setCollectingFee] = useState(false);
   const [downloadingPreview, setDownloadingPreview] = useState(false);
   const [openCollectModal, setOpenCollectModal] = useState(false);
@@ -145,8 +145,6 @@ export default function CollectFees() {
           },
         }
       );
-
-      console.log(feeReceipt.result, "====");
 
       setFeeDetails(feeReceipt.result);
     } catch (error) {
