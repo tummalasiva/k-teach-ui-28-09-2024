@@ -258,7 +258,7 @@ export default function NavDrawer() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openProfile = Boolean(anchorEl);
   const [activeYear, setActiveYear] = React.useState([]);
-  const [employee, setEmployee] = React.useState([]);
+  const [employee, setEmployee] = React.useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -279,10 +279,67 @@ export default function NavDrawer() {
   const { SIDE_MENU_DATA } = menu;
 
   React.useEffect(() => {
-    setSideMenuData(SIDE_MENU_DATA);
+    let role = employee?.role;
+
+    if (!role) {
+      setSideMenuData([]);
+    } else if (role.name === "SUPER ADMIN") {
+      setSideMenuData(SIDE_MENU_DATA);
+    } else {
+      let permissions = role.permissions;
+      let newSideMenuData = [];
+      for (let menuData of SIDE_MENU_DATA) {
+        if (menuData.subMenus.length) {
+          let newMenu = { ...menuData, subMenus: [] };
+
+          for (let ren of menuData.renderName) {
+            if (
+              permissions
+                ?.filter(
+                  (p) => p.module.toLowerCase() === ren?.toLowerCase()
+                )[0]
+                ?.permissions?.includes("view")
+            ) {
+              newMenu.subMenus = [
+                ...new Set([
+                  ...newMenu.subMenus,
+                  ...menuData.subMenus.filter(
+                    (s) => s.renderName?.toLowerCase() === ren?.toLowerCase()
+                  ),
+                ]),
+              ];
+            }
+          }
+
+          if (newMenu.subMenus.length) {
+            newSideMenuData.push(newMenu);
+          }
+        } else {
+          if (
+            permissions
+              ?.filter(
+                (p) =>
+                  p.module.toLowerCase() ===
+                  menuData.renderName[0]?.toLowerCase()
+              )[0]
+              ?.permissions?.includes("view")
+          ) {
+            newSideMenuData.push(menuData);
+          }
+        }
+      }
+
+      setSideMenuData(newSideMenuData);
+    }
+  }, [employee]);
+
+  React.useEffect(() => {
     getActiveAcademicYear();
+  }, [selectedSetting]);
+
+  React.useEffect(() => {
     getEmployees();
-  }, []);
+  }, [selectedSetting]);
 
   //get academic year
   const getActiveAcademicYear = async () => {
