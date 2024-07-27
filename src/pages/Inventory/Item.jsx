@@ -15,6 +15,7 @@ import { get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import { downloadFile } from "../../utils";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Item() {
   const { selectedSetting } = useContext(SettingContext);
@@ -175,106 +176,113 @@ export default function Item() {
         ]}
       />
       <TabPanel index={0} value={value}>
-        <LoadingButton
-          type="submit"
-          size="small"
-          variant="contained"
-          sx={{ my: 2 }}
-          loading={PdfLoading}
-          onClick={handlePdfDownload}>
-          PDF
-        </LoadingButton>
-        <LoadingButton
-          type="submit"
-          size="small"
-          variant="contained"
-          sx={{ ml: 2, my: 2 }}
-          loading={excelLoading}
-          onClick={handleExcelDownload}>
-          Excel
-        </LoadingButton>
+        <CheckPermission module="Item" permission="view">
+          <LoadingButton
+            type="submit"
+            size="small"
+            variant="contained"
+            sx={{ my: 2 }}
+            loading={PdfLoading}
+            onClick={handlePdfDownload}>
+            PDF
+          </LoadingButton>
+        </CheckPermission>
+        <CheckPermission module="Item" permission="view">
+          <LoadingButton
+            type="submit"
+            size="small"
+            variant="contained"
+            sx={{ ml: 2, my: 2 }}
+            loading={excelLoading}
+            onClick={handleExcelDownload}>
+            Excel
+          </LoadingButton>
+        </CheckPermission>
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Items"
+          module="Item"
           bodyData={data}
           tableKeys={itemTableKeys}
           onEditClick={handleEditClick}
         />
       </TabPanel>
-      <TabPanel index={1} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid
-            rowSpacing={1}
-            columnSpacing={2}
-            container
-            component="form"
-            onSubmit={entryFormik.handleSubmit}>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="name"
-                formik={entryFormik}
-                label="Item name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="department"
-                formik={entryFormik}
-                label="Select Department"
-                options={departments}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="brand"
-                formik={entryFormik}
-                label="Brand"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="itemId"
-                formik={entryFormik}
-                label="item Id"
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <FormInput
-                required={false}
-                name="description"
-                formik={entryFormik}
-                label="Description"
-              />
-            </Grid>
+      <CheckPermission module="Item" permission="view">
+        <TabPanel index={1} value={value}>
+          <Paper sx={{ padding: 2, marginBottom: 2 }}>
             <Grid
-              xs={12}
-              md={6}
-              lg={3}
-              style={{ alignSelf: "center", marginTop: "10px" }}
-              item>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                onClick={handleClose}>
-                Cancel
-              </Button>
-              <LoadingButton
-                type="submit"
-                size="small"
-                variant="contained"
-                loading={loading}
-                sx={{ ml: 2 }}>
-                Submit
-              </LoadingButton>
+              rowSpacing={1}
+              columnSpacing={2}
+              container
+              component="form"
+              onSubmit={entryFormik.handleSubmit}>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="name"
+                  formik={entryFormik}
+                  label="Item name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="department"
+                  formik={entryFormik}
+                  label="Select Department"
+                  options={departments}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="brand"
+                  formik={entryFormik}
+                  label="Brand"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="itemId"
+                  formik={entryFormik}
+                  label="item Id"
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <FormInput
+                  required={false}
+                  name="description"
+                  formik={entryFormik}
+                  label="Description"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={6}
+                lg={3}
+                style={{ alignSelf: "center", marginTop: "10px" }}
+                item>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleClose}>
+                  Cancel
+                </Button>
+                <LoadingButton
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  loading={loading}
+                  sx={{ ml: 2 }}>
+                  Submit
+                </LoadingButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </TabPanel>
+          </Paper>
+        </TabPanel>
+      </CheckPermission>
       <TabPanel index={2} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>

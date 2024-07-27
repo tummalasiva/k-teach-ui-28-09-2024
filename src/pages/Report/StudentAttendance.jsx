@@ -19,6 +19,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function StudentAttendance() {
   const { selectedSetting } = useContext(SettingContext);
@@ -193,21 +194,23 @@ export default function StudentAttendance() {
               views={["month"]}
             />
           </Grid>
-          <Grid
-            xs={12}
-            md={12}
-            lg={12}
-            item
-            display="flex"
-            justifyContent="flex-end">
-            <LoadingButton
-              loading={loading}
-              onClick={entryFormik.handleSubmit}
-              size="small"
-              variant="contained">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Student Attendance" permission="view">
+            <Grid
+              xs={12}
+              md={12}
+              lg={12}
+              item
+              display="flex"
+              justifyContent="flex-end">
+              <LoadingButton
+                loading={loading}
+                onClick={entryFormik.handleSubmit}
+                size="small"
+                variant="contained">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 

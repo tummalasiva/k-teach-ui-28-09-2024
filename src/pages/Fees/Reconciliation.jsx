@@ -11,6 +11,7 @@ import SettingContext from "../../context/SettingsContext";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { CircularProgress, IconButton, Stack, Tooltip } from "@mui/material";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const CustomActionFee = ({
   onUpdate = () => {},
@@ -43,32 +44,36 @@ const CustomActionFee = ({
   return (
     <>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Tooltip title="Approve">
-          <IconButton
-            disabled={loading === "Approve"}
-            size="small"
-            onClick={() => updateStatus("Approve", data?._id)}>
-            {loading === "Approve" ? (
-              <CircularProgress size={20} />
-            ) : (
-              <CheckIcon color="primary" fontSize="12px" />
-            )}
-          </IconButton>
-        </Tooltip>
-        {data?.reconciliationStatus != "Rejected" && (
-          <Tooltip title="Reject">
+        <CheckPermission module="Reconciliation" permission="update">
+          <Tooltip title="Approve">
             <IconButton
-              disabled={loading === "Reject"}
+              disabled={loading === "Approve"}
               size="small"
-              onClick={() => updateStatus("Reject", data?._id)}>
-              {loading === "Reject" ? (
+              onClick={() => updateStatus("Approve", data?._id)}>
+              {loading === "Approve" ? (
                 <CircularProgress size={20} />
               ) : (
-                <CloseIcon color="error" fontSize="12px" />
+                <CheckIcon color="primary" fontSize="12px" />
               )}
             </IconButton>
           </Tooltip>
-        )}
+        </CheckPermission>
+        <CheckPermission module="Reconciliation" permission="update">
+          {data?.reconciliationStatus != "Rejected" && (
+            <Tooltip title="Reject">
+              <IconButton
+                disabled={loading === "Reject"}
+                size="small"
+                onClick={() => updateStatus("Reject", data?._id)}>
+                {loading === "Reject" ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  <CloseIcon color="error" fontSize="12px" />
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
+        </CheckPermission>
       </Stack>
     </>
   );

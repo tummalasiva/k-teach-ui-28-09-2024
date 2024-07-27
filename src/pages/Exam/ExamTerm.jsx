@@ -120,13 +120,21 @@ export default function ExamTerm() {
       <CustomTable
         actions={["edit", "delete"]}
         bodyDataModal="exam terms"
+        module="Exam Term"
         bodyData={data}
         tableKeys={examTermTableKeys}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
-      <AddForm title="Add Exam Term" onAddClick={handelExamTerm} />
 
+      {/* == add exam term Form ==== */}
+      <AddForm
+        title="Add Exam Term"
+        module="Exam Term"
+        onAddClick={handelExamTerm}
+      />
+
+      {/* == Add/Update exam term Form ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

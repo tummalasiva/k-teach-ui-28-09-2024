@@ -28,6 +28,7 @@ import { useContext } from "react";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const BookDetailed = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -84,9 +85,11 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button size="small" variant="contained" onClick={handleClickOpen}>
-          Return
-        </Button>
+        <CheckPermission module="Issue and Returns" permission="update">
+          <Button size="small" variant="contained" onClick={handleClickOpen}>
+            Return
+          </Button>
+        </CheckPermission>
       </Stack>
 
       <FormModal
@@ -361,13 +364,15 @@ export default function StudentIssueReturn() {
         value={value}
         labels={["Issue List", "Due List", "History List"]}
       />
+      <CheckPermission module="Issue and Returns" permission="add">
+        <Button
+          variant="contained"
+          onClick={handleClickOpen}
+          sx={{ mt: 1, mb: 2 }}>
+          Issue
+        </Button>
+      </CheckPermission>
 
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        sx={{ mt: 1, mb: 2 }}>
-        Issue
-      </Button>
       <TabPanel index={0} value={value}>
         <BookDetailed>
           <Box>
@@ -424,30 +429,36 @@ export default function StudentIssueReturn() {
               <Grid xs={12} sm={6} md={6} lg={4} item>
                 <FormDatePicker formik={formik} label="To Date" name="toDate" />
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-                lg={3}
-                sx={{ alignSelf: "center", mt: 1 }}
-                item>
-                <Button size="small" type="submit" variant="contained">
-                  Find
-                </Button>
-              </Grid>
+              <CheckPermission module="Issue and Returns" permission="view">
+                <Grid
+                  xs={12}
+                  md={6}
+                  lg={3}
+                  sx={{ alignSelf: "center", mt: 1 }}
+                  item>
+                  <Button size="small" type="submit" variant="contained">
+                    Find
+                  </Button>
+                </Grid>
+              </CheckPermission>
               <Grid xs={12} md={12} lg={12} item>
                 <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
-                  <Button
-                    size="small"
-                    onClick={handleGetPrintPdf}
-                    variant="contained">
-                    Download
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={handleGetDownloadExcel}
-                    variant="contained">
-                    Print
-                  </Button>
+                  <CheckPermission module="Issue and Returns" permission="view">
+                    <Button
+                      size="small"
+                      onClick={handleGetPrintPdf}
+                      variant="contained">
+                      Download
+                    </Button>
+                  </CheckPermission>
+                  <CheckPermission module="Issue and Returns" permission="view">
+                    <Button
+                      size="small"
+                      onClick={handleGetDownloadExcel}
+                      variant="contained">
+                      Print
+                    </Button>
+                  </CheckPermission>
                 </Stack>
               </Grid>
             </Grid>
@@ -461,6 +472,7 @@ export default function StudentIssueReturn() {
         />
       </TabPanel>
 
+      {/* == Add Issue Modal === */}
       <FormModal
         open={open}
         formik={entryFormik}

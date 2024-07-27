@@ -28,6 +28,7 @@ import CourseContext from "../../context/CourseContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { put } from "../../services/apiMethods";
 import DeleteModal from "../../forms/DeleteModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const MuiTableCell = styled(TableCell)(() => ({
   width: "150px",
@@ -37,11 +38,8 @@ const MuiTableCell = styled(TableCell)(() => ({
 }));
 
 export default function CourseContentTable({
-  // chapter,
-  // courseId,
   onEditClick = () => {},
   handelOpenDelModel = () => {},
-  // handleDeleteChapter = () => {},
 }) {
   const { chapter } = useContext(ContentContext);
   const { courseId, onUpdate } = useContext(CourseContext);
@@ -132,14 +130,18 @@ export default function CourseContentTable({
                 </TableCell>
 
                 <TableCell align="center">
-                  <IconButton onClick={() => onEditClick(item)}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleOpenModel(item._id)}>
-                    <DeleteIcon color="error" fontSize="small" />
-                  </IconButton>
+                  <CheckPermission module="Courses Content" permission="update">
+                    <IconButton onClick={() => onEditClick(item)}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </CheckPermission>
+                  <CheckPermission module="Courses Content" permission="delete">
+                    <IconButton
+                      color="error"
+                      onClick={() => handleOpenModel(item._id)}>
+                      <DeleteIcon color="error" fontSize="small" />
+                    </IconButton>
+                  </CheckPermission>
                 </TableCell>
 
                 <TableCell align="center">

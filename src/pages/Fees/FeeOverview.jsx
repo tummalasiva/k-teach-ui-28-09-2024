@@ -26,6 +26,7 @@ import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const showInfo = (data) => {
   let result = [];
@@ -374,11 +375,13 @@ export default function FeeOverview() {
               label="To Date"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <Button onClick={entryFormik.handleSubmit} variant="contained">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Fee Overview" permission="view">
+            <Grid xs={12} md={6} lg={3} item>
+              <Button onClick={entryFormik.handleSubmit} variant="contained">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>

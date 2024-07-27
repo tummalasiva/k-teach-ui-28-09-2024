@@ -17,6 +17,7 @@ import { Button, Grid, Stack, Typography } from "@mui/material";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const EmployeeMemberAction = ({
   onUpdate = () => {},
@@ -65,13 +66,17 @@ const EmployeeMemberAction = ({
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={actionType === "add" ? <Add /> : <RemoveIcon />}
-          onClick={handleClickOpen}>
-          Member
-        </Button>
+        <CheckPermission
+          module="Employee Library Member"
+          permission={actionType}>
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={actionType === "add" ? <Add /> : <RemoveIcon />}
+            onClick={handleClickOpen}>
+            Member
+          </Button>
+        </CheckPermission>
       </Stack>
 
       <FormModal
@@ -146,7 +151,7 @@ export default function EmployeeLibraryMember() {
           bodyData={employee}
           bodyDataModal="employee"
           CustomAction={(props) => (
-            <EmployeeMemberAction {...props} actionType="remove" />
+            <EmployeeMemberAction {...props} actionType="delete" />
           )}
           onUpdate={getEmployee}
         />

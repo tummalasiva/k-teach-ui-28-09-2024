@@ -14,6 +14,7 @@ import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Type_Options = [
   {
@@ -382,16 +383,17 @@ export default function LeaveReport() {
                 </Grid>
               </>
             )}
-
-            <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-              <LoadingButton
-                loading={loadingExcel}
-                onClick={handleGetDownloadExcel}
-                size="small"
-                variant="contained">
-                Download
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Leave Report" permission="view">
+              <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  loading={loadingExcel}
+                  onClick={handleGetDownloadExcel}
+                  size="small"
+                  variant="contained">
+                  Download
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
       </TabPanel>
@@ -488,16 +490,17 @@ export default function LeaveReport() {
                 </Grid>
               </>
             )}
-
-            <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-              <LoadingButton
-                loading={loadingPdf}
-                onClick={handleGetPrintPdf}
-                size="small"
-                variant="contained">
-                Print
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Leave Report" permission="view">
+              <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  loading={loadingPdf}
+                  onClick={handleGetPrintPdf}
+                  size="small"
+                  variant="contained">
+                  Print
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
       </TabPanel>

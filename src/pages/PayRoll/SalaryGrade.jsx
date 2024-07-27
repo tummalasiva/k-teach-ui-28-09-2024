@@ -149,6 +149,7 @@ export default function SalaryGrade() {
 
       <CustomTable
         actions={["edit", "delete"]}
+        module="Salary Grade"
         tableKeys={salaryGradeTableKeys}
         bodyDataModal="salary grade"
         bodyData={data}
@@ -156,8 +157,14 @@ export default function SalaryGrade() {
         onDeleteClick={handleDelete}
       />
 
-      <AddForm title="Add Salary grade" onAddClick={AddSalaryGrade} />
+      {/* == Add Form Salary grade === */}
+      <AddForm
+        title="Add Salary grade"
+        module="Salary Grade"
+        onAddClick={AddSalaryGrade}
+      />
 
+      {/* == Add/update Form Salary grade === */}
       <FormModal
         open={open}
         formik={entryFormik}

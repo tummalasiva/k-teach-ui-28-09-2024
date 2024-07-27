@@ -20,6 +20,7 @@ import AddChapterDialog from "./CourseDialogs/AddChapterDialog";
 import DeleteModal from "../../forms/DeleteModal";
 import ContentContext from "../../context/ContentContext";
 import CourseContext from "../../context/CourseContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Contents = [
   {
@@ -49,13 +50,7 @@ const Contents = [
   // },
 ];
 
-export default function ShowCourseContent({
-  // chapter,
-  // course,
-  // courseId,
-  // onUpdate = () => {},
-  handleEditChapter = () => {},
-}) {
+export default function ShowCourseContent({ handleEditChapter = () => {} }) {
   const { selectedSetting } = useContext(SettingContext);
   const { chapter } = useContext(ContentContext);
   const { courseId, onUpdate, course } = useContext(CourseContext);
@@ -122,11 +117,6 @@ export default function ShowCourseContent({
     }
   };
 
-  // const handleSubmit = () => {
-  //   onDeleteClick(selectedItem._id);
-  //   setOpen(false);
-  // };
-
   return (
     <>
       <Box
@@ -163,43 +153,46 @@ export default function ShowCourseContent({
               fontSize={16}
               display="flex"
               alignItems="center">
-              <Tooltip title="Delete Chapter">
-                <IconButton size="small" color="error">
-                  <DeleteIcon
-                    fontSize="small"
-                    color="error"
-                    onClick={handelOpenDelModel}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Tooltip
-                title="Update Chapter"
-                style={{
-                  color: "#1b3779",
-                }}>
-                <IconButton size="small">
-                  <EditIcon fontSize="small" onClick={handleEditChapter} />
-                </IconButton>
-              </Tooltip>
+              <CheckPermission module="Courses Content" permission="delete">
+                <Tooltip title="Delete Chapter">
+                  <IconButton size="small" color="error">
+                    <DeleteIcon
+                      fontSize="small"
+                      color="error"
+                      onClick={handelOpenDelModel}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </CheckPermission>
+              <CheckPermission module="Courses Content" permission="update">
+                <Tooltip
+                  title="Update Chapter"
+                  style={{
+                    color: "#1b3779",
+                  }}>
+                  <IconButton size="small">
+                    <EditIcon fontSize="small" onClick={handleEditChapter} />
+                  </IconButton>
+                </Tooltip>
+              </CheckPermission>
               Chapter: {chapter?.title}
             </Typography>
           </Grid>
-          <Grid item xs={6} sm={6} md={2}>
-            <FormSelect
-              required={true}
-              name="contents"
-              formik={entryFormik}
-              label="Add Content"
-              options={Contents}
-            />
-          </Grid>
+          <CheckPermission module="Courses Content" permission="add">
+            <Grid item xs={6} sm={6} md={2}>
+              <FormSelect
+                required={true}
+                name="contents"
+                formik={entryFormik}
+                label="Add Content"
+                options={Contents}
+              />
+            </Grid>
+          </CheckPermission>
           <Grid item xs={12} sm={12} md={12}>
             <CourseContentTable
-              // chapter={chapter}
-              // courseId={courseId}
               onEditClick={handleEditClick}
               handelOpenDelModel={handelOpenDelModel}
-              // handleDeleteChapter={handleDeleteChapter}
             />
           </Grid>
         </Grid>

@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import CustomTable from "../../components/Tables/CustomTable";
 import PageHeader from "../../components/PageHeader";
@@ -13,6 +15,7 @@ export default function StudentsLeave() {
         actions={["edit"]}
         tableKeys={studentLeaveTableKeys}
         bodyDataModal="student leave"
+        module="Student Leave"
         bodyData={data}
       />
     </>

@@ -34,6 +34,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import FileSelect from "../../forms/FileSelect";
 import { downloadFile } from "../../utils";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const modalStyle = {
   bgcolor: "background.paper",
@@ -346,19 +347,23 @@ export default function ManageMark() {
           </Grid>
           <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
             <Stack direction="row" spacing={2}>
-              <LoadingButton
-                loading={fetchingMarks}
-                onClick={entryFormik.handleSubmit}
-                size="small"
-                variant="contained">
-                Find
-              </LoadingButton>
-              <Button
-                onClick={() => setOpenModal(true)}
-                size="small"
-                variant="contained">
-                Bulk Update
-              </Button>
+              <CheckPermission module="Manage Mark" permission="view">
+                <LoadingButton
+                  loading={fetchingMarks}
+                  onClick={entryFormik.handleSubmit}
+                  size="small"
+                  variant="contained">
+                  Find
+                </LoadingButton>
+              </CheckPermission>
+              <CheckPermission module="Manage Mark" permission="view">
+                <Button
+                  onClick={() => setOpenModal(true)}
+                  size="small"
+                  variant="contained">
+                  Bulk Update
+                </Button>
+              </CheckPermission>
             </Stack>
           </Grid>
         </Grid>

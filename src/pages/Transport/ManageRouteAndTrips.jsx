@@ -227,16 +227,21 @@ export default function ManageRouteAndTrips() {
       {/* show data table ============== */}
       <CustomTable
         actions={["edit", "view", "delete"]}
-        tableKeys={manageRouteTableKeys}
         bodyDataModal="route"
+        module="Manage Route And Trips"
+        tableKeys={manageRouteTableKeys}
         bodyData={data}
         onViewClick={handleClickOpenView}
         onEditClick={handleEdit}
         onDeleteClick={deleteRoute}
       />
 
-      {/* Add icon ============= */}
-      <AddForm title="Add Route & Trips" onAddClick={AddRouteTrips} />
+      {/* ==== Add icon ============= */}
+      <AddForm
+        title="Add Route & Trips"
+        module="Manage Route And Trips"
+        onAddClick={AddRouteTrips}
+      />
 
       {/* Add/Update dialog ============= */}
       <FormModal

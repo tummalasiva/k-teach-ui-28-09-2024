@@ -19,6 +19,7 @@ import SettingContext from "../../context/SettingsContext";
 import { PieChart, Pie, Tooltip, Cell, Legend } from "recharts";
 import themeData from "../../data/themeData";
 import { downloadFile } from "../../utils";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const graphData = [
   { name: "Issue", value: 400 },
@@ -200,15 +201,19 @@ export default function LibraryReport() {
                 alignSelf="center"
                 gap={1}
                 item>
-                <Button type="submit" size="small" variant="contained">
-                  Find
-                </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={handleGetPrintPdf}>
-                  Print
-                </Button>
+                <CheckPermission module="Library Report" permission="view">
+                  <Button type="submit" size="small" variant="contained">
+                    Find
+                  </Button>
+                </CheckPermission>
+                <CheckPermission module="Library Report" permission="view">
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleGetPrintPdf}>
+                    Print
+                  </Button>
+                </CheckPermission>
               </Grid>
             </Grid>
           </form>
@@ -251,12 +256,16 @@ export default function LibraryReport() {
               alignSelf="center"
               gap={1}
               item>
-              <Button size="small" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Library Report" permission="view">
+                <Button size="small" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Library Report" permission="view">
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </Paper>

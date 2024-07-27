@@ -8,6 +8,7 @@ import FormSelect from "../../forms/FormSelect";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function SubjectWiseReport() {
   const { selectedSetting } = useContext(SettingContext);
@@ -151,11 +152,13 @@ export default function SubjectWiseReport() {
               options={exams}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Subject Wise Report" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
     </>

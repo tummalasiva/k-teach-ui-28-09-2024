@@ -16,6 +16,7 @@ import SettingContext from "../../context/SettingsContext";
 import FormDatePicker from "../../forms/FormDatePicker";
 import VisitorInfoViewModel from "./VisitorInfoViewModel";
 import moment from "moment";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Reason_To_Meet = [
   { label: "Vendor", value: "vendor" },
@@ -296,12 +297,16 @@ export default function VisitorInfo() {
           display="flex"
           justifyContent="flex-start"
           gap={1}>
-          <Button size="small" variant="contained">
-            Excel
-          </Button>
-          <Button size="small" variant="contained">
-            Print
-          </Button>
+          <CheckPermission module="Visitor Info" permission="view">
+            <Button size="small" variant="contained">
+              Excel
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Visitor Info" permission="view">
+            <Button size="small" variant="contained">
+              Print
+            </Button>
+          </CheckPermission>
         </Grid>
       </Grid>
 
@@ -310,6 +315,7 @@ export default function VisitorInfo() {
         tableKeys={visitorInfoTableKeys}
         bodyDataModal="visitor info"
         bodyData={data}
+        module="Visitor Info"
         onEditClick={handleEditClick}
         onViewClick={handleClickOpenView}
       />
@@ -323,7 +329,11 @@ export default function VisitorInfo() {
       />
 
       {/* Add visitor info ============== */}
-      <AddForm title="Add visitor info" onAddClick={onAddClick} />
+      <AddForm
+        title="Add visitor info"
+        module="Visitor Info"
+        onAddClick={onAddClick}
+      />
 
       {/* Add/update model ============== */}
       <FormModal

@@ -15,6 +15,8 @@ import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import dayjs from "dayjs";
+import AddForm from "../../forms/AddForm";
+import CheckPermission from "../Authentication/CheckPermission";
 
 export default function VehicleTire() {
   const { selectedSetting } = useContext(SettingContext);
@@ -189,7 +191,6 @@ export default function VehicleTire() {
                 options={firm}
               />
             </Grid>
-
             <Grid xs={12} md={6} lg={3} item>
               <FormDatePicker
                 formik={formik}
@@ -209,33 +210,39 @@ export default function VehicleTire() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
 
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={<Add />}
-        sx={{ mt: 1, mb: 2 }}>
-        Add
-      </Button>
+      {/* ==== Add form vehicle log ==== */}
+      <AddForm
+        title="Add Tyre/Resole"
+        module="Vehicle Maintenance"
+        onAddClick={handleClickOpen}
+      />
+
       <CustomTable
         actions={["edit", "delete"]}
         tableKeys={vehicleTireTableKeys}
         bodyData={data}
+        module="Vehicle Maintenance"
         bodyDataModal="tyre/resole"
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
+      {/* ==== Add/update modal ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

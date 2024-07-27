@@ -26,7 +26,8 @@ export default function AddChapterDialog({
   const { courseId, onUpdate } = useContext(CourseContext);
   const [selectFile, setSelectFile] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(chapterData, "gaua");
+  // console.log(chapterData, "gaua");
+
   // create || update actions
   const handleCreateOrUpdate = async (values) => {
     try {

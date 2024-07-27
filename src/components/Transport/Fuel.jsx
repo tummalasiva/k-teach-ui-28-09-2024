@@ -15,6 +15,8 @@ import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import FileSelect from "../../forms/FileSelect";
 import dayjs from "dayjs";
+import AddForm from "../../forms/AddForm";
+import CheckPermission from "../Authentication/CheckPermission";
 
 export default function Fuel() {
   const { selectedSetting } = useContext(SettingContext);
@@ -251,32 +253,40 @@ export default function Fuel() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={<Add />}
-        sx={{ mt: 1, mb: 2 }}>
-        Add
-      </Button>
+
+      {/* ==== Add form vehicle log ==== */}
+      <AddForm
+        title="Add Vehicle Fuel"
+        module="Vehicle Maintenance"
+        onAddClick={handleClickOpen}
+      />
+
+      {/* ==== Add form vehicle log ==== */}
       <CustomTable
+        actions={["edit", "delete"]}
+        bodyDataModal="fuel"
+        module="Vehicle Maintenance"
+        onEditClick={handleEditClick}
         tableKeys={vehicleFuelTableKeys}
         bodyData={data}
-        bodyDataModal="fuel"
-        actions={["edit", "delete"]}
-        onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
+      {/* ==== Add/Update form vehicle log ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

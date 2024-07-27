@@ -14,6 +14,8 @@ import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import dayjs from "dayjs";
+import AddForm from "../../forms/AddForm";
+import CheckPermission from "../Authentication/CheckPermission";
 
 export default function Repair() {
   const { selectedSetting } = useContext(SettingContext);
@@ -62,7 +64,7 @@ export default function Repair() {
         date: dayjs(values.date).format("YYYY/MM/DD"),
       };
 
-      console.log(payload, "kkkkkk");
+      // console.log(payload, "kkkkkk");
       setLoading(true);
       if (dataToEdit) {
         const { data } = await put(
@@ -208,31 +210,40 @@ export default function Repair() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={<Add />}
-        sx={{ mt: 1, mb: 2 }}>
-        Add
-      </Button>
+
+      {/* ==== Add form vehicle log ==== */}
+      <AddForm
+        title="Add Repair Maintenance"
+        module="Vehicle Maintenance"
+        onAddClick={handleClickOpen}
+      />
+
+      {/* === Table ==== */}
       <CustomTable
         actions={["edit", "delete"]}
         bodyData={data}
         tableKeys={vehicleRepairTableKeys}
+        module="Vehicle Maintenance"
         bodyDataModal="Repair Maintenance"
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
+
+      {/* ===== Add/Update Modal ===== */}
       <FormModal
         open={open}
         formik={entryFormik}

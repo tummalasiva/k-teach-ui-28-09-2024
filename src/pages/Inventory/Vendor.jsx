@@ -16,6 +16,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get, post, put } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
 import avatar from "../../assets/images/avatar.jpg";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const MuiBox = styled(Box)({
   background: "#ececec",
@@ -206,243 +207,250 @@ export default function Vendor() {
         ]}
       />
       <TabPanel index={0} value={value}>
-        <Button size="small" variant="contained" sx={{ my: 2 }}>
-          PDF
-        </Button>
-        <Button size="small" variant="contained" sx={{ ml: 2, my: 2 }}>
-          Excel
-        </Button>
+        <CheckPermission module="Vendor" permission="view">
+          <Button size="small" variant="contained" sx={{ my: 2 }}>
+            PDF
+          </Button>
+        </CheckPermission>
+        <CheckPermission module="Vendor" permission="view">
+          <Button size="small" variant="contained" sx={{ ml: 2, my: 2 }}>
+            Excel
+          </Button>
+        </CheckPermission>
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Vendor"
+          module="Vendor"
           bodyData={data}
           tableKeys={VendorTableKeys}
           onEditClick={handleEditClick}
         />
       </TabPanel>
-      <TabPanel index={1} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid
-            rowSpacing={1}
-            columnSpacing={2}
-            container
-            component="form"
-            onSubmit={entryFormik.handleSubmit}>
-            <Grid xs={12} md={12} lg={12}>
-              <BasicData>
-                <MuiBox>
-                  <img
-                    src={
-                      logo.length > 0
-                        ? URL.createObjectURL(logo[0])
-                        : dataToEdit?.photo
-                    }
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "contain",
-                    }}
-                    alt="logo"
-                  />
-                </MuiBox>
-
-                <Grid
-                  container
-                  spacing={2}
-                  display="flex"
-                  justifyContent="center">
-                  <Grid xs={12} md={6} lg={3} item>
-                    {" "}
-                    <FileSelect
-                      name="photo"
-                      multi={false}
-                      label="Select Logo"
-                      onChange={(e) => handleChangePhoto(e, "photo")}
-                      previousFile={dataToEdit?.photo}
-                      customOnChange={true}
-                      selectedFiles={logo}
-                      onRemove={(fileName) => handleRemoveFile(fileName)}
-                      accept="image/jpeg, image/png"
-                    />
-                  </Grid>
-                </Grid>
-              </BasicData>
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
-                Basic Information
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="category"
-                formik={entryFormik}
-                label="Category"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="name"
-                formik={entryFormik}
-                label="Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="phone"
-                formik={entryFormik}
-                label="Phone no."
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="email"
-                formik={entryFormik}
-                label="Email"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="gstNumber"
-                formik={entryFormik}
-                label="GST Number"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="dealerName"
-                formik={entryFormik}
-                label="Dealer Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="dealerPhoneNumber"
-                formik={entryFormik}
-                label="Dealer Phone No."
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="website"
-                formik={entryFormik}
-                label="Vendor Website"
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
-                Address Information
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="address"
-                formik={entryFormik}
-                label="Address"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="city"
-                formik={entryFormik}
-                label="City"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="state"
-                formik={entryFormik}
-                label="State"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="zipCode"
-                formik={entryFormik}
-                label="Zip Code"
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
-                Bank Information
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="bankName"
-                formik={entryFormik}
-                label="Bank Name"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="accountNumber"
-                formik={entryFormik}
-                label="Account No"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="ifscCode"
-                formik={entryFormik}
-                label="IFSC Code"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                name="branchName"
-                formik={entryFormik}
-                label="Branch Name"
-              />
-            </Grid>
+      <CheckPermission module="Vendor" permission="add">
+        <TabPanel index={1} value={value}>
+          <Paper sx={{ padding: 2, marginBottom: 2 }}>
             <Grid
-              xs={12}
-              md={6}
-              lg={3}
-              style={{ alignSelf: "center", marginTop: "10px" }}
-              item>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                onClick={handleClose}>
-                Cancel
-              </Button>
-              <LoadingButton
-                type="submit"
-                size="small"
-                variant="contained"
-                loading={loading}
-                sx={{ ml: 2 }}>
-                Submit
-              </LoadingButton>
+              rowSpacing={1}
+              columnSpacing={2}
+              container
+              component="form"
+              onSubmit={entryFormik.handleSubmit}>
+              <Grid xs={12} md={12} lg={12}>
+                <BasicData>
+                  <MuiBox>
+                    <img
+                      src={
+                        logo.length > 0
+                          ? URL.createObjectURL(logo[0])
+                          : dataToEdit?.photo
+                      }
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "contain",
+                      }}
+                      alt="logo"
+                    />
+                  </MuiBox>
+
+                  <Grid
+                    container
+                    spacing={2}
+                    display="flex"
+                    justifyContent="center">
+                    <Grid xs={12} md={6} lg={3} item>
+                      {" "}
+                      <FileSelect
+                        name="photo"
+                        multi={false}
+                        label="Select Logo"
+                        onChange={(e) => handleChangePhoto(e, "photo")}
+                        previousFile={dataToEdit?.photo}
+                        customOnChange={true}
+                        selectedFiles={logo}
+                        onRemove={(fileName) => handleRemoveFile(fileName)}
+                        accept="image/jpeg, image/png"
+                      />
+                    </Grid>
+                  </Grid>
+                </BasicData>
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
+                  Basic Information
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="category"
+                  formik={entryFormik}
+                  label="Category"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="name"
+                  formik={entryFormik}
+                  label="Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="phone"
+                  formik={entryFormik}
+                  label="Phone no."
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="email"
+                  formik={entryFormik}
+                  label="Email"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="gstNumber"
+                  formik={entryFormik}
+                  label="GST Number"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="dealerName"
+                  formik={entryFormik}
+                  label="Dealer Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="dealerPhoneNumber"
+                  formik={entryFormik}
+                  label="Dealer Phone No."
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="website"
+                  formik={entryFormik}
+                  label="Vendor Website"
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
+                  Address Information
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="address"
+                  formik={entryFormik}
+                  label="Address"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="city"
+                  formik={entryFormik}
+                  label="City"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="state"
+                  formik={entryFormik}
+                  label="State"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="zipCode"
+                  formik={entryFormik}
+                  label="Zip Code"
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
+                  Bank Information
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="bankName"
+                  formik={entryFormik}
+                  label="Bank Name"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="accountNumber"
+                  formik={entryFormik}
+                  label="Account No"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="ifscCode"
+                  formik={entryFormik}
+                  label="IFSC Code"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  name="branchName"
+                  formik={entryFormik}
+                  label="Branch Name"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={6}
+                lg={3}
+                style={{ alignSelf: "center", marginTop: "10px" }}
+                item>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleClose}>
+                  Cancel
+                </Button>
+                <LoadingButton
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  loading={loading}
+                  sx={{ ml: 2 }}>
+                  Submit
+                </LoadingButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </TabPanel>
+          </Paper>
+        </TabPanel>
+      </CheckPermission>
       <TabPanel index={2} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>

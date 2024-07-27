@@ -35,6 +35,7 @@ import QuickFeeCollectModal from "./QuickFeeCollectModal";
 import { downloadFile } from "../../utils";
 import { toast } from "react-toastify";
 import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const showInfo = (data) => {
   let result = [];
@@ -620,20 +621,22 @@ export default function CollectFees() {
               options={students}
             />
           </Grid>
-          <Grid
-            xs={12}
-            md={6}
-            lg={3}
-            style={{ alignSelf: "center", marginTop: "10px" }}
-            item>
-            <LoadingButton
-              loading={fetchingStudents}
-              onClick={entryFormik.handleSubmit}
-              size="small"
-              variant="contained">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Collect Fees" permission="view">
+            <Grid
+              xs={12}
+              md={6}
+              lg={3}
+              style={{ alignSelf: "center", marginTop: "10px" }}
+              item>
+              <LoadingButton
+                loading={fetchingStudents}
+                onClick={entryFormik.handleSubmit}
+                size="small"
+                variant="contained">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 
@@ -881,13 +884,14 @@ export default function CollectFees() {
                   {concession ? "remove concession" : "add concession"}
                 </Button>
               </Stack>
-
-              <Button
-                onClick={handleOpenCollectFeeModal}
-                variant="contained"
-                size="small">
-                collect fee
-              </Button>
+              <CheckPermission module="Collect Fees" permission="add">
+                <Button
+                  onClick={handleOpenCollectFeeModal}
+                  variant="contained"
+                  size="small">
+                  collect fee
+                </Button>
+              </CheckPermission>
             </Box>
           </ExtraFeeContainer>
         </TableContainer>

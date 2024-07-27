@@ -40,6 +40,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import ClearIcon from "@mui/icons-material/Clear";
 import Download from "@mui/icons-material/Download";
 import DeleteModal from "../../forms/DeleteModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Data = styled(TableCell)(() => ({
   textAlign: "center",
@@ -292,36 +293,44 @@ export default function Courses() {
                   </Data>
                   <Data>{course.courseHours}</Data>
                   <Data>
-                    <Button onClick={() => handleNavigateCourse(course._id)}>
-                      Upload
-                    </Button>
+                    <CheckPermission module="Courses Content" permission="add">
+                      <Button onClick={() => handleNavigateCourse(course._id)}>
+                        Upload
+                      </Button>
+                    </CheckPermission>
                   </Data>
 
                   <Data>
-                    <Tooltip title="Upload Material">
-                      <Button
-                        onClick={() =>
-                          handleClickOpen(course._id, course.material)
-                        }>
-                        <FileUploadIcon />
-                      </Button>
-                    </Tooltip>
+                    <CheckPermission module="Courses" permission="add">
+                      <Tooltip title="Upload Material">
+                        <Button
+                          onClick={() =>
+                            handleClickOpen(course._id, course.material)
+                          }>
+                          <FileUploadIcon />
+                        </Button>
+                      </Tooltip>
+                    </CheckPermission>
                   </Data>
 
                   <Data>
-                    <Tooltip title="Edit">
-                      <Button onClick={() => handeleClickEdit(course)}>
-                        <EditIcon color="primary" fontSize="small" />
-                      </Button>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        color="error"
-                        size="small"
-                        onClick={() => setDeleteModal(course._id)}>
-                        <Delete color="error" fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                    <CheckPermission module="Courses" permission="update">
+                      <Tooltip title="Edit">
+                        <Button onClick={() => handeleClickEdit(course)}>
+                          <EditIcon color="primary" fontSize="small" />
+                        </Button>
+                      </Tooltip>
+                    </CheckPermission>
+                    <CheckPermission module="Courses" permission="delete">
+                      <Tooltip title="Delete">
+                        <IconButton
+                          color="error"
+                          size="small"
+                          onClick={() => setDeleteModal(course._id)}>
+                          <Delete color="error" fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </CheckPermission>
 
                     <DeleteModal
                       deleteModal={deleteModal}
@@ -355,6 +364,9 @@ export default function Courses() {
           }}
         />
       </TableContainer>
+
+      {/* === Add courses ========= */}
+      <AddForm title="Add Courses" module="Courses" onAddClick={handleSubmit} />
 
       <Dialog
         fullScreen={fullScreen}
@@ -412,8 +424,6 @@ export default function Courses() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-
-      <AddForm onAddClick={handleSubmit} />
     </>
   );
 }

@@ -16,6 +16,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import FileSelect from "../../forms/FileSelect";
 import FormDatePicker from "../../forms/FormDatePicker";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Periodical() {
   const { selectedSetting } = useContext(SettingContext);
@@ -166,32 +167,41 @@ export default function Periodical() {
       <PageHeader title="Periodical List" />
       <Paper sx={{ padding: 2, mb: 1 }}>
         <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={handleGetDownloadSheet}>
-            Download
-          </Button>
-
-          <Button size="small" variant="contained">
-            Count By title
-          </Button>
-
-          <Button size="small" variant="contained">
-            Bulk Upload
-          </Button>
+          <CheckPermission module="Periodical" permission="view">
+            <Button
+              size="small"
+              variant="contained"
+              onClick={handleGetDownloadSheet}>
+              Download
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Periodical" permission="view">
+            <Button size="small" variant="contained">
+              Count By title
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Periodical" permission="add">
+            <Button size="small" variant="contained">
+              Bulk Upload
+            </Button>
+          </CheckPermission>
         </Stack>
       </Paper>
       <CustomTable
         actions={["edit", "delete"]}
         tableKeys={periodicalTableKeys}
         bodyDataModal="periodical list"
+        module="Periodical"
         bodyData={data}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Periodical List" onAddClick={AddFormHandel} />
+      <AddForm
+        title="Add Periodical List"
+        module="Periodical"
+        onAddClick={AddFormHandel}
+      />
 
       {/* ==== Add/Update Periodical List ======== */}
       <FormModal

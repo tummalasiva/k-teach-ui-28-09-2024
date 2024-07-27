@@ -14,11 +14,12 @@ import { Button, Grid, Stack, Typography } from "@mui/material";
 import { Add, Remove as RemoveIcon } from "@mui/icons-material";
 import { useFormik } from "formik";
 import FormModal from "../../forms/FormModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const StudentMemberAction = ({
   onUpdate = () => {},
   data = {},
-  actionType,
+  actionType = "",
 }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -62,13 +63,17 @@ const StudentMemberAction = ({
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={actionType === "add" ? <Add /> : <RemoveIcon />}
-          onClick={handleClickOpen}>
-          Member
-        </Button>
+        <CheckPermission
+          module="Student Library Member"
+          permission={actionType}>
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={actionType === "add" ? <Add /> : <RemoveIcon />}
+            onClick={handleClickOpen}>
+            Member
+          </Button>
+        </CheckPermission>
       </Stack>
 
       <FormModal
@@ -150,7 +155,7 @@ export default function StudentLibraryMember() {
           bodyData={students}
           bodyDataModal="student"
           CustomAction={(props) => (
-            <StudentMemberAction {...props} actionType="remove" />
+            <StudentMemberAction {...props} actionType="delete" />
           )}
           onUpdate={getStudents}
         />

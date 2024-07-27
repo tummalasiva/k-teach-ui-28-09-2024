@@ -152,8 +152,9 @@ export default function Vehicle() {
 
       <CustomTable
         actions={["view", "edit", "delete"]}
-        tableKeys={vehicleTableKeys}
+        module="Vehicle"
         bodyDataModal="vehicle"
+        tableKeys={vehicleTableKeys}
         bodyData={data}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
@@ -161,7 +162,7 @@ export default function Vehicle() {
       />
 
       {/* add icon vehicle ==== */}
-      <AddForm title="Add Vehicle" onAddClick={AddVehicle} />
+      <AddForm title="Add Vehicle" module="Vehicle" onAddClick={AddVehicle} />
 
       {/* Add/Update vehicle ==== */}
       <FormModal

@@ -15,6 +15,7 @@ import SettingContext from "../../context/SettingsContext";
 import { get, post, put } from "../../services/apiMethods";
 import { LoadingButton } from "@mui/lab";
 import FileSelect from "../../forms/FileSelect";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const paymenyModes = [
   { label: "Cash", value: "Cash" },
@@ -354,121 +355,123 @@ export default function InOutTransaction() {
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Transaction"
+          module="In/Out Transaction"
           bodyData={data}
           tableKeys={TransactionTableKeys}
         />
       </TabPanel>
-      <TabPanel index={1} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid
-            rowSpacing={1}
-            columnSpacing={2}
-            container
-            component="form"
-            onSubmit={entryFormik.handleSubmit}>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}>
-                Item Details
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="item"
-                formik={entryFormik}
-                label="Item"
-                options={items}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormInput
-                required={true}
-                name="pricePerItem"
-                formik={entryFormik}
-                label="Price Per Item"
-                type="number"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormInput
-                required={true}
-                name="quantity"
-                formik={entryFormik}
-                label="Quantity"
-              />
-            </Grid>
+      <CheckPermission module="In/Out Transaction" permission="add">
+        <TabPanel index={1} value={value}>
+          <Paper sx={{ padding: 2, marginBottom: 2 }}>
+            <Grid
+              rowSpacing={1}
+              columnSpacing={2}
+              container
+              component="form"
+              onSubmit={entryFormik.handleSubmit}>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", mb: 1, fontWeight: "bold" }}>
+                  Item Details
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="item"
+                  formik={entryFormik}
+                  label="Item"
+                  options={items}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormInput
+                  required={true}
+                  name="pricePerItem"
+                  formik={entryFormik}
+                  label="Price Per Item"
+                  type="number"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormInput
+                  required={true}
+                  name="quantity"
+                  formik={entryFormik}
+                  label="Quantity"
+                />
+              </Grid>
 
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Transaction Details
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="trasactionMode"
-                formik={entryFormik}
-                label="Mode of Payment"
-                options={paymenyModes}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="type"
-                formik={entryFormik}
-                label="Type"
-                options={types}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="purpose"
-                formik={entryFormik}
-                label="Purpose"
-                options={purposes}
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                textAlign="start"
-                sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Transaction Between
-              </Typography>
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="fromType"
-                formik={entryFormik}
-                label="From Type"
-                options={fromTypes}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FormSelect
-                required={true}
-                name="toType"
-                formik={entryFormik}
-                label="To Type"
-                options={toTypes}
-              />
-            </Grid>
-            {/* <Grid xs={12} md={6} lg={4} item>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", fontWeight: "bold" }}>
+                  Transaction Details
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="trasactionMode"
+                  formik={entryFormik}
+                  label="Mode of Payment"
+                  options={paymenyModes}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="type"
+                  formik={entryFormik}
+                  label="Type"
+                  options={types}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="purpose"
+                  formik={entryFormik}
+                  label="Purpose"
+                  options={purposes}
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  textAlign="start"
+                  sx={{ fontSize: "15px", fontWeight: "bold" }}>
+                  Transaction Between
+                </Typography>
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="fromType"
+                  formik={entryFormik}
+                  label="From Type"
+                  options={fromTypes}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={4} item>
+                <FormSelect
+                  required={true}
+                  name="toType"
+                  formik={entryFormik}
+                  label="To Type"
+                  options={toTypes}
+                />
+              </Grid>
+              {/* <Grid xs={12} md={6} lg={4} item>
               <FormSelect
                 required={true}
                 name="status"
@@ -477,129 +480,130 @@ export default function InOutTransaction() {
                 options={status}
               />
             </Grid> */}
-            {(entryFormik.values.fromType === "Vendor" ||
-              entryFormik.values.toType === "Vendor") && (
-              <Grid xs={12} md={6} lg={4} item>
-                <FormSelect
+              {(entryFormik.values.fromType === "Vendor" ||
+                entryFormik.values.toType === "Vendor") && (
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="vendor"
+                    formik={entryFormik}
+                    label="Vendors"
+                    options={vendors}
+                  />
+                </Grid>
+              )}
+              {entryFormik.values.toType === "Student" && (
+                <>
+                  <Grid xs={12} md={6} lg={4} item>
+                    <FormSelect
+                      required={true}
+                      name="class"
+                      formik={entryFormik}
+                      label="Select Class"
+                      options={classes}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={6} lg={4} item>
+                    <FormSelect
+                      required={true}
+                      name="section"
+                      formik={entryFormik}
+                      label="Select Section"
+                      options={sections}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={6} lg={4} item>
+                    <FormSelect
+                      required={true}
+                      name="studentName"
+                      formik={entryFormik}
+                      label="Select Student Name"
+                      options={students}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              {(entryFormik.values.fromType === "School" ||
+                entryFormik.values.toType === "School") && (
+                <Grid xs={12} md={6} lg={4} item>
+                  <FormSelect
+                    required={true}
+                    name="school"
+                    formik={entryFormik}
+                    label="Select School"
+                    options={selectSchool}
+                  />
+                </Grid>
+              )}
+              {entryFormik.values.toType === "Employee" && (
+                <>
+                  <Grid xs={12} md={6} lg={4} item>
+                    <FormSelect
+                      required={true}
+                      name="role"
+                      formik={entryFormik}
+                      label="Select Role"
+                      options={roles}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={6} lg={4} item>
+                    <FormSelect
+                      required={true}
+                      name="employee"
+                      formik={entryFormik}
+                      label="Select Employees"
+                      options={employees}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              <Grid xs={12} md={12} lg={12} item>
+                <FormInput
                   required={true}
-                  name="vendor"
+                  name="note"
                   formik={entryFormik}
-                  label="Vendors"
-                  options={vendors}
+                  label="Note"
                 />
               </Grid>
-            )}
-            {entryFormik.values.toType === "Student" && (
-              <>
-                <Grid xs={12} md={6} lg={4} item>
-                  <FormSelect
-                    required={true}
-                    name="class"
-                    formik={entryFormik}
-                    label="Select Class"
-                    options={classes}
-                  />
-                </Grid>
-                <Grid xs={12} md={6} lg={4} item>
-                  <FormSelect
-                    required={true}
-                    name="section"
-                    formik={entryFormik}
-                    label="Select Section"
-                    options={sections}
-                  />
-                </Grid>
-                <Grid xs={12} md={6} lg={4} item>
-                  <FormSelect
-                    required={true}
-                    name="studentName"
-                    formik={entryFormik}
-                    label="Select Student Name"
-                    options={students}
-                  />
-                </Grid>
-              </>
-            )}
-
-            {(entryFormik.values.fromType === "School" ||
-              entryFormik.values.toType === "School") && (
               <Grid xs={12} md={6} lg={4} item>
-                <FormSelect
-                  required={true}
-                  name="school"
-                  formik={entryFormik}
-                  label="Select School"
-                  options={selectSchool}
+                <FileSelect
+                  name="invoice"
+                  label="Select Invoice"
+                  onChange={(e) => handleChangeFiles(e, "invoice")}
+                  customOnChange={true}
+                  selectedFiles={selectInvoice}
+                  onRemove={(fileName) => handleRemoveFile(fileName)}
+                  accept="image/*,.pdf"
                 />
               </Grid>
-            )}
-            {entryFormik.values.toType === "Employee" && (
-              <>
-                <Grid xs={12} md={6} lg={4} item>
-                  <FormSelect
-                    required={true}
-                    name="role"
-                    formik={entryFormik}
-                    label="Select Role"
-                    options={roles}
-                  />
-                </Grid>
-                <Grid xs={12} md={6} lg={4} item>
-                  <FormSelect
-                    required={true}
-                    name="employee"
-                    formik={entryFormik}
-                    label="Select Employees"
-                    options={employees}
-                  />
-                </Grid>
-              </>
-            )}
-
-            <Grid xs={12} md={12} lg={12} item>
-              <FormInput
-                required={true}
-                name="note"
-                formik={entryFormik}
-                label="Note"
-              />
+              <Grid
+                xs={12}
+                md={12}
+                lg={12}
+                style={{ alignSelf: "center", marginTop: "10px" }}
+                item>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleClose}>
+                  Cancel
+                </Button>
+                <LoadingButton
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  loading={loading}
+                  sx={{ ml: 2 }}>
+                  Submit
+                </LoadingButton>
+              </Grid>
             </Grid>
-            <Grid xs={12} md={6} lg={4} item>
-              <FileSelect
-                name="invoice"
-                label="Select Invoice"
-                onChange={(e) => handleChangeFiles(e, "invoice")}
-                customOnChange={true}
-                selectedFiles={selectInvoice}
-                onRemove={(fileName) => handleRemoveFile(fileName)}
-                accept="image/*,.pdf"
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-              style={{ alignSelf: "center", marginTop: "10px" }}
-              item>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                onClick={handleClose}>
-                Cancel
-              </Button>
-              <LoadingButton
-                type="submit"
-                size="small"
-                variant="contained"
-                loading={loading}
-                sx={{ ml: 2 }}>
-                Submit
-              </LoadingButton>
-            </Grid>
-          </Grid>
-        </Paper>
-      </TabPanel>
+          </Paper>
+        </TabPanel>
+      </CheckPermission>
       <TabPanel index={2} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <Grid rowSpacing={1} columnSpacing={2} container>

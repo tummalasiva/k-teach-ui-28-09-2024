@@ -12,6 +12,7 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import FormInput from "../../forms/FormInput";
 import { Close } from "@mui/icons-material";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function ConsolidatedMarkSheet() {
   const [data, setData] = useState([]);
@@ -110,12 +111,13 @@ export default function ConsolidatedMarkSheet() {
               options={section}
             />
           </Grid>
-
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Add exams
-            </Button>
-          </Grid>
+          <CheckPermission module="Consolidated Marks Sheet" permission="add">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Add exams
+              </Button>
+            </Grid>
+          </CheckPermission>
           <Grid xs={12} md={12} lg={12} item display="flex" gap={2}>
             <Grid xs={12} md={6} lg={3} item>
               <FormInput

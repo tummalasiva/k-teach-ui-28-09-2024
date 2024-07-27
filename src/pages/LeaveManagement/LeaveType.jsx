@@ -233,15 +233,20 @@ export default function LeaveType({}) {
 
       <CustomTable
         actions={["edit", "delete"]}
-        tableKeys={leaveTypeTableKeys}
         bodyDataModal="leave type"
         bodyData={data}
+        module="Leave Type"
+        tableKeys={leaveTypeTableKeys}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Leave Type" onAddClick={AddLeaveType} />
+      <AddForm
+        title="Add Leave Type"
+        module="Leave Type"
+        onAddClick={AddLeaveType}
+      />
 
       {/* ==== add/edit leave type ======== */}
       <Dialog

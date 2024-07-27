@@ -221,16 +221,21 @@ export default function ManageRoomAndBed() {
 
       <CustomTable
         actions={["edit", "delete", "view"]}
-        tableKeys={manageHostelRoomBedTableKeys}
+        module="Manage Room Bed"
         bodyDataModal="room"
         bodyData={data}
+        tableKeys={manageHostelRoomBedTableKeys}
         onDeleteClick={deleteRoom}
         onEditClick={handleEdit}
         onViewClick={handleClickOpenView}
       />
 
       {/* feb model open ============== */}
-      <AddForm title="Add Room & Bed" onAddClick={onAddClick} />
+      <AddForm
+        title="Add Room & Bed"
+        module="Manage Room Bed"
+        onAddClick={onAddClick}
+      />
 
       {/* Add/update model ============== */}
       <FormModal

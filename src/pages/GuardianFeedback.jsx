@@ -18,6 +18,7 @@ import SettingContext from "../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import ViewModel from "../forms/ViewModel";
 import themeData from "../data/themeData";
+import CheckPermission from "../components/Authentication/CheckPermission";
 
 const MuiBox = styled(Box)({
   display: "flex",
@@ -45,28 +46,32 @@ const CustomActionComponent = ({ onUpdate = () => {}, data = {} }) => {
   return (
     <>
       <Stack direction="row" spacing={2}>
-        {["pending", "approved"].includes(data.status) && (
-          <LoadingButton
-            loading={loading}
-            onClick={() => updateStatus("rejected")}
-            disableElevation
-            size="small"
-            color="error"
-            variant="contained">
-            Reject
-          </LoadingButton>
-        )}
-        {["pending", "rejected"].includes(data.status) && (
-          <LoadingButton
-            loading={loading}
-            onClick={() => updateStatus("approved")}
-            disableElevation
-            size="small"
-            color="success"
-            variant="contained">
-            Approve
-          </LoadingButton>
-        )}
+        <CheckPermission module="Guardian Feedback" permission="update">
+          {["pending", "approved"].includes(data.status) && (
+            <LoadingButton
+              loading={loading}
+              onClick={() => updateStatus("rejected")}
+              disableElevation
+              size="small"
+              color="error"
+              variant="contained">
+              Reject
+            </LoadingButton>
+          )}
+        </CheckPermission>
+        <CheckPermission module="Guardian Feedback" permission="update">
+          {["pending", "rejected"].includes(data.status) && (
+            <LoadingButton
+              loading={loading}
+              onClick={() => updateStatus("approved")}
+              disableElevation
+              size="small"
+              color="success"
+              variant="contained">
+              Approve
+            </LoadingButton>
+          )}
+        </CheckPermission>
       </Stack>
     </>
   );
@@ -163,8 +168,10 @@ export default function GuardianFeedback() {
           ))}
         </ButtonGroup>
       </MuiBox>
+      {/*  === Table === */}
       <CustomTable
         actions={["custom", "delete", "view"]}
+        module="Guardian Feedback"
         bodyDataModal="feedback"
         bodyData={filteredData}
         tableKeys={guardianFeedbackTableKeys}
@@ -173,6 +180,7 @@ export default function GuardianFeedback() {
         onUpdate={getFeebacks}
         onViewClick={handleClickOpenView}
       />
+
       {/* ==== view feedback ==== */}
       <ViewModel
         title="Guardian Feedback"

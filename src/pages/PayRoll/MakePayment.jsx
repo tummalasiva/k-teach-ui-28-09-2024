@@ -17,6 +17,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function MakePayment() {
   const { selectedSetting } = useContext(SettingContext);
@@ -171,21 +172,24 @@ export default function MakePayment() {
                 views={["year"]}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={3} style={{ alignSelf: "center" }}>
-              <LoadingButton
-                loading={processingPayment}
-                onClick={entryFormik.handleSubmit}
-                size="small"
-                variant="contained">
-                Process
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Make Payment" permission="view">
+              <Grid item xs={12} md={6} lg={3} style={{ alignSelf: "center" }}>
+                <LoadingButton
+                  loading={processingPayment}
+                  onClick={entryFormik.handleSubmit}
+                  size="small"
+                  variant="contained">
+                  Process
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
       </TabPanel>
       <TabPanel index={1} value={value}>
         <CustomTable
           actions={["download"]}
+          module="Make Payment"
           tableKeys={paymentHistoryTableKeys}
           bodyData={paymentHistory}
           bodyDataModal="history"
@@ -215,16 +219,17 @@ export default function MakePayment() {
                 name="date"
               />
             </Grid>
-
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton
-                onClick={formik.handleSubmit}
-                loading={downloadingDeductions}
-                size="small"
-                variant="contained">
-                Find
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Make Payment" permission="view">
+              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  onClick={formik.handleSubmit}
+                  loading={downloadingDeductions}
+                  size="small"
+                  variant="contained">
+                  Find
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
       </TabPanel>

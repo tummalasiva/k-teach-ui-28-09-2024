@@ -11,6 +11,7 @@ import FormModal from "../../forms/FormModal";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useFormik } from "formik";
 import { Add } from "@mui/icons-material";
+import AddForm from "../../forms/AddForm";
 
 export default function Firm() {
   const { selectedSetting } = useContext(SettingContext);
@@ -98,22 +99,25 @@ export default function Firm() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={<Add />}
-        sx={{ mt: 1, mb: 2 }}>
-        Add
-      </Button>
+      {/* ==== Add icon ============= */}
+      <AddForm
+        title="Add Firm"
+        module="Vehicle Maintenance"
+        onAddClick={handleClickOpen}
+      />
+
+      {/* == Table === */}
       <CustomTable
+        actions={["edit", "delete"]}
+        module="Vehicle Maintenance"
+        bodyDataModal="firm"
         tableKeys={vehicleFirmTableKeys}
         bodyData={data}
-        bodyDataModal="firm"
-        actions={["edit", "delete"]}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
+      {/*==== Add/Update Firm ==== */}
       <FormModal
         open={open}
         formik={entryFormik}
