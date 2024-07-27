@@ -107,6 +107,7 @@ const QuickFeeCollectModal = ({
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  format="DD/MM/YYYY"
                   sx={{ width: "100%" }}
                   label="Payment Date"
                   value={payingDate || null}

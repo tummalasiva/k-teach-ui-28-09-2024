@@ -1,3 +1,5 @@
+/** @format */
+
 export const feeOverviewPaymentTableKeys = [
   {
     name: "Payment",
@@ -6,8 +8,7 @@ export const feeOverviewPaymentTableKeys = [
   { name: "Total", key: "total" },
   { name: "Cash", key: "cash" },
   { name: "Cheque", key: "cheque" },
-  { name: "DD", key: "dd" },
-  { name: "Chalan", key: "chalan" },
+  { name: "DD", key: "DD" },
   { name: "NetBanking", key: "netBanking" },
-  { name: "Online", key: "online" },
+  { name: "Online", key: "Upi" },
 ];
