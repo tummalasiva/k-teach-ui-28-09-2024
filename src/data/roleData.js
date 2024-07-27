@@ -39,6 +39,7 @@ export const ROLE_PERMISSIONS = [
         module: "Roles and Permissions",
         permissions: [],
       },
+      { module: "User Password Reset", permissions: [] },
     ],
   },
   {
@@ -71,7 +72,7 @@ export const ROLE_PERMISSIONS = [
       },
 
       {
-        module: "Experience Letter",
+        module: "Experience-Letter",
         permissions: [],
       },
 
@@ -86,15 +87,15 @@ export const ROLE_PERMISSIONS = [
     module: "Pre-Admission",
     subModule: [
       {
-        module: "Enquiries",
+        module: "Pre Addmission Enquiry",
         permissions: [],
       },
       {
-        module: "Exams",
+        module: "Pre Addmission Exam",
         permissions: [],
       },
       {
-        module: "Exam Schedules",
+        module: "Pre Addmission ExamSchedule",
         permissions: [],
       },
       {
@@ -179,6 +180,10 @@ export const ROLE_PERMISSIONS = [
         module: "Quick Admit",
         permissions: [],
       },
+      {
+        module: "ID Card",
+        permissions: [],
+      },
 
       {
         module: "Student Activity",
@@ -232,7 +237,7 @@ export const ROLE_PERMISSIONS = [
       },
 
       {
-        module: "Awards And Achievement",
+        module: "Awards",
         permissions: [],
       },
       {

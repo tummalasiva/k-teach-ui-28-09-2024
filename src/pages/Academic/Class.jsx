@@ -131,6 +131,7 @@ export default function Class() {
       <PageHeader title="Classes" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Class"
         tableKeys={academicClassTableKeys}
         bodyDataModal="class"
         bodyData={data}
@@ -139,7 +140,11 @@ export default function Class() {
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Class" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        module="Class"
+        title="Add Class"
+        onAddClick={AddDepartmentHandel}
+      />
       {/* ================================== */}
 
       {/* ==== add/edit classes ======== */}

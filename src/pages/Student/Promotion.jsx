@@ -28,6 +28,7 @@ import { hasAllValues } from "../../utils";
 import { toast } from "react-toastify";
 import StickyBar from "../../components/StickyBar";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -254,25 +255,26 @@ export default function Promotion() {
                 .map((s) => ({ label: s.name, value: s._id }))}
             />
           </Grid>
-
-          <Grid
-            item
-            xs={12}
-            md={6}
-            lg={2}
-            display="flex"
-            alignItems="center"
-            // justifyContent="flex-end"
-          >
-            <LoadingButton
-              loading={gettingStudentsList}
-              disabled={!hasAllValues(entryFormik.values, [], false)}
-              onClick={entryFormik.handleSubmit}
-              size="small"
-              variant="contained">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Promotion" permission="view">
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={2}
+              display="flex"
+              alignItems="center"
+              // justifyContent="flex-end"
+            >
+              <LoadingButton
+                loading={gettingStudentsList}
+                disabled={!hasAllValues(entryFormik.values, [], false)}
+                onClick={entryFormik.handleSubmit}
+                size="small"
+                variant="contained">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <TableContainer component={Paper}>

@@ -157,7 +157,11 @@ export default function ClassRoutine() {
         Sections
       </Typography>
 
-      <AddForm title="Add Class Routine" onAddClick={AddClassRoutine} />
+      <AddForm
+        module="Class Routine"
+        title="Add Class Routine"
+        onAddClick={AddClassRoutine}
+      />
       {/* ================================== */}
 
       {/* ==== add/edit classes ======== */}

@@ -18,6 +18,7 @@ import { LoadingButton } from "@mui/lab";
 import AddEditAssignment from "./AddEditAssignment";
 import DownloadIcon from "@mui/icons-material/Download";
 import AssignmentViewModel from "./AssignmentViewModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const CustomActionDownload = ({ data = {} }) => {
   console.log(data, "kkk");
@@ -248,20 +249,24 @@ export default function Assignment() {
                 options={Section_Options}
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton
-                loading={loading}
-                size="small"
-                type="submit"
-                variant="contained"
-                sx={{ ml: 2 }}>
-                Search
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Assignment" permission="view">
+              {" "}
+              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  type="submit"
+                  variant="contained"
+                  sx={{ ml: 2 }}>
+                  Search
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
         <CustomTable
           actions={["view", "edit", "delete", "custom"]}
+          module="Assignment"
           bodyDataModal="Assignment"
           bodyData={data}
           tableKeys={assignmentTableKeys}

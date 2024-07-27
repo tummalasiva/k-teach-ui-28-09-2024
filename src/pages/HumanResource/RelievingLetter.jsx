@@ -162,6 +162,7 @@ export default function RelievingLetter() {
       <TabPanel index={0} value={value}>
         <CustomTable
           actions={["view", "edit", "delete"]}
+          module="Relieving Letter"
           tableKeys={relievingLetterDataTableKeys}
           bodyDataModal="relieving letter"
           bodyData={data}

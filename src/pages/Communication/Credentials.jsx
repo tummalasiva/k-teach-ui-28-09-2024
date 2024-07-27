@@ -28,6 +28,7 @@ import SettingContext from "../../context/SettingsContext";
 import PageHeader from "../../components/PageHeader";
 import { LoadingButton } from "@mui/lab";
 import useResizeObserver from "use-resize-observer";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
   padding: 10,
@@ -971,16 +972,17 @@ const Credentails = () => {
               ) : (
                 ""
               )}
-
-              <Grid item xs={12} md={12} lg={6} container>
-                <LoadingButton
-                  loading={loading}
-                  variant="contained"
-                  size="small"
-                  type="submit">
-                  Send Credentials
-                </LoadingButton>
-              </Grid>
+              <CheckPermission module="Credential" permission="add">
+                <Grid item xs={12} md={12} lg={6} container>
+                  <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    size="small"
+                    type="submit">
+                    Send Credentials
+                  </LoadingButton>
+                </Grid>
+              </CheckPermission>
             </Grid>
           </form>
         </Card>

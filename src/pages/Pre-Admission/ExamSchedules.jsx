@@ -36,6 +36,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { toast } from "react-toastify";
 import { Delete } from "@mui/icons-material";
 import DeleteModal from "../../forms/DeleteModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function ExamSchedules() {
   const { selectedSetting } = useContext(SettingContext);
@@ -221,7 +222,11 @@ export default function ExamSchedules() {
     <>
       <PageHeader title="Exam Schedules" />
 
-      <AddForm title="Add Exam Schedules" onAddClick={AddExamSchedules} />
+      <AddForm
+        module="Pre Addmission ExamSchedule"
+        title="Add Exam Schedules"
+        onAddClick={AddExamSchedules}
+      />
 
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid
@@ -272,11 +277,15 @@ export default function ExamSchedules() {
               name="toDate"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained" type="submit">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission
+            module="Pre Addmission ExamSchedule"
+            permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained" type="submit">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 
@@ -312,16 +321,20 @@ export default function ExamSchedules() {
               <TableCell align="center">{data.class.name}</TableCell>
               <TableCell align="center">{data.exam?.examName}</TableCell>
               <TableCell align="center">
-                <Tooltip
-                  title={`${
-                    data.examLinkEnabled === true ? "Enable" : "Disable"
-                  }`}>
-                  <Switch
-                    key={data._id}
-                    onClick={() => handleUpdateLink(data._id)}
-                    defaultChecked={data.examLinkEnabled ? true : false}
-                  />
-                </Tooltip>
+                <CheckPermission
+                  module="Pre Addmission ExamSchedule"
+                  permission="update">
+                  <Tooltip
+                    title={`${
+                      data.examLinkEnabled === true ? "Enable" : "Disable"
+                    }`}>
+                    <Switch
+                      key={data._id}
+                      onClick={() => handleUpdateLink(data._id)}
+                      defaultChecked={data.examLinkEnabled ? true : false}
+                    />
+                  </Tooltip>
+                </CheckPermission>
 
                 <Tooltip title="Copy Link">
                   <IconButton
@@ -341,24 +354,31 @@ export default function ExamSchedules() {
                     alignItems: "center",
                     gap: 2,
                   }}>
-                  <Tooltip title="Update">
-                    <IconButton
-                      style={{
-                        color: "#1b3779",
-                      }}
-                      size="small">
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton
-                      size="small"
-                      color="error"
-                      onClick={() => setDeleteModal(data._id)}>
-                      <Delete color="error" fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <CheckPermission
+                    module="Pre Addmission ExamSchedule"
+                    permission="update">
+                    <Tooltip title="Update">
+                      <IconButton
+                        style={{
+                          color: "#1b3779",
+                        }}
+                        size="small">
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </CheckPermission>
+                  <CheckPermission
+                    module="Pre Addmission ExamSchedule"
+                    permission="delete">
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => setDeleteModal(data._id)}>
+                        <Delete color="error" fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </CheckPermission>
                   <DeleteModal
                     deleteModal={deleteModal}
                     handleDelete={handleDelete}

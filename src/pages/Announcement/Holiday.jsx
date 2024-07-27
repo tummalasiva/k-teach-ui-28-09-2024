@@ -169,6 +169,7 @@ export default function Holiday() {
       <PageHeader title="Holiday" />
       <CustomTable
         actions={["edit", "delete"]}
+        module="Holiday"
         bodyDataModal="Holiday"
         bodyData={data}
         tableKeys={holidayTableKeys}
@@ -176,7 +177,7 @@ export default function Holiday() {
         onDeleteClick={handleDelete}
       />
 
-      <AddForm title="Add Holiday" onAddClick={AddHoliday} />
+      <AddForm module="Holiday" title="Add Holiday" onAddClick={AddHoliday} />
 
       <FormModal
         open={open}

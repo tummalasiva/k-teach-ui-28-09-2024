@@ -9,6 +9,7 @@ import SettingContext from "../../context/SettingsContext";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import ThemeSelector from "../../components/ThemeSelector";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Title = styled(Typography)(({ theme }) => ({
   textAlign: "start",
@@ -156,11 +157,14 @@ export default function IdCard() {
               options={students}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Generate
-            </Button>
-          </Grid>
+          <CheckPermission module="ID Card" permission="view">
+            {" "}
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Generate
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
     </>

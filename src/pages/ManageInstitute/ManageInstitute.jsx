@@ -51,6 +51,7 @@ export default function ManageInstitute() {
       <PageHeader title="Manage Institute" />
       <CustomTable
         actions={["edit", "switch"]}
+        module="Institute"
         bodyDataModal="manage institute"
         bodyData={data}
         tableKeys={manageInstituteTableKeys}
@@ -58,7 +59,11 @@ export default function ManageInstitute() {
         onToggleSwitch={handleToggleSwitch}
         onEditClick={handleEdit}
       />
-      <AddForm title="Add Institute" onAddClick={handleAddClick} />
+      <AddForm
+        module="Institute"
+        title="Add Institute"
+        onAddClick={handleAddClick}
+      />
     </>
   );
 }

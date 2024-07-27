@@ -14,6 +14,7 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function StudentActivity() {
   const { selectedSetting } = useContext(SettingContext);
@@ -294,26 +295,29 @@ export default function StudentActivity() {
               options={students}
             />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={12}
-            lg={12}
-            display="flex"
-            justifyContent="flex-end">
-            <Button
-              size="small"
-              type="submit"
-              variant="contained"
-              disabled={!Formik.values.student}
-              onClick={Formik.handleSubmit}>
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Student Activity" permission="view">
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end">
+              <Button
+                size="small"
+                type="submit"
+                variant="contained"
+                disabled={!Formik.values.student}
+                onClick={Formik.handleSubmit}>
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <CustomTable
         actions={["edit", "delete"]}
+        module="Student Activity"
         tableKeys={studentActivityTableKeys}
         bodyDataModal="student activity"
         bodyData={data}
@@ -324,6 +328,7 @@ export default function StudentActivity() {
       {/* ====== Fab button component =======*/}
       <AddForm
         title="Student Activity"
+        module="Student Activity"
         onAddClick={AddDepartmentHandel}
         disabled={!Formik.values.student}
       />

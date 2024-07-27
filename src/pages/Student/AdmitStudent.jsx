@@ -30,6 +30,7 @@ import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
 import DownloadIcon from "@mui/icons-material/Download";
 import FileSelect from "../../forms/FileSelect";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Status_Options = [
   { label: "Active", value: true },
@@ -401,18 +402,19 @@ export default function AdmitStudent() {
                 options={Status_Options}
               />
             </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end">
-              <Button size="small" variant="contained" type="submit">
-                Find
-              </Button>
-            </Grid>
+            <CheckPermission module="Admit Student" permission="view">
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end">
+                <Button size="small" variant="contained" type="submit">
+                  Find
+                </Button>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </form>
 
@@ -461,28 +463,36 @@ export default function AdmitStudent() {
               mt: 1,
             }}>
             <Stack direction="row">
-              <Tooltip title="Download">
-                <LoadingButton
-                  loading={loading}
-                  onClick={handleGetDownloadExcel}>
-                  <DownloadForOfflineSharpIcon color="primary" />
-                </LoadingButton>
-              </Tooltip>
-              <Tooltip title="Print">
-                <LoadingButton loading={loader} onClick={handleGetDownloadPdf}>
-                  <PrintSharp color="primary" />
-                </LoadingButton>
-              </Tooltip>
+              <CheckPermission module="Admit Student" permission="view">
+                <Tooltip title="Download">
+                  <LoadingButton
+                    loading={loading}
+                    onClick={handleGetDownloadExcel}>
+                    <DownloadForOfflineSharpIcon color="primary" />
+                  </LoadingButton>
+                </Tooltip>
+                <Tooltip title="Print">
+                  <LoadingButton
+                    loading={loader}
+                    onClick={handleGetDownloadPdf}>
+                    <PrintSharp color="primary" />
+                  </LoadingButton>
+                </Tooltip>
 
-              <Button size="small" variant="contained" onClick={handleNavigate}>
-                Bulk Photo
-              </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleNavigate}>
+                  Bulk Photo
+                </Button>
+              </CheckPermission>
             </Stack>
           </Box>
         </Box>
       </Paper>
       <CustomTable
         actions={["edit", "delete"]}
+        module="Admit Student"
         tableKeys={admitStudentTableKeys}
         bodyDataModal="students"
         bodyData={data}
@@ -490,7 +500,11 @@ export default function AdmitStudent() {
         onDeleteClick={handleDelete}
       />
       {/* add student */}
-      <AddForm title="Add Students" onAddClick={handelAddStudent} />
+      <AddForm
+        module="Admit Student"
+        title="Add Students"
+        onAddClick={handelAddStudent}
+      />
 
       <Dialog
         fullScreen={fullScreen}

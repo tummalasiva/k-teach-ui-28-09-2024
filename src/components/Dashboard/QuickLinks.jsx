@@ -10,6 +10,7 @@ import {
   Message,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import CheckPermission from "../Authentication/CheckPermission";
 
 const DataContainer = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -55,77 +56,88 @@ export default function QuickLinks() {
               Quick Links
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-            <Link
-              to="/sch/student/add-student"
-              style={{ textDecoration: "none" }}>
-              <DataContainer>
-                <Box>
-                  <StyledFab size="small">
-                    <Groups />
-                  </StyledFab>
-                </Box>
-                <Box>Admit Students</Box>
-              </DataContainer>
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-            <Link
-              to="/sch/human-resource/add-employee"
-              style={{ textDecoration: "none" }}>
-              <DataContainer>
-                <Box>
-                  <StyledFab size="small">
-                    <Groups />
-                  </StyledFab>
-                </Box>
-                <Box>Admit Employee</Box>
-              </DataContainer>
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-            <Link
-              to="/sch/exam-Mark/exam-result"
-              style={{ textDecoration: "none" }}>
-              <DataContainer>
-                <Box>
-                  <StyledFab size="small">
-                    <FindInPage />
-                  </StyledFab>
-                </Box>
+          <CheckPermission module="Admit Student" permission="add">
+            {" "}
+            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+              <Link
+                to="/sch/student/add-student"
+                style={{ textDecoration: "none" }}>
+                <DataContainer>
+                  <Box>
+                    <StyledFab size="small">
+                      <Groups />
+                    </StyledFab>
+                  </Box>
+                  <Box>Admit Students</Box>
+                </DataContainer>
+              </Link>
+            </Grid>
+          </CheckPermission>
+          <CheckPermission module="Employee" permission="add">
+            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+              <Link
+                to="/sch/human-resource/add-employee"
+                style={{ textDecoration: "none" }}>
+                <DataContainer>
+                  <Box>
+                    <StyledFab size="small">
+                      <Groups />
+                    </StyledFab>
+                  </Box>
+                  <Box>Admit Employee</Box>
+                </DataContainer>
+              </Link>
+            </Grid>
+          </CheckPermission>
+          <CheckPermission module="Exam Result" permission="view">
+            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+              <Link
+                to="/sch/exam-Mark/exam-result"
+                style={{ textDecoration: "none" }}>
+                <DataContainer>
+                  <Box>
+                    <StyledFab size="small">
+                      <FindInPage />
+                    </StyledFab>
+                  </Box>
 
-                <Typography> Exam Results</Typography>
-              </DataContainer>
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-            <Link
-              to="/sch/exam-Mark/marks-card"
-              style={{ textDecoration: "none" }}>
-              <DataContainer>
-                <Box>
-                  <StyledFab size="small">
-                    <CardMembership />
-                  </StyledFab>
-                </Box>
-                <Typography>Marks Cards</Typography>
-              </DataContainer>
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-            <Link
-              to="/sch/communication_compose"
-              style={{ textDecoration: "none" }}>
-              <DataContainer>
-                <Box>
-                  <StyledFab size="small">
-                    <Message />
-                  </StyledFab>
-                </Box>
-                <Typography>Communication</Typography>
-              </DataContainer>
-            </Link>
-          </Grid>
+                  <Typography> Exam Results</Typography>
+                </DataContainer>
+              </Link>
+            </Grid>
+          </CheckPermission>
+          <CheckPermission module="Marks Card" permission="view">
+            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+              <Link
+                to="/sch/exam-Mark/marks-card"
+                style={{ textDecoration: "none" }}>
+                <DataContainer>
+                  <Box>
+                    <StyledFab size="small">
+                      <CardMembership />
+                    </StyledFab>
+                  </Box>
+                  <Typography>Marks Cards</Typography>
+                </DataContainer>
+              </Link>
+            </Grid>
+          </CheckPermission>
+          <CheckPermission module="Compose" permission="add">
+            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+              <Link
+                to="/sch/communication_compose"
+                style={{ textDecoration: "none" }}>
+                <DataContainer>
+                  <Box>
+                    <StyledFab size="small">
+                      <Message />
+                    </StyledFab>
+                  </Box>
+                  <Typography>Communication</Typography>
+                </DataContainer>
+              </Link>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
     </>

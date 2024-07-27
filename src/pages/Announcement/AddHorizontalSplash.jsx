@@ -111,6 +111,7 @@ export default function AddHorizontalSplash() {
     <>
       <CustomTable
         actions={["edit", "delete", "switch"]}
+        module="Splash News"
         bodyDataModal="Horizontal Splash News"
         bodyData={data}
         tableKeys={horizontalSplashNewsTableKeys}
@@ -122,6 +123,7 @@ export default function AddHorizontalSplash() {
 
       <AddForm
         title="Add Horizontal Splash News"
+        module="Splash News"
         onAddClick={AddHorizontalSplashNews}
       />
 

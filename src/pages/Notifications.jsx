@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import PageHeader from "../components/PageHeader";
 import CustomTable from "../components/Tables/CustomTable";
@@ -10,6 +12,7 @@ export default function Notifications() {
       <PageHeader title="Notifications" />
       <CustomTable
         actions={[]}
+        module="Notification"
         bodyDataModal="Notifications"
         bodyData={data}
         tableKeys={notificationsTableKeys}

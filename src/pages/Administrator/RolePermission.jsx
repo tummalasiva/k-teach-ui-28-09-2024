@@ -262,13 +262,18 @@ export default function RolePermission() {
       <TabPanel value={value} index={0}>
         <CustomTable
           actions={["edit", "delete"]}
+          module="Roles and Permissions"
           bodyDataModal="role permission"
           bodyData={roles}
           onEditClick={handleRoleEditClick}
           tableKeys={rolePermissionTableKeys}
           onDeleteClick={handleDeleteRole}
         />
-        <AddForm title="Add Role" onAddClick={openRoleAddUpdateModal} />
+        <AddForm
+          module="Roles and Permissions"
+          title="Add Role"
+          onAddClick={openRoleAddUpdateModal}
+        />
       </TabPanel>
 
       <FormModal

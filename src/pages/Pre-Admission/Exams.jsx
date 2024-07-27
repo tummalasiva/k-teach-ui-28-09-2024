@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { LoadingButton } from "@mui/lab";
 import AddForm from "../../forms/AddForm";
 import AddOrUpdateExamModal from "./AddOrUpdateExamModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Exams() {
   const { selectedSetting } = useContext(SettingContext);
@@ -116,7 +117,11 @@ export default function Exams() {
     <>
       <PageHeader title="Exams" />
 
-      <AddForm title="Add Exam" onAddClick={handleOpenQuestionModel} />
+      <AddForm
+        module="Pre Addmission Exam"
+        title="Add Exam"
+        onAddClick={handleOpenQuestionModel}
+      />
 
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <Grid
@@ -144,20 +149,23 @@ export default function Exams() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <LoadingButton
-              loading={gettingList}
-              size="small"
-              variant="contained"
-              type="submit">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Pre Addmission Exam" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <LoadingButton
+                loading={gettingList}
+                size="small"
+                variant="contained"
+                type="submit">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 
       <CustomTable
         actions={["edit", "delete"]}
+        module="Pre Addmission Exam"
         tableKeys={examsTableKeys}
         bodyDataModal="exams"
         bodyData={data}

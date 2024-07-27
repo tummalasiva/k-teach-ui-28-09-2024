@@ -106,6 +106,7 @@ export default function AcademicYear() {
       <PageHeader title="Academic Year" />
       <CustomTable
         actions={["edit", "switch"]}
+        module="Academic Year"
         bodyDataModal="academic year"
         bodyData={data}
         tableKeys={academicYearTableKeys}
@@ -115,7 +116,11 @@ export default function AcademicYear() {
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Academic Year" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        module="Academic Year"
+        title="Add Academic Year"
+        onAddClick={AddDepartmentHandel}
+      />
       {/* ================================== */}
 
       {/* ==== add/edit academicYear ======== */}

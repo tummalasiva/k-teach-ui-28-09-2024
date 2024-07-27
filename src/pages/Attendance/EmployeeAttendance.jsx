@@ -16,6 +16,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import EmployeeAttendanceTable from "./EmployeeAttendanceTable";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function EmployeeAttendance() {
   const { selectedSetting } = useContext(SettingContext);
@@ -152,15 +153,17 @@ export default function EmployeeAttendance() {
                 name="date"
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton
-                loading={fetchingAttendanceData}
-                onClick={entryFormik.handleSubmit}
-                size="small"
-                variant="contained">
-                Find
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Employee Attendance" permission="view">
+              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  loading={fetchingAttendanceData}
+                  onClick={entryFormik.handleSubmit}
+                  size="small"
+                  variant="contained">
+                  Find
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
         <EmployeeAttendanceTable
@@ -197,19 +200,22 @@ export default function EmployeeAttendance() {
                 name="toDate"
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton
-                onClick={reportFormik.handleSubmit}
-                loading={fetchingAttendanceReport}
-                size="small"
-                variant="contained">
-                Find
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="Employee Attendance" permission="view">
+              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  onClick={reportFormik.handleSubmit}
+                  loading={fetchingAttendanceReport}
+                  size="small"
+                  variant="contained">
+                  Find
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </Paper>
         <CustomTable
           actions={[]}
+          module="Employee Attendance"
           bodyDataModal="reports"
           bodyData={data}
           tableKeys={employeeAttendanceReportTableKeys}

@@ -12,6 +12,7 @@ import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { useContext } from "react";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const MuiBUtton = styled(Box)({
   display: "flex",
@@ -104,11 +105,14 @@ export default function Result() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained" type="submit">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Result" permission="view">
+            {" "}
+            <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained" type="submit">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <MuiBUtton>
@@ -122,6 +126,7 @@ export default function Result() {
 
       <CustomTable
         actions={["edit"]}
+        module="Result"
         tableKeys={resultTableKeys}
         bodyDataModal="result"
         bodyData={data}
