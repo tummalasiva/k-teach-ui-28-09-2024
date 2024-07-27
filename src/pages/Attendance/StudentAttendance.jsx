@@ -375,6 +375,10 @@ export default function StudentAttendance() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start,",
+            }}
           />
         </TableContainer>
       </TabPanel>

@@ -27,6 +27,8 @@ import ExamVenue from "./components/ExamConduct/ExamVenue";
 
 const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
 const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
+const Web3 = React.lazy(() => import("./components/WebsiteTheme3"));
+
 const EmployeeDashBoard = React.lazy(() => import("./components/NavDrawer"));
 const StudentDashBoard = React.lazy(() =>
   import("./components/NavDrawerStudent")

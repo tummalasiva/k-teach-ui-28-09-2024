@@ -293,6 +293,10 @@ export default function CustomTable({
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start,",
+          }}
         />
       </TableContainer>
 
