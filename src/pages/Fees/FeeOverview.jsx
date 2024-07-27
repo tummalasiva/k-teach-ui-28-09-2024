@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import FormDatePicker from "../../forms/FormDatePicker";
@@ -29,6 +30,7 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
+import CustomSelect from "../../forms/CustomSelect";
 
 const showInfo = (data) => {
   let result = [];
@@ -62,6 +64,30 @@ const ALL_OPTION = {
   label: "All",
   value: "all",
 };
+
+const Category_Options = [
+  {
+    label: "Receipt No",
+    value: "receiptNumber",
+  },
+  {
+    label: "Amount",
+    value: "totalAmountPaid",
+  },
+
+  {
+    label: "Payment Mode",
+    value: "paymentMode",
+  },
+  {
+    label: "Name",
+    value: "name",
+  },
+  {
+    label: "Admission Number",
+    value: "admissionNumber",
+  },
+];
 
 const CustomAction = ({ data }) => {
   const [downloadingReceipt, setDownloadingReceipt] = useState(false);
@@ -109,9 +135,11 @@ export default function FeeOverview() {
   const [sections, setSections] = useState([]);
   const [feeMaps, setFeeMaps] = useState([]);
   const [collectedBy, setCollectedBy] = useState([]);
-
+  const [category, setCategory] = useState("admissionNumber");
+  const [searchValue, setSearchValue] = useState("");
   const [amountInDifferentModes, setAmountInDifferentModes] = useState(null);
   const [allReceipts, setAllReceipts] = useState([]);
+  const [filteredReceipts, setFilteredReceipts] = useState([]);
 
   const getAmountInDifferentModes = async (values) => {
     try {
@@ -141,6 +169,16 @@ export default function FeeOverview() {
       );
 
       setAllReceipts(
+        receipts?.result?.map((r) => ({
+          ...r,
+          name: r.payeeDetails.name,
+          class: r.payeeDetails.className,
+          section: r.payeeDetails.sectionName,
+          admissionNumber: r.payeeDetails.admissionNumber,
+        }))
+      );
+
+      setFilteredReceipts(
         receipts?.result?.map((r) => ({
           ...r,
           name: r.payeeDetails.name,
@@ -338,6 +376,26 @@ export default function FeeOverview() {
     selectedSetting,
   ]);
 
+  const filterData = () => {
+    const filtered = allReceipts.filter((receipt) =>
+      receipt[category]
+        ?.toString()
+        ?.toLowerCase()
+        ?.includes(searchValue.toLowerCase())
+    );
+
+    console.log(filtered, "filtered ");
+    setFilteredReceipts(filtered);
+  };
+
+  useEffect(() => {
+    if (category && searchValue) {
+      filterData();
+    } else {
+      setFilteredReceipts(allReceipts);
+    }
+  }, [category, searchValue]);
+
   return (
     <>
       <PageHeader title="Fee Overview" />
@@ -526,23 +584,30 @@ export default function FeeOverview() {
         columnSpacing={2}
         container
         sx={{ display: "flex", alignItems: "center", my: 1 }}>
-        <Grid xs={12} md={6} lg={3} item>
-          <FormSelect
-            required={true}
-            name="addmisionNo"
-            formik={entryFormik}
-            label="Select Addmision No"
-            // options={""}
+        <Grid item xs={12} md={3}>
+          <CustomSelect
+            label="Search By"
+            options={Category_Options}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            isSearch={false}
           />
         </Grid>
-        <Grid xs={12} md={6} lg={3} item>
-          <FormInput formik={entryFormik} name="search" label="Search..." />
+        <Grid item xs={12} md={3} sx={{ alignSelf: "center" }}>
+          <TextField
+            label="Search"
+            size="small"
+            sx={{ mt: 2 }}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            fullWidth
+          />
         </Grid>
       </Grid>
       <CustomTable
         actions={["custom"]}
         bodyDataModal="data"
-        bodyData={allReceipts}
+        bodyData={filteredReceipts}
         tableKeys={feeOverviewReceiptTableKeys}
         CustomAction={CustomAction}
       />
