@@ -27,6 +27,7 @@ import { get, put } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
 import ViewModel from "../../forms/ViewModel";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const MuiBUtton = styled(Box)({
   display: "flex",
@@ -300,15 +301,18 @@ export default function Enquiries() {
               name="toDate"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <LoadingButton
-              loading={loading}
-              size="small"
-              variant="contained"
-              type="submit">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Pre Addmission Enquiry" permission="view">
+            {" "}
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <LoadingButton
+                loading={loading}
+                size="small"
+                variant="contained"
+                type="submit">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 

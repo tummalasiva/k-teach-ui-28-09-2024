@@ -277,11 +277,15 @@ export default function ExamSchedules() {
               name="toDate"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained" type="submit">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission
+            module="Pre Addmission ExamSchedule"
+            permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained" type="submit">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 

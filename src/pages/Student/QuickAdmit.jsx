@@ -12,6 +12,7 @@ import SettingContext from "../../context/SettingsContext";
 import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Gender_Options = [
   {
@@ -337,20 +338,22 @@ export default function QuickAdmit() {
             </Grid>
           </Grid>
         </Paper>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}>
-          <LoadingButton
-            loading={loading}
-            size="small"
-            variant="contained"
-            type="submit">
-            Submit
-          </LoadingButton>
-        </Box>
+        <CheckPermission module="Quick Admit" permission="add">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}>
+            <LoadingButton
+              loading={loading}
+              size="small"
+              variant="contained"
+              type="submit">
+              Submit
+            </LoadingButton>
+          </Box>
+        </CheckPermission>
       </Box>
     </>
   );

@@ -39,6 +39,7 @@ export const ROLE_PERMISSIONS = [
         module: "Roles and Permissions",
         permissions: [],
       },
+      { module: "User Password Reset", permissions: [] },
     ],
   },
   {
@@ -177,6 +178,10 @@ export const ROLE_PERMISSIONS = [
       },
       {
         module: "Quick Admit",
+        permissions: [],
+      },
+      {
+        module: "ID Card",
         permissions: [],
       },
 

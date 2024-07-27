@@ -16,6 +16,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function TeacherActivity() {
   const { selectedSetting } = useContext(SettingContext);
@@ -311,21 +312,24 @@ export default function TeacherActivity() {
               <Grid xs={12} sm={6} md={6} lg={4} item>
                 <FormDatePicker formik={formik} label="To Date" name="toDate" />
               </Grid>
-              <Grid
-                xs={12}
-                md={12}
-                lg={12}
-                item
-                display={"flex"}
-                justifyContent={"flex-end"}>
-                <LoadingButton
-                  loading={loadingFind}
-                  size="small"
-                  type="submit"
-                  variant="contained">
-                  Find
-                </LoadingButton>
-              </Grid>
+              <CheckPermission module="Teacher Activity" permission="view">
+                {" "}
+                <Grid
+                  xs={12}
+                  md={12}
+                  lg={12}
+                  item
+                  display={"flex"}
+                  justifyContent={"flex-end"}>
+                  <LoadingButton
+                    loading={loadingFind}
+                    size="small"
+                    type="submit"
+                    variant="contained">
+                    Find
+                  </LoadingButton>
+                </Grid>
+              </CheckPermission>
             </Grid>
           </form>
         </Paper>

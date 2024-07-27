@@ -29,6 +29,7 @@ import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const TableHeader = styled(TableCell)(({ theme }) => ({
   borderRight: "1px solid grey",
@@ -142,17 +143,24 @@ export default function Overview() {
               options={academicYear}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center", mt: 2 }}>
-            <Tooltip title="Download">
-              <LoadingButton
-                loading={loading}
-                size="small"
-                variant="contained"
-                onClick={handleGetDownloadExcel}>
-                Download Students
-              </LoadingButton>
-            </Tooltip>
-          </Grid>
+          <CheckPermission module="Overview" permission="view">
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={3}
+              sx={{ alignSelf: "center", mt: 2 }}>
+              <Tooltip title="Download">
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  variant="contained"
+                  onClick={handleGetDownloadExcel}>
+                  Download Students
+                </LoadingButton>
+              </Tooltip>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 

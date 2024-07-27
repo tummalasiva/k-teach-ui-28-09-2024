@@ -30,6 +30,7 @@ import { LoadingButton } from "@mui/lab";
 import { useTheme } from "@emotion/react";
 import DownloadIcon from "@mui/icons-material/Download";
 import FileSelect from "../../forms/FileSelect";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const style = {
@@ -247,25 +248,26 @@ export default function Reshuffle() {
                 )}
               />
             </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={12}
-              lg={12}
-              display="flex"
-              justifyContent="flex-end"
-              gap="10px">
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                onClick={() => setOpenModalAdmit(true)}>
-                Bulk Reshuffle
-              </Button>
-            </Grid>
+            <CheckPermission module="Reshuffle" permission="view">
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end"
+                gap="10px">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => setOpenModalAdmit(true)}>
+                  Bulk Reshuffle
+                </Button>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </form>
       </Paper>

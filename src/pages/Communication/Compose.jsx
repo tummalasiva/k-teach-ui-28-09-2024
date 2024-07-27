@@ -35,6 +35,7 @@ import PageHeader from "../../components/PageHeader";
 import FileSelect from "../../forms/FileSelect";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -1044,22 +1045,25 @@ const Compose = () => {
           </Grid>
         </Card>
 
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            md={12}
-            lg={12}
-            style={{ display: "flex", justifyContent: "flex-end" }}>
-            <LoadingButton
-              loading={sendingMessage}
-              size="small"
-              variant="contained"
-              type="submit">
-              Submit
-            </LoadingButton>
+        <CheckPermission module="Compose" permission="add">
+          {" "}
+          <Grid container spacing={2}>
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              style={{ display: "flex", justifyContent: "flex-end" }}>
+              <LoadingButton
+                loading={sendingMessage}
+                size="small"
+                variant="contained"
+                type="submit">
+                Submit
+              </LoadingButton>
+            </Grid>
           </Grid>
-        </Grid>
+        </CheckPermission>
       </form>
     </>
   );

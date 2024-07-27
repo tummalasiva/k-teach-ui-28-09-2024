@@ -12,6 +12,7 @@ import { get, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const MuiTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -192,15 +193,17 @@ export default function BulkAdmission() {
             </Button>
           </Grid>
 
-          <Grid xs={12} md={12} lg={12} item>
-            <LoadingButton
-              onClick={downloadBulkAdmissionSheet}
-              endIcon={<DownloadIcon />}
-              size="small"
-              variant="contained">
-              Get Sample
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Bulk Admission" permission="view">
+            <Grid xs={12} md={12} lg={12} item>
+              <LoadingButton
+                onClick={downloadBulkAdmissionSheet}
+                endIcon={<DownloadIcon />}
+                size="small"
+                variant="contained">
+                Get Sample
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
 
           <Grid xs={12} md={12} lg={12} item>
             <MuiTypography component="ul">
@@ -216,21 +219,22 @@ export default function BulkAdmission() {
               </MuiTypography>
             </MuiTypography>
           </Grid>
-
-          <Grid
-            item
-            xs={12}
-            md={12}
-            lg={12}
-            display="flex"
-            justifyContent="flex-end">
-            <LoadingButton
-              onClick={uploadSheet}
-              size="small"
-              variant="contained">
-              Submit
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Bulk Admission" permission="add">
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              display="flex"
+              justifyContent="flex-end">
+              <LoadingButton
+                onClick={uploadSheet}
+                size="small"
+                variant="contained">
+                Submit
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <Box

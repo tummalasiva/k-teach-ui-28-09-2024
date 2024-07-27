@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { LoadingButton } from "@mui/lab";
 import AddForm from "../../forms/AddForm";
 import AddOrUpdateExamModal from "./AddOrUpdateExamModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Exams() {
   const { selectedSetting } = useContext(SettingContext);
@@ -148,15 +149,17 @@ export default function Exams() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <LoadingButton
-              loading={gettingList}
-              size="small"
-              variant="contained"
-              type="submit">
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Pre Addmission Exam" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <LoadingButton
+                loading={gettingList}
+                size="small"
+                variant="contained"
+                type="submit">
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
 

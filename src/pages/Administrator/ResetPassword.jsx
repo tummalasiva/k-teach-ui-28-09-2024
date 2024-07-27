@@ -10,6 +10,7 @@ import { get, post } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Type_Options = [
   {
@@ -281,15 +282,18 @@ export default function ResetPassword() {
                 name="password"
               />
             </Grid>
-            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-              <LoadingButton
-                loading={loading}
-                size="small"
-                type="submit"
-                variant="contained">
-                Change Password
-              </LoadingButton>
-            </Grid>
+            <CheckPermission module="User Password Reset" permission="update">
+              {" "}
+              <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  type="submit"
+                  variant="contained">
+                  Change Password
+                </LoadingButton>
+              </Grid>
+            </CheckPermission>
           </Grid>
         </form>
       </Paper>
