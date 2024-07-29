@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const API_PREFIX = process.env.REACT_APP_API_PREFIX;
 
 const client = Axios.create({
-  baseURL: API_PREFIX + "/ecamps/v1",
+  baseURL: API_PREFIX + "/kpi/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": API_PREFIX,
@@ -29,7 +29,7 @@ const setAuthToken = (config) => {
 const refreshAccessToken = async () => {
   try {
     const res = await Axios.post(
-      `${API_PREFIX}/ecamps/v1/account/refreshToken`,
+      `${API_PREFIX}/kpi/v1/account/refreshToken`,
       {},
       {
         headers: {
