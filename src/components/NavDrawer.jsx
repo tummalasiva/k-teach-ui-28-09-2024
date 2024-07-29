@@ -58,66 +58,18 @@ import TeacherActivity from "../pages/HumanResource/TeacherActivity";
 import RolePermission from "../pages/Administrator/RolePermission";
 import UserRole from "../pages/Administrator/UserRole";
 import ResetPassword from "../pages/Administrator/ResetPassword";
-import Enquiries from "../pages/Pre-Admission/Enquiries";
-import Exams from "../pages/Pre-Admission/Exams";
-import ExamSchedules from "../pages/Pre-Admission/ExamSchedules";
-import Result from "../pages/Pre-Admission/Result";
 import Class from "../pages/Academic/Class";
 import Section from "../pages/Academic/Section";
 import Subject from "../pages/Academic/Subject";
-import StudentAttendance from "../pages/Attendance/StudentAttendance";
-import EmployeeAttendance from "../pages/Attendance/EmployeeAttendance";
-import ClassRoutine from "../pages/ClassRoutine";
+
 import Overview from "../pages/Student/Overview";
 import AdmitStudent from "../pages/Student/AdmitStudent";
 import Reshuffle from "../pages/Student/Reshuffle";
 import Promotion from "../pages/Student/Promotion";
 import BulkAdmission from "../pages/Student/BulkAdmission";
 import Credential from "../pages/Student/Credential";
-import QuickAdmit from "../pages/Student/QuickAdmit";
 import StudentActivity from "../pages/Student/StudentActivity";
 
-import Notice from "../pages/Announcement/Notice";
-import News from "../pages/Announcement/News";
-import Holiday from "../pages/Announcement/Holiday";
-import AwardsAndAchievements from "../pages/Announcement/AwardsAndAchievements";
-import SplashNews from "../pages/Announcement/SplashNews";
-import Gallery from "../pages/Gallery";
-import Notifications from "../pages/Notifications";
-import Event from "../pages/Event";
-import ExamGrade from "../pages/Exam/ExamGrade";
-import ExamTerm from "../pages/Exam/ExamTerm";
-import ExamSchedule from "../pages/Exam/ExamSchedule";
-import ExamHallTicket from "../pages/Exam/ExamHallTicket";
-import DivisionWiseReport from "../pages/ExamMark/DivisionWiseReport";
-import SubjectWiseReport from "../pages/ExamMark/SubjectWiseReport";
-import ConsolidatedMarkSheet from "../pages/ExamMark/ConsolidatedMarkSheet";
-import Markscard from "../pages/ExamMark/Markscard";
-import ExamResult from "../pages/ExamMark/ExamResult";
-import ManageMark from "../pages/ExamMark/ManageMark";
-import ExamAttendance from "../pages/ExamMark/ExamAttendance";
-import Courses from "../pages/LMS/Courses";
-import CourseContent from "../pages/LMS/CourseContent";
-import Live from "../pages/LMS/Live";
-import Storage from "../pages/LMS/Storage";
-import Books from "../pages/Library/Books";
-import Periodical from "../pages/Library/Periodical";
-import StudentLibraryMember from "../pages/Library/StudentLibraryMember";
-import StudentIssueReturn from "../pages/Library/StudentIssueReturn";
-import EmployeeLibraryMember from "../pages/Library/EmployeeLibraryMember";
-import EmployeeIssueReturn from "../pages/Library/EmployeeIssueReturn";
-import LeaveType from "../pages/LeaveManagement/LeaveType";
-import StudentsLeave from "../pages/LeaveManagement/StudentsLeave";
-import EmployeeLeave from "../pages/LeaveManagement/EmployeeLeave";
-import LeaveReport from "../pages/LeaveManagement/LeaveReport";
-import Item from "../pages/Inventory/Item";
-import Vendor from "../pages/Inventory/Vendor";
-import InOutTransaction from "../pages/Inventory/InOutTransaction";
-import StockList from "../pages/Inventory/StockList";
-import Issue from "../pages/Inventory/Issue";
-import Sell from "../pages/Inventory/Sell";
-import StudyCertificate from "../pages/Certificate/StudyCertificate";
-import TransferCertificate from "../pages/Certificate/TransferCertificate";
 import ReceiptBook from "../pages/Fees/ReceiptBook";
 import FeeMapCategory from "../pages/Fees/FeeMapCategory";
 import CollectFees from "../pages/Fees/CollectFees";
@@ -128,47 +80,22 @@ import ManageHostel from "../pages/Hostel/ManageHostel";
 import ManageRoomType from "../pages/Hostel/ManageRoomType";
 import ManageRoomAndBed from "../pages/Hostel/ManageRoomAndBed";
 import HostelMember from "../pages/Hostel/HostelMember";
-import Vehicle from "../pages/Transport/Vehicle";
-import ManageRouteAndTrips from "../pages/Transport/ManageRouteAndTrips";
-import TransportMember from "../pages/Transport/TransportMember";
-import VehicleRoutes from "../pages/Transport/Routes";
-import VehicleLog from "../pages/Transport/VehicleLog";
-import VehicleMaintenance from "../pages/Transport/VehicleMaintenance";
-import SalaryGrade from "../pages/PayRoll/SalaryGrade";
-import MakePayment from "../pages/PayRoll/MakePayment";
-import LibraryReport from "../pages/Report/LibraryReport";
-import StudentYearlyAttendance from "../pages/Report/StudentYearlyAttendance";
-import EmployeeYearlyAttendance from "../pages/Report/EmployeeYearlyAttendance";
-import StudentActivityReport from "../pages/Report/StudentActivityReport";
-import StudentAttendanceReport from "../pages/Report/StudentAttendance";
-import EmployeeAttendanceReport from "../pages/Report/EmployeeAttendance";
-import VisitorInfo from "../pages/VisitorInfo/VisitorInfo";
-import StudentCheckout from "../pages/VisitorInfo/StudentCheckout";
-import HelpDesk from "../pages/HelpDesk";
-import GuardianFeedback from "../pages/GuardianFeedback";
 import StudentBulkPhoto from "../pages/Student/StudentBulkPhoto";
-import StudentReport from "../pages/Report/StudentReport";
-import AddForm from "../forms/AddForm";
 import AddEmployee from "../pages/HumanResource/AddEmployee";
 import ManageInstitute from "../pages/ManageInstitute/ManageInstitute";
 import AddInstitute from "../pages/ManageInstitute/AddInstitute";
-import themeData from "../data/themeData";
 import Profile from "../pages/AccountSettings/Profile";
 import UpdateEmployee from "../pages/HumanResource/UpdateEmployee";
 import { PRIVATE_URLS } from "../services/urlConstants";
 import { get } from "../services/apiMethods";
 import SettingContext from "../context/SettingsContext";
 import AddStudent from "../pages/Student/AddStudent";
-import AddCourse from "../pages/LMS/AddCourse";
-import UpdateCourse from "../pages/LMS/UpdateCourse";
-import Room from "../pages/LMS/Room";
 import Compose from "../pages/Communication/Compose";
 import Report from "../pages/Communication/Report";
 import Credentials from "../pages/Communication/Credentials";
 import BulkPhoto from "../pages/Student/BulkPhoto";
-import IdCard from "../pages/Student/IdCard";
-import Assignment from "../pages/Assignment/Assignment";
 import PageNotFound from "./PageNotFound";
+import Notifications from "../pages/Notifications";
 
 // exlnt_70471681
 // 9538063455
@@ -712,41 +639,6 @@ export default function NavDrawer() {
             <ListItemText primary={isDarkMode ? "Dark Mode" : "Light Mode"} />
           </ListItemButton>
         </ListItem>
-        {/* <Divider sx={{ marginBottom: "20px" }} />
-        <DrawerFooter>
-          <List sx={{ width: "100%" }}> */}
-        {/* <ListItem disablePadding>
-              <Link
-                to={"/settings"}
-                style={{ textDecoration: "none", display: "flex", flex: 1 }}>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <SettingsIcon fontSize="small" color="primary" />
-                  </ListItemIcon>
-                  <ListItemText primary={"Settings"} />
-                </ListItemButton>
-              </Link>
-            </ListItem> */}
-        {/* <ListItem disablePadding>
-              <ListItemButton
-                sx={{
-                  "& .MuiListItemText-root": {
-                    whiteSpace: "normal",
-                    wordWrap: "wrap",
-                  },
-                  "& .MuiListItemIcon-root": {
-                  
-                  },
-                }}
-                onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText primary={"Logout"} />
-              </ListItemButton>
-            </ListItem> */}
-        {/* </List>
-        </DrawerFooter> */}
       </Drawer>
       <Box
         component="main"
@@ -791,7 +683,7 @@ export default function NavDrawer() {
             element={<RelievingLetter />}
           />
 
-          <Route path="human-resource/off-boarding" element={<OffBoarding />} />
+          {/* <Route path="human-resource/off-boarding" element={<OffBoarding />} /> */}
           <Route
             path="human-resource/experience-letter"
             element={<ExperienceLetter />}
@@ -802,28 +694,10 @@ export default function NavDrawer() {
             element={<TeacherActivity />}
           />
 
-          <Route path="pre-admission/enquiries" element={<Enquiries />} />
-          <Route path="pre-admission/exams" element={<Exams />} />
-          <Route
-            path="pre-admission/exam-schedules"
-            element={<ExamSchedules />}
-          />
-          <Route path="pre-admission/result" element={<Result />} />
-
           <Route path="academic/class" element={<Class />} />
           <Route path="academic/section" element={<Section />} />
           <Route path="academic/subject" element={<Subject />} />
 
-          <Route
-            path="attendence/student-attendance"
-            element={<StudentAttendance />}
-          />
-          <Route
-            path="attendence/employee-attendance"
-            element={<EmployeeAttendance />}
-          />
-
-          <Route path="class-routine" element={<ClassRoutine />} />
           <Route path="student/overview" element={<Overview />} />
           <Route path="student/admit-student" element={<AdmitStudent />} />
           <Route path="student/add-student" element={<AddStudent />} />
@@ -832,8 +706,6 @@ export default function NavDrawer() {
           <Route path="student/promotion" element={<Promotion />} />
           <Route path="student/bulk-admission" element={<BulkAdmission />} />
           <Route path="student/credential" element={<Credential />} />
-          <Route path="student/quick-admit" element={<QuickAdmit />} />
-          <Route path="student/id-card" element={<IdCard />} />
 
           <Route path="student/bulk-photo" element={<BulkPhoto />} />
           <Route
@@ -845,100 +717,6 @@ export default function NavDrawer() {
             element={<StudentBulkPhoto />}
           />
 
-          <Route path="assignment" element={<Assignment />} />
-
-          <Route path="announcement/notice" element={<Notice />} />
-          <Route path="announcement/news" element={<News />} />
-          <Route path="announcement/holiday" element={<Holiday />} />
-          <Route
-            path="announcement/awardsAndAchievements"
-            element={<AwardsAndAchievements />}
-          />
-          <Route path="announcement/splashNews" element={<SplashNews />} />
-
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="event" element={<Event />} />
-
-          <Route path="exam/exam-grade" element={<ExamGrade />} />
-          <Route path="exam/exam-term" element={<ExamTerm />} />
-          <Route path="exam/exam-schedule" element={<ExamSchedule />} />
-          <Route path="exam/exam-hall-ticket" element={<ExamHallTicket />} />
-          <Route
-            path="exam-Mark/exam-Attendance"
-            element={<ExamAttendance />}
-          />
-          <Route path="exam-Mark/manage-mark" element={<ManageMark />} />
-          <Route path="exam-Mark/exam-result" element={<ExamResult />} />
-          <Route path="exam-Mark/marks-card" element={<Markscard />} />
-          <Route
-            path="exam-Mark/consolidated-marks-sheet"
-            element={<ConsolidatedMarkSheet />}
-          />
-          <Route
-            path="exam-Mark/subject-wise-report"
-            element={<SubjectWiseReport />}
-          />
-          <Route
-            path="exam-Mark/division-wise-report"
-            element={<DivisionWiseReport />}
-          />
-
-          <Route path="lms/storage" element={<Storage />} />
-          <Route path="lms/courses" element={<Courses />} />
-          <Route path="lms/add-courses" element={<AddCourse />} />
-          <Route path="lms/edit-courses/:id" element={<UpdateCourse />} />
-          <Route path="lms/course-content" element={<CourseContent />} />
-          <Route path="lms/live" element={<Live />} />
-          <Route path="lms/room/:roomID" element={<Room />} />
-
-          <Route path="library/books" element={<Books />} />
-          <Route path="library/periodical" element={<Periodical />} />
-          <Route
-            path="library/student-library-member"
-            element={<StudentLibraryMember />}
-          />
-          <Route
-            path="library/student-issue-return"
-            element={<StudentIssueReturn />}
-          />
-          <Route
-            path="library/employee-library-member"
-            element={<EmployeeLibraryMember />}
-          />
-          <Route
-            path="library/employee-issue-return"
-            element={<EmployeeIssueReturn />}
-          />
-
-          <Route path="leave-management/leave-type" element={<LeaveType />} />
-          <Route
-            path="leave-management/student-leave"
-            element={<StudentsLeave />}
-          />
-          <Route
-            path="leave-management/employee-leave"
-            element={<EmployeeLeave />}
-          />
-          <Route
-            path="leave-management/leave-report"
-            element={<LeaveReport />}
-          />
-
-          <Route path="inventory/item" element={<Item />} />
-          <Route path="inventory/vendor" element={<Vendor />} />
-          <Route path="inventory/transaction" element={<InOutTransaction />} />
-          <Route path="inventory/stockList" element={<StockList />} />
-          <Route path="inventory/issue" element={<Issue />} />
-          <Route path="inventory/sell" element={<Sell />} />
-          <Route
-            path="certificate/study-certificate"
-            element={<StudyCertificate />}
-          />
-          <Route
-            path="certificate/transfer-certificate"
-            element={<TransferCertificate />}
-          />
           <Route path="fees/receipt-book" element={<ReceiptBook />} />
           <Route path="fees/feeMap-category" element={<FeeMapCategory />} />
           <Route path="fees/collect-fees" element={<CollectFees />} />
@@ -951,58 +729,8 @@ export default function NavDrawer() {
           <Route path="hostel/manage-room-bed" element={<ManageRoomAndBed />} />
           <Route path="hostel/hostel-member" element={<HostelMember />} />
 
-          <Route path="transport/vehicle" element={<Vehicle />} />
-          <Route
-            path="transport/manage-route"
-            element={<ManageRouteAndTrips />}
-          />
-          <Route path="transport/routes" element={<VehicleRoutes />} />
-          <Route
-            path="transport/trasport-member"
-            element={<TransportMember />}
-          />
-
-          <Route path="transport/vehicle-log" element={<VehicleLog />} />
-          <Route
-            path="transport/vehicle-maintenance"
-            element={<VehicleMaintenance />}
-          />
-
-          <Route path="payroll/salary-grade" element={<SalaryGrade />} />
-          <Route path="payroll/make-payment" element={<MakePayment />} />
-
-          <Route path="report/library-report" element={<LibraryReport />} />
-          <Route
-            path="report/student-attendance"
-            element={<StudentAttendanceReport />}
-          />
-          <Route
-            path="report/student-yearly-attendane"
-            element={<StudentYearlyAttendance />}
-          />
-          <Route
-            path="report/employee-attendance"
-            element={<EmployeeAttendanceReport />}
-          />
-          <Route
-            path="report/employee-yearly-attendance"
-            element={<EmployeeYearlyAttendance />}
-          />
-          <Route path="report/student-report" element={<StudentReport />} />
-          <Route
-            path="report/student-activity-report"
-            element={<StudentActivityReport />}
-          />
-
-          <Route path="visitorInfo/visitor-info" element={<VisitorInfo />} />
-          <Route
-            path="visitorInfo/student-checkout"
-            element={<StudentCheckout />}
-          />
-
-          <Route path="help-desk" element={<HelpDesk />} />
-          <Route path="guardian-feedback" element={<GuardianFeedback />} />
           <Route path="human-resource/add-employee" element={<AddEmployee />} />
+          <Route path="notifications" element={<Notifications />} />
 
           <Route path="communication_compose" element={<Compose />} />
           <Route path="communication_report" element={<Report />} />

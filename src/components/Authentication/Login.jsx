@@ -28,7 +28,7 @@ import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../forms/FormInput";
 import { useFormik } from "formik";
 import { useTheme } from "@mui/material";
-import avatar from "../../assets/images/avatar.jpg";
+import avatar from "../../assets/images/ktechLogo.jpeg";
 import { LoadingButton } from "@mui/lab";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -57,7 +57,6 @@ const InnerBox = styled(Box)(({ theme }) => ({}));
 
 const FormCard = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  padding: "10px",
   borderRadius: "5px",
 }));
 
@@ -98,7 +97,7 @@ const Login = () => {
     initialValues: {
       username: "",
       password: "",
-      userType: "",
+      userType: "employee",
       rememberMe,
     },
 
@@ -153,169 +152,147 @@ const Login = () => {
             sx={{
               maxWidth: 370,
               width: "100%",
-              // background: "rgba(255,255,255,0.3)",
               borderRadius: "5px",
-              padding: "30px",
               position: "relative",
               backgroundColor: "rgba(255,255,255,0.2)",
-              // borderRadius: "16px",
               boxShadow: "0px 4px 30px rgba(0, 0, 0, 0.1)",
               backdropFilter: "blur(10.8px)",
               WebkitBackdropFilter: "blur(10.8px)",
               border: "1px solid rgba(255,255,255,0.45)",
             }}>
-            <BackButtonContainer>
+            {/* <BackButtonContainer>
               <IconButton onClick={() => navigate("/")}>
                 <HomeIcon fontSize="medium" />
               </IconButton>
-            </BackButtonContainer>
+            </BackButtonContainer> */}
 
             <img
               src={avatar}
-              height={"150px"}
-              width={"150px"}
+              height={"250px"}
+              width={"100%"}
               style={{
                 alignSelf: "center",
                 resize: "contain",
                 objectFit: "contain",
-                borderRadius: "50%",
-                marginBottom: "50px",
+                marginBottom: "20px",
+                backgroundColor: "white",
               }}
             />
 
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12} lg={12} my={2}>
-                <ButtonGroup
-                  fullWidth
-                  variant="contained"
-                  aria-label="Basic button group">
-                  <Button
-                    variant={
-                      selectedButton === "employee" ? "contained" : "outlined"
-                    }
-                    onClick={() => handleButtonClick("employee")}>
-                    Staff
-                  </Button>
-                  <Button
-                    variant={
-                      selectedButton === "student" ? "contained" : "outlined"
-                    }
-                    onClick={() => handleButtonClick("student")}>
-                    Student
-                  </Button>
-                </ButtonGroup>
-              </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                {" "}
-                <FormInput
-                  formik={formik}
-                  required
-                  name="username"
-                  label="Username"
-                  size="small"
-                  InputProps={{
-                    style: {
-                      borderWidth: 1,
-                      height: "42px",
-                      borderRadius: 5,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton edge="start">
-                          <Person
-                            sx={{
-                              color: themeData.darkPalette.primary.main,
-                            }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+            <Box sx={{ padding: "20px" }}>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  {" "}
+                  <FormInput
+                    formik={formik}
+                    required
+                    name="username"
+                    label="Username"
+                    size="small"
+                    InputProps={{
+                      style: {
+                        borderWidth: 1,
+                        height: "42px",
+                        borderRadius: 5,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="start">
+                            <Person
+                              sx={{
+                                color: themeData.darkPalette.primary.main,
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12} mt={0.5}>
-                <FormInput
-                  required
-                  formik={formik}
-                  name="password"
-                  label="Password"
-                  size="small"
-                  type={showPassword ? "text" : "password"}
-                  InputProps={{
-                    style: {
-                      borderWidth: 1,
-                      height: "42px",
-                      borderRadius: 5,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton disabled edge="start">
-                          <Key
-                            sx={{
-                              color: themeData.darkPalette.primary.main,
-                            }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end" sx={{ pr: 1 }}>
-                        <IconButton
-                          onClick={togglePasswordVisibility}
-                          edge="end">
-                          {showPassword ? (
-                            <VisibilityOff sx={{ color: "grey" }} />
-                          ) : (
-                            <Visibility sx={{ color: "grey" }} />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} mt={0.5}>
+                  <FormInput
+                    required
+                    formik={formik}
+                    name="password"
+                    label="Password"
+                    size="small"
+                    type={showPassword ? "text" : "password"}
+                    InputProps={{
+                      style: {
+                        borderWidth: 1,
+                        height: "42px",
+                        borderRadius: 5,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton disabled edge="start">
+                            <Key
+                              sx={{
+                                color: themeData.darkPalette.primary.main,
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end" sx={{ pr: 1 }}>
+                          <IconButton
+                            onClick={togglePasswordVisibility}
+                            edge="end">
+                            {showPassword ? (
+                              <VisibilityOff sx={{ color: "grey" }} />
+                            ) : (
+                              <Visibility sx={{ color: "grey" }} />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12} textAlign="left">
-                <FormControlLabel
-                  control={<Checkbox size="small" />}
-                  type="checkbox"
-                  onChange={(e) => {
-                    setRememberMe(e.target.checked);
-                  }}
-                  sx={{ fontSize: "12px" }}
-                  label="Remember me"
-                />
-              </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} textAlign="left">
+                  <FormControlLabel
+                    control={<Checkbox size="small" />}
+                    type="checkbox"
+                    onChange={(e) => {
+                      setRememberMe(e.target.checked);
+                    }}
+                    sx={{ fontSize: "12px" }}
+                    label="Remember me"
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12} my={1}>
-                <LoadingButton
-                  loading={isPending}
-                  type="submit"
-                  fullWidth
-                  variant="contained">
-                  Log In
-                </LoadingButton>
-              </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} my={1}>
+                  <LoadingButton
+                    loading={isPending}
+                    type="submit"
+                    fullWidth
+                    variant="contained">
+                    Log In
+                  </LoadingButton>
+                </Grid>
 
-              {/* Forgot password */}
+                {/* Forgot password */}
 
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                textAlign="center"
-                mt={1}>
-                <Link to="/forgot-password">
-                  <Typography
-                    sx={{ color: themeData.darkPalette.secondary.main }}>
-                    Forgot Password?
-                  </Typography>
-                </Link>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={12}
+                  textAlign="center"
+                  mt={1}>
+                  <Link to="/forgot-password">
+                    <Typography
+                      sx={{ color: themeData.darkPalette.secondary.main }}>
+                      Forgot Password?
+                    </Typography>
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </FormCard>
         </InnerBox>
       </OuterBox>

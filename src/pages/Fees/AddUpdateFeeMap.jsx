@@ -30,10 +30,8 @@ import { LoadingButton } from "@mui/lab";
 
 const LABEL = {
   class: "Class",
-  classOld: "Class - (Old)",
-  classNew: "Class - (New)",
-  transport: "Transport - (Transport department)",
-  hostel: "Hostel - (Hostel department)",
+  hostelMember: "Hostel Member",
+  transportMember: "Transport Member",
 };
 
 const installmentsType = [
@@ -42,6 +40,11 @@ const installmentsType = [
   { label: "Half-Yearly", id: 3 },
   { label: "Yearly", id: 4 },
   { label: "Others", id: 5 },
+];
+
+const MEMBER_OPTIONS = [
+  { label: "Yes", _id: "yes" },
+  { label: "No", _id: "no" },
 ];
 
 function removeElementFromArray(array, elementToRemove) {
@@ -195,10 +198,8 @@ export default function AddUpdateFeeMap({
         receiptTitleId: selectedReceipt,
         dependencies: dependencies,
         classId: addForm.class,
-        routeId: addForm.route,
-        pickType: addForm.pickType,
-        hostelId: addForm.hostel,
-        stopId: addForm.stop,
+        hostelMember: addForm.hostelMember,
+        transportMember: addForm.transportMember,
         fee: addForm.fee,
         installmentType: addForm.installmentsType,
         installments: installments.map((i) => ({
@@ -235,23 +236,18 @@ export default function AddUpdateFeeMap({
   useEffect(() => {
     if (dataToEdit) {
       const {
-        route,
         class: className,
-        hostel,
-        pickType,
-        stop,
+        hostelMember,
+        transportMember,
         fee,
         installmentType,
-        installments,
         dependencies,
       } = dataToEdit;
 
       setAddForm({
-        route: route?._id || "",
         class: className?._id || "",
-        hostel: hostel?._id || "",
-        pickType: pickType || "",
-        stop: stop?._id || "",
+        hostelMember: hostelMember ? "yes" : "no",
+        transportMember: transportMember ? "yes" : "no",
         installmentsType: installmentType || "",
         fee: fee || "",
       });
@@ -490,30 +486,7 @@ export default function AddUpdateFeeMap({
               )}
             </Grid>
 
-            {dependencies.includes("academicYear") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Academic Year</InputLabel>
-                  <Select
-                    size="small"
-                    name="academicYear"
-                    required
-                    value={addForm.academicYear || ""}
-                    onChange={handleAddForm}
-                    label="Select Academic Year">
-                    {academicYears.map((a) => (
-                      <MenuItem key={a._id} value={a._id}>
-                        {a.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
-
-            {(dependencies.includes("class") ||
-              dependencies.includes("classNew") ||
-              dependencies.includes("classOld")) && (
+            {dependencies.includes("class") && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Select Class</InputLabel>
@@ -533,143 +506,44 @@ export default function AddUpdateFeeMap({
                 </FormControl>
               </Grid>
             )}
-            {dependencies.includes("transport") && (
-              <>
-                <Grid item xs={12} md={6} lg={6} mt={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Select Route</InputLabel>
-                    <Select
-                      size="small"
-                      name="route"
-                      required
-                      value={addForm.route || ""}
-                      onChange={handleAddForm}
-                      label="Select Route">
-                      {routes.map((route) => (
-                        <MenuItem key={route._id} value={route._id}>
-                          {route?.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6} lg={6} mt={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Select Stop</InputLabel>
-                    <Select
-                      size="small"
-                      name="stop"
-                      required
-                      value={addForm.stop || ""}
-                      onChange={handleAddForm}
-                      label="Select stop">
-                      {routes
-                        ?.find((s) => s._id === addForm.route)
-                        ?.stops?.map((m) => ({
-                          ...m,
-                          label: m.name,
-                          value: m._id,
-                        }))
-                        ?.map((stop) => (
-                          <MenuItem key={stop.value} value={stop.value}>
-                            {stop?.label}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid xs={12} sm={6} md={6} item mt={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Pick Type</InputLabel>
-                    <Select
-                      size="small"
-                      name="pickType"
-                      value={addForm.pickType || ""}
-                      onChange={handleAddForm}
-                      label="Pick Type">
-                      {["Drop", "Pick", "Both"].map((picktype) => (
-                        <MenuItem key={picktype} value={picktype}>
-                          {picktype}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </>
+
+            {dependencies.includes("hostelMember") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Is Hostel Member</InputLabel>
+                  <Select
+                    size="small"
+                    name="hostelMember"
+                    required
+                    value={addForm.hostelMember || false}
+                    onChange={handleAddForm}
+                    label="Is hostel member">
+                    {MEMBER_OPTIONS.map((c) => (
+                      <MenuItem key={c._id} value={c._id}>
+                        {c.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             )}
 
-            {dependencies.includes("hostel") && (
+            {dependencies.includes("transportMember") && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Select Hostel</InputLabel>
+                  <InputLabel>Is Hostel Member</InputLabel>
                   <Select
                     size="small"
-                    name="hostel"
+                    name="transportMember"
                     required
-                    value={addForm.hostel || ""}
+                    value={addForm.transportMember || false}
                     onChange={handleAddForm}
-                    label="Select Hostel">
-                    {hostels.map((hostel) => (
-                      <MenuItem key={hostel._id} value={hostel._id}>
-                        {hostel?.label}
+                    label="Is transport member">
+                    {MEMBER_OPTIONS.map((c) => (
+                      <MenuItem key={c._id} value={c._id}>
+                        {c.label}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
-            {dependencies.includes("roomType") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Room Type</InputLabel>
-                  <Select
-                    size="small"
-                    name="roomType"
-                    required
-                    value={addForm.roomType || ""}
-                    onChange={handleAddForm}
-                    label="Select Room Type">
-                    {roomTypes.map((roomType) => (
-                      <MenuItem key={roomType._id} value={roomType._id}>
-                        {roomType?.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
-            {dependencies.includes("room") && (
-              <Grid xs={12} sm={6} md={6} item mt={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Room</InputLabel>
-                  <Select
-                    size="small"
-                    name="room"
-                    required
-                    value={addForm.room || ""}
-                    onChange={handleAddForm}
-                    label="Select Room">
-                    {rooms
-                      .filter((r) => {
-                        if (addForm.hostel && addForm.roomType) {
-                          return (
-                            r.hostel?._id == addForm.hostel &&
-                            r.type?._id == addForm.roomType
-                          );
-                        } else if (addForm.hostel && !addForm.roomType) {
-                          return r.hostel?._id == addForm.hostel;
-                        } else if (!addForm.hostel && addForm.roomType) {
-                          return r.type?._id == addForm.roomType;
-                        } else {
-                          return r._id;
-                        }
-                      })
-                      .map((room) => (
-                        <MenuItem key={room._id} value={room._id}>
-                          {room.hostel?.name} - {room.type?.name}{" "}
-                          {`(${room.totalBeds}-Beds)`}
-                        </MenuItem>
-                      ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -707,7 +581,6 @@ export default function AddUpdateFeeMap({
             {addForm.installmentsType == "Others" && (
               <Grid xs={12} sm={6} md={6} item mt={2}>
                 <TextField
-                  // sx={{ marginTop: 1 }}
                   fullWidth
                   label="Number of installments"
                   size="small"

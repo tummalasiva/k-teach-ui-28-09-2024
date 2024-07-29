@@ -1,8 +1,11 @@
+/** @format */
+
 export const feeMapCategoryTableKeys = [
   {
-    name: "Name",
-    key: "name",
+    name: "Description",
+    key: "description",
   },
-  { name: "Description", key: "description" },
   { name: "Amount	", key: "amount" },
+  { name: "Tax Rate", key: "taxRate" },
+  { name: "HSN Code", key: "hsnCode" },
 ];

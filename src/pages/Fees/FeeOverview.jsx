@@ -33,34 +33,7 @@ import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import CustomSelect from "../../forms/CustomSelect";
 import CheckPermission from "../../components/Authentication/CheckPermission";
-
-const showInfo = (data) => {
-  let result = [];
-
-  for (let dep of data.dependencies) {
-    if (["class"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class`;
-      result.push(newItem);
-    } else if (["classOld"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-Old`;
-      result.push(newItem);
-    } else if (["classNew"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-New`;
-      result.push(newItem);
-    } else if (dep === "hostel") {
-      let newItem = `[${data.hostel?.name}]-Hostel`;
-      result.push(newItem);
-    } else if (dep == "transport") {
-      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    } else if (dep == "pickType") {
-      let newItem = `[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    }
-  }
-
-  return result.join(" | ");
-};
+import { showInfo } from "./ReceiptBook";
 
 const ALL_OPTION = {
   label: "All",

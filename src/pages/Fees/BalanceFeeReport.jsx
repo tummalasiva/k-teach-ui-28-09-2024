@@ -14,34 +14,7 @@ import { LoadingButton } from "@mui/lab";
 import { downloadFile } from "../../utils";
 import { toast } from "react-toastify";
 import CheckPermission from "../../components/Authentication/CheckPermission";
-
-const showInfo = (data) => {
-  let result = [];
-
-  for (let dep of data.dependencies) {
-    if (["class"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class`;
-      result.push(newItem);
-    } else if (["classOld"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-Old`;
-      result.push(newItem);
-    } else if (["classNew"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-New`;
-      result.push(newItem);
-    } else if (dep === "hostel") {
-      let newItem = `[${data.hostel?.name}]-Hostel`;
-      result.push(newItem);
-    } else if (dep == "transport") {
-      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    } else if (dep == "pickType") {
-      let newItem = `[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    }
-  }
-
-  return result.join(" | ");
-};
+import { showInfo } from "./ReceiptBook";
 
 export default function BalanceFeeReport() {
   const { selectedSetting } = useContext(SettingContext);

@@ -132,7 +132,7 @@ export default function Events() {
               : "whitesmoke",
         }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item xs={12}>
             <Calendar
               tileClassName={({ date }) => {
                 const today = new Date();
@@ -142,60 +142,6 @@ export default function Events() {
                 return "";
               }}
             />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Card sx={{ minHeight: "200px", padding: "15px" }}>
-              <Collapsible open={true}>
-                <BoldTrigger>{`Notices: (${notice?.length})`}</BoldTrigger>
-                <Divider sx={{ width: "100%", mt: 1 }} />
-                <Box
-                  sx={{
-                    height: "140px",
-                    maxHeight: "140px",
-                    overflow: "auto",
-                  }}>
-                  <DashboardScorlText elevation={0}>
-                    <ScrollContainer>
-                      {notice?.map((data, index) => (
-                        <DashboardNewsConent key={index}>
-                          <NoticeItem component="li">{data.notice}</NoticeItem>
-                        </DashboardNewsConent>
-                      ))}
-                    </ScrollContainer>
-                    {!notice?.length && (
-                      <NoDataFound variant="h6">No data found</NoDataFound>
-                    )}
-                  </DashboardScorlText>
-                </Box>
-              </Collapsible>
-            </Card>
-
-            <Card
-              sx={{ minHeight: "200px", padding: "15px", marginTop: "10px" }}>
-              <Collapsible open={true}>
-                <BoldTrigger>{`Holidays: (${holidays?.length})`}</BoldTrigger>
-                <Divider sx={{ width: "100%", mt: 1 }} />
-                <Box
-                  sx={{
-                    height: "140px",
-                    maxHeight: "140px",
-                    overflow: "auto",
-                  }}>
-                  <DashboardScorlText elevation={0}>
-                    <ScrollContainer>
-                      {holidays?.map((data, index) => (
-                        <DashboardNewsConent key={index}>
-                          <NoticeItem component="li">{data.title}</NoticeItem>
-                        </DashboardNewsConent>
-                      ))}
-                    </ScrollContainer>
-                    {!holidays?.length && (
-                      <NoDataFound variant="h6">No data found</NoDataFound>
-                    )}
-                  </DashboardScorlText>
-                </Box>
-              </Collapsible>
-            </Card>
           </Grid>
         </Grid>
       </Paper>

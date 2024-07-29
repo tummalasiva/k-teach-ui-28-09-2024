@@ -48,27 +48,20 @@ const CustomSwitch = styled(Switch)(({}) => ({
   },
 }));
 
-const showInfo = (data) => {
+export const showInfo = (data) => {
   let result = [];
 
   for (let dep of data.dependencies) {
     if (["class"].includes(dep)) {
       let newItem = `[${data.class?.name}]-Class`;
       result.push(newItem);
-    } else if (["classOld"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-Old`;
+    } else if (["hostelMember"].includes(dep)) {
+      let newItem = `[${data.hostelMember ? "IS" : "IS-NOT"}]-Hostel Member`;
       result.push(newItem);
-    } else if (["classNew"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-New`;
-      result.push(newItem);
-    } else if (["hostel"].includes(dep)) {
-      let newItem = `[${data.hostel?.name}]-Hostel`;
-      result.push(newItem);
-    } else if (["transport"].includes(dep)) {
-      let newItem = `[${data?.route?.vehicle?.number}]+[${data?.route?.title}]-Transport-[${data?.stop?.name}]-Stop-[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    } else if (["pickType"].includes(dep)) {
-      let newItem = `[${data.pickType}]-Pick_Type`;
+    } else if (["transportMember"].includes(dep)) {
+      let newItem = `[${
+        data.transportMember ? "IS" : "IS-NOT"
+      }]-Transport Member`;
       result.push(newItem);
     }
   }
@@ -154,6 +147,7 @@ export default function ReceiptBook() {
           search: { receiptTitle: selectedReceiptId },
         },
       });
+      console.log(data, "data");
       setFeeMaps(data?.result?.map((f) => ({ ...f, detail: showInfo(f) })));
     } catch (error) {
       console.error(error);

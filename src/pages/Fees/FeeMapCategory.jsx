@@ -16,34 +16,7 @@ import FormInput from "../../forms/FormInput";
 import { toast } from "react-toastify";
 import AddFeeMapCategory from "./AddFeeMapCategory";
 import CheckPermission from "../../components/Authentication/CheckPermission";
-
-const showInfo = (data) => {
-  let result = [];
-
-  for (let dep of data.dependencies) {
-    if (["class"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class`;
-      result.push(newItem);
-    } else if (["classOld"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-Old`;
-      result.push(newItem);
-    } else if (["classNew"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-New`;
-      result.push(newItem);
-    } else if (dep === "hostel") {
-      let newItem = `[${data.hostel?.name}]-Hostel`;
-      result.push(newItem);
-    } else if (dep == "transport") {
-      let newItem = `[${data.route.vehicle.number}]+[${data.route.title}]-Transport-[${data.stop.name}]-Stop-[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    } else if (dep == "pickType") {
-      let newItem = `[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    }
-  }
-
-  return result.join(" | ");
-};
+import { showInfo } from "./ReceiptBook";
 
 export default function FeeMapCategory() {
   const { selectedSetting } = useContext(SettingContext);
@@ -57,16 +30,23 @@ export default function FeeMapCategory() {
   const [categories, setCategories] = useState([
     {
       id: 1,
-      name: "Category 1",
       amount: 1,
       description: "",
+      taxRate: "",
+      hsnCode: "",
     },
   ]);
 
   const addCategory = () => {
     let newCategories = [
       ...categories,
-      { id: categories.length + 1, name: "New", amount: 1, description: "" },
+      {
+        id: categories.length + 1,
+        taxRate: "",
+        hsnCode: "",
+        amount: 1,
+        description: "",
+      },
     ];
     setCategories(newCategories);
   };
@@ -149,12 +129,15 @@ export default function FeeMapCategory() {
       } else {
         if (
           categories.find(
-            (c) => !c.name || !parseFloat(c.amount) || parseFloat(c.amount) < 0
+            (c) =>
+              !c.description ||
+              !parseFloat(c.amount) ||
+              parseFloat(c.amount) < 0
           )
         ) {
           setLoading(false);
           return toast.error(
-            "Please mention name and amount for each category"
+            "Please mention description and amount for each category"
           );
         }
 
@@ -180,9 +163,10 @@ export default function FeeMapCategory() {
 
   const entryFormik = useFormik({
     initialValues: {
-      name: dataToEdit?.name || "",
       description: dataToEdit?.description || "",
       amount: dataToEdit?.amount || "",
+      taxRate: dataToEdit?.taxRate || "",
+      hsnCode: dataToEdit?.hsnCode || "",
     },
     onSubmit: handleCreateOrUpdate,
     enableReinitialize: true,
@@ -210,9 +194,10 @@ export default function FeeMapCategory() {
     setCategories([
       {
         id: 1,
-        name: "Category 1",
-        amount: 1,
         description: "",
+        hsnCode: "",
+        taxRate: "",
+        amount: "",
       },
     ]);
   };
@@ -297,27 +282,37 @@ export default function FeeMapCategory() {
         submitButtonTitle={dataToEdit ? "Update" : "Submit"}
         adding={loading}>
         <Grid rowSpacing={0} columnSpacing={2} container>
-          <Grid xs={12} sm={6} md={4} item>
-            <FormInput
-              formik={entryFormik}
-              name="name"
-              label="Name"
-              required={true}
-            />
-          </Grid>
-          <Grid xs={12} sm={6} md={4} item>
+          <Grid xs={12} sm={6} md={3} item>
             <FormInput
               formik={entryFormik}
               name="description"
               label="Description"
+              required={true}
             />
           </Grid>
-          <Grid xs={12} sm={6} md={4} item>
+          <Grid xs={12} sm={6} md={3} item>
             <FormInput
               formik={entryFormik}
               name="amount"
               label="Amount"
               type="number"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3} item>
+            <FormInput
+              formik={entryFormik}
+              name="taxRate"
+              label="Tax Rate"
+              required={true}
+              type="number"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3} item>
+            <FormInput
+              formik={entryFormik}
+              name="hsnCode"
+              label="HSN Code"
               required={true}
             />
           </Grid>

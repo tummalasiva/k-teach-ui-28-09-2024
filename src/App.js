@@ -21,18 +21,8 @@ import { PRIVATE_URLS, PUBLIC_URLS } from "./services/urlConstants";
 import SplashNewsHorizontal from "./theme-one/components/SpalshNews/SpalshNewsHorizontal";
 import SpalshNewsPopup from "./theme-one/components/SpalshNews/SpalshNewsPopup";
 import UserTypeContext from "./context/UserTypeContext";
-import CourseContext from "./context/CourseContext";
-import ExamQuestion from "./components/ExamConduct/ExamQuestion";
-import ExamVenue from "./components/ExamConduct/ExamVenue";
-
-const Web1 = React.lazy(() => import("./components/WebsiteTheme1"));
-const Web2 = React.lazy(() => import("./components/WebsiteTheme2"));
-const Web3 = React.lazy(() => import("./components/WebsiteTheme3"));
 
 const EmployeeDashBoard = React.lazy(() => import("./components/NavDrawer"));
-const StudentDashBoard = React.lazy(() =>
-  import("./components/NavDrawerStudent")
-);
 
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(1);
@@ -58,42 +48,41 @@ function App() {
     }
   }, []);
 
-  const getSplashNews = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.splashNews.listPublic, {
-        params: {
-          schoolId: selectedSetting._id,
-        },
-      });
-      console.log(data.result, "datat");
-      setHorizontalData([]);
-      setPopupData({
-        open: false,
-        data: null,
-      });
+  // const getSplashNews = async () => {
+  //   try {
+  //     const { data } = await get(PRIVATE_URLS.splashNews.listPublic, {
+  //       params: {
+  //         schoolId: selectedSetting._id,
+  //       },
+  //     });
+  //     setHorizontalData([]);
+  //     setPopupData({
+  //       open: false,
+  //       data: null,
+  //     });
 
-      if (data.result.length) {
-        let allSplashNews = data.result;
-        setHorizontalData(
-          allSplashNews.filter((s) => s.type !== "Popup" && s.enabled === true)
-        );
-        setPopupData({
-          open: false,
-          data: allSplashNews.filter(
-            (s) => s.type === "Popup" && s.enabled === true
-          )[0],
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (data.result.length) {
+  //       let allSplashNews = data.result;
+  //       setHorizontalData(
+  //         allSplashNews.filter((s) => s.type !== "Popup" && s.enabled === true)
+  //       );
+  //       setPopupData({
+  //         open: false,
+  //         data: allSplashNews.filter(
+  //           (s) => s.type === "Popup" && s.enabled === true
+  //         )[0],
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (selectedSetting && selectedSetting._id) {
-      getSplashNews();
-    }
-  }, [selectedSetting]);
+  // useEffect(() => {
+  //   if (selectedSetting && selectedSetting._id) {
+  //     getSplashNews();
+  //   }
+  // }, [selectedSetting]);
 
   useEffect(() => {
     if (popupData.data) {
@@ -355,33 +344,17 @@ function App() {
         <WebsiteThemeContext.Provider
           value={{ selectedTheme, setSelectedTheme }}>
           <ThemeProvider theme={webTheme}>
-            <SpalshNewsPopup
+            {/* <SpalshNewsPopup
               open={popupData.open}
               sharedData={popupData.data}
               handleClose={handleClosePopup}
             />
             {horizontalData.length ? (
               <SplashNewsHorizontal horizontalData={horizontalData} />
-            ) : null}
+            ) : null} */}
             <Routes>
-              <Route
-                path="/*"
-                element={
-                  <React.Suspense fallback={<Loader />}>
-                    {selectedTheme % 2 !== 0 ? <Web1 /> : <Web2 />}
-                  </React.Suspense>
-                }
-              />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/pre-admission/exam-conduct/:id"
-                element={<ExamQuestion />}
-              />
-              <Route
-                path="/details/pre-admission/:id"
-                element={<ExamVenue />}
-              />
+              <Route path="/" element={<Login />} />
             </Routes>
           </ThemeProvider>
 
@@ -392,11 +365,7 @@ function App() {
                   path="/sch/*"
                   element={
                     <React.Suspense fallback={<Loader />}>
-                      {userType === "employee" ? (
-                        <EmployeeDashBoard />
-                      ) : (
-                        <StudentDashBoard />
-                      )}
+                      <EmployeeDashBoard />
                     </React.Suspense>
                   }
                 />

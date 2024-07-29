@@ -36,34 +36,7 @@ import { downloadFile } from "../../utils";
 import { toast } from "react-toastify";
 import DownloadForOfflineSharpIcon from "@mui/icons-material/DownloadForOfflineSharp";
 import CheckPermission from "../../components/Authentication/CheckPermission";
-
-const showInfo = (data) => {
-  let result = [];
-
-  for (let dep of data.dependencies) {
-    if (["class"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class`;
-      result.push(newItem);
-    } else if (["classOld"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-Old`;
-      result.push(newItem);
-    } else if (["classNew"].includes(dep)) {
-      let newItem = `[${data.class?.name}]-Class-New`;
-      result.push(newItem);
-    } else if (["hostel"].includes(dep)) {
-      let newItem = `[${data.hostel?.name}]-Hostel`;
-      result.push(newItem);
-    } else if (["transport"].includes(dep)) {
-      let newItem = `[${data?.route?.vehicle?.number}]+[${data?.route?.title}]-Transport-[${data?.stop?.name}]-Stop-[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    } else if (["pickType"].includes(dep)) {
-      let newItem = `[${data.pickType}]-Pick_Type`;
-      result.push(newItem);
-    }
-  }
-
-  return result.join(" | ");
-};
+import { showInfo } from "./ReceiptBook";
 
 const ExtraFeeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -793,7 +766,17 @@ export default function CollectFees() {
                   Due Amount
                 </TableCell>
                 <TableCell sx={{ color: "white" }} align="center">
+                  SGST%
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
+                  CGST%
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
                   Collecting Amount
+                </TableCell>
+
+                <TableCell sx={{ color: "white" }} align="center">
+                  Net Payable
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -802,13 +785,19 @@ export default function CollectFees() {
                 <TableRow key={index}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell align="center">
-                    <Typography>{itemDetail.name}</Typography>
+                    <Typography>{itemDetail.description}</Typography>
                   </TableCell>
 
                   <TableCell align="center">
                     <Typography fontWeight="bold">
                       ₹ {itemDetail.amount}
                     </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography>{itemDetail.taxRate / 2}</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography>{itemDetail.taxRate / 2}</Typography>
                   </TableCell>
                   <TableCell align="center">
                     <CustomInput
@@ -822,9 +811,14 @@ export default function CollectFees() {
                       }
                     />
                   </TableCell>
+                  <TableCell align="center">
+                    <Typography>
+                      {(itemDetail.amountPaid * 1.18)?.toFixed(2)}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               ))}
-              <TableRow
+              {/* <TableRow
                 sx={{
                   backgroundColor: (theme) =>
                     theme.palette.mode === "dark"
@@ -846,7 +840,7 @@ export default function CollectFees() {
                     ₹ {collectingAmount}
                   </Typography>
                 </TableCell>
-              </TableRow>
+              </TableRow> */}
             </TableBody>
           </Table>
           <ExtraFeeContainer>

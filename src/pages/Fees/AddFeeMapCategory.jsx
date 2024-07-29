@@ -78,18 +78,9 @@ export default function AddFeeMapCategory({
               columnSpacing={1}
               container
               alignItems="center">
-              <Grid xs={12} sm={4} md={4} item>
+              <Grid xs={12} sm={3.5} item>
                 <CustomInput
                   required={true}
-                  type="text"
-                  name="name"
-                  value={c.name || ""}
-                  label="Name"
-                  onChange={(e) => handleCustomInputChange(e, c.id)}
-                />
-              </Grid>
-              <Grid xs={12} sm={4} md={4} item>
-                <CustomInput
                   type="text"
                   name="description"
                   value={c.description || ""}
@@ -97,7 +88,7 @@ export default function AddFeeMapCategory({
                   onChange={(e) => handleCustomInputChange(e, c.id)}
                 />
               </Grid>
-              <Grid xs={12} sm={3} md={3} item>
+              <Grid xs={12} sm={2.5} item>
                 <CustomInput
                   required={true}
                   type="number"
@@ -107,7 +98,27 @@ export default function AddFeeMapCategory({
                   onChange={(e) => handleCustomInputChange(e, c.id)}
                 />
               </Grid>
-              <Grid xs={12} sm={1} md={1} item>
+              <Grid xs={12} sm={2.5} item>
+                <CustomInput
+                  required={true}
+                  type="number"
+                  name="taxRate"
+                  value={c.taxRate || ""}
+                  label="Tax Rate"
+                  onChange={(e) => handleCustomInputChange(e, c.id)}
+                />
+              </Grid>
+              <Grid xs={12} sm={2.5} item>
+                <CustomInput
+                  required={true}
+                  type="text"
+                  name="hsnCode"
+                  value={c.hsnCode || ""}
+                  label="HSN Code"
+                  onChange={(e) => handleCustomInputChange(e, c.id)}
+                />
+              </Grid>
+              <Grid xs={12} sm={1} item>
                 <Tooltip title="Remove Category">
                   <IconButton
                     color="error"

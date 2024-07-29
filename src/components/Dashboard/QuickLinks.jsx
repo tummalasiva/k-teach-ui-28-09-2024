@@ -58,7 +58,7 @@ export default function QuickLinks() {
           </Grid>
           <CheckPermission module="Admit Student" permission="add">
             {" "}
-            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+            <Grid item xs={12} sm={12} md={4}>
               <Link
                 to="/sch/student/add-student"
                 style={{ textDecoration: "none" }}>
@@ -74,7 +74,7 @@ export default function QuickLinks() {
             </Grid>
           </CheckPermission>
           <CheckPermission module="Employee" permission="add">
-            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+            <Grid item xs={12} sm={12} md={4}>
               <Link
                 to="/sch/human-resource/add-employee"
                 style={{ textDecoration: "none" }}>
@@ -89,41 +89,9 @@ export default function QuickLinks() {
               </Link>
             </Grid>
           </CheckPermission>
-          <CheckPermission module="Exam Result" permission="view">
-            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-              <Link
-                to="/sch/exam-Mark/exam-result"
-                style={{ textDecoration: "none" }}>
-                <DataContainer>
-                  <Box>
-                    <StyledFab size="small">
-                      <FindInPage />
-                    </StyledFab>
-                  </Box>
 
-                  <Typography> Exam Results</Typography>
-                </DataContainer>
-              </Link>
-            </Grid>
-          </CheckPermission>
-          <CheckPermission module="Marks Card" permission="view">
-            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
-              <Link
-                to="/sch/exam-Mark/marks-card"
-                style={{ textDecoration: "none" }}>
-                <DataContainer>
-                  <Box>
-                    <StyledFab size="small">
-                      <CardMembership />
-                    </StyledFab>
-                  </Box>
-                  <Typography>Marks Cards</Typography>
-                </DataContainer>
-              </Link>
-            </Grid>
-          </CheckPermission>
           <CheckPermission module="Compose" permission="add">
-            <Grid item xs={12} sm={12} md={2.4} lg={2.4}>
+            <Grid item xs={12} sm={12} md={4}>
               <Link
                 to="/sch/communication_compose"
                 style={{ textDecoration: "none" }}>

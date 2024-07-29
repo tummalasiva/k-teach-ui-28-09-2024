@@ -59,11 +59,13 @@ export default function ManageInstitute() {
         onToggleSwitch={handleToggleSwitch}
         onEditClick={handleEdit}
       />
-      <AddForm
-        module="Institute"
-        title="Add Institute"
-        onAddClick={handleAddClick}
-      />
+      {!settings.length ? (
+        <AddForm
+          module="Institute"
+          title="Add Institute"
+          onAddClick={handleAddClick}
+        />
+      ) : null}
     </>
   );
 }
