@@ -8,6 +8,7 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function ExamHallTicket() {
   const { selectedSetting } = useContext(SettingContext);
@@ -114,11 +115,13 @@ export default function ExamHallTicket() {
               options={section}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Generate
-            </Button>
-          </Grid>
+          <CheckPermission module="Exam Hall Ticket" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Generate
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
     </>

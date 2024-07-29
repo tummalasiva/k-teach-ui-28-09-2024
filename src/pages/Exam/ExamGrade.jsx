@@ -114,13 +114,20 @@ export default function ExamGrade() {
         actions={["edit", "delete"]}
         tableKeys={examGradeTableKeys}
         bodyDataModal="exam grades"
+        module="Exam Grade"
         bodyData={data}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
-      <AddForm title="Add Exam Grade" onAddClick={AddExamGrade} />
+      {/* ==== Add Exam grade ======= */}
+      <AddForm
+        title="Add Exam Grade"
+        module="Exam Grade"
+        onAddClick={AddExamGrade}
+      />
 
+      {/* ==== Add/Update Exam grade ======= */}
       <FormModal
         open={open}
         formik={entryFormik}

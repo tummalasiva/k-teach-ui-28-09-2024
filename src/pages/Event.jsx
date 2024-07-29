@@ -161,16 +161,21 @@ export default function Event() {
         actions={["edit", "delete"]}
         bodyDataModal="events"
         bodyData={data}
+        module="Event"
         tableKeys={eventTableKeys}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
 
       {/* ====== Fab button component =======*/}
-      <AddForm title="Add Events" onAddClick={AddDepartmentHandel} />
+      <AddForm
+        title="Add Events"
+        module="Event"
+        onAddClick={AddDepartmentHandel}
+      />
       {/* ================================== */}
 
-      {/* ==== add/edit academicYear ======== */}
+      {/* ==== Add/Update academicYear ======== */}
       <FormModal
         open={open}
         formik={entryFormik}

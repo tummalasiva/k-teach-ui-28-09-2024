@@ -12,6 +12,7 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function StudentActivityReport() {
   const [data, setData] = useState([]);
@@ -187,20 +188,28 @@ export default function StudentActivityReport() {
               display="flex"
               gap={1}
               alignSelf="center">
-              <LoadingButton
-                loading={loading}
-                size="small"
-                variant="contained"
-                type="submit">
-                Find
-              </LoadingButton>
-              <LoadingButton
-                loading={loadingPdf}
-                size="small"
-                variant="contained"
-                onClick={handleGetPrintPdf}>
-                Print
-              </LoadingButton>
+              <CheckPermission
+                module="Student Activity Report"
+                permission="view">
+                <LoadingButton
+                  loading={loading}
+                  size="small"
+                  variant="contained"
+                  type="submit">
+                  Find
+                </LoadingButton>
+              </CheckPermission>
+              <CheckPermission
+                module="Student Activity Report"
+                permission="view">
+                <LoadingButton
+                  loading={loadingPdf}
+                  size="small"
+                  variant="contained"
+                  onClick={handleGetPrintPdf}>
+                  Print
+                </LoadingButton>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>

@@ -16,6 +16,7 @@ import SettingContext from "../../context/SettingsContext";
 import { Add } from "@mui/icons-material";
 import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
   const [loading, setLoading] = useState(false);
@@ -112,13 +113,15 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
-          size="small"
-          startIcon={<Add />}
-          variant="contained"
-          onClick={handleClickOpen}>
-          Member
-        </Button>
+        <CheckPermission module="Hostel Member" permission="update">
+          <Button
+            size="small"
+            startIcon={<Add />}
+            variant="contained"
+            onClick={handleClickOpen}>
+            Member
+          </Button>
+        </CheckPermission>
       </Stack>
 
       <FormModal
@@ -373,7 +376,6 @@ export default function HostelMember() {
       <TabPanel index={0} value={value}>
         <Paper sx={{ padding: 2, marginBottom: 2 }}>
           <form onSubmit={entryFormik.handleSubmit}>
-            {" "}
             <Grid rowSpacing={1} columnSpacing={2} container>
               <Grid xs={12} md={6} lg={3} item>
                 <FormSelect
@@ -402,20 +404,23 @@ export default function HostelMember() {
                   options={sections}
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-                <Button size="small" type="submit" variant="contained">
-                  Find
-                </Button>
-              </Grid>
+              <CheckPermission module="Hostel Member" permission="view">
+                <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+                  <Button size="small" type="submit" variant="contained">
+                    Find
+                  </Button>
+                </Grid>
+              </CheckPermission>
             </Grid>
           </form>
         </Paper>
         <CustomTable
           actions={["delete"]}
-          onDeleteClick={handleDelete}
+          bodyDataModal="hostel member"
+          module="Hostel Member"
           tableKeys={hostelMemberTableKeys}
           bodyData={hostelMember}
-          bodyDataModal="hostel member"
+          onDeleteClick={handleDelete}
         />
       </TabPanel>
       <TabPanel index={1} value={value}>
@@ -449,19 +454,21 @@ export default function HostelMember() {
                   options={sections}
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-                <Button size="small" type="submit" variant="contained">
-                  Find
-                </Button>
-              </Grid>
+              <CheckPermission module="Hostel Member" permission="view">
+                <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+                  <Button size="small" type="submit" variant="contained">
+                    Find
+                  </Button>
+                </Grid>
+              </CheckPermission>
             </Grid>
           </form>
         </Paper>
         <CustomTable
           actions={"custom"}
+          bodyDataModal="hostel member"
           tableKeys={hostelNNonMemberTableKeys}
           bodyData={nonHostelMember}
-          bodyDataModal="hostel member"
           CustomAction={CustomActionAdd}
           onUpdate={formik.handleSubmit}
         />

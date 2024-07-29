@@ -37,6 +37,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../../forms/DeleteModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const TableData = styled(TableCell)(() => ({
   textAlign: "center",
@@ -557,21 +558,24 @@ export default function Live() {
                 </TableBodydata>
 
                 <TableBodydata>
-                  <Tooltip title="Edit">
-                    <IconButton
-                      size="small"
-                      onClick={() => handleUpdateModelOpen(listData._id)}>
-                      <EditIcon color="primary" fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton
-                      size="small"
-                      onClick={() => setDeleteModal(listData._id)}>
-                      <Delete fontSize="small" color="error" />
-                    </IconButton>
-                  </Tooltip>
+                  <CheckPermission module="Live" permission="update">
+                    <Tooltip title="Edit">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleUpdateModelOpen(listData._id)}>
+                        <EditIcon color="primary" fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </CheckPermission>
+                  <CheckPermission module="Live" permission="delete">
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small"
+                        onClick={() => setDeleteModal(listData._id)}>
+                        <Delete fontSize="small" color="error" />
+                      </IconButton>
+                    </Tooltip>
+                  </CheckPermission>
                 </TableBodydata>
               </TableRow>
             ))}
@@ -600,6 +604,10 @@ export default function Live() {
         )}
       </TableContainer>
 
+      {/* =========Add meeting Form ========== */}
+      <AddForm title="Add Meeting" module="Live" onAddClick={AddMeeting} />
+
+      {/* =========Add/Update meeting modal ========== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -755,8 +763,6 @@ export default function Live() {
           </Grid>
         </Grid>
       </FormModal>
-
-      <AddForm title="Add Meeting" onAddClick={AddMeeting} />
     </>
   );
 }

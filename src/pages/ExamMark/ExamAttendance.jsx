@@ -10,6 +10,7 @@ import CustomTable from "../../components/Tables/CustomTable";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function ExamAttendance() {
   const [data, setData] = useState([]);
@@ -154,11 +155,13 @@ export default function ExamAttendance() {
               options={subject}
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Exam Attendance" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <CustomTable

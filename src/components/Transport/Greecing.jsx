@@ -14,6 +14,8 @@ import FormInput from "../../forms/FormInput";
 import FormModal from "../../forms/FormModal";
 import { Add } from "@mui/icons-material";
 import dayjs from "dayjs";
+import AddForm from "../../forms/AddForm";
+import CheckPermission from "../Authentication/CheckPermission";
 
 export default function Greecing() {
   const { selectedSetting } = useContext(SettingContext);
@@ -167,37 +169,45 @@ export default function Greecing() {
             <Grid
               item
               xs={12}
-              md={12}
-              lg={12}
+              md={6}
+              lg={3}
               display="flex"
-              justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-              <Button size="small" variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Vehicle Maintenance" permission="view">
+                <Button size="small" variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={<Add />}
-        sx={{ mt: 1, mb: 2 }}>
-        Add
-      </Button>
+
+      {/* ==== Add form vehicle log ==== */}
+      <AddForm
+        title="Add Greecing"
+        module="Vehicle Maintenance"
+        onAddClick={handleClickOpen}
+      />
+
+      {/* === Table === */}
       <CustomTable
         actions={["edit", "delete"]}
+        module="Vehicle Maintenance"
         bodyData={data}
         tableKeys={vehicleGreecingTableKeys}
         bodyDataModal="greecing"
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
       />
+
+      {/* ==== Add/update modal ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

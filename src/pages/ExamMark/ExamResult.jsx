@@ -20,6 +20,7 @@ import { get } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import ExamResultViewModel from "./ExamResultViewModel";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function ExamResult() {
   const [data, setData] = useState([]);
@@ -181,25 +182,30 @@ export default function ExamResult() {
             />
           </Grid>
           <Grid xs={12} md={6} lg={3} sx={{ alignSelf: "center" }} item>
-            <LoadingButton
-              onClick={entryFormik.handleSubmit}
-              size="small"
-              variant="contained">
-              Find
-            </LoadingButton>
-            <LoadingButton
-              onClick={() => setOpenBulk(true)}
-              size="small"
-              variant="contained"
-              sx={{ ml: 1 }}>
-              Bulk Upload
-            </LoadingButton>
+            <CheckPermission module="Exam Result" permission="view">
+              <LoadingButton
+                onClick={entryFormik.handleSubmit}
+                size="small"
+                variant="contained">
+                Find
+              </LoadingButton>
+            </CheckPermission>
+            <CheckPermission module="Exam Result" permission="add">
+              <LoadingButton
+                onClick={() => setOpenBulk(true)}
+                size="small"
+                variant="contained"
+                sx={{ ml: 1 }}>
+                Bulk Upload
+              </LoadingButton>
+            </CheckPermission>
           </Grid>
         </Grid>
       </Paper>
       <CustomTable
         actions={["view", "download"]}
         bodyDataModal="exam result"
+        module="Exam Result"
         bodyData={data}
         tableKeys={examResultTableKeys}
         onViewClick={handleClickOpenView}

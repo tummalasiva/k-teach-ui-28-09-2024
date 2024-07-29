@@ -14,6 +14,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import SettingContext from "../../context/SettingsContext";
 import CourseContext from "../../context/CourseContext";
 import ContentContext from "../../context/ContentContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Label = styled("label")(() => ({
   fontWeight: 650,
@@ -129,36 +130,33 @@ export default function CourseContent() {
                 options={courses}
               />
             </Box>
-
-            <Button
-              variant="contained"
-              size="medium"
-              disabled={!courses.length}
-              startIcon={<AddIcon />}
-              sx={{ mt: 1 }}
-              multi={false}
-              onClick={handelOpenChapter}>
-              Chapter
-            </Button>
+            <CheckPermission module="Courses Content" permission="add">
+              <Button
+                variant="contained"
+                size="medium"
+                disabled={!courses.length}
+                startIcon={<AddIcon />}
+                sx={{ mt: 1 }}
+                multi={false}
+                onClick={handelOpenChapter}>
+                Chapter
+              </Button>
+            </CheckPermission>
           </Grid>
         </OuterGrid>
         <Divider />
 
-        {/* show all models components == */}
+        {/* == show all models components == */}
         {courseDetails.chapters?.map((chapter, i) => (
           <ContentContext.Provider value={{ chapter: chapter }}>
             <ShowCourseContent
               key={i}
-              // chapter={chapter}
-              // courseId={entryFormik.values.courseId}
-              // course={courseDetails}
-              // submitDetails={() => entryFormik.handleSubmit()}
               handleEditChapter={() => handleEditChapter(chapter)}
             />
           </ContentContext.Provider>
         ))}
 
-        {/* open chapter model ========== */}
+        {/* == open chapter model ========== */}
         <AddChapterDialog
           title="Chapter for Course"
           open={openChapter}

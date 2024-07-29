@@ -39,6 +39,7 @@ import themeData from "../../data/themeData";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { LoadingButton } from "@mui/lab";
 import { downloadFile } from "../../utils";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const HeadingContainer = styled(Grid)(() => ({
   display: "flex",
@@ -329,20 +330,24 @@ export default function StudentReport() {
                 display="flex"
                 gap={1}
                 item>
-                <LoadingButton
-                  loading={loading}
-                  size="small"
-                  variant="contained"
-                  type="submit">
-                  Find
-                </LoadingButton>
-                <LoadingButton
-                  loading={loadingPdf}
-                  size="small"
-                  variant="contained"
-                  onClick={handleGetPrintPdf}>
-                  Print
-                </LoadingButton>
+                <CheckPermission module="Student Report" permission="view">
+                  <LoadingButton
+                    loading={loading}
+                    size="small"
+                    variant="contained"
+                    type="submit">
+                    Find
+                  </LoadingButton>
+                </CheckPermission>
+                <CheckPermission module="Student Report" permission="view">
+                  <LoadingButton
+                    loading={loadingPdf}
+                    size="small"
+                    variant="contained"
+                    onClick={handleGetPrintPdf}>
+                    Print
+                  </LoadingButton>
+                </CheckPermission>
               </Grid>
             </Grid>
           </form>
@@ -621,24 +626,28 @@ export default function StudentReport() {
                 display="flex"
                 gap={1}
                 item>
-                <LoadingButton
-                  loading={loadingGraph}
-                  size="small"
-                  variant="contained"
-                  type="submit">
-                  Find
-                </LoadingButton>
-                <ReactToPrint
-                  trigger={() => (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      onClick={handlePrint}>
-                      Print
-                    </Button>
-                  )}
-                  content={() => componentRef.current}
-                />
+                <CheckPermission module="Student Report" permission="view">
+                  <LoadingButton
+                    loading={loadingGraph}
+                    size="small"
+                    variant="contained"
+                    type="submit">
+                    Find
+                  </LoadingButton>
+                </CheckPermission>
+                <CheckPermission module="Student Report" permission="view">
+                  <ReactToPrint
+                    trigger={() => (
+                      <Button
+                        size="small"
+                        variant="contained"
+                        onClick={handlePrint}>
+                        Print
+                      </Button>
+                    )}
+                    content={() => componentRef.current}
+                  />
+                </CheckPermission>
               </Grid>
             </Grid>
           </form>

@@ -15,6 +15,7 @@ import SettingContext from "../../context/SettingsContext";
 import AddForm from "../../forms/AddForm";
 import FileSelect from "../../forms/FileSelect";
 import BookViewModal from "./BookViewModal";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function Books() {
   const { selectedSetting } = useContext(SettingContext);
@@ -37,7 +38,7 @@ export default function Books() {
       });
       setData(data.result);
 
-      console.log(data.result, "llllllllll");
+      // console.log(data.result, "llllllllll");
     } catch (error) {
       console.log(error);
     }
@@ -165,21 +166,26 @@ export default function Books() {
 
       <Paper sx={{ padding: 2, mb: 1 }}>
         <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
-          <Button size="small" variant="contained">
-            Download
-          </Button>
-
-          <Button size="small" variant="contained">
-            Count By title
-          </Button>
-
-          <Button size="small" variant="contained">
-            Stock Verification
-          </Button>
-
-          <Button size="small" variant="contained">
-            Bulk Upload
-          </Button>
+          <CheckPermission module="Books" permission="view">
+            <Button size="small" variant="contained">
+              Download
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Books" permission="view">
+            <Button size="small" variant="contained">
+              Count By title
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Books" permission="view">
+            <Button size="small" variant="contained">
+              Stock Verification
+            </Button>
+          </CheckPermission>
+          <CheckPermission module="Books" permission="add">
+            <Button size="small" variant="contained">
+              Bulk Upload
+            </Button>
+          </CheckPermission>
         </Stack>
       </Paper>
 
@@ -187,14 +193,26 @@ export default function Books() {
         actions={["edit", "delete", "view"]}
         tableKeys={libraryBookTableKeys}
         bodyDataModal="book"
+        module="Books"
         bodyData={data}
         onEditClick={handleEditClick}
         onDeleteClick={handleDelete}
         onViewClick={handleClickOpenView}
       />
 
-      <AddForm title="Add Books" onAddClick={AddBooks} />
+      {/* === Add Form === */}
+      <AddForm title="Add Books" module="Books" onAddClick={AddBooks} />
 
+      {/* === View Form === */}
+      <BookViewModal
+        title="Book Information"
+        open={modalData?.open}
+        tableData={modalData?.tableData}
+        schoolName={modalData?.schoolName}
+        onClose={onClose}
+      />
+
+      {/* === Add/Update Form === */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -280,14 +298,6 @@ export default function Books() {
           </Grid>
         </Grid>
       </FormModal>
-
-      <BookViewModal
-        title="Book Information"
-        open={modalData?.open}
-        tableData={modalData?.tableData}
-        schoolName={modalData?.schoolName}
-        onClose={onClose}
-      />
     </>
   );
 }

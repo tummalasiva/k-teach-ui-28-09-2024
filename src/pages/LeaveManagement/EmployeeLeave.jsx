@@ -30,6 +30,7 @@ import FormDatePicker from "../../forms/FormDatePicker";
 import CustomSelect from "../../forms/CustomSelect";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const LeaveData = styled(Paper)(({ theme }) => ({
   height: "80px",
@@ -94,26 +95,30 @@ const CustomAction = ({ onUpdate = () => {}, data = {} }) => {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
-          <LoadingButton
-            loading={loadingApprove}
-            size="small"
-            onClick={updateApproveStatus}
-            color="success"
-            variant="contained">
-            Approve
-          </LoadingButton>
-        ) : null}
-        {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
-          <LoadingButton
-            loading={loading}
-            size="small"
-            onClick={updateRejectStatus}
-            color="error"
-            variant="contained">
-            Reject
-          </LoadingButton>
-        ) : null}
+        <CheckPermission module="Employee Leave" permission="update">
+          {data.leaveStatus === "pending" || data.leaveStatus === "rejected" ? (
+            <LoadingButton
+              loading={loadingApprove}
+              size="small"
+              onClick={updateApproveStatus}
+              color="success"
+              variant="contained">
+              Approve
+            </LoadingButton>
+          ) : null}
+        </CheckPermission>
+        <CheckPermission module="Employee Leave" permission="update">
+          {data.leaveStatus === "pending" || data.leaveStatus === "approved" ? (
+            <LoadingButton
+              loading={loading}
+              size="small"
+              onClick={updateRejectStatus}
+              color="error"
+              variant="contained">
+              Reject
+            </LoadingButton>
+          ) : null}
+        </CheckPermission>
       </Stack>
     </>
   );
@@ -357,8 +362,14 @@ export default function EmployeeLeave() {
         />
       </TabPanel>
 
-      <AddForm title="Add Employee Leave" onAddClick={AddLeave} />
+      {/* == Leave type add form ==== */}
+      <AddForm
+        title="Add Employee Leave"
+        module="Employee Leave"
+        onAddClick={AddLeave}
+      />
 
+      {/* == Employee Leave type Add/Update form ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

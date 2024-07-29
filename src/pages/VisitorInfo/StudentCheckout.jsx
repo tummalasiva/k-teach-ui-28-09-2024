@@ -16,6 +16,7 @@ import AddForm from "../../forms/AddForm";
 import FormModal from "../../forms/FormModal";
 import { LoadingButton } from "@mui/lab";
 import { downloadFile } from "../../utils";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Relation_With_Student = [
   { label: "Father", value: "Father" },
@@ -316,33 +317,51 @@ export default function StudentCheckout() {
               display="flex"
               justifyContent="flex-end"
               gap={1}>
-              <Button size="small" variant="contained" type="submit">
-                Find
-              </Button>
-              <LoadingButton
-                size="small"
-                loading={loadingPdf}
-                onClick={handleGetPrintPdf}
-                variant="contained">
-                Print
-              </LoadingButton>
-
-              <Button
-                size="small"
-                onClick={handleGetDownloadExcel}
-                variant="contained">
-                Excel
-              </Button>
+              <CheckPermission module="Student Checkout" permission="add">
+                <Button size="small" variant="contained" type="submit">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Student Checkout" permission="view">
+                <LoadingButton
+                  size="small"
+                  loading={loadingPdf}
+                  onClick={handleGetPrintPdf}
+                  variant="contained">
+                  Print
+                </LoadingButton>
+              </CheckPermission>
+              <CheckPermission module="Student Checkout" permission="view">
+                <Button
+                  size="small"
+                  onClick={handleGetDownloadExcel}
+                  variant="contained">
+                  Excel
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
 
+      {/* === Table ===== */}
+      <CustomTable
+        actions={["view"]}
+        module="Student Checkout"
+        tableKeys={studentCheckOutTableKeys}
+        bodyDataModal="student checkout"
+        bodyData={data}
+      />
+
+      {/* === Add form modal ===== */}
       <AddForm
         title="Student Checkout"
+        module="Student Checkout"
         onAddClick={AddStudentCheckoutHandel}
         disabled={!formik.values.student}
       />
+
+      {/* === Add/update form modal ===== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -415,12 +434,6 @@ export default function StudentCheckout() {
           </Grid>
         </Grid>
       </FormModal>
-      <CustomTable
-        actions={["view"]}
-        tableKeys={studentCheckOutTableKeys}
-        bodyDataModal="student checkout"
-        bodyData={data}
-      />
     </>
   );
 }

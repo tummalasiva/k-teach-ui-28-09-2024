@@ -280,8 +280,25 @@ export default function ExamSchedule() {
           </Grid>
         </Paper>
 
-        <AddForm title="Add Exam Schedule" onAddClick={handelExamSchedule} />
+        {/* =========== Add exam schedule ========= */}
+        <AddForm
+          title="Add Exam Schedule"
+          module="Exam Schedule"
+          onAddClick={handelExamSchedule}
+        />
 
+        {/* =========== Table ========= */}
+        <CustomTable
+          actions={["edit", "delete"]}
+          bodyDataModal="schedule list"
+          module="Exam Schedule"
+          bodyData={data}
+          tableKeys={scheduleListTableKeys}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDelete}
+        />
+
+        {/* =========== Add/update exam schedule ========= */}
         <FormModal
           open={open}
           formik={formik}
@@ -421,15 +438,6 @@ export default function ExamSchedule() {
             </Grid> */}
           </Grid>
         </FormModal>
-
-        <CustomTable
-          actions={["edit", "delete"]}
-          bodyDataModal="schedule list"
-          bodyData={data}
-          tableKeys={scheduleListTableKeys}
-          onEditClick={handleEditClick}
-          onDeleteClick={handleDelete}
-        />
       </TabPanel>
     </>
   );

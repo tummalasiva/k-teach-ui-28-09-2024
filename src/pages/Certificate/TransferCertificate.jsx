@@ -16,6 +16,7 @@ import PageHeader from "../../components/PageHeader";
 import { PRIVATE_URLS } from "../../services/urlConstants";
 import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Header = styled(Typography)(({ theme }) => ({
   fontSize: "25px",
@@ -191,15 +192,21 @@ export default function TransferCertificate() {
             justifyContent="flex-end"
             gap={1}
             item>
-            <Button size="small" variant="contained">
-              Issue
-            </Button>
-            <Button size="small" variant="contained">
-              Bulk Issue
-            </Button>
-            <Button size="small" variant="contained">
-              Print
-            </Button>
+            <CheckPermission module="Transfer Certificate" permission="view">
+              <Button size="small" variant="contained">
+                Issue
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Transfer Certificate" permission="add">
+              <Button size="small" variant="contained">
+                Bulk Issue
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Transfer Certificate" permission="view">
+              <Button size="small" variant="contained">
+                Print
+              </Button>
+            </CheckPermission>
           </Grid>
         </Grid>
       </Paper>

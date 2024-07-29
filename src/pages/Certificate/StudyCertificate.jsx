@@ -26,6 +26,7 @@ import { del, get, post, put } from "../../services/apiMethods";
 import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Heading = styled(Typography)(({ theme }) => ({
   textAlign: "center",
@@ -310,20 +311,24 @@ export default function StudyCertificate() {
             justifyContent="flex-end"
             gap={1}
             item>
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleBulkIssueOpen}>
-              Bulk Issue
-            </Button>
-            <LoadingButton
-              size="small"
-              variant="contained"
-              type="submit"
-              onClick={entryFormik.handleSubmit}
-              loading={loading}>
-              Issue
-            </LoadingButton>
+            <CheckPermission module="Study Certificate" permission="add">
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleBulkIssueOpen}>
+                Bulk Issue
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Study Certificate" permission="view">
+              <LoadingButton
+                size="small"
+                variant="contained"
+                type="submit"
+                onClick={entryFormik.handleSubmit}
+                loading={loading}>
+                Issue
+              </LoadingButton>
+            </CheckPermission>
           </Grid>
         </Grid>
       </Paper>

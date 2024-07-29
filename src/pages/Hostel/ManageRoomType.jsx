@@ -95,6 +95,7 @@ export default function ManageRoomType() {
       <CustomTable
         actions={["edit", "delete"]}
         tableKeys={manageHostelRoomTableKeys}
+        module="Manage Room Type"
         bodyDataModal="room"
         bodyData={data}
         onDeleteClick={deleteRoomType}
@@ -102,7 +103,11 @@ export default function ManageRoomType() {
       />
 
       {/* feb model open ============== */}
-      <AddForm title="Add Room Type" onAddClick={onAddClick} />
+      <AddForm
+        title="Add Room Type"
+        module="Manage Room Type"
+        onAddClick={onAddClick}
+      />
 
       {/* Add/update model ============== */}
       <FormModal

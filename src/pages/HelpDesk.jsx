@@ -60,6 +60,8 @@ export default function HelpDesk() {
   return (
     <>
       <PageHeader title="Tickets" />
+
+      {/* ==== Table ==== */}
       <CustomTable
         actions={[]}
         bodyDataModal="Tickets"
@@ -67,8 +69,14 @@ export default function HelpDesk() {
         tableKeys={ticketTableKeys}
       />
 
-      <AddForm title="Add Tickets" onAddClick={handelExamTerm} />
+      {/* === Add form modal ==== */}
+      <AddForm
+        title="Add Tickets"
+        module="Help Desk"
+        onAddClick={handelExamTerm}
+      />
 
+      {/* === Add/update form modal ==== */}
       <FormModal
         open={open}
         formik={entryFormik}

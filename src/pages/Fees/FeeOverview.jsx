@@ -32,6 +32,7 @@ import { downloadFile } from "../../utils";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import CustomSelect from "../../forms/CustomSelect";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const showInfo = (data) => {
   let result = [];
@@ -513,11 +514,13 @@ export default function FeeOverview() {
               label="To Date"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <Button onClick={entryFormik.handleSubmit} variant="contained">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Fee Overview" permission="view">
+            <Grid xs={12} md={6} lg={3} item>
+              <Button onClick={entryFormik.handleSubmit} variant="contained">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>

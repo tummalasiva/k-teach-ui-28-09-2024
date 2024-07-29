@@ -13,6 +13,7 @@ import FormInput from "../../forms/FormInput";
 import SettingContext from "../../context/SettingsContext";
 import { get } from "../../services/apiMethods";
 import { PRIVATE_URLS } from "../../services/urlConstants";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const status = [
   { label: "Returned", value: "Returned" },
@@ -85,112 +86,119 @@ export default function Issue() {
         labels={["List of Issue", "Issue"]}
       />
       <TabPanel index={0} value={value}>
-        <Button size="small" variant="contained" sx={{ my: 2 }}>
-          PDF
-        </Button>
-        <Button size="small" variant="contained" sx={{ ml: 2, my: 2 }}>
-          Excel
-        </Button>
+        <CheckPermission module="Issue" permission="view">
+          <Button size="small" variant="contained" sx={{ my: 2 }}>
+            PDF
+          </Button>
+        </CheckPermission>
+        <CheckPermission module="Issue" permission="view">
+          <Button size="small" variant="contained" sx={{ ml: 2, my: 2 }}>
+            Excel
+          </Button>
+        </CheckPermission>
         <CustomTable
           actions={["edit"]}
           bodyDataModal="Issue"
+          module="Issue"
           bodyData={data}
           tableKeys={issueDetailTableKeys}
         />
       </TabPanel>
-      <TabPanel index={1} value={value}>
-        <Paper sx={{ padding: 2, marginBottom: 2 }}>
-          <Grid rowSpacing={1} columnSpacing={2} container>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="item"
-                formik={entryFormik}
-                label="Select Item"
-                options={items}
-              />
+      <CheckPermission module="Issue" permission="add">
+        <TabPanel index={1} value={value}>
+          <Paper sx={{ padding: 2, marginBottom: 2 }}>
+            <Grid rowSpacing={1} columnSpacing={2} container>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="item"
+                  formik={entryFormik}
+                  label="Select Item"
+                  options={items}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormInput
+                  required={true}
+                  name="quantity"
+                  formik={entryFormik}
+                  label="Quantity"
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="status"
+                  formik={entryFormik}
+                  label="Select Issue Status"
+                  options={status}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="fromType"
+                  formik={entryFormik}
+                  label="Select From Type"
+                  // options={}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="school"
+                  formik={entryFormik}
+                  label="Select School"
+                  // options={}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="toType"
+                  formik={entryFormik}
+                  label="Select To Type"
+                  // options={}
+                />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  required={true}
+                  name="employeeName"
+                  formik={entryFormik}
+                  label="Select Employee Name"
+                  // options={}
+                />
+              </Grid>
+              <Grid xs={12} md={12} lg={12} item>
+                <FormInput
+                  required={true}
+                  name="note"
+                  formik={entryFormik}
+                  label="Note"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                md={6}
+                lg={3}
+                style={{ alignSelf: "center", marginTop: "10px" }}
+                item>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button size="small" variant="contained" sx={{ ml: 2 }}>
+                  Issue
+                </Button>
+              </Grid>
             </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormInput
-                required={true}
-                name="quantity"
-                formik={entryFormik}
-                label="Quantity"
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="status"
-                formik={entryFormik}
-                label="Select Issue Status"
-                options={status}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="fromType"
-                formik={entryFormik}
-                label="Select From Type"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="school"
-                formik={entryFormik}
-                label="Select School"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="toType"
-                formik={entryFormik}
-                label="Select To Type"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={3} item>
-              <FormSelect
-                required={true}
-                name="employeeName"
-                formik={entryFormik}
-                label="Select Employee Name"
-                // options={}
-              />
-            </Grid>
-            <Grid xs={12} md={12} lg={12} item>
-              <FormInput
-                required={true}
-                name="note"
-                formik={entryFormik}
-                label="Note"
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-              lg={3}
-              style={{ alignSelf: "center", marginTop: "10px" }}
-              item>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button size="small" variant="contained" sx={{ ml: 2 }}>
-                Issue
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      </TabPanel>
+          </Paper>
+        </TabPanel>
+      </CheckPermission>
     </>
   );
 }

@@ -145,16 +145,21 @@ export default function ManageHostel() {
 
       <CustomTable
         actions={["edit", "delete", "view"]}
-        tableKeys={manageHostelTableKeys}
         bodyDataModal="hostel"
+        module="Manage Hostel"
         bodyData={data}
+        tableKeys={manageHostelTableKeys}
         onDeleteClick={deleteHostel}
         onEditClick={handleEdit}
         onViewClick={handleClickOpenView}
       />
 
       {/* feb model open ============== */}
-      <AddForm title="Add Hostel" onAddClick={onAddClick} />
+      <AddForm
+        title="Add Hostel"
+        module="Manage Hostel"
+        onAddClick={onAddClick}
+      />
 
       {/* Add/update model ============== */}
       <FormModal

@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
@@ -8,6 +10,7 @@ import PageHeader from "../../components/PageHeader";
 import FormInput from "../../forms/FormInput";
 import FormDatePicker from "../../forms/FormDatePicker";
 import OverviewTable from "./OverviewTable";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 export default function StockList() {
   const [data, setData] = useState([]);
@@ -38,55 +41,65 @@ export default function StockList() {
               label="To Date"
             />
           </Grid>
-          <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
-            <Button size="small" variant="contained">
-              Find
-            </Button>
-          </Grid>
+          <CheckPermission module="Stock ist" permission="view">
+            <Grid xs={12} md={6} lg={3} style={{ alignSelf: "center" }} item>
+              <Button size="small" variant="contained">
+                Find
+              </Button>
+            </Grid>
+          </CheckPermission>
           <Grid xs={12} md={12} lg={12} style={{ alignSelf: "center" }} item>
-            <Button
-              size="small"
-              color="secondary"
-              variant="contained"
-              sx={{ mr: 2, mt: 1 }}
-            >
-              Sell
-            </Button>
-            <Button
-              size="small"
-              color="secondary"
-              variant="contained"
-              sx={{ mr: 2, mt: 1 }}
-            >
-              Issue
-            </Button>
-            <Button
-              size="small"
-              color="secondary"
-              variant="contained"
-              sx={{ mr: 2, mt: 1 }}
-            >
-              Add Item
-            </Button>
-            <Button
-              size="small"
-              color="secondary"
-              variant="contained"
-              sx={{ mr: 2, mt: 1 }}
-            >
-              Add Vendor
-            </Button>
+            <CheckPermission module="Sell" permission="view">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                sx={{ mr: 2, mt: 1 }}>
+                Sell
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Issue" permission="view">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                sx={{ mr: 2, mt: 1 }}>
+                Issue
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Item" permission="view">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                sx={{ mr: 2, mt: 1 }}>
+                Add Item
+              </Button>
+            </CheckPermission>
+            <CheckPermission module="Vendor" permission="view">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                sx={{ mr: 2, mt: 1 }}>
+                Add Vendor
+              </Button>
+            </CheckPermission>
           </Grid>
         </Grid>
       </Paper>
       {/* overview table component ======= */}
       <Grid xs={12} md={12} lg={12} style={{ alignSelf: "center" }} item>
-        <Button size="small" variant="contained" sx={{ mr: 2, mt: 1 }}>
-          Excel
-        </Button>
-        <Button size="small" variant="contained" sx={{ mr: 2, mt: 1 }}>
-          PDF
-        </Button>
+        <CheckPermission module="Stock ist" permission="view">
+          <Button size="small" variant="contained" sx={{ mr: 2, mt: 1 }}>
+            Excel
+          </Button>
+        </CheckPermission>
+        <CheckPermission module="Stock ist" permission="view">
+          <Button size="small" variant="contained" sx={{ mr: 2, mt: 1 }}>
+            PDF
+          </Button>
+        </CheckPermission>
       </Grid>
       <OverviewTable />
       {/* ================================ */}
@@ -95,8 +108,7 @@ export default function StockList() {
         variant="h6"
         component="div"
         textAlign="start"
-        sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}
-      >
+        sx={{ fontSize: "15px", mt: 1, fontWeight: "bold" }}>
         List of Stocks
       </Typography>
       <CustomTable

@@ -19,6 +19,7 @@ import { PRIVATE_URLS } from "../../services/urlConstants";
 import FileSelect from "../../forms/FileSelect";
 import { downloadFile } from "../../utils";
 import dayjs from "dayjs";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const FormBox = styled(Box)(({ theme }) => ({
   padding: "20px 8px",
@@ -288,7 +289,6 @@ export default function VehicleLog() {
       <PageHeader title="Vehicle Log" />
       <Paper sx={{ padding: 2, marginBottom: 2 }}>
         <form onSubmit={formik.handleSubmit}>
-          {" "}
           <Grid rowSpacing={1} columnSpacing={2} container>
             <Grid xs={12} md={6} lg={3} item>
               <FormSelect
@@ -308,7 +308,6 @@ export default function VehicleLog() {
                 options={route}
               />
             </Grid>
-
             <Grid xs={12} sm={6} md={6} lg={3} item>
               <FormDatePicker
                 formik={formik}
@@ -328,23 +327,43 @@ export default function VehicleLog() {
               justifyContent="flex-end"
               alignSelf="center"
               gap={1}>
-              <Button size="small" type="submit" variant="contained">
-                Find
-              </Button>
-
-              <Button
-                size="small"
-                onClick={handleGetPrintPdf}
-                variant="contained">
-                Print
-              </Button>
+              <CheckPermission module="Vehicle Log" permission="view">
+                <Button size="small" type="submit" variant="contained">
+                  Find
+                </Button>
+              </CheckPermission>
+              <CheckPermission module="Vehicle Log" permission="view">
+                <Button
+                  size="small"
+                  onClick={handleGetPrintPdf}
+                  variant="contained">
+                  Print
+                </Button>
+              </CheckPermission>
             </Grid>
           </Grid>
         </form>
       </Paper>
 
-      <AddForm title="Add Vehicle Log" onAddClick={AddDepartmentHandel} />
+      {/* ==== Table ==== */}
+      <CustomTable
+        actions={["edit", "delete"]}
+        module="Vehicle Log"
+        bodyDataModal="vehicle log"
+        bodyData={data}
+        tableKeys={vehicleLogTableKeys}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
+      />
 
+      {/* ==== Add form vehicle log ==== */}
+      <AddForm
+        title="Add Vehicle Log"
+        module="Vehicle Log"
+        onAddClick={AddDepartmentHandel}
+      />
+
+      {/* ==== Add form vehicle log ==== */}
       <FormModal
         open={open}
         formik={entryFormik}
@@ -475,14 +494,6 @@ export default function VehicleLog() {
           </>
         ) : null}
       </FormModal>
-      <CustomTable
-        actions={["edit", "delete"]}
-        tableKeys={vehicleLogTableKeys}
-        bodyDataModal="vehicle log"
-        bodyData={data}
-        onEditClick={handleEditClick}
-        onDeleteClick={handleDelete}
-      />
     </>
   );
 }

@@ -31,6 +31,7 @@ import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import AddUpdateFeeMap from "./AddUpdateFeeMap";
 import ViewInstallments from "./ViewInstallments";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const CustomSwitch = styled(Switch)(({}) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -98,26 +99,31 @@ const CustomActionFee = ({
   return (
     <>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Button
-          size="small"
-          variant="contained"
-          onClick={() => onNavigateFeeMap(data._id)}>
-          Fee Map
-        </Button>
-
-        <Tooltip title="Edit">
-          <IconButton onClick={() => onEditClick(data)} size="small">
-            <Edit color="primary" fontSize="12px" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={data.active ? "Deactive" : "Activate"}>
-          <CustomSwitch
+        <CheckPermission module="Receipt Book" permission="add">
+          <Button
             size="small"
-            checked={data.active}
-            onChange={updateStatus}
-            inputProps={{ "aria-label": "controlled" }}
-          />
-        </Tooltip>
+            variant="contained"
+            onClick={() => onNavigateFeeMap(data._id)}>
+            Fee Map
+          </Button>
+        </CheckPermission>
+        <CheckPermission module="Receipt Book" permission="update">
+          <Tooltip title="Edit">
+            <IconButton onClick={() => onEditClick(data)} size="small">
+              <Edit color="primary" fontSize="12px" />
+            </IconButton>
+          </Tooltip>
+        </CheckPermission>
+        <CheckPermission module="Receipt Book" permission="update">
+          <Tooltip title={data.active ? "Deactive" : "Activate"}>
+            <CustomSwitch
+              size="small"
+              checked={data.active}
+              onChange={updateStatus}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          </Tooltip>
+        </CheckPermission>
       </Stack>
     </>
   );
@@ -282,14 +288,16 @@ export default function ReceiptBook() {
         labels={["Receipt Book", "Fee Map"]}
       />
       <TabPanel index={0} value={value}>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={handleClickOpen}
-          startIcon={<Add />}
-          sx={{ mt: 1, mb: 2 }}>
-          Add Receipt
-        </Button>
+        <CheckPermission module="Receipt Book" permission="add">
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleClickOpen}
+            startIcon={<Add />}
+            sx={{ mt: 1, mb: 2 }}>
+            Add Receipt
+          </Button>
+        </CheckPermission>
 
         <CustomTable
           actions={["custom"]}
@@ -322,69 +330,73 @@ export default function ReceiptBook() {
           </Grid>
         </FormModal>
       </TabPanel>
-
-      <TabPanel index={1} value={value}>
-        <Grid
-          rowSpacing={1}
-          columnSpacing={2}
-          container
-          sx={{ display: "flex", alignItems: "center", my: 1.5 }}>
-          <Grid xs={12} md={6} lg={3} item>
-            <FormControl fullWidth size="small">
-              <InputLabel>Select Receipt</InputLabel>
-              <Select
-                required={true}
-                fullWidth
-                value={selectedReceiptId || ""}
-                onChange={(e) => setSelectedReceiptId(e.target.value)}
-                label="Select Receipt">
-                {receipts.map((receipt) => (
-                  <MenuItem value={receipt._id} key={receipt._id || ""}>
-                    {receipt.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      <CheckPermission module="Receipt Book" permission="add">
+        <TabPanel index={1} value={value}>
+          <Grid
+            rowSpacing={1}
+            columnSpacing={2}
+            container
+            sx={{ display: "flex", alignItems: "center", my: 1.5 }}>
+            <Grid xs={12} md={6} lg={3} item>
+              <FormControl fullWidth size="small">
+                <InputLabel>Select Receipt</InputLabel>
+                <Select
+                  required={true}
+                  fullWidth
+                  value={selectedReceiptId || ""}
+                  onChange={(e) => setSelectedReceiptId(e.target.value)}
+                  label="Select Receipt">
+                  {receipts.map((receipt) => (
+                    <MenuItem value={receipt._id} key={receipt._id || ""}>
+                      {receipt.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <CheckPermission module="Receipt Book" permission="add">
+              <Grid xs={12} md={6} lg={3} item>
+                <Button
+                  variant="contained"
+                  startIcon={<Add />}
+                  onClick={handleOpenFeeMap}>
+                  Add Fee Map
+                </Button>
+              </Grid>
+            </CheckPermission>
           </Grid>
-          <Grid xs={12} md={6} lg={3} item>
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              onClick={handleOpenFeeMap}>
-              Add Fee Map
-            </Button>
-          </Grid>
-        </Grid>
 
-        <CustomTable
-          actions={["edit", "switch", "view"]}
-          bodyDataModal="Fee Map"
-          bodyData={feeMaps}
-          tableKeys={feeMapTableKeys}
-          toggleStatus="active"
-          onToggleSwitch={handleToggleButton}
-          onViewClick={handleClickOpenView}
-          onEditClick={handleFeeMapEdit}
-        />
+          <CustomTable
+            actions={["edit", "switch", "view"]}
+            bodyDataModal="Fee Map"
+            module="Receipt Book"
+            bodyData={feeMaps}
+            tableKeys={feeMapTableKeys}
+            toggleStatus="active"
+            onToggleSwitch={handleToggleButton}
+            onViewClick={handleClickOpenView}
+            onEditClick={handleFeeMapEdit}
+          />
 
-        {/* Add/Update Fee Map ========= */}
-        <AddUpdateFeeMap
-          open={openFeeMap}
-          dataToEdit={dataToEdit}
-          getFeeMaps={getFeeMaps}
-          setOpen={setOpenFeeMap}
-          loading={loading}
-          selectedReceipt={selectedReceiptId}
-        />
+          {/* Add/Update Fee Map ========= */}
+          <AddUpdateFeeMap
+            open={openFeeMap}
+            dataToEdit={dataToEdit}
+            getFeeMaps={getFeeMaps}
+            setOpen={setOpenFeeMap}
+            loading={loading}
+            selectedReceipt={selectedReceiptId}
+          />
 
-        {/* view installments */}
-        <ViewInstallments
-          title="Installment Details"
-          open={modalData?.open}
-          tableData={modalData?.tableData}
-          onClose={onCloseViewModel}
-        />
-      </TabPanel>
+          {/* view installments */}
+          <ViewInstallments
+            title="Installment Details"
+            open={modalData?.open}
+            tableData={modalData?.tableData}
+            onClose={onCloseViewModel}
+          />
+        </TabPanel>
+      </CheckPermission>
     </>
   );
 }

@@ -13,6 +13,7 @@ import SettingContext from "../../context/SettingsContext";
 import { LoadingButton } from "@mui/lab";
 import { downloadFile } from "../../utils";
 import { toast } from "react-toastify";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const showInfo = (data) => {
   let result = [];
@@ -298,20 +299,22 @@ export default function BalanceFeeReport() {
               options={feeMaps}
             />
           </Grid>
-          <Grid
-            xs={12}
-            md={6}
-            lg={3}
-            style={{ alignSelf: "center", marginTop: "10px" }}
-            item>
-            <LoadingButton
-              size="small"
-              variant="contained"
-              loading={loading}
-              onClick={entryFormik.handleSubmit}>
-              Find
-            </LoadingButton>
-          </Grid>
+          <CheckPermission module="Balance Fee" permission="view">
+            <Grid
+              xs={12}
+              md={6}
+              lg={3}
+              style={{ alignSelf: "center", marginTop: "10px" }}
+              item>
+              <LoadingButton
+                size="small"
+                variant="contained"
+                loading={loading}
+                onClick={entryFormik.handleSubmit}>
+                Find
+              </LoadingButton>
+            </Grid>
+          </CheckPermission>
         </Grid>
       </Paper>
       <CustomTable
@@ -320,27 +323,28 @@ export default function BalanceFeeReport() {
         bodyData={data}
         tableKeys={balanceFeeReportTableKeys}
       />
-
-      {data.length > 0 && (
-        <>
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}>
-            <LoadingButton
-              loading={downloadingExcel}
-              onClick={downloadBalanceReport}
-              size="small"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3 }}>
-              DOWNLOAD
-            </LoadingButton>
-          </Box>
-        </>
-      )}
+      <CheckPermission module="Balance Fee" permission="view">
+        {data.length > 0 && (
+          <>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}>
+              <LoadingButton
+                loading={downloadingExcel}
+                onClick={downloadBalanceReport}
+                size="small"
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3 }}>
+                DOWNLOAD
+              </LoadingButton>
+            </Box>
+          </>
+        )}
+      </CheckPermission>
     </>
   );
 }

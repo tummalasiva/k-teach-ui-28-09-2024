@@ -16,6 +16,7 @@ import SettingContext from "../../context/SettingsContext";
 import { Add, SettingsSharp } from "@mui/icons-material";
 import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const Pick_Type = [
   { label: "Pick", value: "Pick" },
@@ -92,13 +93,15 @@ const CustomActionAdd = ({ onUpdate = () => {}, data = {} }) => {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button
-          size="small"
-          startIcon={<Add />}
-          variant="contained"
-          onClick={handleClickOpen}>
-          Member
-        </Button>
+        <CheckPermission module="Transport Member" permission="update">
+          <Button
+            size="small"
+            startIcon={<Add />}
+            variant="contained"
+            onClick={handleClickOpen}>
+            Member
+          </Button>
+        </CheckPermission>
       </Stack>
 
       <FormModal
@@ -359,7 +362,6 @@ export default function TransportMember() {
       />
       <TabPanel index={0} value={value}>
         <form onSubmit={formik1.handleSubmit}>
-          {" "}
           <Paper sx={{ padding: 2, marginBottom: 2 }}>
             <Grid rowSpacing={1} columnSpacing={2} container>
               <Grid xs={12} md={6} lg={3} item>
@@ -390,73 +392,79 @@ export default function TransportMember() {
                   options={sections}
                 />
               </Grid>
-
-              <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-                <Button size="small" type="submit" variant="contained">
-                  Find
-                </Button>
-              </Grid>
+              <CheckPermission module="Transport Member" permission="view">
+                <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+                  <Button size="small" type="submit" variant="contained">
+                    Find
+                  </Button>
+                </Grid>
+              </CheckPermission>
             </Grid>
           </Paper>
         </form>
+
+        {/* === Table === */}
         <CustomTable
           actions={["delete"]}
-          tableKeys={transportMemberTableKeys}
-          bodyData={transportMember}
+          module="Transport Member"
           bodyDataModal="transport member"
+          bodyData={transportMember}
+          tableKeys={transportMemberTableKeys}
           onDeleteClick={handleDelete}
         />
       </TabPanel>
-      <TabPanel index={1} value={value}>
-        <form onSubmit={formik2.handleSubmit}>
-          <Paper sx={{ padding: 2, marginBottom: 2 }}>
-            <Grid rowSpacing={1} columnSpacing={2} container>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="academicYear"
-                  formik={formik2}
-                  label="Select Academic Year"
-                  options={academicYear}
-                />
-              </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="class"
-                  formik={formik2}
-                  label="Select Class"
-                  options={classes}
-                />
-              </Grid>
+      <CheckPermission module="Transport Member" permission="add">
+        <TabPanel index={1} value={value}>
+          <form onSubmit={formik2.handleSubmit}>
+            <Paper sx={{ padding: 2, marginBottom: 2 }}>
+              <Grid rowSpacing={1} columnSpacing={2} container>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="academicYear"
+                    formik={formik2}
+                    label="Select Academic Year"
+                    options={academicYear}
+                  />
+                </Grid>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="class"
+                    formik={formik2}
+                    label="Select Class"
+                    options={classes}
+                  />
+                </Grid>
 
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  required={true}
-                  name="section"
-                  formik={formik2}
-                  label="Select Section"
-                  options={sections}
-                />
-              </Grid>
+                <Grid xs={12} md={6} lg={3} item>
+                  <FormSelect
+                    required={true}
+                    name="section"
+                    formik={formik2}
+                    label="Select Section"
+                    options={sections}
+                  />
+                </Grid>
 
-              <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
-                <Button size="small" type="submit" variant="contained">
-                  Find
-                </Button>
+                <Grid item xs={12} md={6} lg={3} sx={{ alignSelf: "center" }}>
+                  <Button size="small" type="submit" variant="contained">
+                    Find
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
-        </form>
-        <CustomTable
-          actions={"custom"}
-          tableKeys={transportAddMemberTableKeys}
-          bodyData={transportMemberList}
-          bodyDataModal="transport member"
-          CustomAction={CustomActionAdd}
-          onUpdate={formik2.handleSubmit}
-        />
-      </TabPanel>
+            </Paper>
+          </form>
+          <CustomTable
+            actions={"custom"}
+            tableKeys={transportAddMemberTableKeys}
+            bodyData={transportMemberList}
+            bodyDataModal="transport member"
+            CustomAction={CustomActionAdd}
+            onUpdate={formik2.handleSubmit}
+          />
+        </TabPanel>
+      </CheckPermission>
     </>
   );
 }

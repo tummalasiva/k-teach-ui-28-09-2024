@@ -15,6 +15,7 @@ import FormModal from "../../forms/FormModal";
 import FormInput from "../../forms/FormInput";
 import { toast } from "react-toastify";
 import AddFeeMapCategory from "./AddFeeMapCategory";
+import CheckPermission from "../../components/Authentication/CheckPermission";
 
 const showInfo = (data) => {
   let result = [];
@@ -262,19 +263,22 @@ export default function FeeMapCategory() {
             options={feeMaps}
           />
         </Grid>
-        <Grid xs={12} md={6} lg={3} item>
-          <Button
-            variant="contained"
-            size="small"
-            startIcon={<Add />}
-            onClick={() => setOpenAddModal(true)}>
-            Add Fee Category
-          </Button>
-        </Grid>
+        <CheckPermission module="Fee Map Category" permission="add">
+          <Grid xs={12} md={6} lg={3} item>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<Add />}
+              onClick={() => setOpenAddModal(true)}>
+              Add Fee Category
+            </Button>
+          </Grid>
+        </CheckPermission>
       </Grid>
       <CustomTable
         actions={["edit", "delete"]}
         bodyDataModal="Fee Map Category"
+        module="Fee Map Category"
         bodyData={data}
         tableKeys={feeMapCategoryTableKeys}
         feeMapTableKeys
