@@ -52,7 +52,7 @@ const refreshAccessToken = async () => {
     // Handle error (e.g., redirect to login)
     window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
     window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
-    window.location.href = "/login";
+    window.location.href = "/";
     return null;
   }
 };

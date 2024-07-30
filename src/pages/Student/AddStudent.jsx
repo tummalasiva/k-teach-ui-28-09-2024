@@ -86,6 +86,11 @@ const RTE_Options = [
   { label: "No", value: "no" },
 ];
 
+const TC_OPTIONS = [
+  { label: "With TC", value: "with tc" },
+  { label: "Without TC", value: "without tc" },
+];
+
 export default function AddStudent() {
   const { selectedSetting } = useContext(SettingContext);
   const navigate = useNavigate();
@@ -145,6 +150,7 @@ export default function AddStudent() {
           cicn: values.cicn,
           satNo: values.satNo,
           grNo: values.grNo,
+          tcOption: values.tcOption,
         },
         motherInfo: {
           name: values.motherName,
@@ -254,6 +260,8 @@ export default function AddStudent() {
       aadharNo: dataToEdit?.basicInfo.aadharNo || "",
       satNo: dataToEdit?.basicInfo.satNo || "",
       grNo: dataToEdit?.basicInfo.grNo || "",
+      tcOption: dataToEdit?.basicInfo.tcOption || "",
+
       birthPlace: dataToEdit?.basicInfo.birthPlace || "",
 
       class: dataToEdit?.academicInfo?.class?._id || "",
@@ -519,6 +527,14 @@ export default function AddStudent() {
               </Grid>
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput name="grNo" formik={entryFormik} label="GR No." />
+              </Grid>
+              <Grid xs={12} md={6} lg={3} item>
+                <FormSelect
+                  name="tcOption"
+                  formik={entryFormik}
+                  options={TC_OPTIONS}
+                  label="TC option"
+                />
               </Grid>
             </Grid>
           </Box>

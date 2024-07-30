@@ -32,6 +32,7 @@ const LABEL = {
   class: "Class",
   hostelMember: "Hostel Member",
   transportMember: "Transport Member",
+  tcOption: "TC Option",
 };
 
 const installmentsType = [
@@ -45,6 +46,11 @@ const installmentsType = [
 const MEMBER_OPTIONS = [
   { label: "Yes", _id: "yes" },
   { label: "No", _id: "no" },
+];
+
+const TC_OPTIONS = [
+  { label: "With TC", _id: "with tc" },
+  { label: "Without TC", _id: "without tc" },
 ];
 
 function removeElementFromArray(array, elementToRemove) {
@@ -198,6 +204,7 @@ export default function AddUpdateFeeMap({
         receiptTitleId: selectedReceipt,
         dependencies: dependencies,
         classId: addForm.class,
+        tcOption: addForm.tcOption,
         hostelMember: addForm.hostelMember,
         transportMember: addForm.transportMember,
         fee: addForm.fee,
@@ -241,6 +248,7 @@ export default function AddUpdateFeeMap({
         transportMember,
         fee,
         installmentType,
+        tcOption,
         dependencies,
       } = dataToEdit;
 
@@ -248,6 +256,7 @@ export default function AddUpdateFeeMap({
         class: className?._id || "",
         hostelMember: hostelMember ? "yes" : "no",
         transportMember: transportMember ? "yes" : "no",
+        tcOption: tcOption || "",
         installmentsType: installmentType || "",
         fee: fee || "",
       });
@@ -498,6 +507,27 @@ export default function AddUpdateFeeMap({
                     onChange={handleAddForm}
                     label="Select Class">
                     {classes.map((c) => (
+                      <MenuItem key={c._id} value={c._id}>
+                        {c.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+
+            {dependencies.includes("tcOption") && (
+              <Grid xs={12} sm={6} md={6} item mt={2}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>TC Option</InputLabel>
+                  <Select
+                    size="small"
+                    name="tcOption"
+                    required
+                    value={addForm.tcOption || false}
+                    onChange={handleAddForm}
+                    label="TC Option">
+                    {TC_OPTIONS.map((c) => (
                       <MenuItem key={c._id} value={c._id}>
                         {c.label}
                       </MenuItem>

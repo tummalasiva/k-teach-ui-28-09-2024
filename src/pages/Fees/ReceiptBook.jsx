@@ -63,6 +63,9 @@ export const showInfo = (data) => {
         data.transportMember ? "IS" : "IS-NOT"
       }]-Transport Member`;
       result.push(newItem);
+    } else if (["tcOption"].includes(dep)) {
+      let newItem = `[${data.tcOption}]-TC status`;
+      result.push(newItem);
     }
   }
 
