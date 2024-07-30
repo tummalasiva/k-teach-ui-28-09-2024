@@ -303,7 +303,7 @@ export default function CollectFees() {
   const payableAmount = useMemo(() => {
     let feeParticularAmount = feeDetails
       ? feeDetails.feeMapCategories?.reduce(
-          (acc, c) => acc + parseFloat(c.amountPaid),
+          (acc, c) => acc + parseFloat(c.amountPaid * (1 + c.taxRate / 100)),
           0
         )
       : 0;
@@ -766,13 +766,13 @@ export default function CollectFees() {
                   Due Amount
                 </TableCell>
                 <TableCell sx={{ color: "white" }} align="center">
-                  SGST%
-                </TableCell>
-                <TableCell sx={{ color: "white" }} align="center">
-                  CGST%
-                </TableCell>
-                <TableCell sx={{ color: "white" }} align="center">
                   Collecting Amount
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
+                  SGST
+                </TableCell>
+                <TableCell sx={{ color: "white" }} align="center">
+                  CGST
                 </TableCell>
 
                 <TableCell sx={{ color: "white" }} align="center">
@@ -794,31 +794,36 @@ export default function CollectFees() {
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography>{itemDetail.taxRate / 2}</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography>{itemDetail.taxRate / 2}</Typography>
-                  </TableCell>
-                  <TableCell align="center">
                     <CustomInput
                       disabled={!itemDetail.amount}
                       type="number"
                       style={{ maxWidth: "150px", margin: "4px 0" }}
                       value={itemDetail.amountPaid || ""}
-                      label="Amount"
+                      label="₹ Amount"
                       onChange={(e) =>
                         handleChangeCollectingAmount(e, itemDetail)
                       }
                     />
                   </TableCell>
                   <TableCell align="center">
+                    <Typography>{itemDetail.taxRate / 2}%</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography>{itemDetail.taxRate / 2}%</Typography>
+                  </TableCell>
+
+                  <TableCell align="center">
                     <Typography>
-                      {(itemDetail.amountPaid * 1.18)?.toFixed(2)}
+                      ₹
+                      {(
+                        itemDetail.amountPaid *
+                        (1 + itemDetail.taxRate / 100)
+                      )?.toFixed(2)}
                     </Typography>
                   </TableCell>
                 </TableRow>
               ))}
-              {/* <TableRow
+              <TableRow
                 sx={{
                   backgroundColor: (theme) =>
                     theme.palette.mode === "dark"
@@ -840,7 +845,21 @@ export default function CollectFees() {
                     ₹ {collectingAmount}
                   </Typography>
                 </TableCell>
-              </TableRow> */}
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center">
+                  <Typography fontWeight="bold">
+                    ₹{" "}
+                    {Number(
+                      feeDetails?.feeMapCategories?.reduce(
+                        (t, c) =>
+                          t + parseFloat(c.amountPaid * (1 + c.taxRate / 100)),
+                        0
+                      )
+                    )?.toFixed(2)}
+                  </Typography>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
           <ExtraFeeContainer>

@@ -99,9 +99,11 @@ const QuickFeeCollectModal = ({
               </Typography>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Typography variant="body">
+              <Typography fontWeight="bold" variant="body">
                 <b>Total Amount Being Paid:</b>{" "}
-                {`₹${Number(payingAmount).toFixed(1)}`}
+                <Typography color="red" component="span" fontSize={18}>
+                  {`₹${Number(payingAmount).toFixed(1)}`}
+                </Typography>
               </Typography>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12}>
