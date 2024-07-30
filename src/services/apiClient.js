@@ -82,7 +82,15 @@ client.interceptors.response.use(
     }
 
     if (response && response.data && response.data.message) {
-      toast.error(response.data.message);
+      if (response.data.message?.includes("expired")) {
+        toast.error("Please login again!");
+
+        window.localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
+        window.localStorage.removeItem(process.env.REACT_APP_CURRENT_USER);
+        window.location.href = "/";
+      } else {
+        toast.error(response.data.message);
+      }
     } else {
       console.log(error);
       toast.error(
