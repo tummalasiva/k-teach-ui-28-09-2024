@@ -6,7 +6,8 @@ import { saveAs } from "file-saver";
 export function downloadFile(
   contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   data,
-  filename
+  filename,
+  open = true
 ) {
   // Convert the buffer data to a Blob
   const blob = new Blob([data], {
@@ -15,6 +16,16 @@ export function downloadFile(
 
   // Save the Blob as a file using FileSaver.js
   saveAs(blob, filename);
+
+  if (open && contentType === "application/pdf") {
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, "_blank");
+
+    // Revoke the URL after some time to free up memory
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+    }, 1000);
+  }
 }
 
 export function hasAllValues(obj, exceptions = [], showToast = true) {

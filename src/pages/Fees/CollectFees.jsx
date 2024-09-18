@@ -76,6 +76,7 @@ export default function CollectFees() {
   const [collectingFee, setCollectingFee] = useState(false);
   const [downloadingPreview, setDownloadingPreview] = useState(false);
   const [openCollectModal, setOpenCollectModal] = useState(false);
+  const [payingAmount, setPayingAmount] = useState("");
 
   const handleCloseCollectFeeModal = () => setOpenCollectModal(false);
   const handleOpenCollectFeeModal = () => setOpenCollectModal(true);
@@ -324,8 +325,8 @@ export default function CollectFees() {
     }
     return (
       parseFloat(feeParticularAmount) +
-      parseFloat(penalty || 0) +
-      parseFloat(miscellaneous || 0) -
+      parseFloat(penalty * 1.18 || 0) +
+      parseFloat(miscellaneous * 1.18 || 0) -
       concessionAmount
     );
   }, [feeDetails, penalty, miscellaneous, concession]);
@@ -541,6 +542,27 @@ export default function CollectFees() {
     }
     setDownloadingReceipt("");
   };
+
+  useEffect(() => {
+    if (feeDetails) {
+      setFeeDetails({
+        ...feeDetails,
+        feeMapCategories: feeDetails.feeMapCategories.map((fm) => {
+          if (fm.description.includes("Tution Fee")) {
+            return { ...fm, amountPaid: payingAmount * 0.25 };
+          } else if (fm.description.includes("Transport")) {
+            return { ...fm, amountPaid: payingAmount * 0.1 };
+          } else if (fm.description.includes("Accomodation")) {
+            return { ...fm, amountPaid: payingAmount * 0.15 };
+          } else if (fm.description.includes("Food")) {
+            return { ...fm, amountPaid: payingAmount * 0.4 };
+          } else {
+            return { ...fm, amountPaid: payingAmount * 0.1 };
+          }
+        }),
+      });
+    }
+  }, [payingAmount, feeDetails]);
 
   return (
     <>
@@ -795,7 +817,7 @@ export default function CollectFees() {
                   </TableCell>
                   <TableCell align="center">
                     <CustomInput
-                      disabled={!itemDetail.amount}
+                      disabled={true}
                       type="number"
                       style={{ maxWidth: "150px", margin: "4px 0" }}
                       value={itemDetail.amountPaid || ""}
@@ -878,6 +900,13 @@ export default function CollectFees() {
                 value={miscellaneous}
                 onChange={(e) => setMiscellaneous(e.target.value)}
                 label="Miscellaneous"
+              />
+              <CustomInput
+                type="number"
+                name="payingAmount"
+                value={payingAmount}
+                onChange={(e) => setPayingAmount(e.target.value)}
+                label="Paying Amount"
               />
             </Stack>
             <Box sx={{ display: "flex", columnGap: 2, alignItems: "center" }}>

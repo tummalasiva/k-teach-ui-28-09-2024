@@ -146,7 +146,6 @@ export default function AddEmployee() {
   const [selectedPhoto, setSelectedPhoto] = useState([]);
   const [resume, setResume] = useState([]);
   console.log(dataToEdit, "dataToEdit");
-  const [salaryGrade, setSalaryGrade] = useState([]);
 
   const getEmployeeDetails = async () => {
     try {
@@ -204,28 +203,11 @@ export default function AddEmployee() {
       console.log(error);
     }
   };
-  const getSalaryGrade = async () => {
-    try {
-      const { data } = await get(PRIVATE_URLS.salaryGrade.list, {
-        params: { schoolId: selectedSetting._id },
-      });
-
-      setSalaryGrade(
-        data.result.map((s) => ({
-          label: s.grade,
-          value: s._id,
-        }))
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     getDesignationData();
     getDepartmentData();
     getRoles();
-    getSalaryGrade();
   }, [selectedSetting._id]);
 
   const handleCreateOrUpdate = async (values) => {
@@ -250,7 +232,6 @@ export default function AddEmployee() {
         },
         academicInfo: {
           workExperience: values.workExperience,
-          salaryGrade: values.salaryGrade,
           email: values.email,
           salaryType: values.salaryType,
           department: values.department,
@@ -322,7 +303,6 @@ export default function AddEmployee() {
       spouseOccupation: dataToEdit?.basicInfo.spouseOccupation || "",
       qualification: dataToEdit?.academicInfo.qualification || "",
       workExperience: dataToEdit?.academicInfo.workExperience || "",
-      salaryGrade: dataToEdit?.academicInfo.salaryGrade?._id || "",
       email: dataToEdit?.academicInfo.email || "",
       salaryType: dataToEdit?.academicInfo.salaryType || "",
       role: dataToEdit?.role._id || "",
@@ -560,14 +540,7 @@ export default function AddEmployee() {
                   label="Work Experience"
                 />
               </Grid>
-              <Grid xs={12} md={6} lg={3} item>
-                <FormSelect
-                  name="salaryGrade"
-                  formik={entryFormik}
-                  label="Select Salary Grade"
-                  options={salaryGrade}
-                />
-              </Grid>
+
               <Grid xs={12} md={6} lg={3} item>
                 <FormInput
                   required={true}

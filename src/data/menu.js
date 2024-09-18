@@ -362,7 +362,7 @@ const SIDE_MENU_DATA = [
   {
     name: "Notifications",
     path: "/sch/notifications",
-    renderName: ["Notifications"],
+    renderName: ["Sms-Notifications"],
     subMenus: [],
     icon: <NotificationsActiveRoundedIcon color="primary" fontSize="small" />,
   },
